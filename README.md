@@ -80,7 +80,7 @@
 
 | 구분 | 기술 스택 |
 | :---: | :----: |
-| Front End | React, TypeScript, Three.js, Zustand, emotion |
+| Front End | React, TypeScript, Three.js, Zustand, Emotion |
 | Back End  | TypeScript, NestJS, TypeORM |
 | DB | Redis, MySQL, MongoDB |
 | CI/CD | GitHub Actions |

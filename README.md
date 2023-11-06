@@ -80,8 +80,8 @@
 
 | 구분 | 기술 스택 |
 | :---: | :----: |
-| Front End | React, TypeScript, Three.js, Zustand, Emotion |
-| Back End  | TypeScript, NestJS, TypeORM |
+| Frontend | React, TypeScript, Three.js, React-Three-Fiber, Zustand, Emotion |
+| Backend  | TypeScript, NestJS, TypeORM |
 | DB | Redis, MySQL, MongoDB |
 | CI/CD | GitHub Actions |
 | Deployment | docker, NGINX, Naver Cloud Platform |

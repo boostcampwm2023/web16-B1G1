@@ -111,6 +111,8 @@
 
 ## 🌟 기술 스택
 
+<img src ="https://github.com/boostcampwm2023/web16-B1G1/assets/78800560/e6673bd3-4049-4487-adce-60ac87349362" width="50%">
+
 | 구분 | 기술 스택 |
 | :---: | :----: |
 | Frontend | <img src="https://img.shields.io/badge/react-61DAFB?style=flat&logo=react&logoColor=black"> <img src="https://img.shields.io/badge/typescript-3178C6?style=flat&logo=typescript&logoColor=black"> <img src="https://img.shields.io/badge/threejs-black?style=flate&logo=three.js&logoColor=white"> React-Three-Fiber, Zustand, Emotion |

@@ -1,0 +1,14 @@
+{
+	"overrides": [
+		{
+			"customSyntax": "@stylelint/postcss-css-in-js",
+			"files": ["**/*.styles.ts"]
+		}
+	],
+	"extends": [
+		"stylelint-config-standard",
+		"stylelint-config-prettier"
+	],
+	"rules": {
+	}
+}

@@ -1,14 +1,14 @@
 {
-    "name": "B1G1",
-    "version": "1.0.0",
-    "main": "index.js",
-    "license": "MIT",
-    "packageManager": "yarn@4.0.1",
-    "workspaces": [
-        "packages/*"
-    ],
-    "devDependencies": {
-        "prettier": "^3.1.0",
-        "typescript": "^5.2.2"
-    }
+	"name": "B1G1",
+	"version": "1.0.0",
+	"main": "index.js",
+	"license": "MIT",
+	"packageManager": "yarn@4.0.1",
+	"workspaces": [
+		"packages/*"
+	],
+	"devDependencies": {
+		"prettier": "^3.1.0",
+		"typescript": "^5.2.2"
+	}
 }

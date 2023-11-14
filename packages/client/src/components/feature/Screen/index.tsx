@@ -1,29 +1,45 @@
 import { Canvas } from '@react-three/fiber';
 import BackgroundStars from '../BackgroundStars';
 import { OrbitControls } from '@react-three/drei';
+import Galaxy from '../Galaxy';
+import { EffectComposer, Bloom } from '@react-three/postprocessing';
+import { useControls } from 'leva';
+import { CAMERA_POSITION, CAMERA_ROTATION, CAMERA_FAR } from 'constants/camera';
 
 export default function Screen() {
-	type Vector3 = [number, number, number];
-
-	const CAMERA_POSITION: Vector3 = [0, 2000, 2000];
-	const CAMERA_ROTATION: Vector3 = [-0.5, 0, 0];
-	const CAMERA_FAR = 100000;
-
 	const camera = {
 		position: CAMERA_POSITION,
 		rotation: CAMERA_ROTATION,
 		far: CAMERA_FAR,
 	};
 
+	const { intensity, mipmapBlur, luminanceThreshold, luminanceSmoothing } =
+		useControls('Bloom', {
+			intensity: { value: 0.4, min: 0, max: 1.5, step: 0.01 },
+			mipmapBlur: { value: false },
+			luminanceThreshold: { value: 0.9, min: 0, max: 1, step: 0.01 },
+			luminanceSmoothing: { value: 0.025, min: 0, max: 2, step: 0.01 },
+		});
+
 	return (
 		<div style={{ height: '100vh', width: '100vw' }}>
 			<Canvas camera={camera}>
-				<color attach="background" args={['black']} />
-				<ambientLight color="#ffffff" intensity={5} />
-				<BackgroundStars />
+				<EffectComposer>
+					<Bloom
+						intensity={intensity}
+						mipmapBlur={mipmapBlur}
+						luminanceThreshold={luminanceThreshold}
+						luminanceSmoothing={luminanceSmoothing}
+					/>
+				</EffectComposer>
 
+				<color attach="background" args={['#000']} />
+				<ambientLight color="#fff" intensity={5} />
 				<axesHelper args={[20000]} />
 				<OrbitControls />
+
+				<BackgroundStars />
+				<Galaxy />
 			</Canvas>
 		</div>
 	);

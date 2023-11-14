@@ -13,10 +13,12 @@ export default function Star({ position, size, color }: PropsType) {
 	const meshRef = useRef<THREE.Mesh>(null!);
 
 	useFrame((state, delta) => {
-		const distance = meshRef.current.position.distanceTo(state.camera.position);
-		const scale = distance / DIST_LIMIT;
+		const cameraDistance = new THREE.Vector3(0, 0, 0).distanceTo(
+			state.camera.position,
+		);
+		const scale = cameraDistance / DIST_LIMIT;
 
-		if (distance > DIST_LIMIT) {
+		if (cameraDistance > DIST_LIMIT) {
 			meshRef.current.scale.x = scale;
 			meshRef.current.scale.y = scale;
 			meshRef.current.scale.z = scale;

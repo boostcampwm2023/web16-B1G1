@@ -1,6 +1,8 @@
 import * as THREE from 'three';
 import Star from '../Star';
 import { getRandomInt, getGaussianRandomFloat } from '@utils/random';
+import { useRef } from 'react';
+import { useFrame } from '@react-three/fiber';
 import {
 	ARMS,
 	STARS_NUM,
@@ -28,7 +30,10 @@ const getSpiralPositions = (offset: number) => {
 };
 
 export default function Galaxy() {
+	const galaxyRef = useRef<THREE.Group>(null!);
 	const stars = [];
+
+	useFrame((_, delta) => (galaxyRef.current.rotation.y += delta / 100));
 
 	for (let arm = 0; arm < ARMS; arm++) {
 		for (let star = 0; star < STARS_NUM / (ARMS + 1); star++) {
@@ -50,5 +55,5 @@ export default function Galaxy() {
 		stars.push(<Star position={position} size={size} color={'#FFF'} />);
 	}
 
-	return <group>{stars}</group>;
+	return <group ref={galaxyRef}>{stars}</group>;
 }

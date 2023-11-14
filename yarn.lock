@@ -1845,6 +1845,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/stats.js@npm:*":
+  version: 0.17.3
+  resolution: "@types/stats.js@npm:0.17.3"
+  checksum: ccccc992c6dfe08fb85049aa3ce44ca7e428db8da4a3edd20298f1c8b72768021fa8bacdfbe8e9735a7552ee5d57f667c6f557050ad2d9a87b699b3566a6177a
+  languageName: node
+  linkType: hard
+
 "@types/superagent@npm:*":
   version: 4.1.21
   resolution: "@types/superagent@npm:4.1.21"
@@ -1861,6 +1868,18 @@ __metadata:
   dependencies:
     "@types/superagent": "npm:*"
   checksum: e1b4a4d788c19cd92a3f2e6d0979fb0f679c49aefae2011895a4d9c35aa960d43463aca8783a0b3382bbf0b4eb7ceaf8752d7dc80b8f5a9644fa14e1b1bdbc90
+  languageName: node
+  linkType: hard
+
+"@types/three@npm:^0.158.2":
+  version: 0.158.2
+  resolution: "@types/three@npm:0.158.2"
+  dependencies:
+    "@types/stats.js": "npm:*"
+    "@types/webxr": "npm:*"
+    fflate: "npm:~0.6.10"
+    meshoptimizer: "npm:~0.18.1"
+  checksum: bd7f85c719c6eef2070cc9df24baa352b8c6674fc09aaad2e64431200a95aa22b9b8bab3a2bdb8f3bc87b2e11962560b5113082cc140bb408447e6c2be70f08f
   languageName: node
   linkType: hard
 
@@ -2964,6 +2983,7 @@ __metadata:
     "@types/react": "npm:^18.2.15"
     "@types/react-dom": "npm:^18.2.7"
     "@types/react-router-dom": "npm:^5.3.3"
+    "@types/three": "npm:^0.158.2"
     "@typescript-eslint/eslint-plugin": "npm:^6.0.0"
     "@typescript-eslint/parser": "npm:^6.0.0"
     "@vitejs/plugin-react": "npm:^4.0.3"
@@ -4044,7 +4064,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fflate@npm:^0.6.9":
+"fflate@npm:^0.6.9, fflate@npm:~0.6.10":
   version: 0.6.10
   resolution: "fflate@npm:0.6.10"
   checksum: c452f720e4cb404b300fceb8ef0bdf345f18fbfd3f57f7d0974dce5f5e2ac0e8dd4b6ff4bb7061ae74fd919b9c707172f9dbd44d91149b1137199b8c705768f1
@@ -5812,6 +5832,13 @@ __metadata:
   peerDependencies:
     three: ">=0.137"
   checksum: 8b45158576793b171f8c035c76fcced26f9d6f244098081fb3243b40a0b7788c7274d7bcb7f5ae6fac5876fde8a0ea2cc4f96ebd5afb834fb35a4be798c230c8
+  languageName: node
+  linkType: hard
+
+"meshoptimizer@npm:~0.18.1":
+  version: 0.18.1
+  resolution: "meshoptimizer@npm:0.18.1"
+  checksum: 8a825c58b20b65585e8d00788843929b60c66ba4297e89afaa49f7c51ab9a0f7b9130f90cc9ad1b9b48b3d1bee3beb1bc93608acba0d73e78995c3e6e5ca436b
   languageName: node
   linkType: hard
 

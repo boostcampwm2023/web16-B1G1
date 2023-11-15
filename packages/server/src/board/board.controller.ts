@@ -27,8 +27,8 @@ export class BoardController {
 	}
 
 	@Get(':id')
-	findOne(@Param('id') id: string) {
-		return this.boardService.findOne(+id);
+	getBoardById(@Param('id') id: string): Promise<Board> {
+		return this.boardService.getBoardById(+id);
 	}
 
 	@Patch(':id')

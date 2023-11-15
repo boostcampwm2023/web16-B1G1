@@ -29,8 +29,10 @@ export class BoardService {
 		return `This action returns all board`;
 	}
 
-	findOne(id: number) {
-		return `This action returns a #${id} board`;
+	async findOne(id: number) {
+		const found: Board = await this.boardRepository.findOneBy({ id });
+
+		return found;
 	}
 
 	update(id: number, updateBoardDto: UpdateBoardDto) {

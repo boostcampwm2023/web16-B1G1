@@ -27,7 +27,20 @@ describe('BoardController (e2e)', () => {
 		it.todo('PUT /board/:id/unlike');
 
 		// #60 [08-06] 서버는 전송 받은 데이터를 데이터베이스에 저장한다.
-		it.todo('POST /board');
+		it('POST /board', () => {
+			const board = {
+				title: 'test',
+				content: 'test',
+				author: 'test',
+			};
+			return request(app.getHttpServer())
+				.post('/board')
+				.send(board)
+				.expect(201, {
+					id: 1,
+					...board,
+				});
+		});
 
 		// #65 [09-03] 서버는 검색된 사용자의 글 데이터를 전송한다.
 		it.todo('GET /board/by-author');

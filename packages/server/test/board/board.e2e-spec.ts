@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from '../../src/app.module';
+import { Board } from '../../src/board/entities/board.entity';
 
 describe('BoardController (e2e)', () => {
 	let app: INestApplication;
@@ -17,7 +18,20 @@ describe('BoardController (e2e)', () => {
 
 	describe('/board', () => {
 		// #39 [06-02] 서버는 사용자의 글 데이터를 전송한다.
-		it.todo('GET /board/:id');
+		it('GET /board/:id', async () => {
+			const response = await request(app.getHttpServer())
+				.get('/board/1')
+				.expect(200);
+
+			expect(response).toHaveProperty('body');
+			expect((response as any).body).toHaveProperty('id');
+			expect(response.body.id).toBe(1);
+			expect((response as any).body).toHaveProperty('title');
+			expect((response as any).body).toHaveProperty('content');
+			expect((response as any).body).toHaveProperty('author');
+			expect((response as any).body).toHaveProperty('created_at');
+			expect((response as any).body).toHaveProperty('updated_at');
+		});
 
 		// (추가 필요) 서버는 사용자의 글 목록을 전송한다.
 		it.todo('GET /board');

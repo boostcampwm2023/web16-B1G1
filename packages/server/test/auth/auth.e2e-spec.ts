@@ -58,7 +58,35 @@ describe('AuthController (/auth, e2e)', () => {
 	// #28 [04-05] 없는 회원 정보라면 NotFoundError를 응답한다.
 	// #29 [04-06] 있는 회원 정보라면 JWT(Access Token 및 Refresh Token)를 발급하고 쿠키에 저장한다.
 	// #30 [04-07] JWT에 대한 Refresh Token을 Redis에 저장한다.
-	it.todo('POST /auth/signin');
+	it('POST /auth/signin', async () => {
+		const randomeBytes = Math.random().toString(36).slice(2, 10);
+
+		const newUser = {
+			username: randomeBytes,
+			nickname: randomeBytes,
+			password: randomeBytes,
+		};
+
+		await request(app.getHttpServer()).post('/auth/signup').send(newUser);
+
+		newUser.nickname = undefined;
+		const response = await request(app.getHttpServer())
+			.post('/auth/signin')
+			.send(newUser)
+			.expect(200);
+
+		expect(response).toHaveProperty('headers');
+		expect(response.headers).toHaveProperty('set-cookie');
+		const cookies = response.headers['set-cookie'];
+		expect(cookies.length).toBeGreaterThan(0);
+		expect(cookies[0]).toContain('accessToken');
+
+		newUser.password = 'wrong password';
+		await request(app.getHttpServer())
+			.post('/auth/signin')
+			.send(newUser)
+			.expect(401);
+	});
 
 	// #33 [05-02] 로그아웃 요청을 받으면 토큰을 읽어 해당 회원의 로그인 여부를 확인한다.
 	// #34 [05-03] 로그인을 하지 않은 사용자의 요청이라면 BadRequest 에러를 반환한다.

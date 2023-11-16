@@ -25,8 +25,9 @@ export class BoardService {
 		return created;
 	}
 
-	findAll() {
-		return `This action returns all board`;
+	async findAll() {
+		const boards = await this.boardRepository.find();
+		return boards;
 	}
 
 	async findBoardById(id: number): Promise<Board> {

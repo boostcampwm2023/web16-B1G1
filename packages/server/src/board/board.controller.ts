@@ -6,6 +6,7 @@ import {
 	Patch,
 	Param,
 	Delete,
+	Query,
 } from '@nestjs/common';
 import { BoardService } from './board.service';
 import { CreateBoardDto } from './dto/create-board.dto';
@@ -22,8 +23,13 @@ export class BoardController {
 	}
 
 	@Get()
-	findAll() {
-		return this.boardService.findAll();
+	findAllBoards(): Promise<Board[]> {
+		return this.boardService.findAllBoards();
+	}
+
+	@Get('by-author')
+	findAllBoardsByAuthor(@Query('author') author: string): Promise<Board[]> {
+		return this.boardService.findAllBoardsByAuthor(author);
 	}
 
 	@Get(':id')
@@ -32,12 +38,22 @@ export class BoardController {
 	}
 
 	@Patch(':id')
-	update(@Param('id') id: string, @Body() updateBoardDto: UpdateBoardDto) {
-		return this.boardService.update(+id, updateBoardDto);
+	updateBoard(@Param('id') id: string, @Body() updateBoardDto: UpdateBoardDto) {
+		return this.boardService.updateBoard(+id, updateBoardDto);
+	}
+
+	@Patch(':id/like')
+	patchLike(@Param('id') id: string): Promise<Partial<Board>> {
+		return this.boardService.patchLike(+id);
+	}
+
+	@Patch(':id/unlike')
+	patchUnlike(@Param('id') id: string): Promise<Partial<Board>> {
+		return this.boardService.patchUnlike(+id);
 	}
 
 	@Delete(':id')
-	remove(@Param('id') id: string) {
-		return this.boardService.remove(+id);
+	deleteBoard(@Param('id') id: string): Promise<void> {
+		return this.boardService.deleteBoard(+id);
 	}
 }

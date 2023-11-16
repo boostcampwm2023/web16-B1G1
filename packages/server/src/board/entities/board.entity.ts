@@ -1,4 +1,11 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+	BaseEntity,
+	Column,
+	CreateDateColumn,
+	Entity,
+	PrimaryGeneratedColumn,
+	UpdateDateColumn,
+} from 'typeorm';
 
 @Entity()
 export class Board extends BaseEntity {
@@ -14,9 +21,12 @@ export class Board extends BaseEntity {
 	@Column({ type: 'varchar', length: 50, nullable: false })
 	author: string;
 
-	@Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+	@CreateDateColumn()
 	created_at: Date;
 
-	@Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+	@UpdateDateColumn()
 	updated_at: Date;
+
+	@Column({ type: 'int', default: 0 })
+	like_cnt: number;
 }

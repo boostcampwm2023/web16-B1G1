@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+	BadRequestException,
+	Injectable,
+	NotFoundException,
+} from '@nestjs/common';
 import { CreateBoardDto } from './dto/create-board.dto';
 import { UpdateBoardDto } from './dto/update-board.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -25,8 +29,14 @@ export class BoardService {
 		return created;
 	}
 
-	findAll() {
-		return `This action returns all board`;
+	async findAllBoards(): Promise<Board[]> {
+		const boards = await this.boardRepository.find();
+		return boards;
+	}
+
+	async findAllBoardsByAuthor(author: string): Promise<Board[]> {
+		const boards = await this.boardRepository.findBy({ author });
+		return boards;
 	}
 
 	async findBoardById(id: number): Promise<Board> {
@@ -37,11 +47,31 @@ export class BoardService {
 		return found;
 	}
 
-	update(id: number, updateBoardDto: UpdateBoardDto) {
-		return `This action updates a #${id} board`;
+	async updateBoard(id: number, updateBoardDto: UpdateBoardDto) {
+		const board: Board = await this.findBoardById(id);
+
+		const updatedBoard: Board = await this.boardRepository.save({
+			...board,
+			...updateBoardDto,
+		});
+		return updatedBoard;
 	}
 
-	remove(id: number) {
-		return `This action removes a #${id} board`;
+	async patchLike(id: number): Promise<Partial<Board>> {
+		const board = await this.findBoardById(id);
+		board.like_cnt += 1;
+		await this.boardRepository.save(board);
+		return { like_cnt: board.like_cnt };
+	}
+
+	async patchUnlike(id: number): Promise<Partial<Board>> {
+		const board = await this.findBoardById(id);
+		board.like_cnt -= 1;
+		await this.boardRepository.save(board);
+		return { like_cnt: board.like_cnt };
+	}
+
+	async deleteBoard(id: number): Promise<void> {
+		const result = await this.boardRepository.delete({ id });
 	}
 }

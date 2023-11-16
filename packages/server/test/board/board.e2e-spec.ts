@@ -23,8 +23,8 @@ describe('BoardController (e2e)', () => {
 		it.todo('GET /board');
 
 		// #45 [06-08] 서버는 좋아요 / 좋아요 취소 요청을 받아 데이터베이스의 데이터를 수정한다.
-		it.todo('PUT /board/:id/like');
-		it.todo('PUT /board/:id/unlike');
+		it.todo('PATCH /board/:id/like');
+		it.todo('PATCH /board/:id/unlike');
 
 		// #60 [08-06] 서버는 전송 받은 데이터를 데이터베이스에 저장한다.
 		it('POST /board', async () => {
@@ -48,7 +48,7 @@ describe('BoardController (e2e)', () => {
 		it.todo('GET /board/by-author');
 
 		// (추가 필요) 서버는 사용자의 요청에 따라 글을 수정한다.
-		it.todo('PUT /board/:id');
+		it.todo('PATCH /board/:id');
 
 		// (추가 필요) 서버는 사용자의 요청에 따라 글을 삭제한다.
 		it.todo('DELETE /board/:id');

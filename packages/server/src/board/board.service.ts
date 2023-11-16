@@ -15,7 +15,7 @@ export class BoardService {
 	async create(createBoardDto: CreateBoardDto): Promise<Board> {
 		const { title, content, author } = createBoardDto;
 
-		const board = await this.boardRepository.create({
+		const board = this.boardRepository.create({
 			title,
 			content,
 			author,

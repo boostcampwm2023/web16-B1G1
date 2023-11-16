@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateBoardDto } from './dto/create-board.dto';
 import { UpdateBoardDto } from './dto/update-board.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -29,8 +29,12 @@ export class BoardService {
 		return `This action returns all board`;
 	}
 
-	findOne(id: number) {
-		return `This action returns a #${id} board`;
+	async findBoardById(id: number): Promise<Board> {
+		const found: Board = await this.boardRepository.findOneBy({ id });
+		if (!found) {
+			throw new NotFoundException(`Not found board with id: ${id}`);
+		}
+		return found;
 	}
 
 	update(id: number, updateBoardDto: UpdateBoardDto) {

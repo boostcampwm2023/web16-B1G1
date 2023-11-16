@@ -10,14 +10,15 @@ import {
 import { AuthService } from './auth.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { User } from './entities/user.entity';
 
 @Controller('auth')
 export class AuthController {
 	constructor(private readonly authService: AuthService) {}
 
-	@Post()
-	create(@Body() createAuthDto: CreateUserDto) {
-		return this.authService.create(createAuthDto);
+	@Post('signup')
+	signUp(@Body() createUserDto: CreateUserDto): Promise<Partial<User>> {
+		return this.authService.signUp(createUserDto);
 	}
 
 	@Get()

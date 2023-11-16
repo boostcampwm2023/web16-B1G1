@@ -4,6 +4,28 @@ import { ThreeEvent } from '@react-three/fiber';
 import { Html } from '@react-three/drei';
 import { useCameraStore } from 'store/useCameraStore';
 import { useRef } from 'react';
+import styled from '@emotion/styled';
+
+const Label = styled.div`
+	transform: translate3d(calc(60%), calc(-30%), 0);
+	background: #fff;
+	color: #000;
+	padding: 10px 15px;
+	border-radius: 5px;
+	font-family: 'Noto Sans KR', sans-serif;
+	width: 100%;
+	text-align: center;
+
+	&::before {
+		content: '';
+		position: absolute;
+		top: 20px;
+		left: -30px;
+		height: 2px;
+		width: 50px;
+		background: #fff;
+	}
+`;
 
 const dummyData = [
 	{
@@ -51,7 +73,7 @@ export default function PostStars() {
 				onClick={handleMeshClick}
 			>
 				<Html>
-					<div className="label">별글 입니당</div>
+					<Label>별글 입니당</Label>
 				</Html>
 			</Star>,
 		);

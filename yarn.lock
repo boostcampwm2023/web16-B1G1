@@ -2813,6 +2813,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "B1G1@workspace:."
   dependencies:
+    "@emotion/react": "npm:^11.11.1"
     prettier: "npm:^3.1.0"
     typescript: "npm:^5.2.2"
   languageName: unknown
@@ -3579,7 +3580,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "client@workspace:packages/client"
   dependencies:
-    "@emotion/react": "npm:^11.11.1"
     "@emotion/styled": "npm:^11.11.0"
     "@react-three/drei": "npm:^9.88.13"
     "@react-three/fiber": "npm:^8.15.10"

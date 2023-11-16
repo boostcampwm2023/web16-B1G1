@@ -43,8 +43,14 @@ export class BoardService {
 		return found;
 	}
 
-	update(id: number, updateBoardDto: UpdateBoardDto) {
-		return `This action updates a #${id} board`;
+	async updateBoard(id: number, updateBoardDto: UpdateBoardDto) {
+		const board: Board = await this.findBoardById(id);
+
+		const updatedBoard: Board = await this.boardRepository.save({
+			...board,
+			...updateBoardDto,
+		});
+		return updatedBoard;
 	}
 
 	async patchLike(id: number): Promise<Partial<Board>> {

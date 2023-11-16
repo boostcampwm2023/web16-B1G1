@@ -38,8 +38,8 @@ export class BoardController {
 	}
 
 	@Patch(':id')
-	update(@Param('id') id: string, @Body() updateBoardDto: UpdateBoardDto) {
-		return this.boardService.update(+id, updateBoardDto);
+	updateBoard(@Param('id') id: string, @Body() updateBoardDto: UpdateBoardDto) {
+		return this.boardService.updateBoard(+id, updateBoardDto);
 	}
 
 	@Patch(':id/like')

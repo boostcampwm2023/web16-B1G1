@@ -7,8 +7,8 @@ interface cameraState {
 	setCurrentView: (position: THREE.Vector3) => void;
 	targetView: THREE.Mesh | null;
 	setTargetView: (star: THREE.Mesh | null) => void;
-	distance: number;
-	setDistance: (distance: number) => void;
+	cameraToCurrentView: number;
+	setCameraToCurrentView: (distance: number) => void;
 }
 
 export const useCameraStore = create<cameraState>()((set) => ({
@@ -16,9 +16,10 @@ export const useCameraStore = create<cameraState>()((set) => ({
 	setCurrentView: (position: THREE.Vector3) => set({ currentView: position }),
 	targetView: null,
 	setTargetView: (star: THREE.Mesh | null) => set({ targetView: star }),
-	distance: 100,
-	setDistance: (distance: number) =>
+	cameraToCurrentView: CAMERA_MIN_DISTANCE,
+	setCameraToCurrentView: (distance: number) =>
 		set({
-			distance: distance > CAMERA_MIN_DISTANCE ? distance : CAMERA_MIN_DISTANCE,
+			cameraToCurrentView:
+				distance > CAMERA_MIN_DISTANCE ? distance : CAMERA_MIN_DISTANCE,
 		}),
 }));

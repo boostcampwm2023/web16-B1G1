@@ -14,7 +14,7 @@ export default function Screen() {
 		far: CAMERA_FAR,
 	};
 
-	const { distance, setDistance } = useCameraStore();
+	const { cameraToCurrentView, setCameraToCurrentView } = useCameraStore();
 
 	const { intensity, mipmapBlur, luminanceThreshold, luminanceSmoothing } =
 		useControls('Bloom', {
@@ -28,7 +28,9 @@ export default function Screen() {
 		<div style={{ height: '100vh', width: '100vw' }}>
 			<Canvas
 				camera={camera}
-				onWheel={(e) => setDistance(distance + e.deltaY / 20)}
+				onWheel={(e) =>
+					setCameraToCurrentView(cameraToCurrentView + e.deltaY / 20)
+				}
 			>
 				<EffectComposer>
 					<Bloom

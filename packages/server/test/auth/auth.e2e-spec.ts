@@ -92,5 +92,31 @@ describe('AuthController (/auth, e2e)', () => {
 	// #34 [05-03] 로그인을 하지 않은 사용자의 요청이라면 BadRequest 에러를 반환한다.
 	// #35 [05-04] 로그인을 한 사용자라면 Redis의 Refresh Token 정보를 삭제한다.
 	// #36 [05-05] 브라우저 쿠키의 JWT를 없애는 요청을 보낸다.
-	it.todo('POST /auth/signout');
+	it('GET /auth/signout', async () => {
+		const randomeBytes = Math.random().toString(36).slice(2, 10);
+
+		const newUser = {
+			username: randomeBytes,
+			nickname: randomeBytes,
+			password: randomeBytes,
+		};
+
+		await request(app.getHttpServer()).post('/auth/signup').send(newUser);
+
+		newUser.nickname = undefined;
+		await request(app.getHttpServer()).post('/auth/signin').send(newUser);
+
+		const response = await request(app.getHttpServer())
+			.get('/auth/signout')
+			.expect(200);
+
+		expect(response).toHaveProperty('headers');
+		expect(response.headers).toHaveProperty('set-cookie');
+		const cookies = response.headers['set-cookie'];
+
+		expect(cookies.length).toBeGreaterThan(0);
+		expect(cookies[0]).toBe(
+			'accessToken=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT; HttpOnly',
+		);
+	});
 });

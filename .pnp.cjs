@@ -1959,6 +1959,53 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["@nestjs/swagger", [\
+      ["npm:7.1.16", {\
+        "packageLocation": "./.yarn/cache/@nestjs-swagger-npm-7.1.16-061a06af18-09b3189859.zip/node_modules/@nestjs/swagger/",\
+        "packageDependencies": [\
+          ["@nestjs/swagger", "npm:7.1.16"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:2499dbb93d824027565d71b0716c4fb8b548ad61955d0a0286bfb3c5b4058e227894b6691d96808c00f576db14870018375210362c26ee321ea99fd6ed041c74#npm:7.1.16", {\
+        "packageLocation": "./.yarn/__virtual__/@nestjs-swagger-virtual-3cded8c23c/0/cache/@nestjs-swagger-npm-7.1.16-061a06af18-09b3189859.zip/node_modules/@nestjs/swagger/",\
+        "packageDependencies": [\
+          ["@nestjs/swagger", "virtual:2499dbb93d824027565d71b0716c4fb8b548ad61955d0a0286bfb3c5b4058e227894b6691d96808c00f576db14870018375210362c26ee321ea99fd6ed041c74#npm:7.1.16"],\
+          ["@fastify/static", null],\
+          ["@nestjs/common", "virtual:2499dbb93d824027565d71b0716c4fb8b548ad61955d0a0286bfb3c5b4058e227894b6691d96808c00f576db14870018375210362c26ee321ea99fd6ed041c74#npm:10.2.8"],\
+          ["@nestjs/core", "virtual:2499dbb93d824027565d71b0716c4fb8b548ad61955d0a0286bfb3c5b4058e227894b6691d96808c00f576db14870018375210362c26ee321ea99fd6ed041c74#npm:10.2.8"],\
+          ["@nestjs/mapped-types", "virtual:2499dbb93d824027565d71b0716c4fb8b548ad61955d0a0286bfb3c5b4058e227894b6691d96808c00f576db14870018375210362c26ee321ea99fd6ed041c74#npm:2.0.3"],\
+          ["@types/class-transformer", null],\
+          ["@types/class-validator", null],\
+          ["@types/fastify__static", null],\
+          ["@types/nestjs__common", null],\
+          ["@types/nestjs__core", null],\
+          ["@types/reflect-metadata", null],\
+          ["class-transformer", null],\
+          ["class-validator", null],\
+          ["js-yaml", "npm:4.1.0"],\
+          ["lodash", "npm:4.17.21"],\
+          ["path-to-regexp", "npm:3.2.0"],\
+          ["reflect-metadata", "npm:0.1.13"],\
+          ["swagger-ui-dist", "npm:5.9.1"]\
+        ],\
+        "packagePeers": [\
+          "@fastify/static",\
+          "@nestjs/common",\
+          "@nestjs/core",\
+          "@types/class-transformer",\
+          "@types/class-validator",\
+          "@types/fastify__static",\
+          "@types/nestjs__common",\
+          "@types/nestjs__core",\
+          "@types/reflect-metadata",\
+          "class-transformer",\
+          "class-validator",\
+          "reflect-metadata"\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["@nestjs/testing", [\
       ["npm:10.2.8", {\
         "packageLocation": "./.yarn/cache/@nestjs-testing-npm-10.2.8-ced72640ab-d1ffe2eaad.zip/node_modules/@nestjs/testing/",\
@@ -9596,6 +9643,7 @@ const RAW_RUNTIME_STATE =
           ["@nestjs/passport", "virtual:2499dbb93d824027565d71b0716c4fb8b548ad61955d0a0286bfb3c5b4058e227894b6691d96808c00f576db14870018375210362c26ee321ea99fd6ed041c74#npm:10.0.2"],\
           ["@nestjs/platform-express", "virtual:2499dbb93d824027565d71b0716c4fb8b548ad61955d0a0286bfb3c5b4058e227894b6691d96808c00f576db14870018375210362c26ee321ea99fd6ed041c74#npm:10.2.8"],\
           ["@nestjs/schematics", "virtual:2499dbb93d824027565d71b0716c4fb8b548ad61955d0a0286bfb3c5b4058e227894b6691d96808c00f576db14870018375210362c26ee321ea99fd6ed041c74#npm:10.0.3"],\
+          ["@nestjs/swagger", "virtual:2499dbb93d824027565d71b0716c4fb8b548ad61955d0a0286bfb3c5b4058e227894b6691d96808c00f576db14870018375210362c26ee321ea99fd6ed041c74#npm:7.1.16"],\
           ["@nestjs/testing", "virtual:2499dbb93d824027565d71b0716c4fb8b548ad61955d0a0286bfb3c5b4058e227894b6691d96808c00f576db14870018375210362c26ee321ea99fd6ed041c74#npm:10.2.8"],\
           ["@nestjs/typeorm", "virtual:2499dbb93d824027565d71b0716c4fb8b548ad61955d0a0286bfb3c5b4058e227894b6691d96808c00f576db14870018375210362c26ee321ea99fd6ed041c74#npm:10.0.0"],\
           ["@types/express", "npm:4.17.21"],\
@@ -10091,6 +10139,15 @@ const RAW_RUNTIME_STATE =
         "packagePeers": [\
           "@types/react",\
           "react"\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["swagger-ui-dist", [\
+      ["npm:5.9.1", {\
+        "packageLocation": "./.yarn/cache/swagger-ui-dist-npm-5.9.1-3338a1fea6-dee9f8b9e2.zip/node_modules/swagger-ui-dist/",\
+        "packageDependencies": [\
+          ["swagger-ui-dist", "npm:5.9.1"]\
         ],\
         "linkType": "HARD"\
       }]\

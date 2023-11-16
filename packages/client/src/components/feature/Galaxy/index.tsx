@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import Star from '../Star';
 import { getRandomInt, getGaussianRandomFloat } from '@utils/random';
-import { useRef } from 'react';
+import { useRef, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
 import {
 	ARMS,
@@ -31,43 +31,46 @@ const getSpiralPositions = (offset: number) => {
 
 export default function Galaxy() {
 	const galaxyRef = useRef<THREE.Group>(null!);
-	const stars = [];
 
-	useFrame((_, delta) => (galaxyRef.current.rotation.y += delta / 100));
+	useFrame((_, delta) => (galaxyRef.current.rotation.y += delta / 200));
 
-	for (let arm = 0; arm < ARMS; arm++) {
+	const stars = useMemo(() => {
+		const starList = [];
+		for (let arm = 0; arm < ARMS; arm++) {
+			for (let star = 0; star < STARS_NUM / (ARMS + 1); star++) {
+				const size = getRandomInt(STAR_MIN_SIZE, STAR_MAX_SIZE);
+				const position = getSpiralPositions((arm * 2 * Math.PI) / ARMS);
+
+				starList.push(
+					<Star
+						key={`${arm}${star}`}
+						position={position}
+						size={size}
+						color={'#FFF'}
+					/>,
+				);
+			}
+		}
+
 		for (let star = 0; star < STARS_NUM / (ARMS + 1); star++) {
 			const size = getRandomInt(STAR_MIN_SIZE, STAR_MAX_SIZE);
-			const position = getSpiralPositions((arm * 2 * Math.PI) / ARMS);
+			const position = new THREE.Vector3(
+				getGaussianRandomFloat(0, (ARMS_X_MEAN + ARMS_X_DIST) / 4),
+				getGaussianRandomFloat(0, GALAXY_THICKNESS * 2),
+				getGaussianRandomFloat(0, (ARMS_X_MEAN + ARMS_X_DIST) / 4),
+			);
 
-			stars.push(
+			starList.push(
 				<Star
-					key={`${arm}${star}`}
+					key={`star_${star}`}
 					position={position}
 					size={size}
 					color={'#FFF'}
 				/>,
 			);
 		}
-	}
-
-	for (let star = 0; star < STARS_NUM / (ARMS + 1); star++) {
-		const size = getRandomInt(STAR_MIN_SIZE, STAR_MAX_SIZE);
-		const position = new THREE.Vector3(
-			getGaussianRandomFloat(0, (ARMS_X_MEAN + ARMS_X_DIST) / 4),
-			getGaussianRandomFloat(0, GALAXY_THICKNESS * 2),
-			getGaussianRandomFloat(0, (ARMS_X_MEAN + ARMS_X_DIST) / 4),
-		);
-
-		stars.push(
-			<Star
-				key={`star_${star}`}
-				position={position}
-				size={size}
-				color={'#FFF'}
-			/>,
-		);
-	}
+		return starList;
+	}, []);
 
 	return <group ref={galaxyRef}>{stars}</group>;
 }

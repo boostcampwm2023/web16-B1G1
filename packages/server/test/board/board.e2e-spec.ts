@@ -72,7 +72,27 @@ describe('BoardController (e2e)', () => {
 		});
 
 		// #65 [09-03] 서버는 검색된 사용자의 글 데이터를 전송한다.
-		it.todo('GET /board/by-author');
+		it('GET /board/by-author', async () => {
+			const author = 'testuser';
+			const board = {
+				title: 'test',
+				content: 'test',
+				author,
+			};
+			await request(app.getHttpServer()).post('/board').send(board);
+
+			const response = await request(app.getHttpServer())
+				.get(`/board/by-author?author=${author}`)
+				.expect(200);
+
+			expect(response).toHaveProperty('body');
+			expect(response.body).toBeInstanceOf(Array);
+
+			const boards = response.body as Board[];
+			expect(boards.length).toBeGreaterThan(0);
+			expect(boards[0]).toHaveProperty('id');
+			expect(boards[0]).toHaveProperty('title');
+		});
 
 		// (추가 필요) 서버는 사용자의 요청에 따라 글을 수정한다.
 		it.todo('PATCH /board/:id');

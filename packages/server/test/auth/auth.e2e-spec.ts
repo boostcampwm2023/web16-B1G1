@@ -23,20 +23,36 @@ describe('AuthController (/auth, e2e)', () => {
 
 	// #16 [02-09] 서버는 회원가입 데이터를 받아 형식 검사와 아이디 중복검사를 진행한다.
 	// #17 [02-10] 검사에 통과하면 회원 정보를 데이터베이스에 저장한다.
-	it.todo('POST /auth/signup');
+	it('POST /auth/signup', async () => {
+		const randomeBytes = Math.random().toString(36).slice(2, 10);
+
+		const newUser = {
+			username: randomeBytes,
+			nickname: randomeBytes,
+			password: randomeBytes,
+		};
+
+		const response = await request(app.getHttpServer())
+			.post('/auth/signup')
+			.send(newUser)
+			.expect(201);
+
+		expect(response).toHaveProperty('body');
+		const createdUser = response.body;
+		expect(createdUser).toHaveProperty('id');
+		expect(typeof createdUser.id).toBe('number');
+
+		expect(createdUser).toMatchObject({
+			username: newUser.username,
+			nickname: newUser.nickname,
+		});
+	});
 
 	// #20 [03-02] 사용자가 정보제공을 허용하여 콜백 API 요청을 받으면, 백엔드 서버는 요청에 포함된 코드를 통해 해당 서비스의 인가 서버에 액세스 토큰을 요청한다.
 	// #21 [03-03] 액세스 토큰을 전달받으면, 백엔드 서버는 액세스 토큰을 통해 해당 서비스의 리소스 서버에 사용자 정보를 요청한다.
 	// #22 [03-04] 사용자 정보를 전달받으면, 필요한 속성만 추출하여 회원 정보를 데이터베이스에 저장한다.
-	it.todo('GET /auth/oauth/:service'); // OAuth2.0 서비스 로그인 페이지로 리다이렉트, 쿼리 스트링으로 client_id, scope 담아서 보냄
-	it.todo('GET /auth/oauth/:service/callback');
-	// OAuth2.0 서비스 로그인 후 리다이렉트, 쿼리 스트링으로 code 담아서 보냄.
-	// 백엔드 서버는 해당 서비스의 인가 서버에 액세스 토큰을 요청한다.
-	// 액세스 토큰을 전달받으면, 백엔드 서버는 액세스 토큰을 통해 해당 서비스의 리소스 서버에 사용자 정보를 요청한다.
-	// 사용자 정보를 받으면, 유저 테이블을 조회하여 이미 가입한 회원인지 확인한다.
-	// 이미 가입한 회원이라면, JWT를 발급하고 쿠키에 저장한다. -> JWT 리턴하는지 확인
-	// 새로운 회원이라면, 클라이언트에 닉네임 정보를 받아오도록 요청함. 받아오면 회원 정보를 데이터베이스에 저장하고 JWT를 발급하고 쿠키에 저장한다. -> redirect 확인
-	// 위 로직은 e2e 테스트가 힘들기 때문에 구현을 먼저 하는 것으로 결정.
+	// it.todo('GET /auth/oauth/:service');
+	// it.todo('GET /auth/oauth/:service/callback');
 
 	// #27 [04-04] 데이터베이스에서 로그인 데이터로 조회를 하여 비교한다.
 	// #28 [04-05] 없는 회원 정보라면 NotFoundError를 응답한다.

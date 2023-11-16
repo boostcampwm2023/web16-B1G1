@@ -42,6 +42,11 @@ export class BoardController {
 		return this.boardService.update(+id, updateBoardDto);
 	}
 
+	@Patch(':id/like')
+	patchLike(@Param('id') id: string): Promise<Partial<Board>> {
+		return this.boardService.patchLike(+id);
+	}
+
 	@Delete(':id')
 	remove(@Param('id') id: string) {
 		return this.boardService.remove(+id);

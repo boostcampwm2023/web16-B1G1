@@ -47,6 +47,13 @@ export class BoardService {
 		return `This action updates a #${id} board`;
 	}
 
+	async patchLike(id: number): Promise<Partial<Board>> {
+		const board = await this.findBoardById(id);
+		board.like_cnt += 1;
+		await this.boardRepository.save(board);
+		return { like_cnt: board.like_cnt };
+	}
+
 	remove(id: number) {
 		return `This action removes a #${id} board`;
 	}

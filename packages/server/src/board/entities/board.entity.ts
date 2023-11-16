@@ -19,4 +19,7 @@ export class Board extends BaseEntity {
 
 	@Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
 	updated_at: Date;
+
+	@Column({ type: 'int', default: 0 })
+	like_cnt: number;
 }

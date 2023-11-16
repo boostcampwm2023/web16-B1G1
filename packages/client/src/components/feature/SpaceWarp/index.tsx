@@ -1,15 +1,16 @@
 import { getRandomFloat, getRandomInt } from '@utils/random';
 import { BACKGROUND_STAR_COLORS } from 'constants/backgroundStars';
-import { useMemo, useRef } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
-
-const SPACE_WARP_LINES_NUM = 1500;
-const SPACE_WARP_LINE_LENGTH = 10000;
-const SPACE_WARP_Y_MAX = 100000;
-const SPACE_WARP_Y_MIN = -100000;
-const SPACE_WARP_XZ_MAX = 10000;
-const SPACE_WARP_XZ_MIN = -10000;
+import {
+	SPACE_WARP_LINES_NUM,
+	SPACE_WARP_LINE_LENGTH,
+	SPACE_WARP_XZ_MAX,
+	SPACE_WARP_XZ_MIN,
+	SPACE_WARP_Y_MAX,
+	SPACE_WARP_Y_MIN,
+} from 'constants/spaceWarp';
 
 const geSpaceWarpLinesInfo = () => {
 	const positions = Array.from({ length: SPACE_WARP_LINES_NUM }, () => {

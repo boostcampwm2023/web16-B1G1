@@ -40,7 +40,14 @@ export default function Galaxy() {
 			const size = getRandomInt(STAR_MIN_SIZE, STAR_MAX_SIZE);
 			const position = getSpiralPositions((arm * 2 * Math.PI) / ARMS);
 
-			stars.push(<Star position={position} size={size} color={'#FFF'} />);
+			stars.push(
+				<Star
+					key={`${arm}${star}`}
+					position={position}
+					size={size}
+					color={'#FFF'}
+				/>,
+			);
 		}
 	}
 
@@ -52,7 +59,14 @@ export default function Galaxy() {
 			getGaussianRandomFloat(0, (ARMS_X_MEAN + ARMS_X_DIST) / 4),
 		);
 
-		stars.push(<Star position={position} size={size} color={'#FFF'} />);
+		stars.push(
+			<Star
+				key={`star_${star}`}
+				position={position}
+				size={size}
+				color={'#FFF'}
+			/>,
+		);
 	}
 
 	return <group ref={galaxyRef}>{stars}</group>;

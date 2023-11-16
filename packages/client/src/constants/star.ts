@@ -1,1 +1,1 @@
-export const DIST_LIMIT = 5000;
+export const DIST_LIMIT = 3000;

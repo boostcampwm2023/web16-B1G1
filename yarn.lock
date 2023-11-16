@@ -3433,9 +3433,11 @@ __metadata:
     react-dom: "npm:^18.2.0"
     react-router-dom: "npm:^6.18.0"
     three: "npm:^0.158.0"
+    three-stdlib: "npm:^2.28.5"
     typescript: "npm:^5.0.2"
     vite: "npm:^4.4.5"
     vite-tsconfig-paths: "npm:^4.2.1"
+    zustand: "npm:^4.4.6"
   languageName: unknown
   linkType: soft
 
@@ -8326,7 +8328,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"three-stdlib@npm:^2.23.4, three-stdlib@npm:^2.28.0":
+"three-stdlib@npm:^2.23.4, three-stdlib@npm:^2.28.0, three-stdlib@npm:^2.28.5":
   version: 2.28.5
   resolution: "three-stdlib@npm:2.28.5"
   dependencies:
@@ -8732,6 +8734,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"use-sync-external-store@npm:1.2.0":
+  version: 1.2.0
+  resolution: "use-sync-external-store@npm:1.2.0"
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0
+  checksum: ac4814e5592524f242921157e791b022efe36e451fe0d4fd4d204322d5433a4fc300d63b0ade5185f8e0735ded044c70bcf6d2352db0f74d097a238cebd2da02
+  languageName: node
+  linkType: hard
+
 "util-deprecate@npm:^1.0.1, util-deprecate@npm:~1.0.1":
   version: 1.0.2
   resolution: "util-deprecate@npm:1.0.2"
@@ -9114,5 +9125,25 @@ __metadata:
     react:
       optional: true
   checksum: 6a56185ca67080c252dfe96039da02094cfd780bd7a45768708105f114dea39ae9abc80ffaa7f3f6104e6490db325bd443b857ab5eab8ebf9a697318cd163bb6
+  languageName: node
+  linkType: hard
+
+"zustand@npm:^4.4.6":
+  version: 4.4.6
+  resolution: "zustand@npm:4.4.6"
+  dependencies:
+    use-sync-external-store: "npm:1.2.0"
+  peerDependencies:
+    "@types/react": ">=16.8"
+    immer: ">=9.0"
+    react: ">=16.8"
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+    immer:
+      optional: true
+    react:
+      optional: true
+  checksum: 78ed41a9e946eb5488a102fb8ed839f9ba901f45b83cec23539957939744a09d484aa430d5ef7066b007fa90dc780f8b531f0d176b3c132c8e11216ddc3dbd43
   languageName: node
   linkType: hard

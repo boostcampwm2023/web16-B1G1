@@ -1,10 +1,10 @@
 import { Canvas } from '@react-three/fiber';
 import BackgroundStars from '../BackgroundStars';
-import { OrbitControls } from '@react-three/drei';
 import Galaxy from '../Galaxy';
 import { EffectComposer, Bloom } from '@react-three/postprocessing';
 import { useControls } from 'leva';
 import { CAMERA_POSITION, CAMERA_ROTATION, CAMERA_FAR } from 'constants/camera';
+import Controls from '../Controls/Controls.tsx';
 
 export default function Screen() {
 	const camera = {
@@ -36,7 +36,7 @@ export default function Screen() {
 				<color attach="background" args={['#000']} />
 				<ambientLight color="#fff" intensity={5} />
 				<axesHelper args={[20000]} />
-				<OrbitControls />
+				<Controls />
 
 				<BackgroundStars />
 				<Galaxy />

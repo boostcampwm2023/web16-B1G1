@@ -4,6 +4,7 @@ import * as request from 'supertest';
 import { AppModule } from '../../src/app.module';
 import { Board } from '../../src/board/entities/board.entity';
 import { UpdateBoardDto } from 'src/board/dto/update-board.dto';
+import { CreateBoardDto } from 'src/board/dto/create-board.dto';
 
 describe('BoardController (e2e)', () => {
 	let app: INestApplication;
@@ -172,6 +173,23 @@ describe('BoardController (e2e)', () => {
 		});
 
 		// (추가 필요) 서버는 사용자의 요청에 따라 글을 삭제한다.
-		it.todo('DELETE /board/:id');
+		it('DELETE /board/:id', async () => {
+			const board: CreateBoardDto = {
+				title: 'test',
+				content: 'test',
+				author: 'test',
+			};
+			const newBoard = (
+				await request(app.getHttpServer()).post('/board').send(board)
+			).body;
+
+			await request(app.getHttpServer())
+				.delete(`/board/${newBoard.id}`)
+				.expect(200);
+
+			await request(app.getHttpServer())
+				.get(`/board/${newBoard.id}`)
+				.expect(404);
+		});
 	});
 });

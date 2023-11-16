@@ -6,19 +6,36 @@ import {
 	Patch,
 	Param,
 	Delete,
+	HttpCode,
+	Res,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { CreateUserDto } from './dto/create-user.dto';
+import { SignUpUserDto } from './dto/signup-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
+import { SignInUserDto } from './dto/signin-user.dto';
+import { Response } from 'express';
 
 @Controller('auth')
 export class AuthController {
 	constructor(private readonly authService: AuthService) {}
 
 	@Post('signup')
-	signUp(@Body() createUserDto: CreateUserDto): Promise<Partial<User>> {
-		return this.authService.signUp(createUserDto);
+	signUp(@Body() signUpUserDto: SignUpUserDto): Promise<Partial<User>> {
+		return this.authService.signUp(signUpUserDto);
+	}
+
+	@Post('signin')
+	@HttpCode(200)
+	async signIn(
+		@Body() signInUserDto: SignInUserDto,
+		@Res({ passthrough: true }) res: Response,
+	) {
+		const result = await this.authService.signIn(signInUserDto);
+		// res.setHeader('Authorization', `Bearer ${result.accessToken}`);
+		res.cookie('accessToken', result.accessToken, { httpOnly: true });
+
+		return result;
 	}
 
 	@Get()

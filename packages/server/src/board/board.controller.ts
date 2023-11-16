@@ -16,6 +16,7 @@ import {
 	ApiBadRequestResponse,
 	ApiCreatedResponse,
 	ApiNotFoundResponse,
+	ApiOkResponse,
 	ApiOperation,
 	ApiTags,
 } from '@nestjs/swagger';
@@ -38,7 +39,7 @@ export class BoardController {
 
 	@Get()
 	@ApiOperation({ summary: '게시글 조회', description: '게시글을 조회합니다.' })
-	@ApiCreatedResponse({ status: 200, description: '게시글 조회 성공' })
+	@ApiOkResponse({ status: 200, description: '게시글 조회 성공' })
 	@ApiBadRequestResponse({
 		status: 400,
 		description: '잘못된 요청으로 게시글 조회 실패',
@@ -52,7 +53,7 @@ export class BoardController {
 		summary: '작성자별 게시글 조회',
 		description: '작성자별 게시글을 조회합니다.',
 	})
-	@ApiCreatedResponse({ status: 200, description: '게시글 조회 성공' })
+	@ApiOkResponse({ status: 200, description: '게시글 조회 성공' })
 	@ApiBadRequestResponse({
 		status: 400,
 		description: '잘못된 요청으로 게시글 조회 실패',
@@ -66,7 +67,7 @@ export class BoardController {
 		summary: '게시글 상세 조회',
 		description: '게시글을 상세 조회합니다.',
 	})
-	@ApiCreatedResponse({ status: 200, description: '게시글 조회 성공' })
+	@ApiOkResponse({ status: 200, description: '게시글 조회 성공' })
 	@ApiNotFoundResponse({
 		status: 404,
 		description: '게시글이 존재하지 않음',
@@ -77,7 +78,7 @@ export class BoardController {
 
 	@Patch(':id')
 	@ApiOperation({ summary: '게시글 수정', description: '게시글을 수정합니다.' })
-	@ApiCreatedResponse({ status: 200, description: '게시글 수정 성공' })
+	@ApiOkResponse({ status: 200, description: '게시글 수정 성공' })
 	@ApiBadRequestResponse({
 		status: 400,
 		description: '잘못된 요청으로 게시글 수정 실패',
@@ -91,7 +92,7 @@ export class BoardController {
 		summary: '게시글 좋아요',
 		description: '게시글에 좋아요를 합니다.',
 	})
-	@ApiCreatedResponse({ status: 200, description: '게시글 좋아요 성공' })
+	@ApiOkResponse({ status: 200, description: '게시글 좋아요 성공' })
 	@ApiBadRequestResponse({
 		status: 400,
 		description: '잘못된 요청으로 게시글 좋아요 실패',
@@ -105,7 +106,7 @@ export class BoardController {
 		summary: '게시글 좋아요 취소',
 		description: '게시글에 좋아요를 취소합니다.',
 	})
-	@ApiCreatedResponse({ status: 200, description: '게시글 좋아요 취소 성공' })
+	@ApiOkResponse({ status: 200, description: '게시글 좋아요 취소 성공' })
 	@ApiBadRequestResponse({
 		status: 400,
 		description: '잘못된 요청으로 게시글 좋아요 취소 실패',
@@ -116,7 +117,7 @@ export class BoardController {
 
 	@Delete(':id')
 	@ApiOperation({ summary: '게시글 삭제', description: '게시글을 삭제합니다.' })
-	@ApiCreatedResponse({ status: 200, description: '게시글 삭제 성공' })
+	@ApiOkResponse({ status: 200, description: '게시글 삭제 성공' })
 	@ApiNotFoundResponse({
 		status: 404,
 		description: '게시글이 존재하지 않음',

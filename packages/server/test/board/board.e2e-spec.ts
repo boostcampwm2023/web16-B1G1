@@ -50,7 +50,29 @@ describe('BoardController (e2e)', () => {
 		});
 
 		// #45 [06-08] 서버는 좋아요 / 좋아요 취소 요청을 받아 데이터베이스의 데이터를 수정한다.
-		it.todo('PATCH /board/:id/like');
+		it('PATCH /board/:id/like', async () => {
+			const board = {
+				title: 'test',
+				content: 'test',
+				author: 'test',
+			};
+			const createdBoard = (
+				await request(app.getHttpServer()).post('/board').send(board)
+			).body;
+			expect(createdBoard).toHaveProperty('like_cnt');
+			const cntBeforeLike = createdBoard.like_cnt;
+
+			const resLike = await request(app.getHttpServer())
+				.patch(`/board/${createdBoard.id}/like`)
+				.expect(200);
+
+			expect(resLike).toHaveProperty('body');
+			expect(resLike.body).toHaveProperty('like_cnt');
+			const cntAfterLike = resLike.body.like_cnt;
+
+			expect(cntAfterLike).toBe(cntBeforeLike + 1);
+		});
+
 		it.todo('PATCH /board/:id/unlike');
 
 		// #60 [08-06] 서버는 전송 받은 데이터를 데이터베이스에 저장한다.

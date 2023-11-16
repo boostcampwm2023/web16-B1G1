@@ -1,4 +1,9 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+	BadRequestException,
+	ConflictException,
+	Injectable,
+	UnauthorizedException,
+} from '@nestjs/common';
 import { SignUpUserDto } from './dto/signup-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -47,19 +52,31 @@ export class AuthService {
 		}
 	}
 
-	findAll() {
-		return `This action returns all auth`;
+	async isAvailableUsername(username: string): Promise<boolean> {
+		if (!username) {
+			throw new BadRequestException('username is required');
+		}
+
+		const user = await this.authRepository.findOneBy({ username });
+
+		if (user) {
+			throw new ConflictException('username already exists');
+		} else {
+			return true;
+		}
 	}
 
-	findOne(id: number) {
-		return `This action returns a #${id} auth`;
-	}
+	async isAvailableNickname(nickname: string): Promise<boolean> {
+		if (!nickname) {
+			throw new BadRequestException('nickname is required');
+		}
 
-	update(id: number, updateAuthDto: UpdateUserDto) {
-		return `This action updates a #${id} auth`;
-	}
+		const user = await this.authRepository.findOneBy({ nickname });
 
-	remove(id: number) {
-		return `This action removes a #${id} auth`;
+		if (user) {
+			throw new ConflictException('nickname already exists');
+		} else {
+			return true;
+		}
 	}
 }

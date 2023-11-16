@@ -8,6 +8,7 @@ import {
 	Delete,
 	HttpCode,
 	Res,
+	Query,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SignUpUserDto } from './dto/signup-user.dto';
@@ -47,23 +48,13 @@ export class AuthController {
 		return { message: 'success' };
 	}
 
-	@Get()
-	findAll() {
-		return this.authService.findAll();
+	@Get('is-available-username')
+	isAvailableUsername(@Query('username') username: string) {
+		return this.authService.isAvailableUsername(username);
 	}
 
-	@Get(':id')
-	findOne(@Param('id') id: string) {
-		return this.authService.findOne(+id);
-	}
-
-	@Patch(':id')
-	update(@Param('id') id: string, @Body() updateAuthDto: UpdateUserDto) {
-		return this.authService.update(+id, updateAuthDto);
-	}
-
-	@Delete(':id')
-	remove(@Param('id') id: string) {
-		return this.authService.remove(+id);
+	@Get('is-available-nickname')
+	isAvailableNickname(@Query('nickname') nickname: string) {
+		return this.authService.isAvailableNickname(nickname);
 	}
 }

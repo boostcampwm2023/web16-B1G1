@@ -33,9 +33,18 @@ export class AuthController {
 	) {
 		const result = await this.authService.signIn(signInUserDto);
 		// res.setHeader('Authorization', `Bearer ${result.accessToken}`);
-		res.cookie('accessToken', result.accessToken, { httpOnly: true });
+		res.cookie('accessToken', result.accessToken, {
+			path: '/',
+			httpOnly: true,
+		});
 
 		return result;
+	}
+
+	@Get('signout')
+	async signOut(@Res({ passthrough: true }) res: Response) {
+		res.clearCookie('accessToken', { path: '/', httpOnly: true });
+		return { message: 'success' };
 	}
 
 	@Get()

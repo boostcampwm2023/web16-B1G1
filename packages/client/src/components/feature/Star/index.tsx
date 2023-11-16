@@ -1,7 +1,8 @@
 import { useRef } from 'react';
 import * as THREE from 'three';
-import { useFrame } from '@react-three/fiber';
+import { ThreeEvent, useFrame } from '@react-three/fiber';
 import { DIST_LIMIT } from 'constants/star';
+import { useCameraStore } from 'store/useCameraStore';
 
 interface PropsType {
 	position: THREE.Vector3;
@@ -11,6 +12,7 @@ interface PropsType {
 
 export default function Star({ position, size, color }: PropsType) {
 	const meshRef = useRef<THREE.Mesh>(null!);
+	const { targetView, setTargetView } = useCameraStore();
 
 	useFrame((state, delta) => {
 		const cameraDistance = new THREE.Vector3(0, 0, 0).distanceTo(
@@ -25,8 +27,19 @@ export default function Star({ position, size, color }: PropsType) {
 		}
 	});
 
+	const handleMeshClick = (e: ThreeEvent<MouseEvent>) => {
+		e.stopPropagation();
+
+		if (meshRef.current !== targetView) {
+			setTargetView(meshRef.current);
+			return;
+		}
+
+		setTargetView(null);
+	};
+
 	return (
-		<mesh ref={meshRef} position={position}>
+		<mesh ref={meshRef} position={position} onClick={(e) => handleMeshClick(e)}>
 			<sphereGeometry args={[size, 32, 16]} />
 			<meshStandardMaterial
 				color={color}

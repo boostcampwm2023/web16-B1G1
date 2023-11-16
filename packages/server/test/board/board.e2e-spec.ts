@@ -72,8 +72,28 @@ describe('BoardController (e2e)', () => {
 
 			expect(cntAfterLike).toBe(cntBeforeLike + 1);
 		});
+		it('PATCH /board/:id/unlike', async () => {
+			const board = {
+				title: 'test',
+				content: 'test',
+				author: 'test',
+			};
+			const createdBoard = (
+				await request(app.getHttpServer()).post('/board').send(board)
+			).body;
+			expect(createdBoard).toHaveProperty('like_cnt');
+			const cntBeforeUnlike = createdBoard.like_cnt;
 
-		it.todo('PATCH /board/:id/unlike');
+			const resUnlike = await request(app.getHttpServer())
+				.patch(`/board/${createdBoard.id}/unlike`)
+				.expect(200);
+
+			expect(resUnlike).toHaveProperty('body');
+			expect(resUnlike.body).toHaveProperty('like_cnt');
+			const cntAfterUnlike = resUnlike.body.like_cnt;
+
+			expect(cntAfterUnlike).toBe(cntBeforeUnlike - 1);
+		});
 
 		// #60 [08-06] 서버는 전송 받은 데이터를 데이터베이스에 저장한다.
 		it('POST /board', async () => {

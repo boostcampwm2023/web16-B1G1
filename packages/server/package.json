@@ -25,6 +25,7 @@
 		"@nestjs/mapped-types": "*",
 		"@nestjs/platform-express": "^10.0.0",
 		"@nestjs/typeorm": "^10.0.0",
+		"bcrypt": "^5.1.1",
 		"dotenv": "^16.3.1",
 		"mysql2": "^3.6.3",
 		"reflect-metadata": "^0.1.13",

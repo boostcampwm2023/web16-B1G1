@@ -1,14 +1,10 @@
-import { Route, Routes, HashRouter } from 'react-router-dom';
-import Home from './pages/Home';
-import Landing from './pages/Landing';
+import { router } from 'Router';
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { RouterProvider } from 'react-router-dom';
 
-export default function App() {
-	return (
-		<HashRouter>
-			<Routes>
-				<Route index element={<Landing />} />
-				<Route path="/home" element={<Home />} />
-			</Routes>
-		</HashRouter>
-	);
-}
+ReactDOM.createRoot(document.getElementById('root')!).render(
+	<React.StrictMode>
+		<RouterProvider router={router} />
+	</React.StrictMode>,
+);

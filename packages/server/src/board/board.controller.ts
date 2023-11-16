@@ -53,7 +53,7 @@ export class BoardController {
 	}
 
 	@Delete(':id')
-	remove(@Param('id') id: string) {
-		return this.boardService.remove(+id);
+	deleteBoard(@Param('id') id: string): Promise<void> {
+		return this.boardService.deleteBoard(+id);
 	}
 }

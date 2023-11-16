@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+	BadRequestException,
+	Injectable,
+	NotFoundException,
+} from '@nestjs/common';
 import { CreateBoardDto } from './dto/create-board.dto';
 import { UpdateBoardDto } from './dto/update-board.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -67,7 +71,7 @@ export class BoardService {
 		return { like_cnt: board.like_cnt };
 	}
 
-	remove(id: number) {
-		return `This action removes a #${id} board`;
+	async deleteBoard(id: number): Promise<void> {
+		const result = await this.boardRepository.delete({ id });
 	}
 }

@@ -16,10 +16,54 @@ describe('AuthController (/auth, e2e)', () => {
 	});
 
 	// #12 [02-05] 서버는 아이디 중복을 검사하고 결과를 클라이언트에 전송한다.
-	it.todo('GET /auth/check-duplicate-username');
+	it('GET /auth/is-available-username', async () => {
+		const randomeBytes = Math.random().toString(36).slice(2, 10);
+
+		const newUser = {
+			username: randomeBytes,
+			nickname: randomeBytes,
+			password: randomeBytes,
+		};
+
+		await request(app.getHttpServer()).post('/auth/signup').send(newUser);
+
+		await request(app.getHttpServer())
+			.get(`/auth/is-available-username?username=${randomeBytes}`)
+			.expect(409);
+
+		await request(app.getHttpServer())
+			.get(`/auth/is-available-username?username=${randomeBytes + '1'}`)
+			.expect(200);
+
+		await request(app.getHttpServer())
+			.get(`/auth/is-available-username`)
+			.expect(400);
+	});
 
 	// #91 [02-12] 서버는 닉네임 중복을 검사하고 결과를 클라이언트에 전송한다.
-	it.todo('GET /auth/check-duplicate-nickname');
+	it('GET /auth/is-available-nickname', async () => {
+		const randomeBytes = Math.random().toString(36).slice(2, 10);
+
+		const newUser = {
+			username: randomeBytes,
+			nickname: randomeBytes,
+			password: randomeBytes,
+		};
+
+		await request(app.getHttpServer()).post('/auth/signup').send(newUser);
+
+		await request(app.getHttpServer())
+			.get(`/auth/is-available-nickname?nickname=${randomeBytes}`)
+			.expect(409);
+
+		await request(app.getHttpServer())
+			.get(`/auth/is-available-nickname?nickname=${randomeBytes + '1'}`)
+			.expect(200);
+
+		await request(app.getHttpServer())
+			.get(`/auth/is-available-nickname`)
+			.expect(400);
+	});
 
 	// #16 [02-09] 서버는 회원가입 데이터를 받아 형식 검사와 아이디 중복검사를 진행한다.
 	// #17 [02-10] 검사에 통과하면 회원 정보를 데이터베이스에 저장한다.

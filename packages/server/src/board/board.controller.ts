@@ -22,8 +22,8 @@ export class BoardController {
 	}
 
 	@Get()
-	findAll() {
-		return this.boardService.findAll();
+	findAllBoards(): Promise<Board[]> {
+		return this.boardService.findAllBoards();
 	}
 
 	@Get(':id')

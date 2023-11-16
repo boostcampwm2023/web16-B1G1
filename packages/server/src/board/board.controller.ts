@@ -6,6 +6,7 @@ import {
 	Patch,
 	Param,
 	Delete,
+	Query,
 } from '@nestjs/common';
 import { BoardService } from './board.service';
 import { CreateBoardDto } from './dto/create-board.dto';
@@ -24,6 +25,11 @@ export class BoardController {
 	@Get()
 	findAllBoards(): Promise<Board[]> {
 		return this.boardService.findAllBoards();
+	}
+
+	@Get('by-author')
+	findAllBoardsByAuthor(@Query('author') author: string): Promise<Board[]> {
+		return this.boardService.findAllBoardsByAuthor(author);
 	}
 
 	@Get(':id')

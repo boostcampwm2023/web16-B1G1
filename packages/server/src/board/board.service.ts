@@ -30,6 +30,11 @@ export class BoardService {
 		return boards;
 	}
 
+	async findAllBoardsByAuthor(author: string): Promise<Board[]> {
+		const boards = await this.boardRepository.findBy({ author });
+		return boards;
+	}
+
 	async findBoardById(id: number): Promise<Board> {
 		const found: Board = await this.boardRepository.findOneBy({ id });
 		if (!found) {

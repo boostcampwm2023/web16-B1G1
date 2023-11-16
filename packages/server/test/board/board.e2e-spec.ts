@@ -3,6 +3,7 @@ import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from '../../src/app.module';
 import { Board } from '../../src/board/entities/board.entity';
+import { UpdateBoardDto } from 'src/board/dto/update-board.dto';
 
 describe('BoardController (e2e)', () => {
 	let app: INestApplication;
@@ -137,7 +138,38 @@ describe('BoardController (e2e)', () => {
 		});
 
 		// (추가 필요) 서버는 사용자의 요청에 따라 글을 수정한다.
-		it.todo('PATCH /board/:id');
+		it('PATCH /board/:id', async () => {
+			const board = {
+				title: 'test',
+				content: 'test',
+				author: 'test',
+			};
+			const createdBoard = (
+				await request(app.getHttpServer()).post('/board').send(board)
+			).body;
+			expect(createdBoard).toHaveProperty('id');
+			const id = createdBoard.id;
+
+			const toUpdate: UpdateBoardDto = {
+				title: 'updated',
+				content: 'updated',
+			};
+
+			const updated = await request(app.getHttpServer())
+				.patch(`/board/${id}`)
+				.send({ title: 'updated', content: 'updated' })
+				.expect(200);
+
+			expect(updated).toHaveProperty('body');
+			const updatedBoard = updated.body;
+
+			expect(updatedBoard).toHaveProperty('id');
+			expect(updatedBoard.id).toBe(id);
+			expect(updatedBoard).toHaveProperty('title');
+			expect(updatedBoard.title).toBe(toUpdate.title);
+			expect(updatedBoard).toHaveProperty('content');
+			expect(updatedBoard.content).toBe(toUpdate.content);
+		});
 
 		// (추가 필요) 서버는 사용자의 요청에 따라 글을 삭제한다.
 		it.todo('DELETE /board/:id');

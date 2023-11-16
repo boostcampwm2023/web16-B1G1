@@ -34,7 +34,20 @@ describe('BoardController (e2e)', () => {
 		});
 
 		// (추가 필요) 서버는 사용자의 글 목록을 전송한다.
-		it.todo('GET /board');
+		it('GET /board', async () => {
+			const response = await request(app.getHttpServer())
+				.get('/board')
+				.expect(200);
+
+			expect(response).toHaveProperty('body');
+			expect(response.body).toBeInstanceOf(Array);
+
+			const boards = response.body as Board[];
+			if (boards.length > 0) {
+				expect(boards[0]).toHaveProperty('id');
+				expect(boards[0]).toHaveProperty('title');
+			}
+		});
 
 		// #45 [06-08] 서버는 좋아요 / 좋아요 취소 요청을 받아 데이터베이스의 데이터를 수정한다.
 		it.todo('PATCH /board/:id/like');

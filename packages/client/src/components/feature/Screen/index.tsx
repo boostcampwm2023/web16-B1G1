@@ -6,6 +6,7 @@ import { useControls } from 'leva';
 import { CAMERA_POSITION, CAMERA_ROTATION, CAMERA_FAR } from 'constants/camera';
 import Controls from '../Controls/Controls.tsx';
 import PostStars from '../PostStars/index.tsx';
+import { useCameraStore } from 'store/useCameraStore.ts';
 
 export default function Screen() {
 	const camera = {
@@ -13,6 +14,8 @@ export default function Screen() {
 		rotation: CAMERA_ROTATION,
 		far: CAMERA_FAR,
 	};
+
+	const { cameraToCurrentView, setCameraToCurrentView } = useCameraStore();
 
 	const { intensity, mipmapBlur, luminanceThreshold, luminanceSmoothing } =
 		useControls('Bloom', {
@@ -24,7 +27,12 @@ export default function Screen() {
 
 	return (
 		<div style={{ height: '100vh', width: '100vw' }}>
-			<Canvas camera={camera}>
+			<Canvas
+				camera={camera}
+				onWheel={(e) =>
+					setCameraToCurrentView(cameraToCurrentView + e.deltaY / 20)
+				}
+			>
 				<EffectComposer>
 					<Bloom
 						intensity={intensity}

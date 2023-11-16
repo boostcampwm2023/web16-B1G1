@@ -1,5 +1,5 @@
 export const ARMS = 2;
-export const STARS_NUM = 5000;
+export const STARS_NUM = 2000;
 export const STAR_MIN_SIZE = 5;
 export const STAR_MAX_SIZE = 15;
 export const ARMS_X_MEAN = 1500;

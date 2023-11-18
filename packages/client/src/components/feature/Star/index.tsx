@@ -19,9 +19,10 @@ const useForwardRef = <T,>(ref: ForwardedRef<T>, initialValue: any = null) => {
 
 		if (typeof ref === 'function') {
 			ref(targetRef.current);
-		} else {
-			ref.current = targetRef.current;
+			return;
 		}
+
+		ref.current = targetRef.current;
 	}, [ref]);
 
 	return targetRef;

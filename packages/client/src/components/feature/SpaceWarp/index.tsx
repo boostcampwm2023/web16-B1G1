@@ -1,6 +1,6 @@
 import { getRandomFloat, getRandomInt } from '@utils/random';
 import { BACKGROUND_STAR_COLORS } from 'constants/backgroundStars';
-import { useMemo, useRef, useState } from 'react';
+import { useMemo, useRef } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 import {

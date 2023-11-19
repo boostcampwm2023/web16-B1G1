@@ -18,10 +18,12 @@ import {
 	ApiCreatedResponse,
 	ApiOkResponse,
 	ApiOperation,
+	ApiTags,
 	ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 
 @Controller('auth')
+@ApiTags('인증/인가 API')
 export class AuthController {
 	constructor(private readonly authService: AuthService) {}
 

@@ -14,7 +14,7 @@ export default function Star({ position, size, color }: PropsType) {
 	const meshRef = useRef<THREE.Mesh>(null!);
 	const { targetView, setTargetView } = useCameraStore();
 
-	useFrame((state, delta) => {
+	useFrame((state) => {
 		const cameraDistance = new THREE.Vector3(0, 0, 0).distanceTo(
 			state.camera.position,
 		);

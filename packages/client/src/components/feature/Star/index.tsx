@@ -31,7 +31,7 @@ const useForwardRef = <T,>(ref: ForwardedRef<T>, initialValue: any = null) => {
 const Star = forwardRef<THREE.Mesh, PropsType>((props, ref) => {
 	const innerRef = useForwardRef(ref);
 
-	useFrame((state, delta) => {
+	useFrame((state) => {
 		const cameraDistance = new THREE.Vector3(0, 0, 0).distanceTo(
 			state.camera.position,
 		);

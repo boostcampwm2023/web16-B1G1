@@ -1,18 +1,35 @@
-import { useRef } from 'react';
+import { useRef, forwardRef, useEffect, ForwardedRef } from 'react';
 import * as THREE from 'three';
-import { ThreeEvent, useFrame } from '@react-three/fiber';
+import { useFrame, ThreeEvent } from '@react-three/fiber';
 import { DIST_LIMIT } from 'constants/star';
-import { useCameraStore } from 'store/useCameraStore';
 
 interface PropsType {
+	children?: React.ReactNode;
+	onClick?: (e: ThreeEvent<MouseEvent>) => void;
 	position: THREE.Vector3;
 	size: number;
 	color: string;
 }
 
-export default function Star({ position, size, color }: PropsType) {
-	const meshRef = useRef<THREE.Mesh>(null!);
-	const { targetView, setTargetView } = useCameraStore();
+const useForwardRef = <T,>(ref: ForwardedRef<T>, initialValue: any = null) => {
+	const targetRef = useRef<T>(initialValue);
+
+	useEffect(() => {
+		if (!ref) return;
+
+		if (typeof ref === 'function') {
+			ref(targetRef.current);
+			return;
+		}
+
+		ref.current = targetRef.current;
+	}, [ref]);
+
+	return targetRef;
+};
+
+const Star = forwardRef<THREE.Mesh, PropsType>((props, ref) => {
+	const innerRef = useForwardRef(ref);
 
 	useFrame((state, delta) => {
 		const cameraDistance = new THREE.Vector3(0, 0, 0).distanceTo(
@@ -21,31 +38,23 @@ export default function Star({ position, size, color }: PropsType) {
 		const scale = cameraDistance / DIST_LIMIT;
 
 		if (cameraDistance > DIST_LIMIT) {
-			meshRef.current.scale.x = scale;
-			meshRef.current.scale.y = scale;
-			meshRef.current.scale.z = scale;
+			innerRef.current!.scale.x = scale;
+			innerRef.current!.scale.y = scale;
+			innerRef.current!.scale.z = scale;
 		}
 	});
 
-	const handleMeshClick = (e: ThreeEvent<MouseEvent>) => {
-		e.stopPropagation();
-
-		if (meshRef.current !== targetView) {
-			setTargetView(meshRef.current);
-			return;
-		}
-
-		setTargetView(null);
-	};
-
 	return (
-		<mesh ref={meshRef} position={position} onClick={(e) => handleMeshClick(e)}>
-			<sphereGeometry args={[size, 32, 16]} />
+		<mesh ref={innerRef} position={props.position} onClick={props.onClick}>
+			<sphereGeometry args={[props.size, 32, 16]} />
 			<meshStandardMaterial
-				color={color}
-				emissive={color}
+				color={props.color}
+				emissive={props.color}
 				emissiveIntensity={2}
 			/>
+			{props.children}
 		</mesh>
 	);
-}
+});
+
+export default Star;

@@ -5,6 +5,7 @@ import { EffectComposer, Bloom } from '@react-three/postprocessing';
 import { useControls } from 'leva';
 import { CAMERA_POSITION, CAMERA_ROTATION, CAMERA_FAR } from 'constants/camera';
 import Controls from '../Controls/Controls.tsx';
+import PostStars from '../PostStars/index.tsx';
 import { useCameraStore } from 'store/useCameraStore.ts';
 
 export default function Screen() {
@@ -45,9 +46,9 @@ export default function Screen() {
 				<ambientLight color="#fff" intensity={5} />
 				<axesHelper args={[20000]} />
 				<Controls />
-
 				<BackgroundStars />
 				<Galaxy />
+				<PostStars />
 			</Canvas>
 		</div>
 	);

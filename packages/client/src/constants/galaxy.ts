@@ -1,0 +1,10 @@
+export const ARMS = 2;
+export const STARS_NUM = 2000;
+export const STAR_MIN_SIZE = 5;
+export const STAR_MAX_SIZE = 15;
+export const ARMS_X_MEAN = 1500;
+export const ARMS_X_DIST = 3000;
+export const ARMS_Z_MEAN = 900;
+export const ARMS_Z_DIST = 1000;
+export const GALAXY_THICKNESS = 300;
+export const SPIRAL = 3;

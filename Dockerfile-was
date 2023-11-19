@@ -6,6 +6,8 @@ ADD . /app
 
 RUN yarn workspace server build
 
+# RUN apk add --no-cache --virtual .gyp python make g++ pkgconfig pixman-dev cairo-dev pango-dev
+
 EXPOSE 3000
 
 ENTRYPOINT ["yarn", "workspace", "server", "start:prod"]

@@ -21,6 +21,7 @@
 		"three": "^0.158.0"
 	},
 	"devDependencies": {
+		"@emotion/react": "^11.11.1",
 		"@react-three/postprocessing": "^2.15.11",
 		"@types/node": "^20.9.2",
 		"@types/react": "^18.2.15",

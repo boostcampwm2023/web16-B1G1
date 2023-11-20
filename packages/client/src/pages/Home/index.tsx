@@ -1,4 +1,4 @@
-import Screen from '../../components/feature/Screen';
+import Screen from 'widgets/screen';
 
 export default function Home() {
 	return <Screen />;

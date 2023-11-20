@@ -179,7 +179,7 @@ describe('AuthController (/auth, e2e)', () => {
 			.expect(200);
 
 		expect(response).toHaveProperty('body');
-		const redisValue = response.body;
-		expect(redisValue).toBe(value);
+		const responseValue = response.body.value;
+		expect(responseValue).toBe(value);
 	});
 });

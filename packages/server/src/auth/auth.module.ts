@@ -6,6 +6,7 @@ import { User } from './entities/user.entity';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { jwtConfig } from '../config/jwt.config';
+import { RedisRepository } from './redis.repository';
 
 @Module({
 	imports: [
@@ -14,6 +15,6 @@ import { jwtConfig } from '../config/jwt.config';
 		TypeOrmModule.forFeature([User]),
 	],
 	controllers: [AuthController],
-	providers: [AuthService],
+	providers: [AuthService, RedisRepository],
 })
 export class AuthModule {}

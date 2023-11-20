@@ -5,7 +5,6 @@ import {
 	UnauthorizedException,
 } from '@nestjs/common';
 import { SignUpUserDto } from './dto/signup-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
@@ -13,13 +12,15 @@ import { User } from './entities/user.entity';
 import * as bcrypt from 'bcryptjs';
 import { SignInUserDto } from './dto/signin-user.dto';
 import { JwtService } from '@nestjs/jwt';
+import { RedisRepository } from './redis.repository';
 
 @Injectable()
 export class AuthService {
 	constructor(
 		@InjectRepository(User)
-		private authRepository: Repository<User>,
-		private jwtService: JwtService,
+		private readonly authRepository: Repository<User>,
+		private readonly jwtService: JwtService,
+		private readonly redisRepository: RedisRepository,
 	) {}
 
 	async signUp(signUpUserDto: SignUpUserDto): Promise<Partial<User>> {
@@ -78,5 +79,13 @@ export class AuthService {
 		} else {
 			return true;
 		}
+	}
+
+	async getValueFromRedis(key: string) {
+		return this.redisRepository.get(key);
+	}
+
+	async setValueToRedis(key: string, value: string) {
+		return this.redisRepository.set(key, value);
 	}
 }

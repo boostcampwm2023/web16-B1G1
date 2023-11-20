@@ -13,7 +13,7 @@ import { Repository } from 'typeorm';
 export class BoardService {
 	constructor(
 		@InjectRepository(Board)
-		private boardRepository: Repository<Board>,
+		private readonly boardRepository: Repository<Board>,
 	) {}
 
 	async create(createBoardDto: CreateBoardDto): Promise<Board> {

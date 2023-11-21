@@ -3,10 +3,9 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { RouterProvider } from 'react-router-dom';
 import { ThemeProvider } from '@emotion/react';
-
+import theme from 'shared/ui/styles/theme';
 import './reset.css';
 import './global.css';
-import theme from 'shared/ui/styles/theme';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
 	<React.StrictMode>

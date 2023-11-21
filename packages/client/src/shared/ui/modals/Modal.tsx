@@ -2,14 +2,17 @@ import styled from '@emotion/styled';
 import { Body02ME, Title02 } from '../styles';
 import { ReactNode } from 'react';
 import { css } from '@emotion/react';
+import Button from '../button/button';
 
 interface PropsTypes {
 	title: string;
+	children: ReactNode;
+
 	explanation?: string;
 	topButton?: ReactNode;
 	leftButton?: ReactNode;
 	rightButton?: ReactNode;
-	children: ReactNode;
+	onClickGoBack?: () => void;
 }
 
 export default function Modal({
@@ -18,6 +21,7 @@ export default function Modal({
 	leftButton,
 	rightButton,
 	topButton,
+	onClickGoBack,
 	children,
 	...args
 }: PropsTypes) {
@@ -25,33 +29,51 @@ export default function Modal({
 
 	return (
 		<Layout {...args}>
-			<UpperLayout>
-				<TitleLayout>
-					<Title>{title}</Title>
-					{topButton}
-				</TitleLayout>
-
-				<Explanation>{explanation}</Explanation>
-			</UpperLayout>
-
-			{children}
-
-			{isButtonExist && (
-				<ButtonLayout>
-					<div>{leftButton}</div>
-					<div>{rightButton}</div>
-				</ButtonLayout>
+			{onClickGoBack && (
+				<Button onClick={onClickGoBack} size="m" buttonType="CTA-icon">
+					버튼
+				</Button>
+				// TODO: 이후 화살표 버튼으로 바꿔야 함
 			)}
+
+			<MainLayout>
+				<UpperLayout>
+					<TitleLayout>
+						<Title>{title}</Title>
+						{topButton}
+					</TitleLayout>
+
+					<Explanation>{explanation}</Explanation>
+				</UpperLayout>
+
+				{children}
+
+				{isButtonExist && (
+					<ButtonLayout>
+						<div>{leftButton}</div>
+						<div>{rightButton}</div>
+					</ButtonLayout>
+				)}
+			</MainLayout>
 		</Layout>
 	);
 }
 
 const Layout = styled.div`
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	z-index: 999;
+`;
+
+const MainLayout = styled.div`
 	display: flex;
 	flex-direction: column;
 	border-radius: 16px;
 	opacity: 80%;
 	padding: 32px;
+	margin: 12px 0 0 0;
 
 	${({ theme: { colors } }) => css`
 		background-color: ${colors.background.bdp03};

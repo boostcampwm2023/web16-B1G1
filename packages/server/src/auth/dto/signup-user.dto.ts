@@ -1,11 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { IsNotEmpty, IsString } from 'class-validator';
 import {
-	IsNotEmpty,
-	IsString,
-	Matches,
-	MaxLength,
-	MinLength,
-} from 'class-validator';
+	IsNickname,
+	IsPassword,
+	IsUsername,
+} from '../decorators/signup-constraints.decorator';
 
 export class SignUpUserDto {
 	@ApiProperty({
@@ -13,13 +12,9 @@ export class SignUpUserDto {
 		example: 'test user',
 		required: true,
 	})
-	@IsNotEmpty()
-	@IsString()
-	@MaxLength(50)
-	@MinLength(4)
-	@Matches(/^[a-zA-Z0-9]+$/, {
-		message: '아이디는 영문자와 숫자만 사용할 수 있습니다.',
-	})
+	@IsNotEmpty({ message: '아이디는 필수 입력값입니다.' })
+	@IsString({ message: '아이디는 문자열이어야 합니다.' })
+	@IsUsername()
 	username: string;
 
 	@ApiProperty({
@@ -27,10 +22,9 @@ export class SignUpUserDto {
 		example: 'test password',
 		required: true,
 	})
-	@IsNotEmpty()
-	@IsString()
-	@MaxLength(100)
-	@MinLength(8)
+	@IsNotEmpty({ message: '비밀번호는 필수 입력값입니다.' })
+	@IsString({ message: '비밀번호는 문자열이어야 합니다.' })
+	@IsPassword()
 	password: string;
 
 	@ApiProperty({
@@ -38,12 +32,8 @@ export class SignUpUserDto {
 		example: 'test nickname',
 		required: true,
 	})
-	@IsNotEmpty()
-	@IsString()
-	@MaxLength(50)
-	@MinLength(2)
-	@Matches(/^[a-zA-Z0-9가-힣]+$/, {
-		message: '닉네임은 영문자, 숫자, 한글만 사용할 수 있습니다.',
-	})
+	@IsNotEmpty({ message: '닉네임은 필수 입력값입니다.' })
+	@IsString({ message: '닉네임은 문자열이어야 합니다.' })
+	@IsNickname()
 	nickname: string;
 }

@@ -2547,6 +2547,16 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["@types/cookie-parser", [\
+      ["npm:1.4.6", {\
+        "packageLocation": "./.yarn/cache/@types-cookie-parser-npm-1.4.6-27287e1e43-56421a00d9.zip/node_modules/@types/cookie-parser/",\
+        "packageDependencies": [\
+          ["@types/cookie-parser", "npm:1.4.6"],\
+          ["@types/express", "npm:4.17.21"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["@types/cookiejar", [\
       ["npm:2.1.4", {\
         "packageLocation": "./.yarn/cache/@types-cookiejar-npm-2.1.4-7d1dc9b5ab-df762ac83a.zip/node_modules/@types/cookiejar/",\
@@ -2741,6 +2751,39 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/@types-offscreencanvas-npm-2019.7.3-a966f946e3-6d1dfae721.zip/node_modules/@types/offscreencanvas/",\
         "packageDependencies": [\
           ["@types/offscreencanvas", "npm:2019.7.3"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@types/passport", [\
+      ["npm:1.0.16", {\
+        "packageLocation": "./.yarn/cache/@types-passport-npm-1.0.16-7f245434f2-7120c1186c.zip/node_modules/@types/passport/",\
+        "packageDependencies": [\
+          ["@types/passport", "npm:1.0.16"],\
+          ["@types/express", "npm:4.17.21"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@types/passport-jwt", [\
+      ["npm:3.0.13", {\
+        "packageLocation": "./.yarn/cache/@types-passport-jwt-npm-3.0.13-55c5414e75-39aeafa92d.zip/node_modules/@types/passport-jwt/",\
+        "packageDependencies": [\
+          ["@types/passport-jwt", "npm:3.0.13"],\
+          ["@types/express", "npm:4.17.21"],\
+          ["@types/jsonwebtoken", "npm:9.0.5"],\
+          ["@types/passport-strategy", "npm:0.2.38"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@types/passport-strategy", [\
+      ["npm:0.2.38", {\
+        "packageLocation": "./.yarn/cache/@types-passport-strategy-npm-0.2.38-6460f7e728-d7d2b1782a.zip/node_modules/@types/passport-strategy/",\
+        "packageDependencies": [\
+          ["@types/passport-strategy", "npm:0.2.38"],\
+          ["@types/express", "npm:4.17.21"],\
+          ["@types/passport", "npm:1.0.16"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -4619,10 +4662,28 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["cookie", [\
+      ["npm:0.4.1", {\
+        "packageLocation": "./.yarn/cache/cookie-npm-0.4.1-cc5e2ebb42-4d7bc798df.zip/node_modules/cookie/",\
+        "packageDependencies": [\
+          ["cookie", "npm:0.4.1"]\
+        ],\
+        "linkType": "HARD"\
+      }],\
       ["npm:0.5.0", {\
         "packageLocation": "./.yarn/cache/cookie-npm-0.5.0-e2d58a161a-c01ca3ef8d.zip/node_modules/cookie/",\
         "packageDependencies": [\
           ["cookie", "npm:0.5.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["cookie-parser", [\
+      ["npm:1.4.6", {\
+        "packageLocation": "./.yarn/cache/cookie-parser-npm-1.4.6-a68f84d02a-9c2ade5459.zip/node_modules/cookie-parser/",\
+        "packageDependencies": [\
+          ["cookie-parser", "npm:1.4.6"],\
+          ["cookie", "npm:0.4.1"],\
+          ["cookie-signature", "npm:1.0.6"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -9602,16 +9663,19 @@ const RAW_RUNTIME_STATE =
           ["@nestjs/swagger", "virtual:2499dbb93d824027565d71b0716c4fb8b548ad61955d0a0286bfb3c5b4058e227894b6691d96808c00f576db14870018375210362c26ee321ea99fd6ed041c74#npm:7.1.16"],\
           ["@nestjs/testing", "virtual:2499dbb93d824027565d71b0716c4fb8b548ad61955d0a0286bfb3c5b4058e227894b6691d96808c00f576db14870018375210362c26ee321ea99fd6ed041c74#npm:10.2.8"],\
           ["@nestjs/typeorm", "virtual:2499dbb93d824027565d71b0716c4fb8b548ad61955d0a0286bfb3c5b4058e227894b6691d96808c00f576db14870018375210362c26ee321ea99fd6ed041c74#npm:10.0.0"],\
+          ["@types/cookie-parser", "npm:1.4.6"],\
           ["@types/express", "npm:4.17.21"],\
           ["@types/jest", "npm:29.5.8"],\
           ["@types/multer", "npm:1.4.11"],\
           ["@types/node", "npm:20.9.0"],\
+          ["@types/passport-jwt", "npm:3.0.13"],\
           ["@types/supertest", "npm:2.0.16"],\
           ["@typescript-eslint/eslint-plugin", "virtual:658502eb4296e93abedc18b6aa9b26978f434f08d98e21ebb0e725354b8bb54b62db9c4a1893e460c694ff7500ff5cbafa4457b0dfd26b5838868666c861e990#npm:6.10.0"],\
           ["@typescript-eslint/parser", "virtual:658502eb4296e93abedc18b6aa9b26978f434f08d98e21ebb0e725354b8bb54b62db9c4a1893e460c694ff7500ff5cbafa4457b0dfd26b5838868666c861e990#npm:6.10.0"],\
           ["bcryptjs", "npm:2.4.3"],\
           ["class-transformer", "npm:0.5.1"],\
           ["class-validator", "npm:0.14.0"],\
+          ["cookie-parser", "npm:1.4.6"],\
           ["dotenv", "npm:16.3.1"],\
           ["eslint", "npm:8.53.0"],\
           ["eslint-config-prettier", "virtual:2499dbb93d824027565d71b0716c4fb8b548ad61955d0a0286bfb3c5b4058e227894b6691d96808c00f576db14870018375210362c26ee321ea99fd6ed041c74#npm:9.0.0"],\

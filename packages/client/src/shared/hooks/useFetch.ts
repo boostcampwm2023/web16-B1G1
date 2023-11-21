@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const BASE_URL = 'wow'; // import 해올 base url
+const BASE_URL = 'wow'; // TODO: Add base url
 
 export const useFetch = (api: string) => {
 	const [data, setData] = useState<any>(null);

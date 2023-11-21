@@ -38,8 +38,8 @@ export class BoardController {
 		status: 400,
 		description: '잘못된 요청으로 게시글 작성 실패',
 	})
-	create(@Body() createBoardDto: CreateBoardDto): Promise<Board> {
-		return this.boardService.create(createBoardDto);
+	createBoard(@Body() createBoardDto: CreateBoardDto): Promise<Board> {
+		return this.boardService.createBoard(createBoardDto);
 	}
 
 	@Get()

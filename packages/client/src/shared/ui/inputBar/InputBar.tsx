@@ -1,6 +1,11 @@
 import styled from '@emotion/styled';
 import theme from '../styles/theme';
 
+const Container = styled.div`
+	display: flex;
+	flex-direction: column;
+`;
+
 const Input = styled.input`
 	width: 452px;
 	height: 43px;
@@ -23,11 +28,6 @@ const Input = styled.input`
 const Label = styled.label`
 	margin-bottom: 8px;
 	color: ${theme.colors.text.secondary};
-`;
-
-const Container = styled.div`
-	display: flex;
-	flex-direction: column;
 `;
 
 interface PropsType extends React.InputHTMLAttributes<HTMLInputElement> {

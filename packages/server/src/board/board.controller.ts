@@ -141,6 +141,7 @@ export class BoardController {
 
 	@Post(':id/image')
 	@UseInterceptors(FileInterceptor('file', { dest: './uploads' }))
+	@UsePipes(ValidationPipe)
 	@ApiOperation({
 		summary: '이미지 파일 업로드',
 		description: '이미지 파일을 업로드합니다.',

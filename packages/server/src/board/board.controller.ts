@@ -7,6 +7,8 @@ import {
 	Param,
 	Delete,
 	Query,
+	UseInterceptors,
+	UploadedFile,
 } from '@nestjs/common';
 import { BoardService } from './board.service';
 import { CreateBoardDto } from './dto/create-board.dto';
@@ -20,6 +22,7 @@ import {
 	ApiOperation,
 	ApiTags,
 } from '@nestjs/swagger';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('board')
 @ApiTags('게시글 API')
@@ -124,5 +127,14 @@ export class BoardController {
 	})
 	deleteBoard(@Param('id') id: string): Promise<void> {
 		return this.boardService.deleteBoard(+id);
+	}
+
+	@Post(':id/image')
+	@UseInterceptors(FileInterceptor('file', { dest: './uploads' }))
+	uploadFile(
+		@Param('id') board_id: string,
+		@UploadedFile() file: Express.Multer.File,
+	): Promise<Partial<Board>> {
+		return this.boardService.uploadFile(+board_id, file);
 	}
 }

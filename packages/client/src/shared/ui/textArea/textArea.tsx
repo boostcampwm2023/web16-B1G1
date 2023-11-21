@@ -4,6 +4,7 @@ import { css, SerializedStyles } from '@emotion/react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import theme from '../styles/theme';
+import { Body04Me } from '../styles';
 
 interface PropsType {
 	onChange: (text: string) => void;
@@ -71,6 +72,7 @@ export default function TextArea({
 }
 
 const Section = styled.section<{ width: number; height: number }>`
+	${Body04Me}
 	width: ${({ width }) => width}px;
 	height: ${({ height }) => height}px;
 	padding: 16px;
@@ -110,6 +112,7 @@ const TextInput = styled.textarea<{ css: SerializedStyles }>`
 
 	&:focus {
 		outline: none;
+		color: ${theme.colors.text.secondary};
 	}
 `;
 

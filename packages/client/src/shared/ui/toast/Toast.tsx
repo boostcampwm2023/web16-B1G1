@@ -1,12 +1,20 @@
 import styled from '@emotion/styled';
 import { Body04BD } from '../styles';
 import confirmIcon from '../../../../public/icons/icon-confirm-22.svg';
+import { useState } from 'react';
+import { keyframes } from '@emotion/react';
 
 interface PropsTypes {
 	children: string;
 }
 
 export default function Toast({ children }: PropsTypes) {
+	const [visible, setVisible] = useState(true);
+
+	setTimeout(() => setVisible(false), 3000);
+
+	if (!visible) return null;
+
 	return (
 		<Layout>
 			<img src={confirmIcon} alt="체크 아이콘" />
@@ -15,11 +23,23 @@ export default function Toast({ children }: PropsTypes) {
 	);
 }
 
+const fadeOutAnimation = keyframes`
+	from { opacity: 1 }
+  to { opacity: 0 }
+`;
+
 const Layout = styled.div`
 	display: flex;
-	background-color: ${({ theme }) => theme.colors.primary.filled};
+	position: absolute;
+	top: 53px;
+	left: 50%;
+	transform: translate(-50%, 0%);
 	padding: 16px 24px;
 	border-radius: 27px;
+	background-color: ${({ theme }) => theme.colors.primary.filled};
+
+	animation: ${fadeOutAnimation} 2s ease forwards;
+	animation-delay: 2s;
 `;
 
 const Text = styled.p`

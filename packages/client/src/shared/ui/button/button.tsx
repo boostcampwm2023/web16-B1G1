@@ -54,7 +54,7 @@ const CustomButton = styled.button<PropsType>`
 					}
 
 					&:disabled {
-						border: none;
+						border-color: none;
 						background: ${colors.primary.disabled};
 						color: ${colors.text.disabled};
 					}

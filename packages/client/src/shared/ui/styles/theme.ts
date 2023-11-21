@@ -23,7 +23,7 @@ const theme = {
 		background: {
 			bdp01: '#05021F',
 			bdp02: '#161335',
-			bdp03: '#161335',
+			bdp03: '#241F50',
 		},
 
 		stroke: {

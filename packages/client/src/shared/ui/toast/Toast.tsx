@@ -11,7 +11,7 @@ interface PropsTypes {
 export default function Toast({ children }: PropsTypes) {
 	const [visible, setVisible] = useState(true);
 
-	setTimeout(() => setVisible(false), 2000);
+	setTimeout(() => setVisible(false), 3000);
 
 	if (!visible) return null;
 
@@ -35,10 +35,10 @@ const Layout = styled.div`
 	left: 50%;
 	transform: translate(-50%, 0%);
 	padding: 16px 24px;
-	border-radius: 27px;
+	border-radius: 40px;
 	background-color: ${({ theme }) => theme.colors.primary.filled};
 
-	animation: ${fadeOutAnimation} 2s ease forwards;
+	animation: ${fadeOutAnimation} 1s ease forwards;
 	animation-delay: 2s;
 `;
 

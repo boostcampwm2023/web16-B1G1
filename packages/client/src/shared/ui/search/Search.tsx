@@ -53,7 +53,7 @@ const Layout = styled.div`
 	border-radius: 8px;
 	opacity: 90%;
 	padding: 8px;
-	background-color: #05021f;
+	background-color: ${({ theme: { colors } }) => colors.background.bdp01};
 	border: 1px solid ${({ theme: { colors } }) => colors.stroke.default};
 
 	:hover {

@@ -49,18 +49,20 @@ export class AuthService {
 
 		const user = await this.authRepository.findOneBy({ username });
 
-		if (user && (await bcrypt.compare(password, user.password))) {
-			const accessTokenPayload = { username, id: user.id, type: 'access' };
-			const refreshTokenPayload = { username, id: user.id, type: 'refresh' };
-			const [accessToken, refreshToken] = await Promise.all([
-				this.jwtService.sign(accessTokenPayload),
-				this.jwtService.sign(refreshTokenPayload, { expiresIn: 60 * 60 * 24 }),
-			]);
-
-			return { accessToken, refreshToken };
-		} else {
+		if (!(user && (await bcrypt.compare(password, user.password)))) {
 			throw new UnauthorizedException('login failed');
 		}
+
+		const accessTokenPayload = { username, id: user.id, type: 'access' };
+		const refreshTokenPayload = { username, id: user.id, type: 'refresh' };
+		const [accessToken, refreshToken] = await Promise.all([
+			this.jwtService.sign(accessTokenPayload),
+			this.jwtService.sign(refreshTokenPayload, { expiresIn: 60 * 60 * 24 }),
+		]);
+
+		this.redisRepository.set(username, refreshToken);
+
+		return { accessToken, refreshToken };
 	}
 
 	async isAvailableUsername(username: string): Promise<boolean> {

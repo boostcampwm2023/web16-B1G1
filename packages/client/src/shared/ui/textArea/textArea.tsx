@@ -49,7 +49,7 @@ export default function TextArea({
 					Preview
 				</Tab>
 			</Tabs>
-			{tabIndex === 0 && (
+			{isWrite && (
 				<Container>
 					<TextInput
 						maxLength={maxLength}
@@ -62,7 +62,7 @@ export default function TextArea({
 					</LimitSpan>
 				</Container>
 			)}
-			{tabIndex === 1 && (
+			{isPreview && (
 				<Wrapper css={scrollStyle}>
 					<ReactMarkdown remarkPlugins={[remarkGfm]}>{text}</ReactMarkdown>
 				</Wrapper>

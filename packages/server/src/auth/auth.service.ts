@@ -24,6 +24,12 @@ export class AuthService {
 	) {}
 
 	async signUp(signUpUserDto: SignUpUserDto): Promise<Partial<User>> {
+		const { username, nickname } = signUpUserDto;
+		await Promise.all([
+			this.isAvailableNickname(nickname),
+			this.isAvailableUsername(username),
+		]);
+
 		const salt = await bcrypt.genSalt();
 		const hashedPassword = await bcrypt.hash(signUpUserDto.password, salt);
 

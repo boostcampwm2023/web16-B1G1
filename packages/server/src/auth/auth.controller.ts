@@ -6,6 +6,8 @@ import {
 	HttpCode,
 	Res,
 	Query,
+	UsePipes,
+	ValidationPipe,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SignUpUserDto } from './dto/signup-user.dto';
@@ -28,6 +30,7 @@ export class AuthController {
 	constructor(private readonly authService: AuthService) {}
 
 	@Post('signup')
+	@UsePipes(ValidationPipe)
 	@ApiOperation({ summary: '회원가입', description: '회원가입을 진행합니다.' })
 	@ApiCreatedResponse({ status: 201, description: '회원가입 성공' })
 	@ApiBadRequestResponse({

@@ -34,6 +34,7 @@ const Layout = styled.div`
 	top: 53px;
 	left: 50%;
 	transform: translate(-50%, 0%);
+	z-index: 1000;
 	padding: 16px 24px;
 	border-radius: 40px;
 	background-color: ${({ theme }) => theme.colors.primary.filled};

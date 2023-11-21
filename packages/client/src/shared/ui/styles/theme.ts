@@ -4,7 +4,7 @@ const theme = {
 			filled: '#6C55FA',
 			hover: '#8874FF',
 			pressed: '#472CE9',
-			disabled: '#B6AAFF',
+			disabled: '#30295B',
 		},
 
 		action: {

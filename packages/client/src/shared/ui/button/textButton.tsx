@@ -15,6 +15,8 @@ export default function TextButton({ children, ...args }: PropsType) {
 
 const CustomButton = styled.button<PropsType>`
 	display: flex;
+	height: fit-content;
+	width: fit-content;
 	justify-content: center;
 	align-items: center;
 	gap: 4px;
@@ -29,5 +31,5 @@ const CustomButton = styled.button<PropsType>`
 			${size === 'm' ? Body02BD : Body03BD}
 			text-decoration: underline;
 		}
-	`}
+	`};
 `;

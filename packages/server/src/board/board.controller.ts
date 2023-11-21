@@ -85,6 +85,7 @@ export class BoardController {
 	}
 
 	@Patch(':id')
+	@UsePipes(ValidationPipe)
 	@ApiOperation({ summary: '게시글 수정', description: '게시글을 수정합니다.' })
 	@ApiOkResponse({ status: 200, description: '게시글 수정 성공' })
 	@ApiBadRequestResponse({

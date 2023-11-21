@@ -15,7 +15,7 @@ import { JwtService } from '@nestjs/jwt';
 import { RedisRepository } from './redis.repository';
 import { UserEnum } from './enums/user.enum';
 import { JwtEnum } from './enums/jwt.enum';
-import { createJwtPayload } from '../utils/auth.util';
+import { createJwt } from '../utils/auth.util';
 
 @Injectable()
 export class AuthService {
@@ -56,19 +56,9 @@ export class AuthService {
 			throw new UnauthorizedException(UserEnum.FAIL_SIGNIN_MESSAGE);
 		}
 
-		const accessTokenPayload = createJwtPayload(
-			user,
-			JwtEnum.ACCESS_TOKEN_TYPE,
-		);
-		const refreshTokenPayload = createJwtPayload(
-			user,
-			JwtEnum.REFRESH_TOKEN_TYPE,
-		);
 		const [accessToken, refreshToken] = await Promise.all([
-			this.jwtService.sign(accessTokenPayload),
-			this.jwtService.sign(refreshTokenPayload, {
-				expiresIn: JwtEnum.REFRESH_TOKEN_EXPIRES_IN,
-			}),
+			createJwt(user, JwtEnum.ACCESS_TOKEN_TYPE, this.jwtService),
+			createJwt(user, JwtEnum.REFRESH_TOKEN_TYPE, this.jwtService),
 		]);
 
 		this.redisRepository.set(username, refreshToken);

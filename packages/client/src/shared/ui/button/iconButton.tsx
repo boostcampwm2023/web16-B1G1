@@ -14,6 +14,8 @@ export default function IconButton({ children, ...args }: PropsType) {
 
 const CustomButton = styled.button<PropsType>`
 	display: inline-flex;
+	height: fit-content;
+	width: fit-content;
 	padding: 8px;
 	gap: 10px;
 	border-radius: 8px;

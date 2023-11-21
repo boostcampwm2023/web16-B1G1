@@ -16,6 +16,8 @@ export default function Button({ children, ...args }: PropsType) {
 
 const CustomButton = styled.button<PropsType>`
 	display: inline-flex;
+	height: fit-content;
+	width: fit-content;
 	padding: 6px 12px;
 	justify-content: center;
 	align-items: center;

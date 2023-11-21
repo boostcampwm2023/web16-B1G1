@@ -23,6 +23,7 @@ import {
 	ApiTags,
 	ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
+import { JwtEnum } from './enums/jwt.enum';
 
 @Controller('auth')
 @ApiTags('인증/인가 API')
@@ -54,11 +55,11 @@ export class AuthController {
 		@Res({ passthrough: true }) res: Response,
 	) {
 		const tokens = await this.authService.signIn(signInUserDto);
-		res.cookie('accessToken', tokens.accessToken, {
+		res.cookie(JwtEnum.ACCESS_TOKEN_COOKIE_NAME, tokens.accessToken, {
 			path: '/',
 			httpOnly: true,
 		});
-		res.cookie('refreshToken', tokens.refreshToken, {
+		res.cookie(JwtEnum.REFRESH_TOKEN_COOKIE_NAME, tokens.refreshToken, {
 			path: '/',
 			httpOnly: true,
 		});

@@ -106,14 +106,4 @@ export class AuthController {
 	isAvailableNickname(@Query('nickname') nickname: string) {
 		return this.authService.isAvailableNickname(nickname);
 	}
-
-	@Get('redis')
-	getValueFromRedis(@Query('key') key: string) {
-		return this.authService.getValueFromRedis(key);
-	}
-
-	@Post('redis')
-	setValueToRedis(@Body() { key, value }: { key: string; value: string }) {
-		return this.authService.setValueToRedis(key, value);
-	}
 }

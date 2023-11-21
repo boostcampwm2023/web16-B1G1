@@ -86,15 +86,4 @@ export class AuthService {
 			return true;
 		}
 	}
-
-	async getValueFromRedis(key: string) {
-		const value = await this.redisRepository.get(key);
-		return {
-			value,
-		};
-	}
-
-	async setValueToRedis(key: string, value: string) {
-		return this.redisRepository.set(key, value);
-	}
 }

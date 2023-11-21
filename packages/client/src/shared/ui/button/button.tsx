@@ -10,8 +10,8 @@ interface PropsType extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 	buttonType: 'Button' | 'CTA-icon' | 'warning' | 'warning-border';
 }
 
-export default function Button({ children, ...rest }: PropsType) {
-	return <CustomButton {...rest}>{children}</CustomButton>;
+export default function Button({ children, ...args }: PropsType) {
+	return <CustomButton {...args}>{children}</CustomButton>;
 }
 
 const CustomButton = styled.button<PropsType>`

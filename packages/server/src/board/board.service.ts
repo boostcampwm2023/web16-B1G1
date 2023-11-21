@@ -10,12 +10,16 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Board } from './entities/board.entity';
 import { Repository } from 'typeorm';
 import { unlinkSync } from 'fs';
+import { CreateImageDto } from './dto/create-image.dto';
+import { Image } from './entities/image.entity';
 
 @Injectable()
 export class BoardService {
 	constructor(
 		@InjectRepository(Board)
 		private readonly boardRepository: Repository<Board>,
+		@InjectRepository(Image)
+		private readonly imageRepository: Repository<Image>,
 	) {}
 
 	async create(createBoardDto: CreateBoardDto): Promise<Board> {
@@ -77,10 +81,7 @@ export class BoardService {
 		const result = await this.boardRepository.delete({ id });
 	}
 
-	async uploadFile(
-		board_id: number,
-		file: Express.Multer.File,
-	): Promise<Partial<Board>> {
+	async uploadFile(board_id: number, file: CreateImageDto): Promise<Board> {
 		// 이미지 파일인지 확인
 		if (!file.mimetype.includes('image')) {
 			unlinkSync(file.path); // 파일 삭제
@@ -101,11 +102,20 @@ export class BoardService {
 		}
 
 		// 이미 파일이 존재하는지 확인
-		if (board.filename) {
+		if (board.image_id) {
 			unlinkSync(file.path); // 파일 삭제
 		}
 
-		board.filename = file.filename;
+		const { mimetype, filename, path, size } = file;
+		const image = this.imageRepository.create({
+			mimetype,
+			filename,
+			path,
+			size,
+		});
+		const updatedImage = await this.imageRepository.save(image);
+
+		board.image_id = updatedImage.id;
 		const updatedBoard = await this.boardRepository.save(board);
 
 		return updatedBoard;

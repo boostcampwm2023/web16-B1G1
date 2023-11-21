@@ -24,6 +24,7 @@ import {
 	ApiTags,
 } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { CreateImageDto } from './dto/create-image.dto';
 
 @Controller('board')
 @ApiTags('게시글 API')
@@ -145,8 +146,8 @@ export class BoardController {
 	@UseInterceptors(FileInterceptor('file', { dest: './uploads' }))
 	uploadFile(
 		@Param('id') board_id: string,
-		@UploadedFile() file: Express.Multer.File,
-	): Promise<Partial<Board>> {
+		@UploadedFile() file: CreateImageDto,
+	): Promise<Board> {
 		return this.boardService.uploadFile(+board_id, file);
 	}
 }

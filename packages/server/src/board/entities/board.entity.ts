@@ -30,6 +30,6 @@ export class Board extends BaseEntity {
 	@Column({ type: 'int', default: 0 })
 	like_cnt: number;
 
-	@Column({ type: 'varchar', length: 50, nullable: true })
-	filename: string;
+	@Column({ type: 'int', nullable: true })
+	image_id: number;
 }

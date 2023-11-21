@@ -23,6 +23,7 @@ import {
 	ApiTags,
 	ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
+import { JwtEnum } from './enums/jwt.enum';
 
 @Controller('auth')
 @ApiTags('인증/인가 API')
@@ -53,14 +54,17 @@ export class AuthController {
 		@Body() signInUserDto: SignInUserDto,
 		@Res({ passthrough: true }) res: Response,
 	) {
-		const result = await this.authService.signIn(signInUserDto);
-		// res.setHeader('Authorization', `Bearer ${result.accessToken}`);
-		res.cookie('accessToken', result.accessToken, {
+		const tokens = await this.authService.signIn(signInUserDto);
+		res.cookie(JwtEnum.ACCESS_TOKEN_COOKIE_NAME, tokens.accessToken, {
+			path: '/',
+			httpOnly: true,
+		});
+		res.cookie(JwtEnum.REFRESH_TOKEN_COOKIE_NAME, tokens.refreshToken, {
 			path: '/',
 			httpOnly: true,
 		});
 
-		return result;
+		return tokens;
 	}
 
 	@Get('signout')
@@ -105,15 +109,5 @@ export class AuthController {
 	})
 	isAvailableNickname(@Query('nickname') nickname: string) {
 		return this.authService.isAvailableNickname(nickname);
-	}
-
-	@Get('redis')
-	getValueFromRedis(@Query('key') key: string) {
-		return this.authService.getValueFromRedis(key);
-	}
-
-	@Post('redis')
-	setValueToRedis(@Body() { key, value }: { key: string; value: string }) {
-		return this.authService.setValueToRedis(key, value);
 	}
 }

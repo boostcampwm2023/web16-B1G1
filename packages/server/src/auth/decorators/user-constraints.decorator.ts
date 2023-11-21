@@ -4,20 +4,20 @@ import {
 	ValidatorConstraint,
 	ValidatorConstraintInterface,
 } from 'class-validator';
-import { SignUpEnum } from '../enums/signup.enum';
+import { UserEnum } from '../enums/user.enum';
 
 @ValidatorConstraint({ name: 'isUsername', async: false })
 export class IsUsernameConstraint implements ValidatorConstraintInterface {
 	validate(username: string): boolean {
 		const isEngAndNum = /^[a-zA-Z0-9]+$/.test(username);
 		const checkLength =
-			username.length >= SignUpEnum.MIN_USERNAME_LENGTH &&
-			username.length <= SignUpEnum.MAX_USERNAME_LENGTH;
+			username.length >= UserEnum.MIN_USERNAME_LENGTH &&
+			username.length <= UserEnum.MAX_USERNAME_LENGTH;
 		return isEngAndNum && checkLength;
 	}
 
 	defaultMessage(): string {
-		return SignUpEnum.VIOLATE_USERNAME_MESSAGE;
+		return UserEnum.VIOLATE_USERNAME_MESSAGE;
 	}
 }
 
@@ -37,13 +37,13 @@ export function IsUsername(validationOptions?: ValidationOptions) {
 export class IsPasswordConstraint implements ValidatorConstraintInterface {
 	validate(password: string): boolean {
 		return (
-			password.length >= SignUpEnum.MIN_PASSWORD_LENGTH &&
-			password.length <= SignUpEnum.MAX_PASSWORD_LENGTH
+			password.length >= UserEnum.MIN_PASSWORD_LENGTH &&
+			password.length <= UserEnum.MAX_PASSWORD_LENGTH
 		);
 	}
 
 	defaultMessage(): string {
-		return SignUpEnum.VIOLATE_PASSWORD_MESSAGE;
+		return UserEnum.VIOLATE_PASSWORD_MESSAGE;
 	}
 }
 
@@ -64,13 +64,13 @@ export class IsNicknameConstraint implements ValidatorConstraintInterface {
 	validate(nickname: string): boolean {
 		const isEngAndNumAndKor = /^[a-zA-Z0-9가-힣]+$/.test(nickname);
 		const checkLength =
-			nickname.length >= SignUpEnum.MIN_NICKNAME_LENGTH &&
-			nickname.length <= SignUpEnum.MAX_NICKNAME_LENGTH;
+			nickname.length >= UserEnum.MIN_NICKNAME_LENGTH &&
+			nickname.length <= UserEnum.MAX_NICKNAME_LENGTH;
 		return isEngAndNumAndKor && checkLength;
 	}
 
 	defaultMessage(): string {
-		return SignUpEnum.VIOLATE_NICKNAME_MESSAGE;
+		return UserEnum.VIOLATE_NICKNAME_MESSAGE;
 	}
 }
 

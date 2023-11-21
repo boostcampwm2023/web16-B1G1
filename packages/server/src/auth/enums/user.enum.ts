@@ -1,4 +1,4 @@
-export enum SignUpEnum {
+export enum UserEnum {
 	MIN_USERNAME_LENGTH = 4,
 	MAX_USERNAME_LENGTH = 50,
 	MIN_PASSWORD_LENGTH = 8,
@@ -17,4 +17,6 @@ export enum SignUpEnum {
 	VIOLATE_USERNAME_MESSAGE = `아이디는 영문자와 숫자로 이루어진 ${MIN_USERNAME_LENGTH}~${MAX_USERNAME_LENGTH}자여야 합니다.`,
 	VIOLATE_PASSWORD_MESSAGE = `비밀번호는 ${MIN_PASSWORD_LENGTH}~${MAX_PASSWORD_LENGTH}자여야 합니다.`,
 	VIOLATE_NICKNAME_MESSAGE = `닉네임은 영문자, 숫자, 한글로 이루어진 ${MIN_NICKNAME_LENGTH}~${MAX_NICKNAME_LENGTH}자여야 합니다.`,
+
+	FAIL_SIGNIN_MESSAGE = '아이디에 해당하는 회원이 존재하지 않거나 비밀번호가 일치하지 않습니다.',
 }

@@ -13,6 +13,8 @@ import * as bcrypt from 'bcryptjs';
 import { SignInUserDto } from './dto/signin-user.dto';
 import { JwtService } from '@nestjs/jwt';
 import { RedisRepository } from './redis.repository';
+import { UserEnum } from './enums/user.enum';
+import { JwtEnum } from './enums/jwt.enum';
 
 @Injectable()
 export class AuthService {
@@ -44,19 +46,35 @@ export class AuthService {
 		return createdUser;
 	}
 
-	async signIn(signInUserDto: SignInUserDto): Promise<{ accessToken: string }> {
+	async signIn(signInUserDto: SignInUserDto) {
 		const { username, password } = signInUserDto;
 
 		const user = await this.authRepository.findOneBy({ username });
 
-		if (user && (await bcrypt.compare(password, user.password))) {
-			const payload = { username };
-			const accessToken = await this.jwtService.sign(payload);
-
-			return { accessToken };
-		} else {
-			throw new UnauthorizedException('login failed');
+		if (!(user && (await bcrypt.compare(password, user.password)))) {
+			throw new UnauthorizedException(UserEnum.FAIL_SIGNIN_MESSAGE);
 		}
+
+		const accessTokenPayload = {
+			username,
+			id: user.id,
+			type: JwtEnum.ACCESS_TOKEN_TYPE,
+		};
+		const refreshTokenPayload = {
+			username,
+			id: user.id,
+			type: JwtEnum.REFRESH_TOKEN_TYPE,
+		};
+		const [accessToken, refreshToken] = await Promise.all([
+			this.jwtService.sign(accessTokenPayload),
+			this.jwtService.sign(refreshTokenPayload, {
+				expiresIn: JwtEnum.REFRESH_TOKEN_EXPIRES_IN,
+			}),
+		]);
+
+		this.redisRepository.set(username, refreshToken);
+
+		return { accessToken, refreshToken };
 	}
 
 	async isAvailableUsername(username: string): Promise<boolean> {
@@ -85,16 +103,5 @@ export class AuthService {
 		} else {
 			return true;
 		}
-	}
-
-	async getValueFromRedis(key: string) {
-		const value = await this.redisRepository.get(key);
-		return {
-			value,
-		};
-	}
-
-	async setValueToRedis(key: string, value: string) {
-		return this.redisRepository.set(key, value);
 	}
 }

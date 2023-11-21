@@ -11,6 +11,7 @@ import {
 	UploadedFile,
 	UsePipes,
 	ValidationPipe,
+	ParseIntPipe,
 } from '@nestjs/common';
 import { BoardService } from './board.service';
 import { CreateBoardDto } from './dto/create-board.dto';
@@ -80,8 +81,8 @@ export class BoardController {
 		status: 404,
 		description: '게시글이 존재하지 않음',
 	})
-	findBoardById(@Param('id') id: string): Promise<Board> {
-		return this.boardService.findBoardById(+id);
+	findBoardById(@Param('id', ParseIntPipe) id: number): Promise<Board> {
+		return this.boardService.findBoardById(id);
 	}
 
 	@Patch(':id')
@@ -92,8 +93,11 @@ export class BoardController {
 		status: 400,
 		description: '잘못된 요청으로 게시글 수정 실패',
 	})
-	updateBoard(@Param('id') id: string, @Body() updateBoardDto: UpdateBoardDto) {
-		return this.boardService.updateBoard(+id, updateBoardDto);
+	updateBoard(
+		@Param('id', ParseIntPipe) id: number,
+		@Body() updateBoardDto: UpdateBoardDto,
+	) {
+		return this.boardService.updateBoard(id, updateBoardDto);
 	}
 
 	@Patch(':id/like')
@@ -106,8 +110,8 @@ export class BoardController {
 		status: 400,
 		description: '잘못된 요청으로 게시글 좋아요 실패',
 	})
-	patchLike(@Param('id') id: string): Promise<Partial<Board>> {
-		return this.boardService.patchLike(+id);
+	patchLike(@Param('id', ParseIntPipe) id: number): Promise<Partial<Board>> {
+		return this.boardService.patchLike(id);
 	}
 
 	@Patch(':id/unlike')
@@ -120,8 +124,8 @@ export class BoardController {
 		status: 400,
 		description: '잘못된 요청으로 게시글 좋아요 취소 실패',
 	})
-	patchUnlike(@Param('id') id: string): Promise<Partial<Board>> {
-		return this.boardService.patchUnlike(+id);
+	patchUnlike(@Param('id', ParseIntPipe) id: number): Promise<Partial<Board>> {
+		return this.boardService.patchUnlike(id);
 	}
 
 	@Delete(':id')
@@ -131,8 +135,8 @@ export class BoardController {
 		status: 404,
 		description: '게시글이 존재하지 않음',
 	})
-	deleteBoard(@Param('id') id: string): Promise<void> {
-		return this.boardService.deleteBoard(+id);
+	deleteBoard(@Param('id', ParseIntPipe) id: number): Promise<void> {
+		return this.boardService.deleteBoard(id);
 	}
 
 	@Post(':id/image')
@@ -149,9 +153,9 @@ export class BoardController {
 	})
 	@ApiNotFoundResponse({ status: 404, description: '게시글이 존재하지 않음' })
 	uploadFile(
-		@Param('id') board_id: string,
+		@Param('id', ParseIntPipe) board_id: number,
 		@UploadedFile() file: CreateImageDto,
 	): Promise<Board> {
-		return this.boardService.uploadFile(+board_id, file);
+		return this.boardService.uploadFile(board_id, file);
 	}
 }

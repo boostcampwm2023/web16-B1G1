@@ -44,16 +44,20 @@ export class AuthService {
 		return createdUser;
 	}
 
-	async signIn(signInUserDto: SignInUserDto): Promise<{ accessToken: string }> {
+	async signIn(signInUserDto: SignInUserDto) {
 		const { username, password } = signInUserDto;
 
 		const user = await this.authRepository.findOneBy({ username });
 
 		if (user && (await bcrypt.compare(password, user.password))) {
-			const payload = { username };
-			const accessToken = await this.jwtService.sign(payload);
+			const accessTokenPayload = { username, id: user.id, type: 'access' };
+			const refreshTokenPayload = { username, id: user.id, type: 'refresh' };
+			const [accessToken, refreshToken] = await Promise.all([
+				this.jwtService.sign(accessTokenPayload),
+				this.jwtService.sign(refreshTokenPayload, { expiresIn: 60 * 60 * 24 }),
+			]);
 
-			return { accessToken };
+			return { accessToken, refreshToken };
 		} else {
 			throw new UnauthorizedException('login failed');
 		}

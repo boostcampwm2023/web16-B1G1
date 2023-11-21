@@ -53,14 +53,17 @@ export class AuthController {
 		@Body() signInUserDto: SignInUserDto,
 		@Res({ passthrough: true }) res: Response,
 	) {
-		const result = await this.authService.signIn(signInUserDto);
-		// res.setHeader('Authorization', `Bearer ${result.accessToken}`);
-		res.cookie('accessToken', result.accessToken, {
+		const tokens = await this.authService.signIn(signInUserDto);
+		res.cookie('accessToken', tokens.accessToken, {
+			path: '/',
+			httpOnly: true,
+		});
+		res.cookie('refreshToken', tokens.refreshToken, {
 			path: '/',
 			httpOnly: true,
 		});
 
-		return result;
+		return tokens;
 	}
 
 	@Get('signout')

@@ -188,4 +188,28 @@ describe('BoardController (/board, e2e)', () => {
 
 		await request(app.getHttpServer()).get(`/board/${newBoard.id}`).expect(404);
 	});
+
+	// #61 [08-07] 사진 정보는 스토리지 서버에 저장한다.
+	it('POST /board/:id/image', async () => {
+		const board: CreateBoardDto = {
+			title: 'test',
+			content: 'test',
+			author: 'test',
+		};
+		const newBoard = (
+			await request(app.getHttpServer()).post('/board').send(board)
+		).body;
+
+		const image = Buffer.from('test');
+
+		const response = await request(app.getHttpServer())
+			.post(`/board/${newBoard.id}/image`)
+			.attach('file', image, 'test.png')
+			.expect(201);
+
+		expect(response).toHaveProperty('body');
+		expect((response as any).body).toHaveProperty('id');
+		expect(response.body.id).toBe(newBoard.id);
+		expect((response as any).body).toHaveProperty('filename');
+	});
 });

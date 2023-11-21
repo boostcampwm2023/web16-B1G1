@@ -7,6 +7,8 @@ import {
 	Param,
 	Delete,
 	Query,
+	UseInterceptors,
+	UploadedFile,
 } from '@nestjs/common';
 import { BoardService } from './board.service';
 import { CreateBoardDto } from './dto/create-board.dto';
@@ -18,8 +20,11 @@ import {
 	ApiNotFoundResponse,
 	ApiOkResponse,
 	ApiOperation,
+	ApiParam,
 	ApiTags,
 } from '@nestjs/swagger';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { CreateImageDto } from './dto/create-image.dto';
 
 @Controller('board')
 @ApiTags('게시글 API')
@@ -124,5 +129,25 @@ export class BoardController {
 	})
 	deleteBoard(@Param('id') id: string): Promise<void> {
 		return this.boardService.deleteBoard(+id);
+	}
+
+	@Post(':id/image')
+	@ApiOperation({
+		summary: '이미지 파일 업로드',
+		description: '이미지 파일을 업로드합니다.',
+	})
+	@ApiParam({ name: 'id', description: '게시글 번호' })
+	@ApiOkResponse({ status: 200, description: '이미지 파일 업로드 성공' })
+	@ApiBadRequestResponse({
+		status: 400,
+		description: '잘못된 요청으로 파일 업로드 실패',
+	})
+	@ApiNotFoundResponse({ status: 404, description: '게시글이 존재하지 않음' })
+	@UseInterceptors(FileInterceptor('file', { dest: './uploads' }))
+	uploadFile(
+		@Param('id') board_id: string,
+		@UploadedFile() file: CreateImageDto,
+	): Promise<Board> {
+		return this.boardService.uploadFile(+board_id, file);
 	}
 }

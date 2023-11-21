@@ -29,4 +29,7 @@ export class Board extends BaseEntity {
 
 	@Column({ type: 'int', default: 0 })
 	like_cnt: number;
+
+	@Column({ type: 'int', nullable: true })
+	image_id: number;
 }

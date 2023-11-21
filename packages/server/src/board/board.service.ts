@@ -22,7 +22,7 @@ export class BoardService {
 		private readonly imageRepository: Repository<Image>,
 	) {}
 
-	async create(createBoardDto: CreateBoardDto): Promise<Board> {
+	async createBoard(createBoardDto: CreateBoardDto): Promise<Board> {
 		const { title, content, author } = createBoardDto;
 
 		const board = this.boardRepository.create({

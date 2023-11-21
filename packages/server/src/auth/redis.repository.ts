@@ -1,5 +1,5 @@
 import Redis from 'ioredis';
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { redisConfig } from '../config/redis.config';
 
 @Injectable()
@@ -16,5 +16,10 @@ export class RedisRepository {
 
 	async set(key: string, value: string) {
 		return this.redisClient.set(key, value);
+	}
+
+	async checkRefreshToken(username: string, refreshToken: string) {
+		const redisRefreshToken = await this.get(username);
+		return redisRefreshToken === refreshToken;
 	}
 }

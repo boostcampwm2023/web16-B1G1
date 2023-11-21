@@ -9,6 +9,8 @@ import {
 	Query,
 	UseInterceptors,
 	UploadedFile,
+	UsePipes,
+	ValidationPipe,
 } from '@nestjs/common';
 import { BoardService } from './board.service';
 import { CreateBoardDto } from './dto/create-board.dto';
@@ -32,6 +34,7 @@ export class BoardController {
 	constructor(private readonly boardService: BoardService) {}
 
 	@Post()
+	@UsePipes(ValidationPipe)
 	@ApiOperation({ summary: '게시글 작성', description: '게시글을 작성합니다.' })
 	@ApiCreatedResponse({ status: 201, description: '게시글 작성 성공' })
 	@ApiBadRequestResponse({
@@ -132,6 +135,7 @@ export class BoardController {
 	}
 
 	@Post(':id/image')
+	@UseInterceptors(FileInterceptor('file', { dest: './uploads' }))
 	@ApiOperation({
 		summary: '이미지 파일 업로드',
 		description: '이미지 파일을 업로드합니다.',
@@ -143,7 +147,6 @@ export class BoardController {
 		description: '잘못된 요청으로 파일 업로드 실패',
 	})
 	@ApiNotFoundResponse({ status: 404, description: '게시글이 존재하지 않음' })
-	@UseInterceptors(FileInterceptor('file', { dest: './uploads' }))
 	uploadFile(
 		@Param('id') board_id: string,
 		@UploadedFile() file: CreateImageDto,

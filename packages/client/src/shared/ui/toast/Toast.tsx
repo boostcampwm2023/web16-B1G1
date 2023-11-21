@@ -11,7 +11,7 @@ interface PropsTypes {
 export default function Toast({ children }: PropsTypes) {
 	const [visible, setVisible] = useState(true);
 
-	setTimeout(() => setVisible(false), 3000);
+	setTimeout(() => setVisible(false), 2000);
 
 	if (!visible) return null;
 

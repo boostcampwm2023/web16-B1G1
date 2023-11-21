@@ -4,17 +4,20 @@ import {
 	ValidatorConstraint,
 	ValidatorConstraintInterface,
 } from 'class-validator';
+import { SignUpEnum } from '../enums/signup.enum';
 
 @ValidatorConstraint({ name: 'isUsername', async: false })
 export class IsUsernameConstraint implements ValidatorConstraintInterface {
 	validate(username: string): boolean {
 		const isEngAndNum = /^[a-zA-Z0-9]+$/.test(username);
-		const checkLength = username.length >= 4 && username.length <= 50;
+		const checkLength =
+			username.length >= SignUpEnum.MIN_USERNAME_LENGTH &&
+			username.length <= SignUpEnum.MAX_USERNAME_LENGTH;
 		return isEngAndNum && checkLength;
 	}
 
 	defaultMessage(): string {
-		return '아이디는 영문자와 숫자로 이루어진 4~50자여야 합니다.';
+		return SignUpEnum.VIOLATE_USERNAME_MESSAGE;
 	}
 }
 
@@ -33,11 +36,14 @@ export function IsUsername(validationOptions?: ValidationOptions) {
 @ValidatorConstraint({ name: 'isPassword', async: false })
 export class IsPasswordConstraint implements ValidatorConstraintInterface {
 	validate(password: string): boolean {
-		return password.length >= 8 && password.length <= 100;
+		return (
+			password.length >= SignUpEnum.MIN_PASSWORD_LENGTH &&
+			password.length <= SignUpEnum.MAX_PASSWORD_LENGTH
+		);
 	}
 
 	defaultMessage(): string {
-		return '비밀번호는 8~100자여야 합니다.';
+		return SignUpEnum.VIOLATE_PASSWORD_MESSAGE;
 	}
 }
 
@@ -57,12 +63,14 @@ export function IsPassword(validationOptions?: ValidationOptions) {
 export class IsNicknameConstraint implements ValidatorConstraintInterface {
 	validate(nickname: string): boolean {
 		const isEngAndNumAndKor = /^[a-zA-Z0-9가-힣]+$/.test(nickname);
-		const checkLength = nickname.length >= 2 && nickname.length <= 50;
+		const checkLength =
+			nickname.length >= SignUpEnum.MIN_NICKNAME_LENGTH &&
+			nickname.length <= SignUpEnum.MAX_NICKNAME_LENGTH;
 		return isEngAndNumAndKor && checkLength;
 	}
 
 	defaultMessage(): string {
-		return '닉네임은 영문자, 숫자, 한글로 이루어진 2~50자여야 합니다.';
+		return SignUpEnum.VIOLATE_NICKNAME_MESSAGE;
 	}
 }
 

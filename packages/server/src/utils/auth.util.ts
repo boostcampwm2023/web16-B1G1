@@ -14,7 +14,7 @@ export async function createJwt(
 		type,
 	};
 	const jwt = await jwtService.sign(payload, {
-		expiresIn: type === JwtEnum.ACCESS_TOKEN_TYPE ? '1h' : '7d',
+		expiresIn: type === JwtEnum.ACCESS_TOKEN_TYPE ? '1h' : '1d',
 	});
 	return jwt;
 }

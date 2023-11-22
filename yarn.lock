@@ -10530,7 +10530,7 @@ __metadata:
   checksum: 443bda43e5ad3b73c5976e987dba2b2d761439867ba7d5d7c5f4b01d3c1cb1b976f5f0e6b2399a00dc9b4eaec611bd9984ce9ce8a75a72e60aed518b10a902d2
   languageName: node
   linkType: hard
-  
+
 "vite-plugin-svgr@npm:^4.2.0":
   version: 4.2.0
   resolution: "vite-plugin-svgr@npm:4.2.0"

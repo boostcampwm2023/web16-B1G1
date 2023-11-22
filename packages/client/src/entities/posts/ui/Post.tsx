@@ -20,30 +20,28 @@ export default function Post({ position, size, color, label }: PropsType) {
 
 	const handleMeshClick = (e: ThreeEvent<MouseEvent>) => {
 		e.stopPropagation();
-		setClicked((prev) => !prev);
-
-		if (clicked) {
-			const currentPosition = meshRef.current.position;
-			camera.position.set(
-				currentPosition.x + size * 2,
-				currentPosition.y,
-				currentPosition.z + size * 2,
-			);
-
-			camera.lookAt(
-				currentPosition.x + size * 2,
-				currentPosition.y,
-				currentPosition.z,
-			);
-			return;
-		}
 
 		if (meshRef.current !== targetView) {
+			setClicked(true);
 			setTargetView(meshRef.current);
 			return;
 		}
 
-		setTargetView(null);
+		setClicked(false);
+		const currentPosition = meshRef.current.position;
+		camera.position.set(
+			currentPosition.x + size * 2,
+			currentPosition.y,
+			currentPosition.z + size * 2,
+		);
+
+		camera.lookAt(
+			currentPosition.x + size * 2,
+			currentPosition.y,
+			currentPosition.z,
+		);
+
+		return;
 	};
 
 	return (

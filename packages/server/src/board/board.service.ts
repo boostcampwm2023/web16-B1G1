@@ -51,7 +51,9 @@ export class BoardService {
 	}
 
 	async findAllBoardsByAuthor(author: string): Promise<Board[]> {
-		const boards = await this.boardRepository.findBy({ author });
+		const boards = await this.boardRepository.findBy({
+			user: { nickname: author },
+		});
 		return boards;
 	}
 

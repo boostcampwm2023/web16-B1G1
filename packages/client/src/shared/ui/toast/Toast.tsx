@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { Body04BD } from '../styles';
-import confirmIcon from '../../../../public/icons/icon-confirm-22.svg';
+import confirmIcon from '@icons/icon-confirm-22.svg';
 import { useState } from 'react';
 import { keyframes } from '@emotion/react';
 

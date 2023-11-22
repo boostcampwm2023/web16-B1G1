@@ -1,7 +1,7 @@
 import Star from 'features/star';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { useCameraStore } from 'shared/store/useCameraStore';
-import { ThreeEvent } from '@react-three/fiber';
+import { ThreeEvent, useThree } from '@react-three/fiber';
 import { Html } from '@react-three/drei';
 import styled from '@emotion/styled';
 
@@ -16,10 +16,27 @@ export default function Post({ position, size, color, label }: PropsType) {
 	const { targetView, setTargetView } = useCameraStore();
 	const meshRef = useRef<THREE.Mesh>(null!);
 	const [clicked, setClicked] = useState(false);
+	const { camera } = useThree();
 
 	const handleMeshClick = (e: ThreeEvent<MouseEvent>) => {
 		e.stopPropagation();
 		setClicked((prev) => !prev);
+
+		if (clicked) {
+			const currentPosition = meshRef.current.position;
+			camera.position.set(
+				currentPosition.x + size * 2,
+				currentPosition.y,
+				currentPosition.z + size * 2,
+			);
+
+			camera.lookAt(
+				currentPosition.x + size * 2,
+				currentPosition.y,
+				currentPosition.z,
+			);
+			return;
+		}
 
 		if (meshRef.current !== targetView) {
 			setTargetView(meshRef.current);

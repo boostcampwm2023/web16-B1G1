@@ -89,18 +89,44 @@ export class BoardService {
 		return updatedBoard;
 	}
 
-	async patchLike(id: number): Promise<Partial<Board>> {
+	async patchLike(id: number, userData: UserDataDto): Promise<Partial<Board>> {
 		const board = await this.findBoardById(id);
-		board.like_cnt += 1;
-		await this.boardRepository.save(board);
-		return { like_cnt: board.like_cnt };
+		if (board.likes.find((user) => user.id === userData.userId)) {
+			throw new BadRequestException('You already liked this post');
+		}
+
+		const user = await this.userRepository.findOneBy({ id: userData.userId });
+		if (!user) {
+			throw new NotFoundException(`Not found user with id: ${userData.userId}`);
+		}
+
+		board.likes.push(user);
+		board.like_cnt = board.likes.length;
+
+		const updatedBoard = await this.boardRepository.save(board);
+
+		return { like_cnt: updatedBoard.like_cnt };
 	}
 
-	async patchUnlike(id: number): Promise<Partial<Board>> {
+	async patchUnlike(
+		id: number,
+		userData: UserDataDto,
+	): Promise<Partial<Board>> {
 		const board = await this.findBoardById(id);
-		board.like_cnt -= 1;
-		await this.boardRepository.save(board);
-		return { like_cnt: board.like_cnt };
+		if (!board.likes.find((user) => user.id === userData.userId)) {
+			throw new BadRequestException('You have not liked this post');
+		}
+
+		const user = await this.userRepository.findOneBy({ id: userData.userId });
+		if (!user) {
+			throw new NotFoundException(`Not found user with id: ${userData.userId}`);
+		}
+
+		board.likes = board.likes.filter((user) => user.id !== userData.userId);
+		board.like_cnt = board.likes.length;
+
+		const updatedBoard = await this.boardRepository.save(board);
+		return { like_cnt: updatedBoard.like_cnt };
 	}
 
 	async deleteBoard(id: number, userData: UserDataDto): Promise<void> {

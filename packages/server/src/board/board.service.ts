@@ -60,9 +60,6 @@ export class BoardService {
 		if (!found) {
 			throw new NotFoundException(`Not found board with id: ${id}`);
 		}
-		if (found.content) {
-			found.content = decryptAes(found.content); // AES 복호화하여 반환
-		}
 		return found;
 	}
 

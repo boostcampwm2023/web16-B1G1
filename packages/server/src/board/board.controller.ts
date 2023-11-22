@@ -31,8 +31,8 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { CreateImageDto } from './dto/create-image.dto';
 import { CookieAuthGuard } from 'src/auth/cookie-auth.guard';
 import { GetUser } from 'src/auth/decorators/get-user.decorator';
-import { User } from 'src/auth/entities/user.entity';
 import { UserDataDto } from './dto/user-data.dto';
+import { decryptAes } from 'src/utils/aes.util';
 
 @Controller('board')
 @ApiTags('게시글 API')
@@ -98,8 +98,13 @@ export class BoardController {
 		status: 404,
 		description: '게시글이 존재하지 않음',
 	})
-	findBoardById(@Param('id', ParseIntPipe) id: number): Promise<Board> {
-		return this.boardService.findBoardById(id);
+	async findBoardById(@Param('id', ParseIntPipe) id: number): Promise<Board> {
+		const found = await this.boardService.findBoardById(id);
+		// AES 복호화
+		if (found.content) {
+			found.content = decryptAes(found.content); // AES 복호화하여 반환
+		}
+		return found;
 	}
 
 	@Patch(':id')

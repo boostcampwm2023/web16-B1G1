@@ -123,4 +123,11 @@ export class AuthController {
 	isAvailableNickname(@Query('nickname') nickname: string) {
 		return this.authService.isAvailableNickname(nickname);
 	}
+
+	@Get('github/signin')
+	signInWithGithub(@Res({ passthrough: true }) res: Response) {
+		res.redirect(
+			`https://github.com/login/oauth/authorize?client_id=${process.env.OAUTH_GITHUB_CLIENT_ID}&scope=read:user%20user:email`,
+		);
+	}
 }

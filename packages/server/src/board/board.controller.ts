@@ -32,6 +32,7 @@ import { CreateImageDto } from './dto/create-image.dto';
 import { CookieAuthGuard } from 'src/auth/cookie-auth.guard';
 import { GetUser } from 'src/auth/decorators/get-user.decorator';
 import { User } from 'src/auth/entities/user.entity';
+import { UserDataDto } from './dto/user-data.dto';
 
 @Controller('board')
 @ApiTags('게시글 API')
@@ -48,10 +49,9 @@ export class BoardController {
 		description: '잘못된 요청으로 게시글 작성 실패',
 	})
 	createBoard(
-		@GetUser() userData,
 		@Body() createBoardDto: CreateBoardDto,
+		@GetUser() userData: UserDataDto,
 	): Promise<Board> {
-		if (userData.nickname) createBoardDto.author = userData.nickname;
 		return this.boardService.createBoard(createBoardDto, userData);
 	}
 
@@ -78,7 +78,12 @@ export class BoardController {
 		status: 400,
 		description: '잘못된 요청으로 게시글 조회 실패',
 	})
-	findAllBoardsByAuthor(@Query('author') author: string): Promise<Board[]> {
+	findAllBoardsByAuthor(
+		@Query('author') author: string,
+		@GetUser() userData: UserDataDto,
+	): Promise<Board[]> {
+		// 파라미터 없는 경우 로그인한 사용자의 게시글 조회
+		author = author ? author : userData.nickname;
 		return this.boardService.findAllBoardsByAuthor(author);
 	}
 
@@ -107,12 +112,11 @@ export class BoardController {
 		description: '잘못된 요청으로 게시글 수정 실패',
 	})
 	updateBoard(
-		@GetUser() userData,
 		@Param('id', ParseIntPipe) id: number,
 		@Body() updateBoardDto: UpdateBoardDto,
+		@GetUser() userData: UserDataDto,
 	) {
-		if (userData.nickname) updateBoardDto.author = userData.nickname;
-		return this.boardService.updateBoard(id, updateBoardDto);
+		return this.boardService.updateBoard(id, updateBoardDto, userData);
 	}
 
 	@Patch(':id/like')
@@ -147,14 +151,18 @@ export class BoardController {
 
 	@Delete(':id')
 	@UseGuards(CookieAuthGuard)
+	@UsePipes(ValidationPipe)
 	@ApiOperation({ summary: '게시글 삭제', description: '게시글을 삭제합니다.' })
 	@ApiOkResponse({ status: 200, description: '게시글 삭제 성공' })
 	@ApiNotFoundResponse({
 		status: 404,
 		description: '게시글이 존재하지 않음',
 	})
-	deleteBoard(@Param('id', ParseIntPipe) id: number): Promise<void> {
-		return this.boardService.deleteBoard(id);
+	deleteBoard(
+		@Param('id', ParseIntPipe) id: number,
+		@GetUser() userData: UserDataDto,
+	): Promise<void> {
+		return this.boardService.deleteBoard(id, userData);
 	}
 
 	@Post(':id/image')

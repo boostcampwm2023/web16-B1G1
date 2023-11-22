@@ -11,12 +11,12 @@ interface PropsTypes {
 export default function Toast({ children }: PropsTypes) {
 	const [visible, setVisible] = useState(true);
 
-	setTimeout(() => setVisible(false), 3000);
+	const handleAnimationEnd = () => setVisible(false);
 
 	if (!visible) return null;
 
 	return (
-		<Layout>
+		<Layout onAnimationEnd={handleAnimationEnd}>
 			<img src={confirmIcon} alt="체크 아이콘" />
 			<Text>{children}</Text>
 		</Layout>
@@ -46,5 +46,7 @@ const Layout = styled.div`
 const Text = styled.p`
 	color: #fff;
 	margin: 0 0 0 8px;
+	white-space: nowrap;
+
 	${Body04BD}
 `;

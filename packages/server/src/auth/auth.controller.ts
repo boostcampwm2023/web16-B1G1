@@ -10,6 +10,7 @@ import {
 	ValidationPipe,
 	UseGuards,
 	Req,
+	UnauthorizedException,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SignUpUserDto } from './dto/signup-user.dto';
@@ -122,5 +123,66 @@ export class AuthController {
 	})
 	isAvailableNickname(@Query('nickname') nickname: string) {
 		return this.authService.isAvailableNickname(nickname);
+	}
+
+	@Get('github/signin')
+	signInWithGithub(@Res({ passthrough: true }) res: Response) {
+		res.redirect(
+			`https://github.com/login/oauth/authorize?client_id=${process.env.OAUTH_GITHUB_CLIENT_ID}&scope=read:user%20user:email`,
+		);
+	}
+
+	@Get('github/callback')
+	async oauthGithubCallback(
+		@Query('code') authorizedCode: string,
+		@Res({ passthrough: true }) res: Response,
+	) {
+		const { username, accessToken, refreshToken } =
+			await this.authService.oauthGithubCallback(authorizedCode);
+
+		if (username) {
+			res.cookie('GitHubUsername', username, {
+				path: '/',
+				httpOnly: true,
+			});
+			return { username };
+		}
+
+		res.cookie(JwtEnum.ACCESS_TOKEN_COOKIE_NAME, accessToken, {
+			path: '/',
+			httpOnly: true,
+		});
+		res.cookie(JwtEnum.REFRESH_TOKEN_COOKIE_NAME, refreshToken, {
+			path: '/',
+			httpOnly: true,
+		});
+
+		return { accessToken, refreshToken };
+	}
+
+	@Post('github/signup')
+	async signUpWithGithub(
+		@Body('nickname') nickname: string,
+		@Req() req,
+		@Res({ passthrough: true }) res: Response,
+	) {
+		let gitHubUsername;
+		try {
+			gitHubUsername = req.cookies.GitHubUsername;
+		} catch (e) {
+			throw new UnauthorizedException('잘못된 접근입니다.');
+		}
+
+		const savedUser = await this.authService.signUpWithGithub(
+			nickname,
+			gitHubUsername,
+		);
+
+		res.clearCookie('GitHubUsername', {
+			path: '/',
+			httpOnly: true,
+		});
+
+		return savedUser;
 	}
 }

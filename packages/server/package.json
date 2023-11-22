@@ -28,7 +28,6 @@
 		"@nestjs/platform-express": "^10.0.0",
 		"@nestjs/swagger": "^7.1.16",
 		"@nestjs/typeorm": "^10.0.0",
-		"@types/multer": "^1.4.11",
 		"bcryptjs": "^2.4.3",
 		"class-transformer": "^0.5.1",
 		"class-validator": "^0.14.0",
@@ -41,7 +40,8 @@
 		"passport-jwt": "^4.0.1",
 		"reflect-metadata": "^0.1.13",
 		"rxjs": "^7.8.1",
-		"typeorm": "^0.3.17"
+		"typeorm": "^0.3.17",
+		"uuid": "^9.0.1"
 	},
 	"devDependencies": {
 		"@nestjs/cli": "^10.0.0",
@@ -53,6 +53,8 @@
 		"@types/node": "^20.3.1",
 		"@types/passport-jwt": "^3.0.13",
 		"@types/supertest": "^2.0.12",
+		"@types/multer": "^1.4.11",
+		"@types/uuid": "^9.0.7",
 		"@typescript-eslint/eslint-plugin": "^6.0.0",
 		"@typescript-eslint/parser": "^6.0.0",
 		"eslint": "^8.42.0",

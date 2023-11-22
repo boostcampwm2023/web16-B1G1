@@ -2926,6 +2926,15 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["@types/uuid", [\
+      ["npm:9.0.7", {\
+        "packageLocation": "./.yarn/cache/@types-uuid-npm-9.0.7-c380bb8654-b329ebd4f9.zip/node_modules/@types/uuid/",\
+        "packageDependencies": [\
+          ["@types/uuid", "npm:9.0.7"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["@types/validator", [\
       ["npm:13.11.7", {\
         "packageLocation": "./.yarn/cache/@types-validator-npm-13.11.7-1eda8f8948-9ca2a047d6.zip/node_modules/@types/validator/",\
@@ -9679,6 +9688,7 @@ const RAW_RUNTIME_STATE =
           ["@types/node", "npm:20.9.0"],\
           ["@types/passport-jwt", "npm:3.0.13"],\
           ["@types/supertest", "npm:2.0.16"],\
+          ["@types/uuid", "npm:9.0.7"],\
           ["@typescript-eslint/eslint-plugin", "virtual:658502eb4296e93abedc18b6aa9b26978f434f08d98e21ebb0e725354b8bb54b62db9c4a1893e460c694ff7500ff5cbafa4457b0dfd26b5838868666c861e990#npm:6.10.0"],\
           ["@typescript-eslint/parser", "virtual:658502eb4296e93abedc18b6aa9b26978f434f08d98e21ebb0e725354b8bb54b62db9c4a1893e460c694ff7500ff5cbafa4457b0dfd26b5838868666c861e990#npm:6.10.0"],\
           ["bcryptjs", "npm:2.4.3"],\
@@ -9705,7 +9715,8 @@ const RAW_RUNTIME_STATE =
           ["ts-node", "virtual:2499dbb93d824027565d71b0716c4fb8b548ad61955d0a0286bfb3c5b4058e227894b6691d96808c00f576db14870018375210362c26ee321ea99fd6ed041c74#npm:10.9.1"],\
           ["tsconfig-paths", "npm:4.2.0"],\
           ["typeorm", "virtual:2499dbb93d824027565d71b0716c4fb8b548ad61955d0a0286bfb3c5b4058e227894b6691d96808c00f576db14870018375210362c26ee321ea99fd6ed041c74#npm:0.3.17"],\
-          ["typescript", "patch:typescript@npm%3A5.2.2#optional!builtin<compat/typescript>::version=5.2.2&hash=f3b441"]\
+          ["typescript", "patch:typescript@npm%3A5.2.2#optional!builtin<compat/typescript>::version=5.2.2&hash=f3b441"],\
+          ["uuid", "npm:9.0.1"]\
         ],\
         "linkType": "SOFT"\
       }]\

@@ -31,7 +31,7 @@ const Input = styled.input`
 	height: 100%;
 	padding: 12px;
 	border-radius: 4px;
-	background-color: ${theme.colors.background['bdp-03']};
+	background-color: ${theme.colors.background.bdp03};
 	border: 1px solid ${theme.colors.stroke.default};
 	color: ${theme.colors.text.third};
 

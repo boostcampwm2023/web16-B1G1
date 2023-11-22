@@ -1,1 +1,1 @@
-export * from './InputBar';
+export { default as Input } from './InputBar';

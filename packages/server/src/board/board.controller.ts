@@ -12,6 +12,8 @@ import {
 	UsePipes,
 	ValidationPipe,
 	ParseIntPipe,
+	UseGuards,
+	Req,
 } from '@nestjs/common';
 import { BoardService } from './board.service';
 import { CreateBoardDto } from './dto/create-board.dto';
@@ -28,6 +30,7 @@ import {
 } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CreateImageDto } from './dto/create-image.dto';
+import { CookieAuthGuard } from 'src/auth/cookie-auth.guard';
 
 @Controller('board')
 @ApiTags('게시글 API')
@@ -35,6 +38,7 @@ export class BoardController {
 	constructor(private readonly boardService: BoardService) {}
 
 	@Post()
+	@UseGuards(CookieAuthGuard)
 	@UsePipes(ValidationPipe)
 	@ApiOperation({ summary: '게시글 작성', description: '게시글을 작성합니다.' })
 	@ApiCreatedResponse({ status: 201, description: '게시글 작성 성공' })
@@ -47,6 +51,7 @@ export class BoardController {
 	}
 
 	@Get()
+	@UseGuards(CookieAuthGuard)
 	@ApiOperation({ summary: '게시글 조회', description: '게시글을 조회합니다.' })
 	@ApiOkResponse({ status: 200, description: '게시글 조회 성공' })
 	@ApiBadRequestResponse({
@@ -58,6 +63,7 @@ export class BoardController {
 	}
 
 	@Get('by-author')
+	@UseGuards(CookieAuthGuard)
 	@ApiOperation({
 		summary: '작성자별 게시글 조회',
 		description: '작성자별 게시글을 조회합니다.',
@@ -72,6 +78,7 @@ export class BoardController {
 	}
 
 	@Get(':id')
+	@UseGuards(CookieAuthGuard)
 	@ApiOperation({
 		summary: '게시글 상세 조회',
 		description: '게시글을 상세 조회합니다.',
@@ -86,6 +93,7 @@ export class BoardController {
 	}
 
 	@Patch(':id')
+	@UseGuards(CookieAuthGuard)
 	@UsePipes(ValidationPipe)
 	@ApiOperation({ summary: '게시글 수정', description: '게시글을 수정합니다.' })
 	@ApiOkResponse({ status: 200, description: '게시글 수정 성공' })
@@ -101,6 +109,7 @@ export class BoardController {
 	}
 
 	@Patch(':id/like')
+	@UseGuards(CookieAuthGuard)
 	@ApiOperation({
 		summary: '게시글 좋아요',
 		description: '게시글에 좋아요를 합니다.',
@@ -115,6 +124,7 @@ export class BoardController {
 	}
 
 	@Patch(':id/unlike')
+	@UseGuards(CookieAuthGuard)
 	@ApiOperation({
 		summary: '게시글 좋아요 취소',
 		description: '게시글에 좋아요를 취소합니다.',
@@ -129,6 +139,7 @@ export class BoardController {
 	}
 
 	@Delete(':id')
+	@UseGuards(CookieAuthGuard)
 	@ApiOperation({ summary: '게시글 삭제', description: '게시글을 삭제합니다.' })
 	@ApiOkResponse({ status: 200, description: '게시글 삭제 성공' })
 	@ApiNotFoundResponse({
@@ -140,6 +151,7 @@ export class BoardController {
 	}
 
 	@Post(':id/image')
+	@UseGuards(CookieAuthGuard)
 	@UseInterceptors(FileInterceptor('file', { dest: './uploads' }))
 	@UsePipes(ValidationPipe)
 	@ApiOperation({

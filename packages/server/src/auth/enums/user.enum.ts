@@ -19,4 +19,6 @@ export enum UserEnum {
 	VIOLATE_NICKNAME_MESSAGE = `닉네임은 영문자, 숫자, 한글로 이루어진 ${MIN_NICKNAME_LENGTH}~${MAX_NICKNAME_LENGTH}자여야 합니다.`,
 
 	FAIL_SIGNIN_MESSAGE = '아이디에 해당하는 회원이 존재하지 않거나 비밀번호가 일치하지 않습니다.',
+
+	SUCCESS_SIGNOUT_MESSAGE = '로그아웃에 성공했습니다.',
 }

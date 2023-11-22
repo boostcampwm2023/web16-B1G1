@@ -66,7 +66,6 @@ export class CookieAuthGuard extends AuthGuard('jwt') {
 			JwtEnum.ACCESS_TOKEN_TYPE,
 			this.jwtService,
 		);
-		console.log(newAccessToken);
 		response.cookie(JwtEnum.ACCESS_TOKEN_COOKIE_NAME, newAccessToken, {
 			path: '/',
 			httpOnly: true,

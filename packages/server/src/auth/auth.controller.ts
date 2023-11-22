@@ -8,6 +8,8 @@ import {
 	Query,
 	UsePipes,
 	ValidationPipe,
+	UseGuards,
+	Req,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SignUpUserDto } from './dto/signup-user.dto';
@@ -24,6 +26,8 @@ import {
 	ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { JwtEnum } from './enums/jwt.enum';
+import { CookieAuthGuard } from './cookie-auth.guard';
+import { UserEnum } from './enums/user.enum';
 
 @Controller('auth')
 @ApiTags('인증/인가 API')
@@ -68,11 +72,20 @@ export class AuthController {
 	}
 
 	@Get('signout')
+	@UseGuards(CookieAuthGuard)
 	@ApiOperation({ summary: '로그아웃', description: '로그아웃을 진행합니다.' })
 	@ApiOkResponse({ status: 200, description: '로그아웃 성공' })
-	async signOut(@Res({ passthrough: true }) res: Response) {
-		res.clearCookie('accessToken', { path: '/', httpOnly: true });
-		return { message: 'success' };
+	async signOut(@Res({ passthrough: true }) res: Response, @Req() req) {
+		await this.authService.signOut(req.user);
+		res.clearCookie(JwtEnum.ACCESS_TOKEN_COOKIE_NAME, {
+			path: '/',
+			httpOnly: true,
+		});
+		res.clearCookie(JwtEnum.REFRESH_TOKEN_COOKIE_NAME, {
+			path: '/',
+			httpOnly: true,
+		});
+		return { message: UserEnum.SUCCESS_SIGNOUT_MESSAGE };
 	}
 
 	@Get('is-available-username')

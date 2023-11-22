@@ -1,9 +1,13 @@
 import { TextButton } from 'shared/ui';
 import RightArrow from '@icons/icon-arrow-right-17-white.svg?react';
 
-export default function TopButton() {
+interface PropsType {
+	onClick: () => void;
+}
+
+export default function TopButton({ onClick }: PropsType) {
 	return (
-		<TextButton size="l" onClick={() => console.log('top button')}>
+		<TextButton size="l" onClick={onClick}>
 			<p>둘러보기</p>
 			<RightArrow />
 		</TextButton>

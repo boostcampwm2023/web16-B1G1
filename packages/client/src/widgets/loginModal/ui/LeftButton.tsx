@@ -1,12 +1,12 @@
 import { Button } from 'shared/ui';
 
-export default function LeftButton() {
+interface PropsType {
+	onClick: () => void;
+}
+
+export default function LeftButton({ onClick }: PropsType) {
 	return (
-		<Button
-			onClick={() => console.log('left button')}
-			size="m"
-			buttonType="Button"
-		>
+		<Button onClick={onClick} size="m" buttonType="Button">
 			회원가입
 		</Button>
 	);

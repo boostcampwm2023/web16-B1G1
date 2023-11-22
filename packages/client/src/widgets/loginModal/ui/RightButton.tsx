@@ -1,12 +1,12 @@
 import { Button } from 'shared/ui';
 
-export default function RightButton() {
+interface PropsType {
+	onClick: () => void;
+}
+
+export default function RightButton({ onClick }: PropsType) {
 	return (
-		<Button
-			onClick={() => console.log('right button')}
-			size="m"
-			buttonType="CTA-icon"
-		>
+		<Button onClick={onClick} size="m" buttonType="CTA-icon">
 			로그인
 		</Button>
 	);

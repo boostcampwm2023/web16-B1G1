@@ -3,9 +3,14 @@ import {
 	Column,
 	CreateDateColumn,
 	Entity,
+	JoinColumn,
+	ManyToOne,
+	OneToOne,
 	PrimaryGeneratedColumn,
 	UpdateDateColumn,
 } from 'typeorm';
+import { Image } from './image.entity';
+import { User } from 'src/auth/entities/user.entity';
 
 @Entity()
 export class Board extends BaseEntity {
@@ -30,6 +35,10 @@ export class Board extends BaseEntity {
 	@Column({ type: 'int', default: 0 })
 	like_cnt: number;
 
-	@Column({ type: 'int', nullable: true })
-	image_id: number;
+	@OneToOne(() => Image, { nullable: true })
+	@JoinColumn()
+	image: number;
+
+	@ManyToOne(() => User, (user) => user.boards, { onDelete: 'CASCADE' })
+	user: User;
 }

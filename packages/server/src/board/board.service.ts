@@ -111,7 +111,7 @@ export class BoardService {
 		}
 
 		// 이미 파일이 존재하는지 확인
-		if (board.image_id) {
+		if (board.image) {
 			unlinkSync(file.path); // 파일 삭제
 		}
 
@@ -124,7 +124,7 @@ export class BoardService {
 		});
 		const updatedImage = await this.imageRepository.save(image);
 
-		board.image_id = updatedImage.id;
+		board.image = updatedImage.id;
 		const updatedBoard = await this.boardRepository.save(board);
 
 		return updatedBoard;

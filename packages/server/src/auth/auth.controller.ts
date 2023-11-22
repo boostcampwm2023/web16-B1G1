@@ -130,4 +130,9 @@ export class AuthController {
 			`https://github.com/login/oauth/authorize?client_id=${process.env.OAUTH_GITHUB_CLIENT_ID}&scope=read:user%20user:email`,
 		);
 	}
+
+	@Get('github/callback')
+	async oauthGithubCallback(@Query('code') code: string) {
+		await this.authService.oauthGithubCallback(code);
+	}
 }

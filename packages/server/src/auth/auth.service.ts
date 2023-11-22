@@ -97,4 +97,8 @@ export class AuthService {
 			return true;
 		}
 	}
+
+	async oauthGithubCallback(code: string) {
+		console.log(code);
+	}
 }

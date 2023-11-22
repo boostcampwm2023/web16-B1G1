@@ -76,8 +76,8 @@ const MainLayout = styled.div`
 	margin: 12px 0 0 0;
 
 	${({ theme: { colors } }) => css`
-		background-color: ${colors.background.bdp03};
-		border: 2px solid ${colors.stroke.default};
+		background-color: ${colors.background.bdp01};
+		border: 2px solid ${colors.stroke.focus};
 	`};
 `;
 

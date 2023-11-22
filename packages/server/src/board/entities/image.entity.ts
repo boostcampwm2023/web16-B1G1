@@ -3,8 +3,10 @@ import {
 	Column,
 	CreateDateColumn,
 	Entity,
+	ManyToOne,
 	PrimaryGeneratedColumn,
 } from 'typeorm';
+import { Board } from './board.entity';
 
 @Entity()
 export class Image extends BaseEntity {
@@ -17,12 +19,12 @@ export class Image extends BaseEntity {
 	@Column({ type: 'varchar', length: 50, nullable: false })
 	filename: string;
 
-	@Column({ type: 'varchar', length: 50, nullable: false })
-	path: string;
-
 	@Column({ type: 'int', nullable: false })
 	size: number;
 
 	@CreateDateColumn()
 	created_at: Date;
+
+	@ManyToOne(() => Board, (board) => board.images, { eager: false })
+	board: Board;
 }

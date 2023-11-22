@@ -7,6 +7,7 @@ import {
 	JoinTable,
 	ManyToMany,
 	ManyToOne,
+	OneToMany,
 	OneToOne,
 	PrimaryGeneratedColumn,
 	UpdateDateColumn,
@@ -38,9 +39,10 @@ export class Board extends BaseEntity {
 	@Column({ type: 'int', default: 0 })
 	like_cnt: number;
 
-	@OneToOne(() => Image, { nullable: true })
-	@JoinColumn()
-	image: number;
+	@OneToMany(() => Image, (image) => image.board, {
+		eager: true,
+	})
+	images: Image[];
 
 	@ManyToOne(() => User, (user) => user.boards, {
 		eager: true,

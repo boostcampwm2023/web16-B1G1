@@ -13,6 +13,8 @@ import { unlinkSync } from 'fs';
 import { CreateImageDto } from './dto/create-image.dto';
 import { Image } from './entities/image.entity';
 import { encryptAes, decryptAes } from 'src/utils/aes.util';
+import { User } from 'src/auth/entities/user.entity';
+import { UserDataDto } from './dto/user-data.dto';
 
 @Injectable()
 export class BoardService {
@@ -21,19 +23,26 @@ export class BoardService {
 		private readonly boardRepository: Repository<Board>,
 		@InjectRepository(Image)
 		private readonly imageRepository: Repository<Image>,
+		@InjectRepository(User)
+		private readonly userRepository: Repository<User>,
 	) {}
 
-	async createBoard(createBoardDto: CreateBoardDto): Promise<Board> {
-		const { title, content, author } = createBoardDto;
+	async createBoard(
+		createBoardDto: CreateBoardDto,
+		userData: UserDataDto,
+	): Promise<Board> {
+		const { title, content } = createBoardDto;
+
+		const user = await this.userRepository.findOneBy({ id: userData.userId });
 
 		const board = this.boardRepository.create({
 			title,
 			content: encryptAes(content), // AES 암호화하여 저장
-			author,
+			user,
 		});
-		const created: Board = await this.boardRepository.save(board);
-
-		return created;
+		const createdBoard: Board = await this.boardRepository.save(board);
+		createdBoard.user.password = undefined; // password 제거하여 반환
+		return createdBoard;
 	}
 
 	async findAllBoards(): Promise<Board[]> {
@@ -42,7 +51,9 @@ export class BoardService {
 	}
 
 	async findAllBoardsByAuthor(author: string): Promise<Board[]> {
-		const boards = await this.boardRepository.findBy({ author });
+		const boards = await this.boardRepository.findBy({
+			user: { nickname: author },
+		});
 		return boards;
 	}
 
@@ -51,14 +62,20 @@ export class BoardService {
 		if (!found) {
 			throw new NotFoundException(`Not found board with id: ${id}`);
 		}
-		if (found.content) {
-			found.content = decryptAes(found.content); // AES 복호화하여 반환
-		}
 		return found;
 	}
 
-	async updateBoard(id: number, updateBoardDto: UpdateBoardDto) {
+	async updateBoard(
+		id: number,
+		updateBoardDto: UpdateBoardDto,
+		userData: UserDataDto,
+	) {
 		const board: Board = await this.findBoardById(id);
+
+		// 게시글 작성자와 수정 요청자가 다른 경우
+		if (board.user.id !== userData.userId) {
+			throw new BadRequestException('You are not the author of this post');
+		}
 
 		// updateBoardDto.content가 존재하면 AES 암호화하여 저장
 		if (updateBoardDto.content) {
@@ -72,21 +89,54 @@ export class BoardService {
 		return updatedBoard;
 	}
 
-	async patchLike(id: number): Promise<Partial<Board>> {
+	async patchLike(id: number, userData: UserDataDto): Promise<Partial<Board>> {
 		const board = await this.findBoardById(id);
-		board.like_cnt += 1;
-		await this.boardRepository.save(board);
-		return { like_cnt: board.like_cnt };
+		if (board.likes.find((user) => user.id === userData.userId)) {
+			throw new BadRequestException('You already liked this post');
+		}
+
+		const user = await this.userRepository.findOneBy({ id: userData.userId });
+		if (!user) {
+			throw new NotFoundException(`Not found user with id: ${userData.userId}`);
+		}
+
+		board.likes.push(user);
+		board.like_cnt = board.likes.length;
+
+		const updatedBoard = await this.boardRepository.save(board);
+
+		return { like_cnt: updatedBoard.like_cnt };
 	}
 
-	async patchUnlike(id: number): Promise<Partial<Board>> {
+	async patchUnlike(
+		id: number,
+		userData: UserDataDto,
+	): Promise<Partial<Board>> {
 		const board = await this.findBoardById(id);
-		board.like_cnt -= 1;
-		await this.boardRepository.save(board);
-		return { like_cnt: board.like_cnt };
+		if (!board.likes.find((user) => user.id === userData.userId)) {
+			throw new BadRequestException('You have not liked this post');
+		}
+
+		const user = await this.userRepository.findOneBy({ id: userData.userId });
+		if (!user) {
+			throw new NotFoundException(`Not found user with id: ${userData.userId}`);
+		}
+
+		board.likes = board.likes.filter((user) => user.id !== userData.userId);
+		board.like_cnt = board.likes.length;
+
+		const updatedBoard = await this.boardRepository.save(board);
+		return { like_cnt: updatedBoard.like_cnt };
 	}
 
-	async deleteBoard(id: number): Promise<void> {
+	async deleteBoard(id: number, userData: UserDataDto): Promise<void> {
+		const board: Board = await this.findBoardById(id);
+
+		// 게시글 작성자와 삭제 요청자가 다른 경우
+		if (board.user.id !== userData.userId) {
+			throw new BadRequestException('You are not the author of this post');
+		}
+
 		const result = await this.boardRepository.delete({ id });
 	}
 

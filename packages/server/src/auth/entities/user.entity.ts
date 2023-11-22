@@ -24,6 +24,6 @@ export class User {
 	@CreateDateColumn()
 	created_at: Date;
 
-	@OneToMany(() => Board, (board) => board.user)
+	@OneToMany(() => Board, (board) => board.user, { eager: false })
 	boards: Board[];
 }

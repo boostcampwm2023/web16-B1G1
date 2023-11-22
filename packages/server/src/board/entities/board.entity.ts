@@ -4,6 +4,8 @@ import {
 	CreateDateColumn,
 	Entity,
 	JoinColumn,
+	JoinTable,
+	ManyToMany,
 	ManyToOne,
 	OneToOne,
 	PrimaryGeneratedColumn,
@@ -23,14 +25,15 @@ export class Board extends BaseEntity {
 	@Column({ type: 'text', nullable: true })
 	content: string;
 
-	@Column({ type: 'varchar', length: 50, nullable: false })
-	author: string;
-
 	@CreateDateColumn()
 	created_at: Date;
 
 	@UpdateDateColumn()
 	updated_at: Date;
+
+	@ManyToMany(() => User, { eager: true })
+	@JoinTable()
+	likes: User[];
 
 	@Column({ type: 'int', default: 0 })
 	like_cnt: number;
@@ -39,6 +42,9 @@ export class Board extends BaseEntity {
 	@JoinColumn()
 	image: number;
 
-	@ManyToOne(() => User, (user) => user.boards, { onDelete: 'CASCADE' })
+	@ManyToOne(() => User, (user) => user.boards, {
+		eager: true,
+		onDelete: 'CASCADE',
+	})
 	user: User;
 }

@@ -23,7 +23,8 @@
 		"paths": {
 			"@utils/*": ["shared/utils/*"],
 			"@hooks/*": ["shared/lib/hooks/*"],
-			"@constants": ["shared/lib/constants"]
+			"@constants": ["shared/lib/constants"],
+			"@icons/*": ["../public/icons/*"]
 		}
 	},
 	"include": ["src"],

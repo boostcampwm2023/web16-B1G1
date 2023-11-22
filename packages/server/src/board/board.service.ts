@@ -12,6 +12,7 @@ import { Repository } from 'typeorm';
 import { unlinkSync } from 'fs';
 import { CreateImageDto } from './dto/create-image.dto';
 import { Image } from './entities/image.entity';
+import { User } from 'src/auth/entities/user.entity';
 import { encryptAes, decryptAes } from 'src/utils/aes.util';
 
 @Injectable()
@@ -21,6 +22,8 @@ export class BoardService {
 		private readonly boardRepository: Repository<Board>,
 		@InjectRepository(Image)
 		private readonly imageRepository: Repository<Image>,
+		@InjectRepository(User)
+		private readonly userRepository: Repository<User>,
 	) {}
 
 	async createBoard(createBoardDto: CreateBoardDto): Promise<Board> {

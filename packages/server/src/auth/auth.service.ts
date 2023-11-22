@@ -15,7 +15,7 @@ import { JwtService } from '@nestjs/jwt';
 import { RedisRepository } from './redis.repository';
 import { UserEnum } from './enums/user.enum';
 import { JwtEnum } from './enums/jwt.enum';
-import { createJwt } from '../utils/auth.util';
+import { createJwt, getGitHubAccessToken } from '../utils/auth.util';
 
 @Injectable()
 export class AuthService {
@@ -99,6 +99,11 @@ export class AuthService {
 	}
 
 	async oauthGithubCallback(code: string) {
-		console.log(code);
+		if (!code) {
+			throw new BadRequestException('Authorized Code가 존재하지 않습니다.');
+		}
+
+		const accessToken = await getGitHubAccessToken(code);
+		console.log(accessToken);
 	}
 }

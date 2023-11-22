@@ -126,6 +126,7 @@ export class BoardController {
 
 	@Patch(':id/like')
 	@UseGuards(CookieAuthGuard)
+	@UsePipes(ValidationPipe)
 	@ApiOperation({
 		summary: '게시글 좋아요',
 		description: '게시글에 좋아요를 합니다.',
@@ -135,12 +136,16 @@ export class BoardController {
 		status: 400,
 		description: '잘못된 요청으로 게시글 좋아요 실패',
 	})
-	patchLike(@Param('id', ParseIntPipe) id: number): Promise<Partial<Board>> {
-		return this.boardService.patchLike(id);
+	patchLike(
+		@Param('id', ParseIntPipe) id: number,
+		@GetUser() userData: UserDataDto,
+	): Promise<Partial<Board>> {
+		return this.boardService.patchLike(id, userData);
 	}
 
 	@Patch(':id/unlike')
 	@UseGuards(CookieAuthGuard)
+	@UsePipes(ValidationPipe)
 	@ApiOperation({
 		summary: '게시글 좋아요 취소',
 		description: '게시글에 좋아요를 취소합니다.',
@@ -150,8 +155,11 @@ export class BoardController {
 		status: 400,
 		description: '잘못된 요청으로 게시글 좋아요 취소 실패',
 	})
-	patchUnlike(@Param('id', ParseIntPipe) id: number): Promise<Partial<Board>> {
-		return this.boardService.patchUnlike(id);
+	patchUnlike(
+		@Param('id', ParseIntPipe) id: number,
+		@GetUser() userData: UserDataDto,
+	): Promise<Partial<Board>> {
+		return this.boardService.patchUnlike(id, userData);
 	}
 
 	@Delete(':id')

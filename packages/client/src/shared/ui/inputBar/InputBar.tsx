@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import theme from '../styles/theme';
+import { Body02ME, Body03ME } from '../styles';
 
 interface PropsType extends React.InputHTMLAttributes<HTMLInputElement> {
 	label: string;
@@ -34,6 +35,7 @@ const Input = styled.input`
 	background-color: ${theme.colors.background.bdp03};
 	border: 1px solid ${theme.colors.stroke.default};
 	color: ${theme.colors.text.third};
+	${Body03ME}
 
 	&:hover {
 		border: 1px solid ${theme.colors.stroke.sc};
@@ -42,10 +44,13 @@ const Input = styled.input`
 	&:focus {
 		outline: none;
 		border: 1px solid ${theme.colors.stroke.focus};
+		color: ${theme.colors.text.secondary};
 	}
 `;
 
 const Label = styled.label`
 	margin-bottom: 8px;
+	color: ${theme.colors.text.secondary};
+	${Body02ME}
 	color: ${theme.colors.text.secondary};
 `;

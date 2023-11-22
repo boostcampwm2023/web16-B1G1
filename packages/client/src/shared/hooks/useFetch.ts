@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 
 const BASE_URL = 'wow'; // TODO: Add base url
 
-export const useFetch = (api: string) => {
-	const [data, setData] = useState<any>(null);
+export const useFetch = <T>(api: string) => {
+	const [data, setData] = useState<T>();
 	const [loading, setLoading] = useState<boolean>(true);
-	const [error, setError] = useState<any>(null);
+	const [error, setError] = useState<AxiosError>();
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -15,7 +15,7 @@ export const useFetch = (api: string) => {
 				setData(res.data);
 				setLoading(false);
 			} catch (err) {
-				setError(err);
+				setError(err as AxiosError);
 				setLoading(false);
 			}
 		};
@@ -29,7 +29,7 @@ export const useFetch = (api: string) => {
 			setData(res.data);
 			setLoading(false);
 		} catch (err) {
-			setError(err);
+			setError(err as AxiosError);
 			setLoading(false);
 		}
 	};

@@ -9,7 +9,7 @@ interface PropsTypes {
 	title: string;
 	children: ReactNode;
 
-	explanation?: string;
+	description?: string;
 	topButton?: ReactNode;
 	leftButton?: ReactNode;
 	rightButton?: ReactNode;
@@ -18,7 +18,7 @@ interface PropsTypes {
 
 export default function Modal({
 	title,
-	explanation,
+	description,
 	leftButton,
 	rightButton,
 	topButton,
@@ -43,7 +43,7 @@ export default function Modal({
 						{topButton}
 					</TitleLayout>
 
-					<Explanation>{explanation}</Explanation>
+					{description && <Description>{description}</Description>}
 				</UpperLayout>
 
 				{children}
@@ -101,11 +101,12 @@ const ButtonLayout = styled.div`
 const Title = styled.h1`
 	display: flex;
 	justify-content: flex-start;
+	margin: 0;
 	color: ${({ theme: { colors } }) => colors.text.primary};
 	${Title02}
 `;
 
-const Explanation = styled.p`
+const Description = styled.p`
 	color: ${({ theme: { colors } }) => colors.text.third};
 	${Body02ME}
 `;

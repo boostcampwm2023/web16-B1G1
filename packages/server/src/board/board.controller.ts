@@ -13,7 +13,6 @@ import {
 	ValidationPipe,
 	ParseIntPipe,
 	UseGuards,
-	Req,
 } from '@nestjs/common';
 import { BoardService } from './board.service';
 import { CreateBoardDto } from './dto/create-board.dto';
@@ -31,6 +30,8 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CreateImageDto } from './dto/create-image.dto';
 import { CookieAuthGuard } from 'src/auth/cookie-auth.guard';
+import { GetUser } from 'src/auth/decorators/get-user.decorator';
+import { User } from 'src/auth/entities/user.entity';
 
 @Controller('board')
 @ApiTags('게시글 API')
@@ -47,12 +48,11 @@ export class BoardController {
 		description: '잘못된 요청으로 게시글 작성 실패',
 	})
 	createBoard(
-		@Req() req,
+		@GetUser() userData,
 		@Body() createBoardDto: CreateBoardDto,
 	): Promise<Board> {
-		if (req.user && req.user.nickname)
-			createBoardDto.author = req.user.nickname;
-		return this.boardService.createBoard(createBoardDto);
+		if (userData.nickname) createBoardDto.author = userData.nickname;
+		return this.boardService.createBoard(createBoardDto, userData);
 	}
 
 	@Get()
@@ -107,12 +107,11 @@ export class BoardController {
 		description: '잘못된 요청으로 게시글 수정 실패',
 	})
 	updateBoard(
-		@Req() req,
+		@GetUser() userData,
 		@Param('id', ParseIntPipe) id: number,
 		@Body() updateBoardDto: UpdateBoardDto,
 	) {
-		if (req.user && req.user.nickname)
-			updateBoardDto.author = req.user.nickname;
+		if (userData.nickname) updateBoardDto.author = userData.nickname;
 		return this.boardService.updateBoard(id, updateBoardDto);
 	}
 

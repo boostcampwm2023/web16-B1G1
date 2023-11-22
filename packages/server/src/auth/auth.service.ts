@@ -66,6 +66,10 @@ export class AuthService {
 		return { accessToken, refreshToken };
 	}
 
+	async signOut(user: Partial<User>) {
+		this.redisRepository.del(user.username);
+	}
+
 	async isAvailableUsername(username: string): Promise<boolean> {
 		if (!username) {
 			throw new BadRequestException('username is required');

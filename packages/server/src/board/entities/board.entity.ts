@@ -39,6 +39,9 @@ export class Board extends BaseEntity {
 	@JoinColumn()
 	image: number;
 
-	@ManyToOne(() => User, (user) => user.boards, { onDelete: 'CASCADE' })
+	@ManyToOne(() => User, (user) => user.boards, {
+		eager: true,
+		onDelete: 'CASCADE',
+	})
 	user: User;
 }

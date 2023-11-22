@@ -6,17 +6,23 @@ interface PropsType extends React.InputHTMLAttributes<HTMLInputElement> {
 	label: string;
 	id: string;
 	placeholder: string;
+	isEssential?: boolean;
 }
 
 export default function InputBar({
 	id,
 	label,
 	placeholder,
+	isEssential = false,
 	...args
 }: PropsType) {
 	return (
 		<Container>
-			<Label htmlFor={id}>{label}</Label>
+			<LabelContainer>
+				<LabelText htmlFor={id}>{label}</LabelText>
+				{isEssential && <LabelStar>*</LabelStar>}
+			</LabelContainer>
+
 			<Input id={id} placeholder={placeholder} {...args} />
 		</Container>
 	);
@@ -48,9 +54,16 @@ const Input = styled.input`
 	}
 `;
 
-const Label = styled.label`
-	margin-bottom: 8px;
+const LabelContainer = styled.div`
+	margin: 0 0 8px 0;
+`;
+
+const LabelText = styled.label`
 	color: ${theme.colors.text.secondary};
 	${Body02ME}
-	color: ${theme.colors.text.secondary};
+`;
+
+const LabelStar = styled.label`
+	color: ${({ theme: { colors } }) => colors.text.warning};
+	${Body02ME};
 `;

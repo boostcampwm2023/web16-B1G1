@@ -8,6 +8,12 @@ async function bootstrap() {
 
 	app.use(cookieParser());
 
+	// cors 허용
+	app.enableCors({
+		origin: true,
+		credentials: true,
+	});
+
 	const config = new DocumentBuilder()
 		.setTitle('B1G1 API')
 		.setDescription('B1G1 API description')

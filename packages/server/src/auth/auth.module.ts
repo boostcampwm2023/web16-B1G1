@@ -7,6 +7,7 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { jwtConfig } from '../config/jwt.config';
 import { RedisRepository } from './redis.repository';
+import { CookieAuthGuard } from './cookie-auth.guard';
 
 @Module({
 	imports: [
@@ -15,6 +16,7 @@ import { RedisRepository } from './redis.repository';
 		TypeOrmModule.forFeature([User]),
 	],
 	controllers: [AuthController],
-	providers: [AuthService, RedisRepository],
+	providers: [AuthService, CookieAuthGuard, RedisRepository],
+	exports: [JwtModule, CookieAuthGuard, RedisRepository],
 })
 export class AuthModule {}

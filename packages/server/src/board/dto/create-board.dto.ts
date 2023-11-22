@@ -21,13 +21,14 @@ export class CreateBoardDto {
 	})
 	content: string;
 
-	@IsNotEmpty({ message: '게시글 작성자는 필수 입력입니다.' })
-	@IsString({ message: '게시글 작성자는 문자열로 입력해야 합니다.' })
-	@MaxLength(50, { message: '게시글 작성자는 50자 이내로 입력해야 합니다.' })
-	@ApiProperty({
-		description: '게시글 작성자',
-		example: 'test author',
-		required: true,
-	})
+	// 서버에서 직접 삽입해주도록 변경 (validation 제거)
+	// @IsNotEmpty({ message: '게시글 작성자는 필수 입력입니다.' })
+	// @IsString({ message: '게시글 작성자는 문자열로 입력해야 합니다.' })
+	// @MaxLength(50, { message: '게시글 작성자는 50자 이내로 입력해야 합니다.' })
+	// @ApiProperty({
+	// 	description: '게시글 작성자',
+	// 	example: 'test author',
+	// 	required: true,
+	// })
 	author: string;
 }

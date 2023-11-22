@@ -12,6 +12,7 @@ import { Repository } from 'typeorm';
 import { unlinkSync } from 'fs';
 import { CreateImageDto } from './dto/create-image.dto';
 import { Image } from './entities/image.entity';
+import { encryptAes, decryptAes } from 'src/utils/aes.util';
 
 @Injectable()
 export class BoardService {
@@ -27,7 +28,7 @@ export class BoardService {
 
 		const board = this.boardRepository.create({
 			title,
-			content,
+			content: encryptAes(content), // AES 암호화하여 저장
 			author,
 		});
 		const created: Board = await this.boardRepository.save(board);
@@ -50,11 +51,19 @@ export class BoardService {
 		if (!found) {
 			throw new NotFoundException(`Not found board with id: ${id}`);
 		}
+		if (found.content) {
+			found.content = decryptAes(found.content); // AES 복호화하여 반환
+		}
 		return found;
 	}
 
 	async updateBoard(id: number, updateBoardDto: UpdateBoardDto) {
 		const board: Board = await this.findBoardById(id);
+
+		// updateBoardDto.content가 존재하면 AES 암호화하여 저장
+		if (updateBoardDto.content) {
+			updateBoardDto.content = encryptAes(updateBoardDto.content);
+		}
 
 		const updatedBoard: Board = await this.boardRepository.save({
 			...board,
@@ -102,7 +111,7 @@ export class BoardService {
 		}
 
 		// 이미 파일이 존재하는지 확인
-		if (board.image_id) {
+		if (board.image) {
 			unlinkSync(file.path); // 파일 삭제
 		}
 
@@ -115,7 +124,7 @@ export class BoardService {
 		});
 		const updatedImage = await this.imageRepository.save(image);
 
-		board.image_id = updatedImage.id;
+		board.image = updatedImage.id;
 		const updatedBoard = await this.boardRepository.save(board);
 
 		return updatedBoard;

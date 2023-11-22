@@ -1,7 +1,9 @@
+import { Board } from 'src/board/entities/board.entity';
 import {
 	Column,
 	CreateDateColumn,
 	Entity,
+	OneToMany,
 	PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -21,4 +23,7 @@ export class User {
 
 	@CreateDateColumn()
 	created_at: Date;
+
+	@OneToMany(() => Board, (board) => board.user)
+	boards: Board[];
 }

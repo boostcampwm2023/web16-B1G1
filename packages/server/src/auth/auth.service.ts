@@ -20,6 +20,7 @@ import {
 	getGitHubAccessToken,
 	getGitHubUserData,
 } from '../utils/auth.util';
+import { v4 as uuid } from 'uuid';
 
 @Injectable()
 export class AuthService {
@@ -45,10 +46,10 @@ export class AuthService {
 			password: hashedPassword,
 		});
 
-		const createdUser: User = await this.authRepository.save(newUser);
-		createdUser.password = undefined;
+		const savedUser: User = await this.authRepository.save(newUser);
+		savedUser.password = undefined;
 
-		return createdUser;
+		return savedUser;
 	}
 
 	async signIn(signInUserDto: SignInUserDto) {
@@ -115,6 +116,7 @@ export class AuthService {
 		});
 
 		if (!user) {
+			this.redisRepository.set(gitHubUser.username, gitHubAccessToken);
 			return {
 				username: gitHubUser.username,
 				accessToken: null,
@@ -134,5 +136,32 @@ export class AuthService {
 			accessToken,
 			refreshToken,
 		};
+	}
+
+	async signUpWithGithub(nickname: string, GitHubUsername: any) {
+		let gitHubUserData;
+		try {
+			const gitHubAccessToken = await this.redisRepository.get(GitHubUsername);
+			gitHubUserData = await getGitHubUserData(gitHubAccessToken);
+		} catch (e) {
+			throw new UnauthorizedException('잘못된 접근입니다.');
+		}
+
+		if (gitHubUserData.username !== GitHubUsername) {
+			throw new UnauthorizedException('잘못된 접근입니다.');
+		}
+
+		this.redisRepository.del(GitHubUsername);
+
+		const newUser = this.authRepository.create({
+			username: GitHubUsername,
+			password: uuid(),
+			nickname,
+		});
+
+		const savedUser: User = await this.authRepository.save(newUser);
+		savedUser.password = undefined;
+
+		return savedUser;
 	}
 }

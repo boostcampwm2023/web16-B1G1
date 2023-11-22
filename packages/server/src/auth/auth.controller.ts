@@ -10,6 +10,7 @@ import {
 	ValidationPipe,
 	UseGuards,
 	Req,
+	UnauthorizedException,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SignUpUserDto } from './dto/signup-user.dto';
@@ -157,5 +158,31 @@ export class AuthController {
 		});
 
 		return { accessToken, refreshToken };
+	}
+
+	@Post('github/signup')
+	async signUpWithGithub(
+		@Body('nickname') nickname: string,
+		@Req() req,
+		@Res({ passthrough: true }) res: Response,
+	) {
+		let gitHubUsername;
+		try {
+			gitHubUsername = req.cookies.GitHubUsername;
+		} catch (e) {
+			throw new UnauthorizedException('잘못된 접근입니다.');
+		}
+
+		const savedUser = await this.authService.signUpWithGithub(
+			nickname,
+			gitHubUsername,
+		);
+
+		res.clearCookie('GitHubUsername', {
+			path: '/',
+			httpOnly: true,
+		});
+
+		return savedUser;
 	}
 }

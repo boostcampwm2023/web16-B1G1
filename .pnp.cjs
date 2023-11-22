@@ -4799,6 +4799,15 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["crypto", [\
+      ["npm:1.0.1", {\
+        "packageLocation": "./.yarn/cache/crypto-npm-1.0.1-7cb8e3dca6-fcf7dbd68a.zip/node_modules/crypto/",\
+        "packageDependencies": [\
+          ["crypto", "npm:1.0.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["csstype", [\
       ["npm:3.1.2", {\
         "packageLocation": "./.yarn/cache/csstype-npm-3.1.2-cead7d99b2-32c038af25.zip/node_modules/csstype/",\
@@ -9676,6 +9685,7 @@ const RAW_RUNTIME_STATE =
           ["class-transformer", "npm:0.5.1"],\
           ["class-validator", "npm:0.14.0"],\
           ["cookie-parser", "npm:1.4.6"],\
+          ["crypto", "npm:1.0.1"],\
           ["dotenv", "npm:16.3.1"],\
           ["eslint", "npm:8.53.0"],\
           ["eslint-config-prettier", "virtual:2499dbb93d824027565d71b0716c4fb8b548ad61955d0a0286bfb3c5b4058e227894b6691d96808c00f576db14870018375210362c26ee321ea99fd6ed041c74#npm:9.0.0"],\

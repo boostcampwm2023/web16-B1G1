@@ -6,7 +6,6 @@ interface PropsType extends React.InputHTMLAttributes<HTMLInputElement> {
 	label: string;
 	id: string;
 	placeholder: string;
-	onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 	isEssential?: boolean;
 }
 
@@ -14,7 +13,6 @@ export default function InputBar({
 	id,
 	label,
 	placeholder,
-	onChange,
 	isEssential = false,
 	...args
 }: PropsType) {
@@ -25,7 +23,7 @@ export default function InputBar({
 				{isEssential && <LabelStar>*</LabelStar>}
 			</LabelContainer>
 
-			<Input id={id} placeholder={placeholder} onChange={onChange} {...args} />
+			<Input id={id} placeholder={placeholder} {...args} />
 		</Container>
 	);
 }

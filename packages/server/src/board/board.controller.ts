@@ -46,7 +46,12 @@ export class BoardController {
 		status: 400,
 		description: '잘못된 요청으로 게시글 작성 실패',
 	})
-	createBoard(@Body() createBoardDto: CreateBoardDto): Promise<Board> {
+	createBoard(
+		@Req() req,
+		@Body() createBoardDto: CreateBoardDto,
+	): Promise<Board> {
+		if (req.user && req.user.nickname)
+			createBoardDto.author = req.user.nickname;
 		return this.boardService.createBoard(createBoardDto);
 	}
 
@@ -102,9 +107,12 @@ export class BoardController {
 		description: '잘못된 요청으로 게시글 수정 실패',
 	})
 	updateBoard(
+		@Req() req,
 		@Param('id', ParseIntPipe) id: number,
 		@Body() updateBoardDto: UpdateBoardDto,
 	) {
+		if (req.user && req.user.nickname)
+			updateBoardDto.author = req.user.nickname;
 		return this.boardService.updateBoard(id, updateBoardDto);
 	}
 

@@ -4,6 +4,8 @@ import {
 	CreateDateColumn,
 	Entity,
 	JoinColumn,
+	JoinTable,
+	ManyToMany,
 	ManyToOne,
 	OneToOne,
 	PrimaryGeneratedColumn,
@@ -28,6 +30,10 @@ export class Board extends BaseEntity {
 
 	@UpdateDateColumn()
 	updated_at: Date;
+
+	@ManyToMany(() => User, { eager: true })
+	@JoinTable()
+	likes: User[];
 
 	@Column({ type: 'int', default: 0 })
 	like_cnt: number;

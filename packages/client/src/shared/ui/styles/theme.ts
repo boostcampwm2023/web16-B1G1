@@ -23,13 +23,13 @@ const theme = {
 		background: {
 			bdp01: '#05021F',
 			bdp02: '#161335',
-			bdp03: '#161335',
+			bdp03: '#241F50',
 		},
 
 		stroke: {
 			default: '#1E1A4D',
 			focus: '#6C55FA',
-			sc: '#564A6B',
+			sc: '#514B75',
 		},
 
 		text: {

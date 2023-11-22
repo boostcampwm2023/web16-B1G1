@@ -23,6 +23,9 @@ const CustomButton = styled.button<PropsType>`
 	align-items: center;
 	gap: 2px;
 	border-radius: 4px;
+	&:disabled {
+		cursor: default;
+	}
 
 	${({ size, buttonType, theme: { colors } }) => {
 		switch (buttonType) {

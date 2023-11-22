@@ -2,7 +2,8 @@ import styled from '@emotion/styled';
 import { Body02ME, Title02 } from '../styles';
 import { ReactNode } from 'react';
 import { css } from '@emotion/react';
-import Button from '../button/button';
+import goBackIcon from '@icons/icon-back-32-white.svg';
+import { IconButton } from '..';
 
 interface PropsTypes {
 	title: string;
@@ -30,10 +31,9 @@ export default function Modal({
 	return (
 		<Layout {...args}>
 			{onClickGoBack && (
-				<Button onClick={onClickGoBack} size="m" buttonType="CTA-icon">
-					버튼
-				</Button>
-				// TODO: 이후 화살표 버튼으로 바꿔야 함
+				<IconButton onClick={onClickGoBack}>
+					<img src={goBackIcon} alt="뒤로가기 버튼" />
+				</IconButton>
 			)}
 
 			<MainLayout>

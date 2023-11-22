@@ -3,7 +3,7 @@ import LoginModal from 'widgets/loginModal';
 import LogoAndStart from 'widgets/logoAndStart';
 import { useReducer } from 'react';
 
-function reducer(state: number, action: { type: 'NEXT' | 'PREV' }) {
+function pageReducer(state: number, action: { type: 'NEXT' | 'PREV' }) {
 	switch (action.type) {
 		case 'NEXT':
 			return state + 1;
@@ -15,7 +15,7 @@ function reducer(state: number, action: { type: 'NEXT' | 'PREV' }) {
 }
 
 export default function Landing() {
-	const [page, dispatch] = useReducer(reducer, 0);
+	const [page, dispatch] = useReducer(pageReducer, 0);
 	return (
 		<>
 			{page === 0 && <LogoAndStart changePage={dispatch} />}

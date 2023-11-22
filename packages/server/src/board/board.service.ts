@@ -12,8 +12,9 @@ import { Repository } from 'typeorm';
 import { unlinkSync } from 'fs';
 import { CreateImageDto } from './dto/create-image.dto';
 import { Image } from './entities/image.entity';
-import { User } from 'src/auth/entities/user.entity';
 import { encryptAes, decryptAes } from 'src/utils/aes.util';
+import { User } from 'src/auth/entities/user.entity';
+import { UserDataDto } from './dto/user-data.dto';
 
 @Injectable()
 export class BoardService {
@@ -26,17 +27,22 @@ export class BoardService {
 		private readonly userRepository: Repository<User>,
 	) {}
 
-	async createBoard(createBoardDto: CreateBoardDto): Promise<Board> {
-		const { title, content, author } = createBoardDto;
+	async createBoard(
+		createBoardDto: CreateBoardDto,
+		userData: UserDataDto,
+	): Promise<Board> {
+		const { title, content } = createBoardDto;
+
+		const user = await this.userRepository.findOneBy({ id: userData.userId });
 
 		const board = this.boardRepository.create({
 			title,
 			content: encryptAes(content), // AES 암호화하여 저장
-			author,
+			user,
 		});
-		const created: Board = await this.boardRepository.save(board);
-
-		return created;
+		const createdBoard: Board = await this.boardRepository.save(board);
+		createdBoard.user.password = undefined; // password 제거하여 반환
+		return createdBoard;
 	}
 
 	async findAllBoards(): Promise<Board[]> {

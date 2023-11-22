@@ -66,8 +66,17 @@ export class BoardService {
 		return found;
 	}
 
-	async updateBoard(id: number, updateBoardDto: UpdateBoardDto) {
+	async updateBoard(
+		id: number,
+		updateBoardDto: UpdateBoardDto,
+		userData: UserDataDto,
+	) {
 		const board: Board = await this.findBoardById(id);
+
+		// 게시글 작성자와 수정 요청자가 다른 경우
+		if (board.user.id !== userData.userId) {
+			throw new BadRequestException('You are not the author of this post');
+		}
 
 		// updateBoardDto.content가 존재하면 AES 암호화하여 저장
 		if (updateBoardDto.content) {
@@ -95,7 +104,14 @@ export class BoardService {
 		return { like_cnt: board.like_cnt };
 	}
 
-	async deleteBoard(id: number): Promise<void> {
+	async deleteBoard(id: number, userData: UserDataDto): Promise<void> {
+		const board: Board = await this.findBoardById(id);
+
+		// 게시글 작성자와 삭제 요청자가 다른 경우
+		if (board.user.id !== userData.userId) {
+			throw new BadRequestException('You are not the author of this post');
+		}
+
 		const result = await this.boardRepository.delete({ id });
 	}
 

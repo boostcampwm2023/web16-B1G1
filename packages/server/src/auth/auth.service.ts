@@ -15,7 +15,11 @@ import { JwtService } from '@nestjs/jwt';
 import { RedisRepository } from './redis.repository';
 import { UserEnum } from './enums/user.enum';
 import { JwtEnum } from './enums/jwt.enum';
-import { createJwt, getGitHubAccessToken } from '../utils/auth.util';
+import {
+	createJwt,
+	getGitHubAccessToken,
+	getGithubUserData,
+} from '../utils/auth.util';
 
 @Injectable()
 export class AuthService {
@@ -104,6 +108,7 @@ export class AuthService {
 		}
 
 		const accessToken = await getGitHubAccessToken(code);
-		console.log(accessToken);
+		const githubUser = await getGithubUserData(accessToken);
+		console.log(githubUser);
 	}
 }

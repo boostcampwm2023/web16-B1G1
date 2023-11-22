@@ -46,3 +46,23 @@ export async function getGitHubAccessToken(authorizedCode: string) {
 	const accessTokenData = await accessTokenResponse.json();
 	return accessTokenData.access_token;
 }
+
+export async function getGithubUserData(accessToken: string) {
+	const userResponse = await fetch('https://api.github.com/user', {
+		method: 'GET',
+		headers: {
+			Authorization: `Bearer ${accessToken}`,
+		},
+	});
+
+	if (!userResponse.ok) {
+		throw new InternalServerErrorException(
+			'GitHub으로부터 유저 정보를 받아오지 못했습니다.',
+		);
+	}
+
+	const userData = await userResponse.json();
+	return {
+		username: userData.login,
+	};
+}

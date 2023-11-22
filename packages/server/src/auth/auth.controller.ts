@@ -132,7 +132,30 @@ export class AuthController {
 	}
 
 	@Get('github/callback')
-	async oauthGithubCallback(@Query('code') code: string) {
-		await this.authService.oauthGithubCallback(code);
+	async oauthGithubCallback(
+		@Query('code') authorizedCode: string,
+		@Res({ passthrough: true }) res: Response,
+	) {
+		const { username, accessToken, refreshToken } =
+			await this.authService.oauthGithubCallback(authorizedCode);
+
+		if (username) {
+			res.cookie('GitHubUsername', username, {
+				path: '/',
+				httpOnly: true,
+			});
+			return { username };
+		}
+
+		res.cookie(JwtEnum.ACCESS_TOKEN_COOKIE_NAME, accessToken, {
+			path: '/',
+			httpOnly: true,
+		});
+		res.cookie(JwtEnum.REFRESH_TOKEN_COOKIE_NAME, refreshToken, {
+			path: '/',
+			httpOnly: true,
+		});
+
+		return { accessToken, refreshToken };
 	}
 }

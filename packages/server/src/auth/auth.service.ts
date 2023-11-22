@@ -18,7 +18,7 @@ import { JwtEnum } from './enums/jwt.enum';
 import {
 	createJwt,
 	getGitHubAccessToken,
-	getGithubUserData,
+	getGitHubUserData,
 } from '../utils/auth.util';
 
 @Injectable()
@@ -102,13 +102,37 @@ export class AuthService {
 		}
 	}
 
-	async oauthGithubCallback(code: string) {
-		if (!code) {
+	async oauthGithubCallback(authorizedCode: string) {
+		if (!authorizedCode) {
 			throw new BadRequestException('Authorized Code가 존재하지 않습니다.');
 		}
 
-		const accessToken = await getGitHubAccessToken(code);
-		const githubUser = await getGithubUserData(accessToken);
-		console.log(githubUser);
+		const gitHubAccessToken = await getGitHubAccessToken(authorizedCode);
+		const gitHubUser = await getGitHubUserData(gitHubAccessToken);
+
+		const user = await this.authRepository.findOneBy({
+			username: gitHubUser.username,
+		});
+
+		if (!user) {
+			return {
+				username: gitHubUser.username,
+				accessToken: null,
+				refreshToken: null,
+			};
+		}
+
+		const [accessToken, refreshToken] = await Promise.all([
+			createJwt(user, JwtEnum.ACCESS_TOKEN_TYPE, this.jwtService),
+			createJwt(user, JwtEnum.REFRESH_TOKEN_TYPE, this.jwtService),
+		]);
+
+		this.redisRepository.set(user.username, refreshToken);
+
+		return {
+			username: null,
+			accessToken,
+			refreshToken,
+		};
 	}
 }

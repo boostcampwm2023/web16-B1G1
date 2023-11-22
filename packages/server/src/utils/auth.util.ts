@@ -47,7 +47,7 @@ export async function getGitHubAccessToken(authorizedCode: string) {
 	return accessTokenData.access_token;
 }
 
-export async function getGithubUserData(accessToken: string) {
+export async function getGitHubUserData(accessToken: string) {
 	const userResponse = await fetch('https://api.github.com/user', {
 		method: 'GET',
 		headers: {

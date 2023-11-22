@@ -1,5 +1,5 @@
 import Star from 'features/star';
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useCameraStore } from 'shared/store/useCameraStore';
 import { ThreeEvent } from '@react-three/fiber';
 import { Html } from '@react-three/drei';
@@ -15,9 +15,11 @@ interface PropsType {
 export default function Post({ position, size, color, label }: PropsType) {
 	const { targetView, setTargetView } = useCameraStore();
 	const meshRef = useRef<THREE.Mesh>(null!);
+	const [clicked, setClicked] = useState(false);
 
 	const handleMeshClick = (e: ThreeEvent<MouseEvent>) => {
 		e.stopPropagation();
+		setClicked((prev) => !prev);
 
 		if (meshRef.current !== targetView) {
 			setTargetView(meshRef.current);
@@ -35,9 +37,11 @@ export default function Post({ position, size, color, label }: PropsType) {
 			onClick={handleMeshClick}
 			ref={meshRef}
 		>
-			<Html>
-				<Label>{label}</Label>
-			</Html>
+			{clicked && (
+				<Html>
+					<Label>{label}</Label>
+				</Html>
+			)}
 		</Star>
 	);
 }

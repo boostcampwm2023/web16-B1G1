@@ -1,7 +1,10 @@
 import Post from './Post';
 import * as THREE from 'three';
+import { useState } from 'react';
 
 export default function Posts() {
+	const [post, setPost] = useState(0);
+
 	return (
 		<>
 			{dummyData.map((data, index) => (
@@ -11,6 +14,8 @@ export default function Posts() {
 					size={data.size}
 					color={data.color}
 					label={data.label}
+					onClick={() => setPost(index)}
+					isSelected={post === index}
 				/>
 			))}
 		</>

@@ -1,47 +1,44 @@
 import Star from 'features/star';
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import { useCameraStore } from 'shared/store/useCameraStore';
-import { ThreeEvent, useThree } from '@react-three/fiber';
+import { ThreeEvent } from '@react-three/fiber';
 import { Html } from '@react-three/drei';
 import styled from '@emotion/styled';
+import { useViewStore } from 'shared/store/useWritingStore';
+import * as THREE from 'three';
 
 interface PropsType {
 	position: THREE.Vector3;
 	size: number;
 	color: string;
 	label: string;
+	onClick: () => void;
+	isSelected: boolean;
 }
 
-export default function Post({ position, size, color, label }: PropsType) {
+export default function Post({
+	position,
+	size,
+	color,
+	label,
+	onClick,
+	isSelected,
+}: PropsType) {
 	const { targetView, setTargetView } = useCameraStore();
 	const meshRef = useRef<THREE.Mesh>(null!);
-	const [clicked, setClicked] = useState(false);
-	const { camera } = useThree();
+	const { view, setView } = useViewStore();
 
 	const handleMeshClick = (e: ThreeEvent<MouseEvent>) => {
 		e.stopPropagation();
+		onClick();
 
 		if (meshRef.current !== targetView) {
-			setClicked(true);
+			setView('DETAIL');
 			setTargetView(meshRef.current);
 			return;
 		}
 
-		setClicked(false);
-		const currentPosition = meshRef.current.position;
-		camera.position.set(
-			currentPosition.x + size * 2,
-			currentPosition.y,
-			currentPosition.z + size * 2,
-		);
-
-		camera.lookAt(
-			currentPosition.x + size * 2,
-			currentPosition.y,
-			currentPosition.z,
-		);
-
-		return;
+		setView('WRITING');
 	};
 
 	return (
@@ -52,7 +49,7 @@ export default function Post({ position, size, color, label }: PropsType) {
 			onClick={handleMeshClick}
 			ref={meshRef}
 		>
-			{clicked && (
+			{view === 'DETAIL' && isSelected && (
 				<Html>
 					<Label>{label}</Label>
 				</Html>

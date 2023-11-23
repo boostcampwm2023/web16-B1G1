@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+  was:
+    container_name: was
+    image: qkrwogk/web16-b1g1-be:week2
+    ports:
+      - 3000:3000
+    env_file:
+      - .env
+    networks:
+      - b1g1-network
+  web:
+    container_name: web
+    image: qkrwogk/web16-b1g1-fe:week2
+    ports:
+      - 80:80
+    networks:
+      - b1g1-network
+
+networks:
+  b1g1-network:
+    driver: bridge

@@ -20,6 +20,7 @@ import {
 	getGitHubAccessToken,
 	getGitHubUserData,
 	getNaverAccessToken,
+	getNaverUserData,
 } from '../utils/auth.util';
 import { v4 as uuid } from 'uuid';
 
@@ -168,6 +169,7 @@ export class AuthService {
 
 	async oauthNaverCallback(authorizedCode: string, state: string) {
 		const naverAccessToken = await getNaverAccessToken(authorizedCode, state);
-		return naverAccessToken;
+		const naverUserData = await getNaverUserData(naverAccessToken);
+		return naverUserData;
 	}
 }

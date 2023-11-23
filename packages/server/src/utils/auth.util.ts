@@ -98,3 +98,23 @@ export async function getNaverAccessToken(
 	const accessTokenData = await accessTokenResponse.json();
 	return accessTokenData.access_token;
 }
+
+export async function getNaverUserData(accessToken: string) {
+	const userResponse = await fetch('https://openapi.naver.com/v1/nid/me', {
+		method: 'GET',
+		headers: {
+			Authorization: `Bearer ${accessToken}`,
+		},
+	});
+
+	if (!userResponse.ok) {
+		throw new InternalServerErrorException(
+			'Naver로부터 유저 정보를 받아오지 못했습니다.',
+		);
+	}
+
+	const userData = await userResponse.json();
+	return {
+		username: userData.response.id,
+	};
+}

@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import searchIcon from '@icons/icon-search-24-white.svg';
 import { Body03ME } from '../styles';
-import Button from '../buttons/button';
+import { Button } from 'shared/ui';
 
 interface PropsTypes {
 	onClick: () => void;

@@ -1,3 +1,4 @@
+/// <reference types="vite-plugin-svgr/client" />
 import { router } from 'app/Router';
 import React from 'react';
 import ReactDOM from 'react-dom/client';

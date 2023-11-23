@@ -221,4 +221,30 @@ export class AuthController {
 
 		return { accessToken, refreshToken };
 	}
+
+	@Post('naver/signup')
+	async signUpWithNaver(
+		@Body('nickname') nickname: string,
+		@Req() req,
+		@Res({ passthrough: true }) res: Response,
+	) {
+		let naverUsername;
+		try {
+			naverUsername = req.cookies.NaverUsername;
+		} catch (e) {
+			throw new UnauthorizedException('잘못된 접근입니다.');
+		}
+
+		const savedUser = await this.authService.signUpWithNaver(
+			nickname,
+			naverUsername,
+		);
+
+		res.clearCookie('NaverUsername', {
+			path: '/',
+			httpOnly: true,
+		});
+
+		return savedUser;
+	}
 }

@@ -197,4 +197,31 @@ export class AuthService {
 			refreshToken,
 		};
 	}
+
+	async signUpWithNaver(nickname: string, naverUsername) {
+		let naverUserData;
+		try {
+			const naverAccessToken = await this.redisRepository.get(naverUsername);
+			naverUserData = await getNaverUserData(naverAccessToken);
+		} catch (e) {
+			throw new UnauthorizedException('잘못된 접근입니다.');
+		}
+
+		if (naverUserData.username !== naverUsername) {
+			throw new UnauthorizedException('잘못된 접근입니다.');
+		}
+
+		this.redisRepository.del(naverUsername);
+
+		const newUser = this.authRepository.create({
+			username: naverUsername,
+			password: uuid(),
+			nickname,
+		});
+
+		const savedUser: User = await this.authRepository.save(newUser);
+		savedUser.password = undefined;
+
+		return savedUser;
+	}
 }

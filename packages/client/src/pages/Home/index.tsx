@@ -1,7 +1,14 @@
-import Toast from 'shared/ui/toast/Toast';
+import WritingModal from 'features/writingModal';
 import Screen from 'widgets/screen';
+import { useViewStore } from 'shared/store/useWritingStore';
 
 export default function Home() {
-	// return <Screen />;
-	return <Toast>토스트입니다</Toast>;
+	const { view } = useViewStore();
+
+	return (
+		<>
+			{view === 'WRITING' && <WritingModal />}
+			<Screen />
+		</>
+	);
 }

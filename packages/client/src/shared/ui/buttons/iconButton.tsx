@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import React from 'react';
 import { css } from '@emotion/react';
+import { Body02ME, Body03ME, Body02BD, Body03BD } from '../styles';
 
 interface PropsType extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 	onClick: () => void;

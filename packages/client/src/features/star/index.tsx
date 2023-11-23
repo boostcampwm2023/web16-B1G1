@@ -1,7 +1,8 @@
-import { useRef, forwardRef, useEffect, ForwardedRef } from 'react';
+import { forwardRef } from 'react';
 import * as THREE from 'three';
 import { useFrame, ThreeEvent } from '@react-three/fiber';
 import { DISTANCE_LIMIT } from './lib/constants';
+import { useForwardRef } from 'shared/hooks';
 
 interface PropsType {
 	children?: React.ReactNode;
@@ -10,23 +11,6 @@ interface PropsType {
 	size: number;
 	color: string;
 }
-
-const useForwardRef = <T,>(ref: ForwardedRef<T>, initialValue: any = null) => {
-	const targetRef = useRef<T>(initialValue);
-
-	useEffect(() => {
-		if (!ref) return;
-
-		if (typeof ref === 'function') {
-			ref(targetRef.current);
-			return;
-		}
-
-		ref.current = targetRef.current;
-	}, [ref]);
-
-	return targetRef;
-};
 
 const Star = forwardRef<THREE.Mesh, PropsType>((props, ref) => {
 	const innerRef = useForwardRef(ref);

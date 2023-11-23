@@ -75,11 +75,9 @@ const Section = styled.section<{ width: number; height: number }>`
 	${Body04Me}
 	width: ${({ width }) => width}px;
 	height: ${({ height }) => height}px;
-	padding: 16px;
 	background-color: ${theme.colors.background.bdp03};
 	color: ${theme.colors.text.third};
 	border-radius: 4px;
-	border: 1px solid ${theme.colors.stroke.default};
 	display: flex;
 	flex-direction: column;
 `;

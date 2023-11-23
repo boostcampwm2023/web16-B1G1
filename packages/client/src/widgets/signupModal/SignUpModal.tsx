@@ -3,6 +3,7 @@ import { Button, Modal } from 'shared/ui';
 import { useState, useEffect } from 'react';
 import IdInputContainer from './ui/IdInputContainer';
 import PwInputContainer from './ui/PwInputContainer';
+import CheckPwInputContainer from './ui/CheckPwInputContainer';
 
 interface PropsType {
 	changePage: React.Dispatch<{ type: 'NEXT' | 'PREV' }>;
@@ -54,6 +55,11 @@ export default function SignUpModal({ changePage }: PropsType) {
 			<InputBarsContainer>
 				<IdInputContainer state={id} setState={setId} />
 				<PwInputContainer state={password} setState={setPassword} />
+				<CheckPwInputContainer
+					pwState={password}
+					checkPwstate={checkPassword}
+					setCheckPwState={setCheckPassword}
+				/>
 			</InputBarsContainer>
 		</Modal>
 	);

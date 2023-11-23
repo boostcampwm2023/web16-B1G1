@@ -10,24 +10,29 @@ interface PropsTypes {
 	setState: React.Dispatch<React.SetStateAction<string>>;
 }
 
+type PwStateTypes = 'DEFAULT' | 'VALID' | 'INVALID';
+
 export default function PwInputContainer({ state, setState }: PropsTypes) {
-	const [isValid, setIsValid] = useState(false);
+	const [pwState, setPwState] = useState<PwStateTypes>('DEFAULT');
 	const [isFocusOut, setIsFocusOut] = useState(false);
 
 	const handlePwInput = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
 		if (!engOrNumRegex.test(target.value)) return;
 		if (target.value.length > 18) return;
 
-		if (target.value.length < 8) setIsValid(false);
-		else if (engAndNumRegex.test(target.value)) setIsValid(true);
-		else setIsValid(false);
+		if (target.value.length < 8) setPwState('INVALID');
+		else if (engAndNumRegex.test(target.value)) setPwState('VALID');
+		else setPwState('INVALID');
 
 		setState(target.value);
 	};
 
 	const handlePwFocusOut = () => setIsFocusOut(true);
 
-	const message = '	8 - 18자의 영숫자 조합 비밀번호를 입력해주세요.';
+	const getMessage = () => {
+		if (pwState === 'VALID') return '사용 가능한 비밀번호입니다.';
+		return '8 - 18자의 영숫자 조합 비밀번호를 입력해주세요.';
+	};
 
 	return (
 		<Layout>
@@ -39,13 +44,13 @@ export default function PwInputContainer({ state, setState }: PropsTypes) {
 				value={state}
 				onChange={handlePwInput}
 				autoComplete="off"
-				isValid={isValid}
+				pwState={pwState}
 				onBlur={handlePwFocusOut}
 				isFocusOut={isFocusOut}
 			/>
 
-			<Message isValid={isValid} isFocusOut={isFocusOut}>
-				{message}
+			<Message pwState={pwState} isFocusOut={isFocusOut}>
+				{getMessage()}
 			</Message>
 		</Layout>
 	);
@@ -56,9 +61,10 @@ const Layout = styled.div`
 	flex-direction: column;
 `;
 
-const PwInput = styled(Input)<{ isValid: boolean; isFocusOut: boolean }>`
-	${({ isValid, isFocusOut, theme: { colors } }) => {
-		if (isValid || !isFocusOut) return;
+const PwInput = styled(Input)<{ pwState: PwStateTypes; isFocusOut: boolean }>`
+	${({ pwState, isFocusOut, theme: { colors } }) => {
+		if (pwState !== 'INVALID') return;
+		if (!isFocusOut) return;
 
 		return css`
 			border-color: ${colors.text.warning};
@@ -74,12 +80,14 @@ const PwInput = styled(Input)<{ isValid: boolean; isFocusOut: boolean }>`
 	}};
 `;
 
-const Message = styled.p<{ isValid: boolean; isFocusOut: boolean }>`
+const Message = styled.p<{ pwState: PwStateTypes; isFocusOut: boolean }>`
 	margin: 4px 0 0 0;
 
-	color: ${({ isValid, isFocusOut, theme: { colors } }) => {
-		if (isValid || !isFocusOut) return colors.text.secondary;
-		else return colors.text.warning;
+	color: ${({ pwState, isFocusOut, theme: { colors } }) => {
+		if (pwState === 'DEFAULT') return colors.text.secondary;
+		if (pwState === 'VALID') return colors.text.confirm;
+		if (!isFocusOut) return colors.text.secondary;
+		return colors.text.warning;
 	}};
 
 	${Caption}

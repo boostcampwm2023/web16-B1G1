@@ -163,4 +163,23 @@ describe('AuthController (/auth, e2e)', () => {
 			'accessToken=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT; HttpOnly',
 		);
 	});
+
+	it('POST, GET /auth/redis', async () => {
+		const randomeBytes = Math.random().toString(36).slice(2, 10);
+		const key = randomeBytes;
+		const value = randomeBytes;
+
+		await request(app.getHttpServer())
+			.post('/auth/redis')
+			.send({ key, value })
+			.expect(201);
+
+		const response = await request(app.getHttpServer())
+			.get(`/auth/redis?key=${key}`)
+			.expect(200);
+
+		expect(response).toHaveProperty('body');
+		const responseValue = response.body.value;
+		expect(responseValue).toBe(value);
+	});
 });

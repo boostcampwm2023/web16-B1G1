@@ -1,4 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { IsNotEmpty, IsString } from 'class-validator';
+import {
+	IsNickname,
+	IsPassword,
+	IsUsername,
+} from '../decorators/user-constraints.decorator';
+import { UserEnum } from '../enums/user.enum';
 
 export class SignUpUserDto {
 	@ApiProperty({
@@ -6,6 +13,9 @@ export class SignUpUserDto {
 		example: 'test user',
 		required: true,
 	})
+	@IsNotEmpty({ message: UserEnum.USERNAME_NOTEMPTY_MESSAGE as string })
+	@IsString({ message: UserEnum.USERNAME_ISSTRING_MESSAGE as string })
+	@IsUsername()
 	username: string;
 
 	@ApiProperty({
@@ -13,6 +23,9 @@ export class SignUpUserDto {
 		example: 'test password',
 		required: true,
 	})
+	@IsNotEmpty({ message: UserEnum.PASSWORD_NOTEMPTY_MESSAGE as string })
+	@IsString({ message: UserEnum.PASSWORD_ISSTRING_MESSAGE as string })
+	@IsPassword()
 	password: string;
 
 	@ApiProperty({
@@ -20,5 +33,8 @@ export class SignUpUserDto {
 		example: 'test nickname',
 		required: true,
 	})
+	@IsNotEmpty({ message: UserEnum.NICKNAME_NOTEMPTY_MESSAGE as string })
+	@IsString({ message: UserEnum.NICKNAME_ISSTRING_MESSAGE as string })
+	@IsNickname()
 	nickname: string;
 }

@@ -5,24 +5,39 @@ import {
 	UnauthorizedException,
 } from '@nestjs/common';
 import { SignUpUserDto } from './dto/signup-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 import { SignInUserDto } from './dto/signin-user.dto';
 import { JwtService } from '@nestjs/jwt';
+import { RedisRepository } from './redis.repository';
+import { UserEnum } from './enums/user.enum';
+import { JwtEnum } from './enums/jwt.enum';
+import {
+	createJwt,
+	getGitHubAccessToken,
+	getGitHubUserData,
+} from '../utils/auth.util';
+import { v4 as uuid } from 'uuid';
 
 @Injectable()
 export class AuthService {
 	constructor(
 		@InjectRepository(User)
-		private authRepository: Repository<User>,
-		private jwtService: JwtService,
+		private readonly authRepository: Repository<User>,
+		private readonly jwtService: JwtService,
+		private readonly redisRepository: RedisRepository,
 	) {}
 
 	async signUp(signUpUserDto: SignUpUserDto): Promise<Partial<User>> {
+		const { username, nickname } = signUpUserDto;
+		await Promise.all([
+			this.isAvailableNickname(nickname),
+			this.isAvailableUsername(username),
+		]);
+
 		const salt = await bcrypt.genSalt();
 		const hashedPassword = await bcrypt.hash(signUpUserDto.password, salt);
 
@@ -31,25 +46,33 @@ export class AuthService {
 			password: hashedPassword,
 		});
 
-		const createdUser: User = await this.authRepository.save(newUser);
-		createdUser.password = undefined;
+		const savedUser: User = await this.authRepository.save(newUser);
+		savedUser.password = undefined;
 
-		return createdUser;
+		return savedUser;
 	}
 
-	async signIn(signInUserDto: SignInUserDto): Promise<{ accessToken: string }> {
+	async signIn(signInUserDto: SignInUserDto) {
 		const { username, password } = signInUserDto;
 
 		const user = await this.authRepository.findOneBy({ username });
 
-		if (user && (await bcrypt.compare(password, user.password))) {
-			const payload = { username };
-			const accessToken = await this.jwtService.sign(payload);
-
-			return { accessToken };
-		} else {
-			throw new UnauthorizedException('login failed');
+		if (!(user && (await bcrypt.compare(password, user.password)))) {
+			throw new UnauthorizedException(UserEnum.FAIL_SIGNIN_MESSAGE);
 		}
+
+		const [accessToken, refreshToken] = await Promise.all([
+			createJwt(user, JwtEnum.ACCESS_TOKEN_TYPE, this.jwtService),
+			createJwt(user, JwtEnum.REFRESH_TOKEN_TYPE, this.jwtService),
+		]);
+
+		this.redisRepository.set(username, refreshToken);
+
+		return { accessToken, refreshToken };
+	}
+
+	async signOut(user: Partial<User>) {
+		this.redisRepository.del(user.username);
 	}
 
 	async isAvailableUsername(username: string): Promise<boolean> {
@@ -78,5 +101,67 @@ export class AuthService {
 		} else {
 			return true;
 		}
+	}
+
+	async oauthGithubCallback(authorizedCode: string) {
+		if (!authorizedCode) {
+			throw new BadRequestException('Authorized Code가 존재하지 않습니다.');
+		}
+
+		const gitHubAccessToken = await getGitHubAccessToken(authorizedCode);
+		const gitHubUser = await getGitHubUserData(gitHubAccessToken);
+
+		const user = await this.authRepository.findOneBy({
+			username: gitHubUser.username,
+		});
+
+		if (!user) {
+			this.redisRepository.set(gitHubUser.username, gitHubAccessToken);
+			return {
+				username: gitHubUser.username,
+				accessToken: null,
+				refreshToken: null,
+			};
+		}
+
+		const [accessToken, refreshToken] = await Promise.all([
+			createJwt(user, JwtEnum.ACCESS_TOKEN_TYPE, this.jwtService),
+			createJwt(user, JwtEnum.REFRESH_TOKEN_TYPE, this.jwtService),
+		]);
+
+		this.redisRepository.set(user.username, refreshToken);
+
+		return {
+			username: null,
+			accessToken,
+			refreshToken,
+		};
+	}
+
+	async signUpWithGithub(nickname: string, GitHubUsername: any) {
+		let gitHubUserData;
+		try {
+			const gitHubAccessToken = await this.redisRepository.get(GitHubUsername);
+			gitHubUserData = await getGitHubUserData(gitHubAccessToken);
+		} catch (e) {
+			throw new UnauthorizedException('잘못된 접근입니다.');
+		}
+
+		if (gitHubUserData.username !== GitHubUsername) {
+			throw new UnauthorizedException('잘못된 접근입니다.');
+		}
+
+		this.redisRepository.del(GitHubUsername);
+
+		const newUser = this.authRepository.create({
+			username: GitHubUsername,
+			password: uuid(),
+			nickname,
+		});
+
+		const savedUser: User = await this.authRepository.save(newUser);
+		savedUser.password = undefined;
+
+		return savedUser;
 	}
 }

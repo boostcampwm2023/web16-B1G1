@@ -6,6 +6,11 @@ import {
 	HttpCode,
 	Res,
 	Query,
+	UsePipes,
+	ValidationPipe,
+	UseGuards,
+	Req,
+	UnauthorizedException,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SignUpUserDto } from './dto/signup-user.dto';
@@ -18,14 +23,20 @@ import {
 	ApiCreatedResponse,
 	ApiOkResponse,
 	ApiOperation,
+	ApiTags,
 	ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
+import { JwtEnum } from './enums/jwt.enum';
+import { CookieAuthGuard } from './cookie-auth.guard';
+import { UserEnum } from './enums/user.enum';
 
 @Controller('auth')
+@ApiTags('인증/인가 API')
 export class AuthController {
 	constructor(private readonly authService: AuthService) {}
 
 	@Post('signup')
+	@UsePipes(ValidationPipe)
 	@ApiOperation({ summary: '회원가입', description: '회원가입을 진행합니다.' })
 	@ApiCreatedResponse({ status: 201, description: '회원가입 성공' })
 	@ApiBadRequestResponse({
@@ -48,22 +59,34 @@ export class AuthController {
 		@Body() signInUserDto: SignInUserDto,
 		@Res({ passthrough: true }) res: Response,
 	) {
-		const result = await this.authService.signIn(signInUserDto);
-		// res.setHeader('Authorization', `Bearer ${result.accessToken}`);
-		res.cookie('accessToken', result.accessToken, {
+		const tokens = await this.authService.signIn(signInUserDto);
+		res.cookie(JwtEnum.ACCESS_TOKEN_COOKIE_NAME, tokens.accessToken, {
+			path: '/',
+			httpOnly: true,
+		});
+		res.cookie(JwtEnum.REFRESH_TOKEN_COOKIE_NAME, tokens.refreshToken, {
 			path: '/',
 			httpOnly: true,
 		});
 
-		return result;
+		return tokens;
 	}
 
 	@Get('signout')
+	@UseGuards(CookieAuthGuard)
 	@ApiOperation({ summary: '로그아웃', description: '로그아웃을 진행합니다.' })
 	@ApiOkResponse({ status: 200, description: '로그아웃 성공' })
-	async signOut(@Res({ passthrough: true }) res: Response) {
-		res.clearCookie('accessToken', { path: '/', httpOnly: true });
-		return { message: 'success' };
+	async signOut(@Res({ passthrough: true }) res: Response, @Req() req) {
+		await this.authService.signOut(req.user);
+		res.clearCookie(JwtEnum.ACCESS_TOKEN_COOKIE_NAME, {
+			path: '/',
+			httpOnly: true,
+		});
+		res.clearCookie(JwtEnum.REFRESH_TOKEN_COOKIE_NAME, {
+			path: '/',
+			httpOnly: true,
+		});
+		return { message: UserEnum.SUCCESS_SIGNOUT_MESSAGE };
 	}
 
 	@Get('is-available-username')
@@ -100,5 +123,66 @@ export class AuthController {
 	})
 	isAvailableNickname(@Query('nickname') nickname: string) {
 		return this.authService.isAvailableNickname(nickname);
+	}
+
+	@Get('github/signin')
+	signInWithGithub(@Res({ passthrough: true }) res: Response) {
+		res.redirect(
+			`https://github.com/login/oauth/authorize?client_id=${process.env.OAUTH_GITHUB_CLIENT_ID}&scope=read:user%20user:email`,
+		);
+	}
+
+	@Get('github/callback')
+	async oauthGithubCallback(
+		@Query('code') authorizedCode: string,
+		@Res({ passthrough: true }) res: Response,
+	) {
+		const { username, accessToken, refreshToken } =
+			await this.authService.oauthGithubCallback(authorizedCode);
+
+		if (username) {
+			res.cookie('GitHubUsername', username, {
+				path: '/',
+				httpOnly: true,
+			});
+			return { username };
+		}
+
+		res.cookie(JwtEnum.ACCESS_TOKEN_COOKIE_NAME, accessToken, {
+			path: '/',
+			httpOnly: true,
+		});
+		res.cookie(JwtEnum.REFRESH_TOKEN_COOKIE_NAME, refreshToken, {
+			path: '/',
+			httpOnly: true,
+		});
+
+		return { accessToken, refreshToken };
+	}
+
+	@Post('github/signup')
+	async signUpWithGithub(
+		@Body('nickname') nickname: string,
+		@Req() req,
+		@Res({ passthrough: true }) res: Response,
+	) {
+		let gitHubUsername;
+		try {
+			gitHubUsername = req.cookies.GitHubUsername;
+		} catch (e) {
+			throw new UnauthorizedException('잘못된 접근입니다.');
+		}
+
+		const savedUser = await this.authService.signUpWithGithub(
+			nickname,
+			gitHubUsername,
+		);
+
+		res.clearCookie('GitHubUsername', {
+			path: '/',
+			httpOnly: true,
+		});
+
+		return savedUser;
 	}
 }

@@ -169,7 +169,32 @@ export class AuthService {
 
 	async oauthNaverCallback(authorizedCode: string, state: string) {
 		const naverAccessToken = await getNaverAccessToken(authorizedCode, state);
-		const naverUserData = await getNaverUserData(naverAccessToken);
-		return naverUserData;
+		const naverUser = await getNaverUserData(naverAccessToken);
+
+		const user = await this.authRepository.findOneBy({
+			username: naverUser.username,
+		});
+
+		if (!user) {
+			this.redisRepository.set(naverUser.username, naverAccessToken);
+			return {
+				username: naverUser.username,
+				accessToken: null,
+				refreshToken: null,
+			};
+		}
+
+		const [accessToken, refreshToken] = await Promise.all([
+			createJwt(user, JwtEnum.ACCESS_TOKEN_TYPE, this.jwtService),
+			createJwt(user, JwtEnum.REFRESH_TOKEN_TYPE, this.jwtService),
+		]);
+
+		this.redisRepository.set(user.username, refreshToken);
+
+		return {
+			username: null,
+			accessToken,
+			refreshToken,
+		};
 	}
 }

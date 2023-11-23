@@ -197,12 +197,28 @@ export class AuthController {
 	async oauthNaverCallback(
 		@Query('code') authorizedCode: string,
 		@Query('state') state: string,
+		@Res({ passthrough: true }) res: Response,
 	) {
-		const result = await this.authService.oauthNaverCallback(
-			authorizedCode,
-			state,
-		);
+		const { username, accessToken, refreshToken } =
+			await this.authService.oauthNaverCallback(authorizedCode, state);
 
-		return result;
+		if (username) {
+			res.cookie('NaverUsername', username, {
+				path: '/',
+				httpOnly: true,
+			});
+			return { username };
+		}
+
+		res.cookie(JwtEnum.ACCESS_TOKEN_COOKIE_NAME, accessToken, {
+			path: '/',
+			httpOnly: true,
+		});
+		res.cookie(JwtEnum.REFRESH_TOKEN_COOKIE_NAME, refreshToken, {
+			path: '/',
+			httpOnly: true,
+		});
+
+		return { accessToken, refreshToken };
 	}
 }

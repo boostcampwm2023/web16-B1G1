@@ -1,11 +1,13 @@
 import { create } from 'zustand';
 
+type view = 'MAIN' | 'DETAIL' | 'WRITING';
+
 interface viewState {
-	view: string;
-	setView: (writing: string) => void;
+	view: view;
+	setView: (view: view) => void;
 }
 
 export const useViewStore = create<viewState>((set) => ({
 	view: 'MAIN',
-	setView: (view: string) => set({ view }),
+	setView: (view: view) => set({ view }),
 }));

@@ -1,6 +1,7 @@
 import LandingScreen from 'widgets/landingScreen';
 import LoginModal from 'widgets/loginModal';
 import LogoAndStart from 'widgets/logoAndStart';
+import SignUpModal from 'widgets/signupModal/SignUpModal';
 import { useReducer } from 'react';
 
 function pageReducer(state: number, action: { type: 'NEXT' | 'PREV' }) {
@@ -20,6 +21,7 @@ export default function Landing() {
 		<>
 			{page === 0 && <LogoAndStart changePage={dispatch} />}
 			{page === 1 && <LoginModal changePage={dispatch} />}
+			{page === 2 && <SignUpModal changePage={dispatch} />}
 			<LandingScreen />
 		</>
 	);

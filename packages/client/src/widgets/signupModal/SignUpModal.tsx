@@ -3,7 +3,11 @@ import { Button, Modal } from 'shared/ui';
 import InputBar from 'shared/ui/inputBar/InputBar';
 import { useState } from 'react';
 
-export default function signUpModal() {
+interface PropsType {
+	changePage: React.Dispatch<{ type: 'NEXT' | 'PREV' }>;
+}
+
+export default function SignUpModal({ changePage }: PropsType) {
 	const [isAllInputFilled, setIsAllInputFilled] = useState(false);
 
 	const [inputValues, setInputValues] = useState({
@@ -58,7 +62,7 @@ export default function signUpModal() {
 		<Modal
 			title="회원가입"
 			rightButton={signUpButton}
-			onClickGoBack={handleGoBackButton}
+			onClickGoBack={() => changePage({ type: 'PREV' })}
 		>
 			<InputBarsContainer>
 				<InputBar

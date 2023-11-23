@@ -5,7 +5,7 @@ import { css } from '@emotion/react';
 import goBackIcon from '@icons/icon-back-32-white.svg';
 import { IconButton } from '..';
 
-interface PropsTypes {
+interface PropsTypes extends React.HTMLAttributes<HTMLDivElement> {
 	title: string;
 	children: ReactNode;
 

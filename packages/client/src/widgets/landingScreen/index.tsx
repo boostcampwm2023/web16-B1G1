@@ -3,8 +3,6 @@ import BackgroundStars from 'features/backgroundStars';
 import Galaxy from '../galaxy/index.tsx';
 import { EffectComposer, Bloom } from '@react-three/postprocessing';
 import { useControls } from 'leva';
-import Controls from 'features/controls/Controls.tsx';
-import PostStars from 'entities/PostStars';
 import { useCameraStore } from 'shared/store/useCameraStore.ts';
 import * as THREE from 'three';
 

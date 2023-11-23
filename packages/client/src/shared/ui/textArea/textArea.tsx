@@ -79,6 +79,7 @@ const Section = styled.section<{ width: number; height: number }>`
 	color: ${theme.colors.text.third};
 	border-radius: 4px;
 	display: flex;
+	padding: 16px;
 	flex-direction: column;
 `;
 

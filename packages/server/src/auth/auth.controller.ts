@@ -192,4 +192,17 @@ export class AuthController {
 			`https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${process.env.OAUTH_NAVER_CLIENT_ID}&state=STATE_STRING&redirect_uri=${process.env.OAUTH_NAVER_REDIRECT_URI}`,
 		);
 	}
+
+	@Get('naver/callback')
+	async oauthNaverCallback(
+		@Query('code') authorizedCode: string,
+		@Query('state') state: string,
+	) {
+		const result = await this.authService.oauthNaverCallback(
+			authorizedCode,
+			state,
+		);
+
+		return result;
+	}
 }

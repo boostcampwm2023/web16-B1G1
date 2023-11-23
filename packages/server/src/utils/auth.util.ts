@@ -66,3 +66,35 @@ export async function getGitHubUserData(accessToken: string) {
 		username: userData.login,
 	};
 }
+
+export async function getNaverAccessToken(
+	authorizedCode: string,
+	state: string,
+) {
+	const accessTokenResponse = await fetch(
+		'https://nid.naver.com/oauth2.0/token',
+		{
+			method: 'POST',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/x-www-form-urlencoded',
+			},
+			body: new URLSearchParams({
+				grant_type: 'authorization_code',
+				client_id: process.env.OAUTH_NAVER_CLIENT_ID,
+				client_secret: process.env.OAUTH_NAVER_CLIENT_SECRETS,
+				code: authorizedCode,
+				state,
+			}),
+		},
+	);
+
+	if (!accessTokenResponse.ok) {
+		throw new InternalServerErrorException(
+			'Naver로부터 accessToken을 받아오지 못했습니다.',
+		);
+	}
+
+	const accessTokenData = await accessTokenResponse.json();
+	return accessTokenData.access_token;
+}

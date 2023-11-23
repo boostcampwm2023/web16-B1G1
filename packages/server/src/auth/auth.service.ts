@@ -19,6 +19,7 @@ import {
 	createJwt,
 	getGitHubAccessToken,
 	getGitHubUserData,
+	getNaverAccessToken,
 } from '../utils/auth.util';
 import { v4 as uuid } from 'uuid';
 
@@ -163,5 +164,10 @@ export class AuthService {
 		savedUser.password = undefined;
 
 		return savedUser;
+	}
+
+	async oauthNaverCallback(authorizedCode: string, state: string) {
+		const naverAccessToken = await getNaverAccessToken(authorizedCode, state);
+		return naverAccessToken;
 	}
 }

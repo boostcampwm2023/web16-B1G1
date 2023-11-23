@@ -1,5 +1,14 @@
+import WritingModal from 'features/writingModal';
 import Screen from 'widgets/screen';
+import { useViewStore } from 'shared/store/useWritingStore';
 
 export default function Home() {
-	return <Screen />;
+	const { view } = useViewStore();
+
+	return (
+		<>
+			{view === 'WRITING' && <WritingModal />}
+			<Screen />
+		</>
+	);
 }

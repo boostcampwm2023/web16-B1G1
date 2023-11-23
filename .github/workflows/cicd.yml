@@ -26,6 +26,7 @@ jobs:
 
       - name: Test and Build with yarn
         run: |
+          yarn install
           yarn workspace client build
 
       - name: Build and Push Docker image

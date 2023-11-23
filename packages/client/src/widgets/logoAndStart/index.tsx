@@ -1,6 +1,5 @@
 import { Button } from 'shared/ui';
 import styled from '@emotion/styled';
-import { css } from '@emotion/react';
 import React from 'react';
 import { Title02 } from 'shared/ui/styles';
 

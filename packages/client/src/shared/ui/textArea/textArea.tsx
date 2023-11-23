@@ -21,8 +21,8 @@ export default function TextArea({
 }: PropsType) {
 	const [tabIndex, setTabIndex] = useState(0);
 	const [text, setText] = useState('');
-	let isWrite = tabIndex === 0;
-	let isPreview = tabIndex === 1;
+	const isWrite = tabIndex === 0;
+	const isPreview = tabIndex === 1;
 
 	const handleTabClick = (index: number) => {
 		setTabIndex(index);

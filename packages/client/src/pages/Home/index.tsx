@@ -1,4 +1,4 @@
-import WritingModal from 'features/writingModal';
+import { WritingModal } from 'features/writingModal';
 import Screen from 'widgets/screen';
 import { useViewStore } from 'shared/store/useWritingStore';
 

@@ -185,4 +185,11 @@ export class AuthController {
 
 		return savedUser;
 	}
+
+	@Get('naver/signin')
+	signInWithNaver(@Res({ passthrough: true }) res: Response) {
+		res.redirect(
+			`https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${process.env.OAUTH_NAVER_CLIENT_ID}&state=STATE_STRING&redirect_uri=${process.env.OAUTH_NAVER_REDIRECT_URI}`,
+		);
+	}
 }

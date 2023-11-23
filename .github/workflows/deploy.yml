@@ -4,7 +4,7 @@ on:
       - main
 
 jobs:
-  build and deploy:
+  build_and_deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -26,6 +26,7 @@ jobs:
 
       - name: Test and Build with yarn
         run: |
+          yarn install
           yarn workspace client build
 
       - name: Build and Push Docker image
@@ -48,7 +49,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
           source: docker-compose.yml
-          target: /app/docker-compose${{ github.sha }}.yml
+          target: /app
 
       - name: make .env file
         run: |
@@ -63,7 +64,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
           source: .env
-          target: /app/.env
+          target: /app
 
       - name: Deploy with SSH
         uses: appleboy/ssh-action@master
@@ -79,4 +80,5 @@ jobs:
             docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/web16-b1g1-be:${{ github.sha }}
             docker stop $(docker ps -a -q)
             docker rm $(docker ps -a -q)
-            docker-compose up -d -f docker-compose${{ github.sha }}.yml
+            docker-compose up -d
+            rm -rf .env docker-compose.yml

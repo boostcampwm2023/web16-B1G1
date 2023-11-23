@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import { Body02ME, Title02 } from '../styles';
 import { ReactNode } from 'react';
 import { css } from '@emotion/react';
-import Button from '../button/button';
+import Button from '../buttons/Button';
 
 interface PropsTypes {
 	title: string;

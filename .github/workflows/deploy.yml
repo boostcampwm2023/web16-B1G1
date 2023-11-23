@@ -50,9 +50,11 @@ jobs:
           source: docker-compose.yml
           target: /app/docker-compose${{ github.sha }}.yml
 
-      - name: send .env file (secrets.ENV) with scp
+      - name: make .env file
         run: |
           echo ${{ secrets.ENV }} > .env
+
+      - name: send .env file with scp
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.SSH_HOST }}

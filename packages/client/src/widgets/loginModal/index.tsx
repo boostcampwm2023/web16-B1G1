@@ -10,11 +10,6 @@ interface PropsType {
 export default function LoginModal({ changePage }: PropsType) {
 	return (
 		<Login>
-			<PrevButton>
-				<IconButton onClick={() => changePage({ type: 'PREV' })}>
-					<BackIcon />
-				</IconButton>
-			</PrevButton>
 			<Modal
 				title="로그인"
 				topButton={<TopButton onClick={() => changePage({ type: 'PREV' })} />}

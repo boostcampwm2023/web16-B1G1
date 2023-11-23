@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import * as THREE from 'three';
 import { CAMERA_MIN_DISTANCE } from '@constants';
 
-interface cameraState {
+interface CameraState {
 	currentView: THREE.Vector3;
 	setCurrentView: (position: THREE.Vector3) => void;
 	targetView: THREE.Mesh | null;
@@ -11,7 +11,7 @@ interface cameraState {
 	setCameraToCurrentView: (distance: number) => void;
 }
 
-export const useCameraStore = create<cameraState>()((set) => ({
+export const useCameraStore = create<CameraState>()((set) => ({
 	currentView: new THREE.Vector3(0, 0, 0),
 	setCurrentView: (position: THREE.Vector3) => set({ currentView: position }),
 	targetView: null,

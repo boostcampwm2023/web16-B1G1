@@ -1,13 +1,13 @@
 import { create } from 'zustand';
 
-interface loginState {
+interface LoginState {
 	id: string;
 	setId: (id: string) => void;
 	password: string;
 	setPassword: (password: string) => void;
 }
 
-export const useLoginStore = create<loginState>()((set) => ({
+export const useLoginStore = create<LoginState>()((set) => ({
 	id: '',
 	setId: (id: string) => set({ id }),
 	password: '',

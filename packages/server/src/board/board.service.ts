@@ -1,7 +1,6 @@
 import {
 	BadRequestException,
 	Injectable,
-	InternalServerErrorException,
 	NotFoundException,
 } from '@nestjs/common';
 import { CreateBoardDto } from './dto/create-board.dto';
@@ -9,12 +8,13 @@ import { UpdateBoardDto } from './dto/update-board.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Board } from './entities/board.entity';
 import { Repository } from 'typeorm';
-import { unlinkSync } from 'fs';
-import { CreateImageDto } from './dto/create-image.dto';
 import { Image } from './entities/image.entity';
-import { encryptAes, decryptAes } from 'src/utils/aes.util';
+import { encryptAes } from 'src/utils/aes.util';
 import { User } from 'src/auth/entities/user.entity';
 import { UserDataDto } from './dto/user-data.dto';
+import * as AWS from 'aws-sdk';
+import { awsConfig, bucketName } from 'src/config/aws.config';
+import { v1 as uuid } from 'uuid';
 
 @Injectable()
 export class BoardService {
@@ -30,17 +30,26 @@ export class BoardService {
 	async createBoard(
 		createBoardDto: CreateBoardDto,
 		userData: UserDataDto,
+		files: Express.Multer.File[],
 	): Promise<Board> {
 		const { title, content } = createBoardDto;
 
 		const user = await this.userRepository.findOneBy({ id: userData.userId });
 
+		const images: Image[] = [];
+		for (const file of files) {
+			const image = await this.uploadFile(file);
+			images.push(image);
+		}
+
 		const board = this.boardRepository.create({
 			title,
 			content: encryptAes(content), // AES 암호화하여 저장
 			user,
+			images,
 		});
 		const createdBoard: Board = await this.boardRepository.save(board);
+
 		createdBoard.user.password = undefined; // password 제거하여 반환
 		return createdBoard;
 	}
@@ -140,43 +149,38 @@ export class BoardService {
 		const result = await this.boardRepository.delete({ id });
 	}
 
-	async uploadFile(board_id: number, file: CreateImageDto): Promise<Board> {
-		// 이미지 파일인지 확인
+	async uploadFile(file: Express.Multer.File): Promise<Image> {
 		if (!file.mimetype.includes('image')) {
-			unlinkSync(file.path); // 파일 삭제
 			throw new BadRequestException('Only image files are allowed');
 		}
 
-		const board = await this.findBoardById(board_id);
+		const { mimetype, buffer, size } = file;
 
-		// 게시글 존재 여부 확인
-		if (!board) {
-			unlinkSync(file.path); // 파일 삭제
-			throw new NotFoundException(`Not found board with id: ${board_id}`);
-		}
+		const filename = uuid();
 
-		// 파일이 정상적으로 업로드 되었는지 확인
-		if (!file.path) {
-			throw new InternalServerErrorException('No file uploaded');
-		}
+		// AWS.config.update(awsConfig);
+		// const result = await new AWS.S3().putObject({
+		// 	Bucket: bucketName,
+		// 	Key: filename,
+		// 	Body: buffer,
+		// 	ACL: 'public-read',
+		// })
+		// .promise();
+		// console.log(result);
+		// const downloaded = await new AWS.S3()
+		// 	.getObject({
+		// 		Bucket: bucketName,
+		// 		Key: filename,
+		// 	})
+		// 	.promise();
+		// console.log(downloaded);
 
-		// 이미 파일이 존재하는지 확인
-		if (board.image) {
-			unlinkSync(file.path); // 파일 삭제
-		}
-
-		const { mimetype, filename, path, size } = file;
-		const image = this.imageRepository.create({
+		const updatedImage = await this.imageRepository.save({
 			mimetype,
 			filename,
-			path,
 			size,
 		});
-		const updatedImage = await this.imageRepository.save(image);
 
-		board.image = updatedImage.id;
-		const updatedBoard = await this.boardRepository.save(board);
-
-		return updatedBoard;
+		return updatedImage;
 	}
 }

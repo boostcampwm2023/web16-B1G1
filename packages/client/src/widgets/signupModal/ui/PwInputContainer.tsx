@@ -54,6 +54,7 @@ export default function PwInputContainer({ setValidPw }: PropsTypes) {
 				state={pwState}
 				onBlur={handlePwFocusOut}
 				isFocusOut={isFocusOut}
+				type="password"
 			/>
 
 			<Message state={pwState} isFocusOut={isFocusOut}>

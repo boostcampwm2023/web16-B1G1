@@ -63,6 +63,7 @@ export default function CheckPwInputContainer({
 				state={checkPwState}
 				onBlur={handlePwFocusOut}
 				isFocusOut={isFocusOut}
+				type="password"
 			/>
 
 			<Message state={checkPwState} isFocusOut={isFocusOut}>

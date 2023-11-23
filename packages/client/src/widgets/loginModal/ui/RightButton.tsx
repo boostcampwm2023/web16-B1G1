@@ -3,7 +3,7 @@ import { useLoginStore } from 'shared/store/userLoginStore';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-const BASE_URL = 'http://www.별글.site/api/';
+const BASE_URL = 'https://www.별글.site/api/';
 
 export default function RightButton() {
 	const { id, password, setPassword } = useLoginStore();

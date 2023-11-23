@@ -3,7 +3,7 @@ import { Button, Modal } from 'shared/ui';
 import InputBar from 'shared/ui/inputBar/InputBar';
 import { useState } from 'react';
 
-export default function SignUpModal() {
+export default function signUpModal() {
 	const [isAllInputFilled, setIsAllInputFilled] = useState(false);
 
 	const [inputValues, setInputValues] = useState({
@@ -16,7 +16,7 @@ export default function SignUpModal() {
 		// TODO: 로그인 모달로 이동하도록 하기
 	};
 
-	const handleSignUpButton = () => {
+	const handlesignUpButton = () => {
 		if (!isAllInputFilled) return;
 
 		console.log(inputValues);
@@ -43,16 +43,12 @@ export default function SignUpModal() {
 		});
 	};
 
-	const signupButton = isAllInputFilled ? (
-		<Button onClick={handleSignUpButton} buttonType="CTA-icon" size="m">
-			회원가입
-		</Button>
-	) : (
+	const signUpButton = (
 		<Button
-			onClick={handleSignUpButton}
+			onClick={handlesignUpButton}
 			buttonType="CTA-icon"
 			size="m"
-			disabled
+			disabled={!isAllInputFilled}
 		>
 			회원가입
 		</Button>
@@ -61,7 +57,7 @@ export default function SignUpModal() {
 	return (
 		<Modal
 			title="회원가입"
-			rightButton={signupButton}
+			rightButton={signUpButton}
 			onClickGoBack={handleGoBackButton}
 		>
 			<InputBarsContainer>

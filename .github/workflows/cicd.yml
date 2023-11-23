@@ -49,7 +49,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
           source: docker-compose.yml
-          target: /app/docker-compose.yml
+          target: /app
 
       - name: make .env file
         run: |
@@ -64,7 +64,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
           source: .env
-          target: /app/.env
+          target: /app
 
       - name: Deploy with SSH
         uses: appleboy/ssh-action@master

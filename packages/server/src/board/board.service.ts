@@ -1,6 +1,7 @@
 import {
 	BadRequestException,
 	Injectable,
+	Logger,
 	NotFoundException,
 } from '@nestjs/common';
 import { CreateBoardDto } from './dto/create-board.dto';
@@ -158,22 +159,17 @@ export class BoardService {
 
 		const filename = uuid();
 
-		// AWS.config.update(awsConfig);
-		// const result = await new AWS.S3().putObject({
-		// 	Bucket: bucketName,
-		// 	Key: filename,
-		// 	Body: buffer,
-		// 	ACL: 'public-read',
-		// })
-		// .promise();
-		// console.log(result);
-		// const downloaded = await new AWS.S3()
-		// 	.getObject({
-		// 		Bucket: bucketName,
-		// 		Key: filename,
-		// 	})
-		// 	.promise();
-		// console.log(downloaded);
+		// NCP Object Storage 업로드
+		AWS.config.update(awsConfig);
+		const result = await new AWS.S3()
+			.putObject({
+				Bucket: bucketName,
+				Key: filename,
+				Body: buffer,
+				ACL: 'public-read',
+			})
+			.promise();
+		Logger.log('uploadFile result:', result);
 
 		const updatedImage = await this.imageRepository.save({
 			mimetype,
@@ -182,5 +178,19 @@ export class BoardService {
 		});
 
 		return updatedImage;
+	}
+
+	async downloadFile(filename: string): Promise<Buffer> {
+		// NCP Object Storage 다운로드
+		AWS.config.update(awsConfig);
+		const result = await new AWS.S3()
+			.getObject({
+				Bucket: bucketName,
+				Key: filename,
+			})
+			.promise();
+		Logger.log(`downloadFile result: ${result.ETag}`);
+
+		return result.Body as Buffer;
 	}
 }

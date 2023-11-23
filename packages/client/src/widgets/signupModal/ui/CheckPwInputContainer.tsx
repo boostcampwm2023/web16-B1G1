@@ -3,39 +3,50 @@ import { Input } from 'shared/ui';
 import { useState } from 'react';
 import { Caption } from 'shared/ui/styles';
 import { css } from '@emotion/react';
+import { useEffect } from 'react';
 
 interface PropsTypes {
-	pwState: string;
-	checkPwstate: string;
-	setCheckPwState: React.Dispatch<React.SetStateAction<string>>;
+	validPw: string;
+	setValidCheckPw: React.Dispatch<React.SetStateAction<string>>;
 }
 
 type CheckStateTypes = 'DEFAULT' | 'VALID' | 'INVALID';
 
 export default function CheckPwInputContainer({
-	pwState,
-	checkPwstate,
-	setCheckPwState,
+	validPw,
+	setValidCheckPw,
 }: PropsTypes) {
-	const [checkState, setCheckState] = useState<CheckStateTypes>('DEFAULT');
+	const [checkPw, setCheckPw] = useState('');
+	const [checkPwState, setCheckPwState] = useState<CheckStateTypes>('DEFAULT');
+
 	const [isFocusOut, setIsFocusOut] = useState(false);
+
+	useEffect(() => {
+		if (checkPwState === 'VALID') setValidCheckPw(checkPw);
+		else setValidCheckPw('');
+	}, [checkPw, checkPwState]);
+
+	useEffect(() => {
+		if (validPw === checkPw && validPw !== '') setCheckPwState('VALID');
+		else setCheckPwState('INVALID');
+	}, [validPw, checkPw]);
 
 	const handleCheckPwInput = ({
 		target,
 	}: React.ChangeEvent<HTMLInputElement>) => {
 		if (target.value.length > 18) return;
 
-		if (pwState === target.value) setCheckState('VALID');
-		else setCheckState('INVALID');
+		if (validPw === target.value) setCheckPwState('VALID');
+		else setCheckPwState('INVALID');
 
-		setCheckPwState(target.value);
+		setCheckPw(target.value);
 	};
 
 	const handlePwFocusOut = () => setIsFocusOut(true);
 
 	const getMessage = () => {
-		if (checkState === 'DEFAULT') return '비밀번호를 한번 더 입력해주세요.';
-		if (checkState === 'VALID') return '비밀번호가 일치합니다.';
+		if (checkPwState === 'DEFAULT') return '비밀번호를 한번 더 입력해주세요.';
+		if (checkPwState === 'VALID') return '비밀번호가 일치합니다.';
 		return '비밀번호가 일치하지 않습니다.';
 	};
 
@@ -43,18 +54,18 @@ export default function CheckPwInputContainer({
 		<Layout>
 			<PwInput
 				id="password"
-				label="비밀번호"
+				label="비밀번호 확인"
 				placeholder="비밀번호를 입력해주세요."
 				isEssential
-				value={checkPwstate}
+				value={checkPw}
 				onChange={handleCheckPwInput}
 				autoComplete="off"
-				checkState={checkState}
+				state={checkPwState}
 				onBlur={handlePwFocusOut}
 				isFocusOut={isFocusOut}
 			/>
 
-			<Message checkState={checkState} isFocusOut={isFocusOut}>
+			<Message state={checkPwState} isFocusOut={isFocusOut}>
 				{getMessage()}
 			</Message>
 		</Layout>
@@ -67,11 +78,11 @@ const Layout = styled.div`
 `;
 
 const PwInput = styled(Input)<{
-	checkState: CheckStateTypes;
+	state: CheckStateTypes;
 	isFocusOut: boolean;
 }>`
-	${({ checkState, isFocusOut, theme: { colors } }) => {
-		if (checkState !== 'INVALID') return;
+	${({ state, isFocusOut, theme: { colors } }) => {
+		if (state !== 'INVALID') return;
 		if (!isFocusOut) return;
 
 		return css`
@@ -88,12 +99,12 @@ const PwInput = styled(Input)<{
 	}};
 `;
 
-const Message = styled.p<{ checkState: CheckStateTypes; isFocusOut: boolean }>`
+const Message = styled.p<{ state: CheckStateTypes; isFocusOut: boolean }>`
 	margin: 4px 0 0 0;
 
-	color: ${({ checkState, isFocusOut, theme: { colors } }) => {
-		if (checkState === 'DEFAULT') return colors.text.secondary;
-		if (checkState === 'VALID') return colors.text.confirm;
+	color: ${({ state, isFocusOut, theme: { colors } }) => {
+		if (state === 'DEFAULT') return colors.text.secondary;
+		if (state === 'VALID') return colors.text.confirm;
 		if (!isFocusOut) return colors.text.secondary;
 		return colors.text.warning;
 	}};

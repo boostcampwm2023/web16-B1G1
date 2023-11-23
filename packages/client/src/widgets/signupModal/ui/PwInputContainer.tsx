@@ -1,20 +1,27 @@
 import styled from '@emotion/styled';
 import { Input } from 'shared/ui';
-import { engAndNumRegex, engOrNumRegex } from '../lib/regexConstants';
+import { engAndNumRegex, engOrNumRegex } from '../lib/constants';
 import { useState } from 'react';
 import { Caption } from 'shared/ui/styles';
 import { css } from '@emotion/react';
+import { useEffect } from 'react';
 
 interface PropsTypes {
-	state: string;
-	setState: React.Dispatch<React.SetStateAction<string>>;
+	setValidPw: React.Dispatch<React.SetStateAction<string>>;
 }
 
 type PwStateTypes = 'DEFAULT' | 'VALID' | 'INVALID';
 
-export default function PwInputContainer({ state, setState }: PropsTypes) {
+export default function PwInputContainer({ setValidPw }: PropsTypes) {
+	const [pw, setPw] = useState('');
 	const [pwState, setPwState] = useState<PwStateTypes>('DEFAULT');
+
 	const [isFocusOut, setIsFocusOut] = useState(false);
+
+	useEffect(() => {
+		if (pwState === 'VALID') setValidPw(pw);
+		else setValidPw('');
+	}, [pw]);
 
 	const handlePwInput = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
 		if (!engOrNumRegex.test(target.value)) return;
@@ -24,7 +31,7 @@ export default function PwInputContainer({ state, setState }: PropsTypes) {
 		else if (engAndNumRegex.test(target.value)) setPwState('VALID');
 		else setPwState('INVALID');
 
-		setState(target.value);
+		setPw(target.value);
 	};
 
 	const handlePwFocusOut = () => setIsFocusOut(true);
@@ -41,15 +48,15 @@ export default function PwInputContainer({ state, setState }: PropsTypes) {
 				label="비밀번호"
 				placeholder="비밀번호를 입력해주세요."
 				isEssential
-				value={state}
+				value={pw}
 				onChange={handlePwInput}
 				autoComplete="off"
-				pwState={pwState}
+				state={pwState}
 				onBlur={handlePwFocusOut}
 				isFocusOut={isFocusOut}
 			/>
 
-			<Message pwState={pwState} isFocusOut={isFocusOut}>
+			<Message state={pwState} isFocusOut={isFocusOut}>
 				{getMessage()}
 			</Message>
 		</Layout>
@@ -61,9 +68,9 @@ const Layout = styled.div`
 	flex-direction: column;
 `;
 
-const PwInput = styled(Input)<{ pwState: PwStateTypes; isFocusOut: boolean }>`
-	${({ pwState, isFocusOut, theme: { colors } }) => {
-		if (pwState !== 'INVALID') return;
+const PwInput = styled(Input)<{ state: PwStateTypes; isFocusOut: boolean }>`
+	${({ state, isFocusOut, theme: { colors } }) => {
+		if (state !== 'INVALID') return;
 		if (!isFocusOut) return;
 
 		return css`
@@ -80,12 +87,12 @@ const PwInput = styled(Input)<{ pwState: PwStateTypes; isFocusOut: boolean }>`
 	}};
 `;
 
-const Message = styled.p<{ pwState: PwStateTypes; isFocusOut: boolean }>`
+const Message = styled.p<{ state: PwStateTypes; isFocusOut: boolean }>`
 	margin: 4px 0 0 0;
 
-	color: ${({ pwState, isFocusOut, theme: { colors } }) => {
-		if (pwState === 'DEFAULT') return colors.text.secondary;
-		if (pwState === 'VALID') return colors.text.confirm;
+	color: ${({ state, isFocusOut, theme: { colors } }) => {
+		if (state === 'DEFAULT') return colors.text.secondary;
+		if (state === 'VALID') return colors.text.confirm;
 		if (!isFocusOut) return colors.text.secondary;
 		return colors.text.warning;
 	}};

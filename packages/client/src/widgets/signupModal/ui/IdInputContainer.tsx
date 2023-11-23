@@ -1,48 +1,55 @@
 import styled from '@emotion/styled';
 import { Button, Input } from 'shared/ui';
 import { useState } from 'react';
-import { engOrNumRegex } from '../lib/regexConstants';
+import { engOrNumRegex } from '../lib/constants';
 import { Caption } from 'shared/ui/styles';
 import { css } from '@emotion/react';
+import { useEffect } from 'react';
 
 interface PropsTypes {
-	state: string;
-	setState: React.Dispatch<React.SetStateAction<string>>;
+	setValidId: React.Dispatch<React.SetStateAction<string>>;
 }
 
-type DuplicateStateTypes = 'DEFAULT' | 'VALID' | 'INVALID' | 'DUPLICATED';
+type IdStateTypes = 'DEFAULT' | 'VALID' | 'INVALID' | 'DUPLICATED';
 
-export default function IdInputContainer({ state, setState }: PropsTypes) {
-	const [duplicateState, setDuplicateState] =
-		useState<DuplicateStateTypes>('DEFAULT');
+export default function IdInputContainer({ setValidId }: PropsTypes) {
+	const [id, setId] = useState('');
+	const [idState, setIdState] = useState<IdStateTypes>('DEFAULT');
+
+	useEffect(() => {
+		if (idState === 'VALID') setValidId(id);
+		else setValidId('');
+	}, [id]);
 
 	const handleIdInput = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
 		if (!engOrNumRegex.test(target.value)) return;
 		if (target.value.length > 10) return;
 
-		setDuplicateState('DEFAULT');
+		setIdState('DEFAULT');
 
-		setState(target.value);
+		setId(target.value);
 	};
 
 	const handleIdDuplicateCheck = () => {
-		if (state.length < 4) {
-			setDuplicateState('INVALID');
+		if (id.length < 4) {
+			setIdState('INVALID');
+
 			return;
 		}
 
-		// 서버에 요청
+		// TODO: 서버에 요청
 
-		// 사용 가능한 아이디일 경우
-		setDuplicateState('VALID');
+		// TODO: 사용 가능한 아이디일 경우
+		setIdState('VALID');
+		setValidId(id);
 
-		// 중복된 아이디일 경우
-		setDuplicateState('DUPLICATED');
+		// TODO: 중복된 아이디일 경우
+		// setIdState('DUPLICATED');
 	};
 
 	const getMessage = () => {
-		if (duplicateState === 'VALID') return '사용 가능한 아이디입니다.';
-		if (duplicateState === 'DUPLICATED') return '이미 사용중인 아이디입니다.';
+		if (idState === 'VALID') return '사용 가능한 아이디입니다.';
+		if (idState === 'DUPLICATED') return '이미 사용중인 아이디입니다.';
 		return '4 - 10자의 영어/숫자 비밀번호를 입력해주세요.';
 	};
 
@@ -54,22 +61,22 @@ export default function IdInputContainer({ state, setState }: PropsTypes) {
 					label="아이디"
 					placeholder="아이디를 입력해주세요."
 					isEssential
-					value={state}
+					value={id}
 					onChange={handleIdInput}
 					autoComplete="off"
-					state={duplicateState}
+					state={idState}
 				/>
 				<DuplicateCheckButton
 					onClick={handleIdDuplicateCheck}
 					size="m"
 					buttonType="Button"
-					disabled={duplicateState === 'VALID'}
+					disabled={idState === 'VALID'}
 				>
 					중복확인
 				</DuplicateCheckButton>
 			</InputContainer>
 
-			<Message state={duplicateState}>{getMessage()}</Message>
+			<Message state={idState}>{getMessage()}</Message>
 		</Layout>
 	);
 }
@@ -86,7 +93,7 @@ const InputContainer = styled.div`
 	gap: 8px;
 `;
 
-const IdInput = styled(Input)<{ state: DuplicateStateTypes }>`
+const IdInput = styled(Input)<{ state: IdStateTypes }>`
 	${({ state, theme: { colors } }) => {
 		if (state === 'VALID' || state === 'DEFAULT') return;
 
@@ -109,7 +116,7 @@ const DuplicateCheckButton = styled(Button)`
 	padding: 10px 12px;
 `;
 
-const Message = styled.p<{ state: DuplicateStateTypes }>`
+const Message = styled.p<{ state: IdStateTypes }>`
 	margin: 4px 0 0 0;
 
 	color: ${({ state, theme: { colors } }) => {

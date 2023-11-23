@@ -10,27 +10,27 @@ interface PropsType {
 }
 
 export default function SignUpModal({ changePage }: PropsType) {
-	const [isAllInputFilled, setIsAllInputFilled] = useState(false);
+	const [validId, setValidId] = useState('');
+	const [validPw, setValidPw] = useState('');
+	const [validCheckPw, setValidCheckPw] = useState('');
 
-	const [id, setId] = useState('');
-	const [password, setPassword] = useState('');
-	const [checkPassword, setCheckPassword] = useState('');
+	const [isAllInputValid, setIsAllInputValid] = useState(false);
 
 	useEffect(() => {
-		if (id && password && checkPassword) {
-			setIsAllInputFilled(true);
+		if (validId && validPw && validCheckPw) {
+			setIsAllInputValid(true);
 			return;
 		}
 
-		setIsAllInputFilled(false);
-	}, [id, password, checkPassword]);
+		setIsAllInputValid(false);
+	}, [validId, validPw, validCheckPw]);
 
 	// const handleGoBackButton = () => {
 	// 	// TODO: 로그인 모달로 이동하도록 하기
 	// };
 
 	const handleSignUpButton = () => {
-		if (!isAllInputFilled) return;
+		if (!isAllInputValid) return;
 
 		// TODO: 회원가입 요청 보낸 후 로그인 모달로 이동
 	};
@@ -40,7 +40,7 @@ export default function SignUpModal({ changePage }: PropsType) {
 			onClick={handleSignUpButton}
 			buttonType="CTA-icon"
 			size="m"
-			disabled={!isAllInputFilled}
+			disabled={!isAllInputValid}
 		>
 			회원가입
 		</Button>
@@ -53,12 +53,11 @@ export default function SignUpModal({ changePage }: PropsType) {
 			onClickGoBack={() => changePage({ type: 'PREV' })}
 		>
 			<InputBarsContainer>
-				<IdInputContainer state={id} setState={setId} />
-				<PwInputContainer state={password} setState={setPassword} />
+				<IdInputContainer setValidId={setValidId} />
+				<PwInputContainer setValidPw={setValidPw} />
 				<CheckPwInputContainer
-					pwState={password}
-					checkPwstate={checkPassword}
-					setCheckPwState={setCheckPassword}
+					validPw={validPw}
+					setValidCheckPw={setValidCheckPw}
 				/>
 			</InputBarsContainer>
 		</Modal>

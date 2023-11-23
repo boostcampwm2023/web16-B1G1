@@ -18,7 +18,7 @@ export default function LoginModal({ changePage }: PropsType) {
 			<Modal
 				title="로그인"
 				topButton={<TopButton onClick={() => changePage({ type: 'PREV' })} />}
-				rightButton={<RightButton onClick={() => console.log('로그인')} />}
+				rightButton={<RightButton />}
 				leftButton={<LeftButton onClick={() => console.log('회원가입')} />}
 			>
 				<LoginContent />

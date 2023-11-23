@@ -3,20 +3,16 @@ import BackgroundStars from 'features/backgroundStars';
 import Galaxy from '../galaxy/index.tsx';
 import { EffectComposer, Bloom } from '@react-three/postprocessing';
 import { useControls } from 'leva';
-import {
-	CAMERA_POSITION,
-	CAMERA_ROTATION,
-	CAMERA_FAR,
-} from './lib/constants.ts';
 import Controls from 'features/controls/Controls.tsx';
 import PostStars from 'entities/PostStars';
 import { useCameraStore } from 'shared/store/useCameraStore.ts';
+import * as THREE from 'three';
 
 export default function LandingScreen() {
 	const camera = {
-		position: CAMERA_POSITION,
-		rotation: CAMERA_ROTATION,
-		far: CAMERA_FAR,
+		position: new THREE.Vector3(4000, 8000, 16000),
+		up: new THREE.Vector3(0, 1, 0.8),
+		far: 500000,
 	};
 
 	const { cameraToCurrentView, setCameraToCurrentView } = useCameraStore();
@@ -48,11 +44,9 @@ export default function LandingScreen() {
 
 				<color attach="background" args={['#000']} />
 				<ambientLight color="#fff" intensity={5} />
-				<axesHelper args={[20000]} />
-				<Controls />
+				{/* <Controls /> */}
 				<BackgroundStars />
-				<Galaxy position={[0, 0, -10000]} />
-				<PostStars />
+				<Galaxy />
 			</Canvas>
 		</div>
 	);

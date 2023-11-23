@@ -13,6 +13,7 @@ import {
 	ParseIntPipe,
 	UseGuards,
 	UploadedFiles,
+	Res,
 } from '@nestjs/common';
 import { BoardService } from './board.service';
 import { CreateBoardDto } from './dto/create-board.dto';
@@ -31,6 +32,7 @@ import { CookieAuthGuard } from 'src/auth/cookie-auth.guard';
 import { GetUser } from 'src/auth/decorators/get-user.decorator';
 import { UserDataDto } from './dto/user-data.dto';
 import { decryptAes } from 'src/utils/aes.util';
+import * as FormData from 'form-data';
 
 @Controller('board')
 @ApiTags('게시글 API')
@@ -98,13 +100,42 @@ export class BoardController {
 		status: 404,
 		description: '게시글이 존재하지 않음',
 	})
-	async findBoardById(@Param('id', ParseIntPipe) id: number): Promise<Board> {
+	async findBoardById(
+		@Param('id', ParseIntPipe) id: number,
+		@Res() res,
+	): Promise<void> {
 		const found = await this.boardService.findBoardById(id);
 		// AES 복호화
 		if (found.content) {
 			found.content = decryptAes(found.content); // AES 복호화하여 반환
 		}
-		return found;
+
+		// 폼 데이터 만들어 반환
+		const formData = new FormData();
+		formData.append('id', found.id.toString());
+		formData.append('title', found.title);
+		formData.append('content', found.content);
+		formData.append('author', found.user.nickname);
+		formData.append('created_at', found.created_at.toString());
+		formData.append('updated_at', found.updated_at.toString());
+		formData.append('like_cnt', found.like_cnt.toString());
+
+		// NCP Object Storage 다운로드
+		const files = [];
+		for (let image of found.images) {
+			const file: Buffer = await this.boardService.downloadFile(image.filename);
+			console.log(file);
+			formData.append('file', file, {
+				filename: image.filename,
+				contentType: image.mimetype,
+			});
+		}
+
+		res.set({
+			'Content-Type': 'multipart/form-data',
+		});
+		formData.pipe(res);
+		// return found;
 	}
 
 	@Patch(':id')

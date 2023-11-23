@@ -3,7 +3,7 @@ version: '3'
 services:
   was:
     container_name: was
-    image: qkrwogk/web16-b1g1-fe:GITHUB_SHA
+    image: qkrwogk/web16-b1g1-be:GITHUB_SHA
     ports:
       - 3000:3000
     env_file:

@@ -3,7 +3,7 @@ import BackgroundStars from 'features/backgroundStars';
 import Galaxy from '../galaxy/index.tsx';
 import { EffectComposer, Bloom } from '@react-three/postprocessing';
 import { useControls } from 'leva';
-import { CAMERA_POSITION, CAMERA_ROTATION, CAMERA_FAR } from '@constants';
+import { CAMERA_POSITION, CAMERA_FAR } from '@constants';
 import Controls from 'features/controls/Controls.tsx';
 import { useCameraStore } from 'shared/store/useCameraStore.ts';
 import { Posts } from 'entities/posts/index.ts';
@@ -11,7 +11,6 @@ import { Posts } from 'entities/posts/index.ts';
 export default function Screen() {
 	const camera = {
 		position: CAMERA_POSITION,
-		rotation: CAMERA_ROTATION,
 		far: CAMERA_FAR,
 	};
 
@@ -44,7 +43,6 @@ export default function Screen() {
 
 				<color attach="background" args={['#000']} />
 				<ambientLight color="#fff" intensity={5} />
-				<axesHelper args={[20000]} />
 				<Controls />
 				<BackgroundStars />
 				<Galaxy />

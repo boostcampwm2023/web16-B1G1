@@ -31,7 +31,7 @@ export default function Modal({
 	return (
 		<Layout {...args}>
 			{onClickGoBack && (
-				<IconButton onClick={onClickGoBack}>
+				<IconButton onClick={onClickGoBack} type="button">
 					<img src={goBackIcon} alt="뒤로가기 버튼" />
 				</IconButton>
 			)}

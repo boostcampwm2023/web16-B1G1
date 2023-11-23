@@ -16,9 +16,9 @@ export default function SignUpModal({ changePage }: PropsType) {
 		checkPassword: '',
 	});
 
-	const handleGoBackButton = () => {
-		// TODO: 로그인 모달로 이동하도록 하기
-	};
+	// const handleGoBackButton = () => {
+	// 	// TODO: 로그인 모달로 이동하도록 하기
+	// };
 
 	const handlesignUpButton = () => {
 		if (!isAllInputFilled) return;

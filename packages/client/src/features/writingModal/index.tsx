@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { Button, IconButton, Modal } from 'shared/ui';
-import TextArea from 'shared/ui/textArea/TextArea';
+import { TextArea } from 'shared/ui';
 import ImageIcon from '@icons/icon-photo-32-gray.svg?react';
 import { ModalPortal } from 'shared/ui';
 import { useViewStore } from 'shared/store/useWritingStore';
 import styled from '@emotion/styled';
 
 export default function WritingModal() {
-	const [text, setText] = useState('');
+	const [_, setText] = useState('');
 	const { setView } = useViewStore();
 
 	return (

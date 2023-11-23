@@ -1,22 +1,23 @@
 import styled from '@emotion/styled';
 import { Button, Input } from 'shared/ui';
 import { useState } from 'react';
-import { engNumRegex } from '../lib/regexConstants';
+import { engOrNumRegex } from '../lib/regexConstants';
 import { Caption } from 'shared/ui/styles';
+import { css } from '@emotion/react';
 
 interface PropsTypes {
 	state: string;
 	setState: React.Dispatch<React.SetStateAction<string>>;
 }
 
-type DuplicateStateTypes = 'DEFAULT' | 'VALID' | 'INVALID';
+type DuplicateStateTypes = 'DEFAULT' | 'VALID' | 'INVALID' | 'DUPLICATED';
 
 export default function IdInputContainer({ state, setState }: PropsTypes) {
 	const [duplicateState, setDuplicateState] =
 		useState<DuplicateStateTypes>('DEFAULT');
 
 	const handleIdInput = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
-		if (!engNumRegex.test(target.value)) return;
+		if (!engOrNumRegex.test(target.value)) return;
 		if (target.value.length > 10) return;
 
 		setDuplicateState('DEFAULT');
@@ -25,19 +26,24 @@ export default function IdInputContainer({ state, setState }: PropsTypes) {
 	};
 
 	const handleIdDuplicateCheck = () => {
+		if (state.length < 4) {
+			setDuplicateState('INVALID');
+			return;
+		}
+
 		// 서버에 요청
 
 		// 사용 가능한 아이디일 경우
 		setDuplicateState('VALID');
 
-		// 사용 불가한 아이디일 경우
-		setDuplicateState('INVALID');
+		// 중복된 아이디일 경우
+		setDuplicateState('DUPLICATED');
 	};
 
 	const getMessage = () => {
 		if (duplicateState === 'VALID') return '사용 가능한 아이디입니다.';
-		if (duplicateState === 'INVALID') return '이미 사용중인 아이디입니다.';
-		return '영숫자 조합 10자 이하로 입력해주세요.';
+		if (duplicateState === 'DUPLICATED') return '이미 사용중인 아이디입니다.';
+		return '4 - 10자의 영어/숫자 비밀번호를 입력해주세요.';
 	};
 
 	return (
@@ -57,6 +63,7 @@ export default function IdInputContainer({ state, setState }: PropsTypes) {
 					onClick={handleIdDuplicateCheck}
 					size="m"
 					buttonType="Button"
+					disabled={duplicateState === 'VALID'}
 				>
 					중복확인
 				</DuplicateCheckButton>
@@ -80,8 +87,20 @@ const InputContainer = styled.div`
 `;
 
 const IdInput = styled(Input)<{ state: DuplicateStateTypes }>`
-	border-color: ${({ state, theme: { colors } }) => {
-		if (state === 'INVALID') return colors.text.warning;
+	${({ state, theme: { colors } }) => {
+		if (state === 'VALID' || state === 'DEFAULT') return;
+
+		return css`
+			border-color: ${colors.text.warning};
+
+			&:focus {
+				border-color: ${colors.text.warning};
+			}
+
+			&:hover {
+				border-color: ${colors.text.warning};
+			}
+		`;
 	}};
 `;
 
@@ -100,6 +119,8 @@ const Message = styled.p<{ state: DuplicateStateTypes }>`
 			case 'VALID':
 				return colors.text.confirm;
 			case 'INVALID':
+				return colors.text.warning;
+			case 'DUPLICATED':
 				return colors.text.warning;
 		}
 	}};

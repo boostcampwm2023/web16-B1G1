@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import { Button, Modal } from 'shared/ui';
 import { useState, useEffect } from 'react';
 import IdInputContainer from './ui/IdInputContainer';
+import PwInputContainer from './ui/PwInputContainer';
 
 interface PropsType {
 	changePage: React.Dispatch<{ type: 'NEXT' | 'PREV' }>;
@@ -50,30 +51,9 @@ export default function SignUpModal({ changePage }: PropsType) {
 			rightButton={signUpButton}
 			onClickGoBack={() => changePage({ type: 'PREV' })}
 		>
-			<IdInputContainer state={id} setState={setId} />
-
 			<InputBarsContainer>
-				{/* <InputBar
-					id="id"
-					label="아이디"
-					placeholder="아이디를 입력해주세요."
-					isEssential
-					onChange={handleInputs}
-				/>
-				<InputBar
-					id="password"
-					label="비밀번호"
-					placeholder="비밀번호를 입력해주세요."
-					isEssential
-					onChange={handleInputs}
-				/>
-				<InputBar
-					id="checkPassword"
-					label="비밀번호 확인"
-					placeholder="비밀번호를 다시 입력해주세요."
-					isEssential
-					onChange={handleInputs}
-				/> */}
+				<IdInputContainer state={id} setState={setId} />
+				<PwInputContainer state={password} setState={setPassword} />
 			</InputBarsContainer>
 		</Modal>
 	);

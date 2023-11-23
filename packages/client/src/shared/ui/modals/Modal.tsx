@@ -2,13 +2,14 @@ import styled from '@emotion/styled';
 import { Body02ME, Title02 } from '../styles';
 import { ReactNode } from 'react';
 import { css } from '@emotion/react';
-import Button from '../buttons/Button';
+import goBackIcon from '@icons/icon-back-32-white.svg';
+import { IconButton } from '..';
 
 interface PropsTypes {
 	title: string;
 	children: ReactNode;
 
-	explanation?: string;
+	description?: string;
 	topButton?: ReactNode;
 	leftButton?: ReactNode;
 	rightButton?: ReactNode;
@@ -17,7 +18,7 @@ interface PropsTypes {
 
 export default function Modal({
 	title,
-	explanation,
+	description,
 	leftButton,
 	rightButton,
 	topButton,
@@ -30,10 +31,9 @@ export default function Modal({
 	return (
 		<Layout {...args}>
 			{onClickGoBack && (
-				<Button onClick={onClickGoBack} size="m" buttonType="CTA-icon">
-					버튼
-				</Button>
-				// TODO: 이후 화살표 버튼으로 바꿔야 함
+				<IconButton onClick={onClickGoBack}>
+					<img src={goBackIcon} alt="뒤로가기 버튼" />
+				</IconButton>
 			)}
 
 			<MainLayout>
@@ -43,7 +43,7 @@ export default function Modal({
 						{topButton}
 					</TitleLayout>
 
-					<Explanation>{explanation}</Explanation>
+					{description && <Description>{description}</Description>}
 				</UpperLayout>
 
 				{children}
@@ -76,8 +76,8 @@ const MainLayout = styled.div`
 	margin: 12px 0 0 0;
 
 	${({ theme: { colors } }) => css`
-		background-color: ${colors.background.bdp03};
-		border: 2px solid ${colors.stroke.default};
+		background-color: ${colors.background.bdp01};
+		border: 2px solid ${colors.stroke.focus};
 	`};
 `;
 
@@ -101,11 +101,12 @@ const ButtonLayout = styled.div`
 const Title = styled.h1`
 	display: flex;
 	justify-content: flex-start;
+	margin: 0;
 	color: ${({ theme: { colors } }) => colors.text.primary};
 	${Title02}
 `;
 
-const Explanation = styled.p`
+const Description = styled.p`
 	color: ${({ theme: { colors } }) => colors.text.third};
 	${Body02ME}
 `;

@@ -29,7 +29,7 @@ const theme = {
 		stroke: {
 			default: '#1E1A4D',
 			focus: '#6C55FA',
-			sc: '#564A6B',
+			sc: '#514B75',
 		},
 
 		text: {

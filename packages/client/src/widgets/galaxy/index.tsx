@@ -29,7 +29,7 @@ const getSpiralPositions = (offset: number) => {
 	return new THREE.Vector3(r * Math.cos(theta), y, r * Math.sin(theta));
 };
 
-export default function Galaxy() {
+export default function Galaxy({ ...props }) {
 	const galaxyRef = useRef<THREE.Group>(null!);
 
 	useFrame((_, delta) => (galaxyRef.current.rotation.y += delta / 100));
@@ -72,5 +72,9 @@ export default function Galaxy() {
 		return starList;
 	}, []);
 
-	return <group ref={galaxyRef}>{stars}</group>;
+	return (
+		<group ref={galaxyRef} {...props}>
+			{stars}
+		</group>
+	);
 }

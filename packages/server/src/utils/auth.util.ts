@@ -20,7 +20,10 @@ export async function createJwt(
 	return jwt;
 }
 
-export async function getGitHubAccessToken(authorizedCode: string) {
+export async function getOAuthAccessToken(
+	service: string,
+	authorizedCode: string,
+) {
 	const accessTokenResponse = await fetch(
 		'https://github.com/login/oauth/access_token',
 		{
@@ -47,7 +50,7 @@ export async function getGitHubAccessToken(authorizedCode: string) {
 	return accessTokenData.access_token;
 }
 
-export async function getGitHubUserData(accessToken: string) {
+export async function getOAuthUserData(service: string, accessToken: string) {
 	const userResponse = await fetch('https://api.github.com/user', {
 		method: 'GET',
 		headers: {

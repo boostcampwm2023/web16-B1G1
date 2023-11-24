@@ -146,13 +146,14 @@ export class AuthController {
 		res.redirect(redirectUrl);
 	}
 
-	@Get('github/callback')
+	@Get(':service/callback')
 	async oauthGithubCallback(
+		@Param('service') service: string,
 		@Query('code') authorizedCode: string,
 		@Res({ passthrough: true }) res: Response,
 	) {
 		const { username, accessToken, refreshToken } =
-			await this.authService.oauthGithubCallback(authorizedCode);
+			await this.authService.oauthCallback(service, authorizedCode);
 
 		if (username) {
 			res.cookie('GitHubUsername', username, {
@@ -174,8 +175,9 @@ export class AuthController {
 		return { accessToken, refreshToken };
 	}
 
-	@Post('github/signup')
+	@Post(':service/signup')
 	async signUpWithGithub(
+		@Param('service') service: string,
 		@Body('nickname') nickname: string,
 		@Req() req,
 		@Res({ passthrough: true }) res: Response,
@@ -188,6 +190,7 @@ export class AuthController {
 		}
 
 		const savedUser = await this.authService.signUpWithGithub(
+			service,
 			nickname,
 			gitHubUsername,
 		);

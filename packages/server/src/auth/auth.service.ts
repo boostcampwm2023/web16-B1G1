@@ -17,8 +17,8 @@ import { UserEnum } from './enums/user.enum';
 import { JwtEnum } from './enums/jwt.enum';
 import {
 	createJwt,
-	getGitHubAccessToken,
-	getGitHubUserData,
+	getOAuthAccessToken,
+	getOAuthUserData,
 } from '../utils/auth.util';
 import { v4 as uuid } from 'uuid';
 
@@ -103,22 +103,31 @@ export class AuthService {
 		}
 	}
 
-	async oauthGithubCallback(authorizedCode: string) {
+	async oauthCallback(service: string, authorizedCode: string) {
 		if (!authorizedCode) {
 			throw new BadRequestException('Authorized Code가 존재하지 않습니다.');
 		}
 
-		const gitHubAccessToken = await getGitHubAccessToken(authorizedCode);
-		const gitHubUser = await getGitHubUserData(gitHubAccessToken);
+		const resourceServerAccessToken = await getOAuthAccessToken(
+			service,
+			authorizedCode,
+		);
+		const resourceServerUser = await getOAuthUserData(
+			service,
+			resourceServerAccessToken,
+		);
 
 		const user = await this.authRepository.findOneBy({
-			username: gitHubUser.username,
+			username: resourceServerUser.username,
 		});
 
 		if (!user) {
-			this.redisRepository.set(gitHubUser.username, gitHubAccessToken);
+			this.redisRepository.set(
+				resourceServerUser.username,
+				resourceServerAccessToken,
+			);
 			return {
-				username: gitHubUser.username,
+				username: resourceServerUser.username,
 				accessToken: null,
 				refreshToken: null,
 			};
@@ -138,11 +147,15 @@ export class AuthService {
 		};
 	}
 
-	async signUpWithGithub(nickname: string, GitHubUsername: any) {
+	async signUpWithGithub(
+		service: string,
+		nickname: string,
+		GitHubUsername: any,
+	) {
 		let gitHubUserData;
 		try {
 			const gitHubAccessToken = await this.redisRepository.get(GitHubUsername);
-			gitHubUserData = await getGitHubUserData(gitHubAccessToken);
+			gitHubUserData = await getOAuthUserData(service, gitHubAccessToken);
 		} catch (e) {
 			throw new UnauthorizedException('잘못된 접근입니다.');
 		}

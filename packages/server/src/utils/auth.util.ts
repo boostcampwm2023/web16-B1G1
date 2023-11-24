@@ -37,7 +37,7 @@ export async function getOAuthAccessToken(
 
 	if (!accessTokenResponse.ok) {
 		throw new InternalServerErrorException(
-			'GitHub으로부터 accessToken을 받아오지 못했습니다.',
+			`${service}으로부터 accessToken을 받아오지 못했습니다.`,
 		);
 	}
 
@@ -46,16 +46,15 @@ export async function getOAuthAccessToken(
 }
 
 export async function getOAuthUserData(service: string, accessToken: string) {
-	const userResponse = await fetch('https://api.github.com/user', {
-		method: 'GET',
-		headers: {
-			Authorization: `Bearer ${accessToken}`,
-		},
-	});
+	const [urlForUserData, requestData] = getOAuthUserDataRequestData(
+		service,
+		accessToken,
+	);
+	const userResponse = await fetch(urlForUserData, requestData);
 
 	if (!userResponse.ok) {
 		throw new InternalServerErrorException(
-			'GitHub으로부터 유저 정보를 받아오지 못했습니다.',
+			`${service}으로부터 유저 정보를 받아오지 못했습니다.`,
 		);
 	}
 
@@ -109,4 +108,32 @@ function getOAuthAccessTokenRequestData(
 			throw new NotFoundException('존재하지 않는 서비스입니다.');
 	}
 	return [urlForAccessToken, requestData];
+}
+
+function getOAuthUserDataRequestData(service: string, accessToken: string) {
+	let urlForUserData: string;
+	let requestData: any;
+	switch (service) {
+		case 'github':
+			urlForUserData = 'https://api.github.com/user';
+			requestData = {
+				method: 'GET',
+				headers: {
+					Authorization: `Bearer ${accessToken}`,
+				},
+			};
+			break;
+		case 'naver':
+			urlForUserData = 'https://openapi.naver.com/v1/nid/me';
+			requestData = {
+				method: 'GET',
+				headers: {
+					Authorization: `Bearer ${accessToken}`,
+				},
+			};
+			break;
+		default:
+			throw new NotFoundException('존재하지 않는 서비스입니다.');
+	}
+	return [urlForUserData, requestData];
 }

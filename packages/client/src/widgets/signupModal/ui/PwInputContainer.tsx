@@ -12,6 +12,9 @@ interface PropsTypes {
 
 type PwStateTypes = 'DEFAULT' | 'VALID' | 'INVALID';
 
+const MIN_PW_LENGTH = 8;
+const MAX_PW_LENGTH = 18;
+
 export default function PwInputContainer({ setValidPw }: PropsTypes) {
 	const [pw, setPw] = useState('');
 	const [pwState, setPwState] = useState<PwStateTypes>('DEFAULT');
@@ -25,9 +28,9 @@ export default function PwInputContainer({ setValidPw }: PropsTypes) {
 
 	const handlePwInput = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
 		if (!engOrNumRegex.test(target.value)) return;
-		if (target.value.length > 18) return;
+		if (target.value.length > MAX_PW_LENGTH) return;
 
-		if (target.value.length < 8) setPwState('INVALID');
+		if (target.value.length < MIN_PW_LENGTH) setPwState('INVALID');
 		else if (engAndNumRegex.test(target.value)) setPwState('VALID');
 		else setPwState('INVALID');
 
@@ -38,7 +41,7 @@ export default function PwInputContainer({ setValidPw }: PropsTypes) {
 
 	const getMessage = () => {
 		if (pwState === 'VALID') return '사용 가능한 비밀번호입니다.';
-		return '8 - 18자의 영숫자 조합 비밀번호를 입력해주세요.';
+		return `${MIN_PW_LENGTH} - ${MAX_PW_LENGTH}자의 영숫자 조합 비밀번호를 입력해주세요.`;
 	};
 
 	return (

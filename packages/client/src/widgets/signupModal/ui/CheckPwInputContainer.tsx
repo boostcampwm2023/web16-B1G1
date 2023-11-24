@@ -12,6 +12,8 @@ interface PropsTypes {
 
 type CheckStateTypes = 'DEFAULT' | 'VALID' | 'INVALID';
 
+const MAX_PW_LENGTH = 18;
+
 export default function CheckPwInputContainer({
 	validPw,
 	setValidCheckPw,
@@ -34,7 +36,7 @@ export default function CheckPwInputContainer({
 	const handleCheckPwInput = ({
 		target,
 	}: React.ChangeEvent<HTMLInputElement>) => {
-		if (target.value.length > 18) return;
+		if (target.value.length > MAX_PW_LENGTH) return;
 
 		if (validPw === target.value) setCheckPwState('VALID');
 		else setCheckPwState('INVALID');

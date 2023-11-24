@@ -12,6 +12,9 @@ interface PropsTypes {
 
 type IdStateTypes = 'DEFAULT' | 'VALID' | 'INVALID' | 'DUPLICATED';
 
+const MIN_ID_LENGTH = 4;
+const MAX_ID_LENGTH = 10;
+
 export default function IdInputContainer({ setValidId }: PropsTypes) {
 	const [id, setId] = useState('');
 	const [idState, setIdState] = useState<IdStateTypes>('DEFAULT');
@@ -23,7 +26,7 @@ export default function IdInputContainer({ setValidId }: PropsTypes) {
 
 	const handleIdInput = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
 		if (!engOrNumRegex.test(target.value)) return;
-		if (target.value.length > 10) return;
+		if (target.value.length > MAX_ID_LENGTH) return;
 
 		setIdState('DEFAULT');
 
@@ -31,9 +34,8 @@ export default function IdInputContainer({ setValidId }: PropsTypes) {
 	};
 
 	const handleIdDuplicateCheck = () => {
-		if (id.length < 4) {
+		if (id.length < MIN_ID_LENGTH || id.length > MAX_ID_LENGTH) {
 			setIdState('INVALID');
-
 			return;
 		}
 
@@ -50,7 +52,7 @@ export default function IdInputContainer({ setValidId }: PropsTypes) {
 	const getMessage = () => {
 		if (idState === 'VALID') return '사용 가능한 아이디입니다.';
 		if (idState === 'DUPLICATED') return '이미 사용중인 아이디입니다.';
-		return '4 - 10자의 영어/숫자 비밀번호를 입력해주세요.';
+		return `${MIN_ID_LENGTH} - ${MAX_ID_LENGTH}자의 영어/숫자 비밀번호를 입력해주세요.`;
 	};
 
 	return (

@@ -113,22 +113,22 @@ export class AuthService {
 			authorizedCode,
 			state,
 		);
-		const resourceServerUser = await getOAuthUserData(
+		const resourceServerUsername = await getOAuthUserData(
 			service,
 			resourceServerAccessToken,
 		);
 
 		const user = await this.authRepository.findOneBy({
-			username: resourceServerUser.username,
+			username: resourceServerUsername,
 		});
 
 		if (!user) {
 			this.redisRepository.set(
-				resourceServerUser.username,
+				resourceServerUsername,
 				resourceServerAccessToken,
 			);
 			return {
-				username: resourceServerUser.username,
+				username: resourceServerUsername,
 				accessToken: null,
 				refreshToken: null,
 			};

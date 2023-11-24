@@ -59,9 +59,14 @@ export async function getOAuthUserData(service: string, accessToken: string) {
 	}
 
 	const userData = await userResponse.json();
-	return {
-		username: userData.login,
-	};
+	switch (service) {
+		case 'github':
+			return userData.login;
+		case 'naver':
+			return userData.response.id;
+		default:
+			throw new NotFoundException('존재하지 않는 서비스입니다.');
+	}
 }
 
 function getOAuthAccessTokenRequestData(

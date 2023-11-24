@@ -11,6 +11,8 @@ import {
 	UseGuards,
 	Req,
 	UnauthorizedException,
+	Param,
+	NotFoundException,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SignUpUserDto } from './dto/signup-user.dto';
@@ -125,11 +127,23 @@ export class AuthController {
 		return this.authService.isAvailableNickname(nickname);
 	}
 
-	@Get('github/signin')
-	signInWithGithub(@Res({ passthrough: true }) res: Response) {
-		res.redirect(
-			`https://github.com/login/oauth/authorize?client_id=${process.env.OAUTH_GITHUB_CLIENT_ID}&scope=read:user%20user:email`,
-		);
+	@Get(':service/signin')
+	signInWithOAuth(
+		@Param('service') service: string,
+		@Res({ passthrough: true }) res: Response,
+	) {
+		let redirectUrl: string;
+		switch (service) {
+			case 'github':
+				redirectUrl = `https://github.com/login/oauth/authorize?client_id=${process.env.OAUTH_GITHUB_CLIENT_ID}&scope=read:user%20user:email`;
+				break;
+			case 'naver':
+				redirectUrl = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${process.env.OAUTH_NAVER_CLIENT_ID}&redirect_uri=${process.env.OAUTH_NAVER_REDIRECT_URI}&state=STATE_STRING`;
+				break;
+			default:
+				throw new NotFoundException('존재하지 않는 서비스입니다.');
+		}
+		res.redirect(redirectUrl);
 	}
 
 	@Get('github/callback')

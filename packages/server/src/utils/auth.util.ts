@@ -1,7 +1,10 @@
 import { User } from '../auth/entities/user.entity';
 import { JwtService } from '@nestjs/jwt';
 import { JwtEnum } from '../auth/enums/jwt.enum';
-import { InternalServerErrorException } from '@nestjs/common';
+import {
+	InternalServerErrorException,
+	NotFoundException,
+} from '@nestjs/common';
 
 export async function createJwt(
 	user: Partial<User>,
@@ -23,22 +26,14 @@ export async function createJwt(
 export async function getOAuthAccessToken(
 	service: string,
 	authorizedCode: string,
+	state?: string,
 ) {
-	const accessTokenResponse = await fetch(
-		'https://github.com/login/oauth/access_token',
-		{
-			method: 'POST',
-			headers: {
-				Accept: 'application/json',
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify({
-				client_id: process.env.OAUTH_GITHUB_CLIENT_ID,
-				client_secret: process.env.OAUTH_GITHUB_CLIENT_SECRETS,
-				code: authorizedCode,
-			}),
-		},
+	const [urlForAccessToken, requestData] = getOAuthAccessTokenRequestData(
+		service,
+		authorizedCode,
+		state,
 	);
+	const accessTokenResponse = await fetch(urlForAccessToken, requestData);
 
 	if (!accessTokenResponse.ok) {
 		throw new InternalServerErrorException(
@@ -68,4 +63,50 @@ export async function getOAuthUserData(service: string, accessToken: string) {
 	return {
 		username: userData.login,
 	};
+}
+
+function getOAuthAccessTokenRequestData(
+	service: string,
+	authorizedCode: string,
+	state?: string,
+) {
+	let urlForAccessToken: string;
+	let requestData: any;
+	switch (service) {
+		case 'github':
+			urlForAccessToken = 'https://github.com/login/oauth/access_token';
+			requestData = {
+				method: 'POST',
+				headers: {
+					Accept: 'application/json',
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({
+					client_id: process.env.OAUTH_GITHUB_CLIENT_ID,
+					client_secret: process.env.OAUTH_GITHUB_CLIENT_SECRETS,
+					code: authorizedCode,
+				}),
+			};
+			break;
+		case 'naver':
+			urlForAccessToken = 'https://nid.naver.com/oauth2.0/token';
+			requestData = {
+				method: 'POST',
+				headers: {
+					Accept: 'application/json',
+					'Content-Type': 'application/x-www-form-urlencoded',
+				},
+				body: new URLSearchParams({
+					grant_type: 'authorization_code',
+					client_id: process.env.OAUTH_NAVER_CLIENT_ID,
+					client_secret: process.env.OAUTH_NAVER_CLIENT_SECRETS,
+					code: authorizedCode,
+					state,
+				}),
+			};
+			break;
+		default:
+			throw new NotFoundException('존재하지 않는 서비스입니다.');
+	}
+	return [urlForAccessToken, requestData];
 }

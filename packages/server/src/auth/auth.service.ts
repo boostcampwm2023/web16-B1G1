@@ -103,7 +103,7 @@ export class AuthService {
 		}
 	}
 
-	async oauthCallback(service: string, authorizedCode: string) {
+	async oauthCallback(service: string, authorizedCode: string, state?: string) {
 		if (!authorizedCode) {
 			throw new BadRequestException('Authorized Code가 존재하지 않습니다.');
 		}
@@ -111,6 +111,7 @@ export class AuthService {
 		const resourceServerAccessToken = await getOAuthAccessToken(
 			service,
 			authorizedCode,
+			state,
 		);
 		const resourceServerUser = await getOAuthUserData(
 			service,

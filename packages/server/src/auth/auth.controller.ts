@@ -150,13 +150,14 @@ export class AuthController {
 	async oauthGithubCallback(
 		@Param('service') service: string,
 		@Query('code') authorizedCode: string,
+		@Query('state') state: string,
 		@Res({ passthrough: true }) res: Response,
 	) {
 		const { username, accessToken, refreshToken } =
-			await this.authService.oauthCallback(service, authorizedCode);
+			await this.authService.oauthCallback(service, authorizedCode, state);
 
 		if (username) {
-			res.cookie('GitHubUsername', username, {
+			res.cookie(`${service}Username`, username, {
 				path: '/',
 				httpOnly: true,
 			});

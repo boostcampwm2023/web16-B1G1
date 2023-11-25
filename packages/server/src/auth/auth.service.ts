@@ -148,27 +148,32 @@ export class AuthService {
 		};
 	}
 
-	async signUpWithGithub(
+	async signUpWithOAuth(
 		service: string,
 		nickname: string,
-		GitHubUsername: any,
+		resourceServerUsername: any,
 	) {
-		let gitHubUserData;
+		let recivedResourceServerUsername: string;
 		try {
-			const gitHubAccessToken = await this.redisRepository.get(GitHubUsername);
-			gitHubUserData = await getOAuthUserData(service, gitHubAccessToken);
+			const resourceServerAccessToken: string = await this.redisRepository.get(
+				resourceServerUsername,
+			);
+			recivedResourceServerUsername = await getOAuthUserData(
+				service,
+				resourceServerAccessToken,
+			);
 		} catch (e) {
 			throw new UnauthorizedException('잘못된 접근입니다.');
 		}
 
-		if (gitHubUserData.username !== GitHubUsername) {
+		if (recivedResourceServerUsername !== resourceServerUsername) {
 			throw new UnauthorizedException('잘못된 접근입니다.');
 		}
 
-		this.redisRepository.del(GitHubUsername);
+		this.redisRepository.del(resourceServerUsername);
 
-		const newUser = this.authRepository.create({
-			username: GitHubUsername,
+		const newUser: User = this.authRepository.create({
+			username: resourceServerUsername,
 			password: uuid(),
 			nickname,
 		});

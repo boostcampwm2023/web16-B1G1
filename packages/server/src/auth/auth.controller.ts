@@ -138,7 +138,7 @@ export class AuthController {
 				redirectUrl = `https://github.com/login/oauth/authorize?client_id=${process.env.OAUTH_GITHUB_CLIENT_ID}&scope=read:user%20user:email`;
 				break;
 			case 'naver':
-				redirectUrl = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${process.env.OAUTH_NAVER_CLIENT_ID}&redirect_uri=${process.env.OAUTH_NAVER_REDIRECT_URI}&state=STATE_STRING`;
+				redirectUrl = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${process.env.OAUTH_NAVER_CLIENT_ID}&redirect_uri=${process.env.OAUTH_NAVER_REDIRECT_URL}&state=STATE_STRING`;
 				break;
 			default:
 				throw new NotFoundException('존재하지 않는 서비스입니다.');
@@ -147,7 +147,7 @@ export class AuthController {
 	}
 
 	@Get(':service/callback')
-	async oauthGithubCallback(
+	async oauthCallback(
 		@Param('service') service: string,
 		@Query('code') authorizedCode: string,
 		@Query('state') state: string,
@@ -177,26 +177,26 @@ export class AuthController {
 	}
 
 	@Post(':service/signup')
-	async signUpWithGithub(
+	async signUpWithOAuth(
 		@Param('service') service: string,
 		@Body('nickname') nickname: string,
 		@Req() req,
 		@Res({ passthrough: true }) res: Response,
 	) {
-		let gitHubUsername;
+		let resourceServerUsername: string;
 		try {
-			gitHubUsername = req.cookies.GitHubUsername;
+			resourceServerUsername = req.cookies[`${service}Username`];
 		} catch (e) {
 			throw new UnauthorizedException('잘못된 접근입니다.');
 		}
 
-		const savedUser = await this.authService.signUpWithGithub(
+		const savedUser = await this.authService.signUpWithOAuth(
 			service,
 			nickname,
-			gitHubUsername,
+			resourceServerUsername,
 		);
 
-		res.clearCookie('GitHubUsername', {
+		res.clearCookie(`${service}Username`, {
 			path: '/',
 			httpOnly: true,
 		});

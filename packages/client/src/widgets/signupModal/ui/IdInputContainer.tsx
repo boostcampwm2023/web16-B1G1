@@ -30,7 +30,6 @@ export default function IdInputContainer({ setValidId }: PropsTypes) {
 		if (target.value.length > MAX_ID_LENGTH) return;
 
 		setIdState('DEFAULT');
-
 		setId(target.value);
 	};
 
@@ -40,15 +39,17 @@ export default function IdInputContainer({ setValidId }: PropsTypes) {
 			return;
 		}
 
-		const response = await getIsAvailableUsername(id);
+		try {
+			const response = await getIsAvailableUsername(id);
 
-		if (response) {
-			setIdState('VALID');
-			setValidId(id);
-			return;
+			if (response) {
+				setIdState('VALID');
+				setValidId(id);
+				return;
+			}
+		} catch (error) {
+			setIdState('DUPLICATED');
 		}
-
-		setIdState('DUPLICATED');
 	};
 
 	const getMessage = () => {

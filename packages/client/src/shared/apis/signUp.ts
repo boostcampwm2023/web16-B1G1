@@ -9,6 +9,15 @@ export const getIsAvailableUsername = async (username: string) => {
 	return data;
 };
 
+export const getIsAvailableNickName = async (nickname: string) => {
+	const { data } = await instance({
+		method: 'GET',
+		url: `/auth/is-available-nickname?nickname=${nickname}`,
+	});
+
+	return data;
+};
+
 interface PostSignUpTypes {
 	username: string;
 	password: string;

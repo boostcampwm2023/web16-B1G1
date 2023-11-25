@@ -11,6 +11,8 @@ import {
 	UseGuards,
 	Req,
 	UnauthorizedException,
+	Param,
+	NotFoundException,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SignUpUserDto } from './dto/signup-user.dto';
@@ -125,23 +127,37 @@ export class AuthController {
 		return this.authService.isAvailableNickname(nickname);
 	}
 
-	@Get('github/signin')
-	signInWithGithub(@Res({ passthrough: true }) res: Response) {
-		res.redirect(
-			`https://github.com/login/oauth/authorize?client_id=${process.env.OAUTH_GITHUB_CLIENT_ID}&scope=read:user%20user:email`,
-		);
+	@Get(':service/signin')
+	signInWithOAuth(
+		@Param('service') service: string,
+		@Res({ passthrough: true }) res: Response,
+	) {
+		let redirectUrl: string;
+		switch (service) {
+			case 'github':
+				redirectUrl = `https://github.com/login/oauth/authorize?client_id=${process.env.OAUTH_GITHUB_CLIENT_ID}&scope=read:user%20user:email`;
+				break;
+			case 'naver':
+				redirectUrl = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${process.env.OAUTH_NAVER_CLIENT_ID}&redirect_uri=${process.env.OAUTH_NAVER_REDIRECT_URL}&state=STATE_STRING`;
+				break;
+			default:
+				throw new NotFoundException('존재하지 않는 서비스입니다.');
+		}
+		res.redirect(redirectUrl);
 	}
 
-	@Get('github/callback')
-	async oauthGithubCallback(
+	@Get(':service/callback')
+	async oauthCallback(
+		@Param('service') service: string,
 		@Query('code') authorizedCode: string,
+		@Query('state') state: string,
 		@Res({ passthrough: true }) res: Response,
 	) {
 		const { username, accessToken, refreshToken } =
-			await this.authService.oauthGithubCallback(authorizedCode);
+			await this.authService.oauthCallback(service, authorizedCode, state);
 
 		if (username) {
-			res.cookie('GitHubUsername', username, {
+			res.cookie(`${service}Username`, username, {
 				path: '/',
 				httpOnly: true,
 			});
@@ -160,25 +176,27 @@ export class AuthController {
 		return { accessToken, refreshToken };
 	}
 
-	@Post('github/signup')
-	async signUpWithGithub(
+	@Post(':service/signup')
+	async signUpWithOAuth(
+		@Param('service') service: string,
 		@Body('nickname') nickname: string,
 		@Req() req,
 		@Res({ passthrough: true }) res: Response,
 	) {
-		let gitHubUsername;
+		let resourceServerUsername: string;
 		try {
-			gitHubUsername = req.cookies.GitHubUsername;
+			resourceServerUsername = req.cookies[`${service}Username`];
 		} catch (e) {
 			throw new UnauthorizedException('잘못된 접근입니다.');
 		}
 
-		const savedUser = await this.authService.signUpWithGithub(
+		const savedUser = await this.authService.signUpWithOAuth(
+			service,
 			nickname,
-			gitHubUsername,
+			resourceServerUsername,
 		);
 
-		res.clearCookie('GitHubUsername', {
+		res.clearCookie(`${service}Username`, {
 			path: '/',
 			httpOnly: true,
 		});

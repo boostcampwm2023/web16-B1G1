@@ -64,6 +64,8 @@ export async function getOAuthUserData(service: string, accessToken: string) {
 			return userData.login;
 		case 'naver':
 			return userData.response.id;
+		case 'google':
+			return userData.email;
 		default:
 			throw new NotFoundException('존재하지 않는 서비스입니다.');
 	}
@@ -109,6 +111,23 @@ function getOAuthAccessTokenRequestData(
 				}),
 			};
 			break;
+		case 'google':
+			urlForAccessToken = 'https://oauth2.googleapis.com/token';
+			requestData = {
+				method: 'POST',
+				headers: {
+					Accept: 'application/json',
+					'Content-Type': 'application/x-www-form-urlencoded',
+				},
+				body: new URLSearchParams({
+					grant_type: 'authorization_code',
+					client_id: process.env.OAUTH_GOOGLE_CLIENT_ID,
+					client_secret: process.env.OAUTH_GOOGLE_CLIENT_SECRETS,
+					code: authorizedCode,
+					redirect_uri: process.env.OAUTH_GOOGLE_REDIRECT_URI,
+				}),
+			};
+			break;
 		default:
 			throw new NotFoundException('존재하지 않는 서비스입니다.');
 	}
@@ -130,6 +149,15 @@ function getOAuthUserDataRequestData(service: string, accessToken: string) {
 			break;
 		case 'naver':
 			urlForUserData = 'https://openapi.naver.com/v1/nid/me';
+			requestData = {
+				method: 'GET',
+				headers: {
+					Authorization: `Bearer ${accessToken}`,
+				},
+			};
+			break;
+		case 'google':
+			urlForUserData = 'https://www.googleapis.com/oauth2/v2/userinfo';
 			requestData = {
 				method: 'GET',
 				headers: {

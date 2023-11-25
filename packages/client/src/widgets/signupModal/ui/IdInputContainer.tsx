@@ -5,6 +5,7 @@ import { engOrNumRegex } from '../lib/constants';
 import { Caption } from 'shared/ui/styles';
 import { css } from '@emotion/react';
 import { useEffect } from 'react';
+import { getIsAvailableUsername } from 'shared/apis';
 
 interface PropsTypes {
 	setValidId: React.Dispatch<React.SetStateAction<string>>;
@@ -33,20 +34,21 @@ export default function IdInputContainer({ setValidId }: PropsTypes) {
 		setId(target.value);
 	};
 
-	const handleIdDuplicateCheck = () => {
+	const handleIdDuplicateCheck = async () => {
 		if (id.length < MIN_ID_LENGTH || id.length > MAX_ID_LENGTH) {
 			setIdState('INVALID');
 			return;
 		}
 
-		// TODO: 서버에 요청
+		const response = await getIsAvailableUsername(id);
 
-		// TODO: 사용 가능한 아이디일 경우
-		setIdState('VALID');
-		setValidId(id);
+		if (response) {
+			setIdState('VALID');
+			setValidId(id);
+			return;
+		}
 
-		// TODO: 중복된 아이디일 경우
-		// setIdState('DUPLICATED');
+		setIdState('DUPLICATED');
 	};
 
 	const getMessage = () => {

@@ -16,6 +16,7 @@ import { UserDataDto } from './dto/user-data.dto';
 import * as AWS from 'aws-sdk';
 import { awsConfig, bucketName } from 'src/config/aws.config';
 import { v1 as uuid } from 'uuid';
+import * as sharp from 'sharp';
 
 @Injectable()
 export class BoardService {
@@ -157,6 +158,11 @@ export class BoardService {
 
 		const { mimetype, buffer, size } = file;
 
+		const resized_buffer = await sharp(buffer)
+			.resize(500, 500, { fit: 'cover' })
+			.toFormat('png', { quality: 100 })
+			.toBuffer();
+
 		const filename = uuid();
 
 		// NCP Object Storage 업로드
@@ -165,7 +171,7 @@ export class BoardService {
 			.putObject({
 				Bucket: bucketName,
 				Key: filename,
-				Body: buffer,
+				Body: resized_buffer,
 				ACL: 'public-read',
 			})
 			.promise();

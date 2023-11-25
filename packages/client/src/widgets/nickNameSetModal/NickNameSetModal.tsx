@@ -1,48 +1,64 @@
-import styled from '@emotion/styled';
 import { Button, Modal } from 'shared/ui';
-import InputBar from 'shared/ui/inputBar/InputBar';
 import { useState } from 'react';
+import NickNameInputContainer from './ui/NickNameInputContainer';
+import { postSignUp } from 'shared/apis';
+import { useSignUpStore } from 'shared/store/useSignUpStore';
+import { useToastStore } from 'shared/store/useToastStore';
 
-export default function NickNameSetModal() {
-	const [nickName, setNickName] = useState('');
+interface PropsTypes {
+	changePage: React.Dispatch<{
+		type: 'NEXT' | 'PREV' | 'SET';
+		pageIndex?: number;
+	}>;
+}
 
-	const handleSaveButton = () => {
-		if (!nickName) return;
+export default function NickNameSetModal({ changePage }: PropsTypes) {
+	const [validNickName, setValidNickName] = useState('');
 
-		console.log(nickName);
-		// TODO: 백엔드 요청 보낸 후 로그인 모달로 이동
+	const handleSaveButton = async () => {
+		// TODO: 소셜로그인 시 로직 따로 추가해야 함
+
+		const { id, pw } = useSignUpStore.getState();
+
+		try {
+			const response = await postSignUp({
+				username: id,
+				password: pw,
+				nickname: validNickName,
+			});
+
+			if (response) {
+				changePage({ type: 'SET', pageIndex: 1 });
+
+				useToastStore.setState({
+					text: '회원가입이 완료되었습니다.',
+				});
+			}
+		} catch (error) {
+			useToastStore.setState({
+				text: '회원가입에 실패했습니다.',
+			});
+		}
 	};
-
-	const handleNickNameInput = ({
-		target,
-	}: React.ChangeEvent<HTMLInputElement>) => setNickName(target.value);
 
 	const saveButton = (
 		<Button
 			onClick={handleSaveButton}
 			buttonType="CTA-icon"
 			size="m"
-			disabled={!nickName}
+			disabled={!validNickName}
 		>
 			저장
 		</Button>
 	);
 
 	return (
-		<Modal title="회원가입" rightButton={saveButton}>
-			<InputBarWrapper>
-				<InputBar
-					id="nickName"
-					label="닉네임"
-					placeholder="닉네임을 입력해주세요."
-					isEssential
-					onChange={handleNickNameInput}
-				/>
-			</InputBarWrapper>
+		<Modal
+			title="닉네임 설정"
+			rightButton={saveButton}
+			description="서비스 이용에 사용할 닉네임을 정해주세요"
+		>
+			<NickNameInputContainer setValidNickName={setValidNickName} />
 		</Modal>
 	);
 }
-
-const InputBarWrapper = styled.div`
-	width: 452px;
-`;

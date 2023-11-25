@@ -138,7 +138,10 @@ export class AuthController {
 				redirectUrl = `https://github.com/login/oauth/authorize?client_id=${process.env.OAUTH_GITHUB_CLIENT_ID}&scope=read:user%20user:email`;
 				break;
 			case 'naver':
-				redirectUrl = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${process.env.OAUTH_NAVER_CLIENT_ID}&redirect_uri=${process.env.OAUTH_NAVER_REDIRECT_URL}&state=STATE_STRING`;
+				redirectUrl = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${process.env.OAUTH_NAVER_CLIENT_ID}&redirect_uri=${process.env.OAUTH_NAVER_REDIRECT_URI}&state=STATE_STRING`;
+				break;
+			case 'google':
+				redirectUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.OAUTH_GOOGLE_CLIENT_ID}&redirect_uri=${process.env.OAUTH_GOOGLE_REDIRECT_URI}&response_type=code&scope=email%20profile`;
 				break;
 			default:
 				throw new NotFoundException('존재하지 않는 서비스입니다.');

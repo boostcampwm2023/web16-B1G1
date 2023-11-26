@@ -40,7 +40,7 @@ export default function UnderBar() {
 const Layout = styled.div`
 	position: absolute;
 	left: 50%;
-	bottom: 50px;
+	bottom: 30px;
 	z-index: 50;
 	transform: translateX(-50%);
 

@@ -31,7 +31,7 @@ const fadeOutAnimation = keyframes`
 const Layout = styled.div`
 	display: flex;
 	position: absolute;
-	top: 53px;
+	top: 30px;
 	left: 50%;
 	transform: translate(-50%, 0%);
 	z-index: 1000;

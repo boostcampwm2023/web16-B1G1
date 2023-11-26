@@ -27,6 +27,8 @@ export class BoardService {
 		private readonly imageRepository: Repository<Image>,
 		@InjectRepository(User)
 		private readonly userRepository: Repository<User>,
+		@InjectModel(Star.name)
+		private readonly starModel: Model<Star>,
 	) {}
 
 	async createBoard(

@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Button, Modal } from 'shared/ui';
 import TextArea from 'shared/ui/textArea/TextArea';
 import { ModalPortal } from 'shared/ui';
-import { useViewStore } from 'shared/store/useWritingStore';
+import { useViewStore } from 'shared/store/useViewStore';
 import styled from '@emotion/styled';
 import Images from './Images';
 import axios from 'axios';

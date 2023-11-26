@@ -4,7 +4,7 @@ import * as THREE from 'three';
 import { useCameraStore } from 'shared/store/useCameraStore';
 import { Camera, useFrame } from '@react-three/fiber';
 import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
-import { useViewStore } from 'shared/store/useWritingStore';
+import { useViewStore } from 'shared/store/useViewStore';
 
 const setCameraPosition = (
 	camera: Camera,
@@ -29,7 +29,7 @@ export default function Controls() {
 		const LENGTH_LIMIT = 1000 * delta;
 
 		if (targetView) targetView.getWorldPosition(targetPosition);
-		if (view === 'WRITING') {
+		if (view === 'POST') {
 			targetPosition
 				.sub(state.camera.position)
 				.applyAxisAngle(new THREE.Vector3(0, 1, 0), -Math.PI / 6)
@@ -47,7 +47,7 @@ export default function Controls() {
 			if (direction.length() > LENGTH_LIMIT) direction.setLength(LENGTH_LIMIT);
 
 			setCurrentView(currentView.add(direction));
-			if (view !== 'WRITING')
+			if (view !== 'POST')
 				setCameraPosition(state.camera, currentView, cameraToCurrentView);
 
 			controlsRef.current.target = currentView;

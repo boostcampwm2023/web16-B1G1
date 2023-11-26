@@ -4,29 +4,22 @@ import { useCameraStore } from 'shared/store/useCameraStore';
 import { ThreeEvent } from '@react-three/fiber';
 import { Html } from '@react-three/drei';
 import styled from '@emotion/styled';
-import { useViewStore } from 'shared/store/useWritingStore';
+import { useViewStore } from 'shared/store/useViewStore';
 import * as THREE from 'three';
+import { PostData } from 'shared/lib/types/post';
+import { usePostStore } from 'shared/store/usePostStore';
 
 interface PropsType {
-	position: THREE.Vector3;
-	size: number;
-	color: string;
-	label: string;
+	data: PostData;
 	onClick: () => void;
 	isSelected: boolean;
 }
 
-export default function Post({
-	position,
-	size,
-	color,
-	label,
-	onClick,
-	isSelected,
-}: PropsType) {
+export default function Post({ data, onClick, isSelected }: PropsType) {
 	const { targetView, setTargetView } = useCameraStore();
 	const meshRef = useRef<THREE.Mesh>(null!);
 	const { view, setView } = useViewStore();
+	const { setData } = usePostStore();
 
 	const handleMeshClick = (e: ThreeEvent<MouseEvent>) => {
 		e.stopPropagation();
@@ -38,20 +31,21 @@ export default function Post({
 			return;
 		}
 
-		setView('WRITING');
+		setData(data);
+		setView('POST');
 	};
 
 	return (
 		<Star
-			position={position}
-			size={size}
-			color={color}
+			position={data.position}
+			size={data.size}
+			color={data.color}
 			onClick={handleMeshClick}
 			ref={meshRef}
 		>
 			{view === 'DETAIL' && isSelected && (
 				<Html>
-					<Label>{label}</Label>
+					<Label>{data.title}</Label>
 				</Html>
 			)}
 		</Star>

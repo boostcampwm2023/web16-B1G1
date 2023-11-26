@@ -81,6 +81,27 @@ export class BoardService {
 		const boards = await this.boardRepository.findBy({
 			user: { nickname: author },
 		});
+
+		for (let board of boards) {
+			board.content = undefined; // content 제거하여 반환
+			board.user.password = undefined; // user.password 제거하여 반환
+			board.user.created_at = undefined; // user.created_at 제거하여 반환
+			board.likes = undefined; // likes 제거하여 반환
+			board.images = undefined; // images 제거하여 반환
+
+			// star 스타일이 존재하면 MongoDB에서 조회하여 반환
+			if (board.star) {
+				const star = await this.starModel.findById(board.star);
+				if (star) {
+					board.star = JSON.stringify(star);
+				} else {
+					board.star = null;
+				}
+			} else {
+				board.star = undefined;
+			}
+		}
+
 		return boards;
 	}
 

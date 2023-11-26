@@ -17,6 +17,9 @@ import * as AWS from 'aws-sdk';
 import { awsConfig, bucketName } from 'src/config/aws.config';
 import { v1 as uuid } from 'uuid';
 import * as sharp from 'sharp';
+import { InjectModel } from '@nestjs/mongoose';
+import { Star } from './schemas/star.schema';
+import { Model, Types } from 'mongoose';
 
 @Injectable()
 export class BoardService {
@@ -36,7 +39,7 @@ export class BoardService {
 		userData: UserDataDto,
 		files: Express.Multer.File[],
 	): Promise<Board> {
-		const { title, content } = createBoardDto;
+		const { title, content, star } = createBoardDto;
 
 		const user = await this.userRepository.findOneBy({ id: userData.userId });
 
@@ -46,11 +49,22 @@ export class BoardService {
 			images.push(image);
 		}
 
+		// 별 스타일이 존재하면 MongoDB에 저장
+		let star_id: string;
+		if (star) {
+			const starDoc = new this.starModel({
+				...JSON.parse(star),
+			});
+			await starDoc.save();
+			star_id = starDoc._id.toString();
+		}
+
 		const board = this.boardRepository.create({
 			title,
 			content: encryptAes(content), // AES 암호화하여 저장
 			user,
 			images,
+			star: star_id,
 		});
 		const createdBoard: Board = await this.boardRepository.save(board);
 

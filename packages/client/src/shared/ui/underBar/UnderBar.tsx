@@ -5,6 +5,7 @@ import { Title01 } from '../styles';
 import PlanetEditIcon from '@icons/icon-planetedit-24-white.svg';
 import AddIcon from '@icons/icon-add-24-white.svg';
 import WriteIcon from '@icons/icon-writte-24-white.svg';
+import { MAX_WIDTH1, MAX_WIDTH2 } from 'shared/lib/constants';
 
 export default function UnderBar() {
 	const tempName = '도라에몽도라에몽도라';
@@ -38,20 +39,28 @@ export default function UnderBar() {
 
 const Layout = styled.div`
 	position: absolute;
-	z-index: 50;
 	left: 50%;
 	bottom: 50px;
+	z-index: 50;
 	transform: translateX(-50%);
 
 	display: flex;
 	padding: 24px;
-	width: 1180px; // TODO: 수정 필요
 	justify-content: space-between;
 	align-items: center;
 	border-radius: 12px;
+	width: 1180px;
 
 	background-color: ${({ theme }) => theme.colors.background.bdp01_80};
 	border: 1px solid ${({ theme }) => theme.colors.stroke.default};
+
+	@media (max-width: ${MAX_WIDTH1}px) {
+		width: calc(100% - 30px);
+	}
+
+	@media (max-width: ${MAX_WIDTH2}px) {
+		width: 1000px;
+	}
 `;
 
 const Name = styled.p`

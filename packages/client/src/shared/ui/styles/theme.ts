@@ -16,6 +16,8 @@ const theme = {
 
 		warning: {
 			filled: '#F27A89',
+			filled_10: '#F27A891A',
+			filled_80: '#F27A89CC',
 			hover: '#F49CA7',
 			pressed: '#E65164',
 		},

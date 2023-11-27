@@ -1,6 +1,6 @@
 import { Canvas } from '@react-three/fiber';
 import BackgroundStars from 'features/backgroundStars';
-import Galaxy from '../galaxy/index.tsx';
+import { Galaxy } from '../galaxy';
 import { EffectComposer, Bloom } from '@react-three/postprocessing';
 import { useControls } from 'leva';
 import { CAMERA_POSITION, CAMERA_FAR } from '@constants';

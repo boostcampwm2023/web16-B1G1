@@ -19,15 +19,7 @@ import { SignUpUserDto } from './dto/signup-user.dto';
 import { User } from './entities/user.entity';
 import { SignInUserDto } from './dto/signin-user.dto';
 import { Response } from 'express';
-import {
-	ApiBadRequestResponse,
-	ApiConflictResponse,
-	ApiCreatedResponse,
-	ApiOkResponse,
-	ApiOperation,
-	ApiTags,
-	ApiUnauthorizedResponse,
-} from '@nestjs/swagger';
+import { ApiTags } from '@nestjs/swagger';
 import { JwtEnum } from './enums/jwt.enum';
 import { CookieAuthGuard } from './cookie-auth.guard';
 import { UserEnum } from './enums/user.enum';
@@ -36,6 +28,9 @@ import { SignInSwaggerDecorator } from './decorators/swagger/sign-in-swagger.dec
 import { SignOutSwaggerDecorator } from './decorators/swagger/sign-out-swagger.decorator';
 import { IsAvailableUsernameSwaggerDecorator } from './decorators/swagger/is-available-username-swagger.decorator';
 import { IsAvailableNicknameSwaggerDecorator } from './decorators/swagger/is-available-nickname-swagger.decorator';
+import { SignInWithOAuthSwaggerDecorator } from './decorators/swagger/sign-in-with-oauth-swagger.decorator';
+import { SignUpWithOAuthSwaggerDecorator } from './decorators/swagger/sign-up-with-oauth-swagger.decorator';
+import { OAuthCallbackSwaggerDecorator } from './decorators/swagger/oauth-callback-swagger.decorator';
 
 @Controller('auth')
 @ApiTags('인증/인가 API')
@@ -98,6 +93,7 @@ export class AuthController {
 	}
 
 	@Get(':service/signin')
+	@SignInWithOAuthSwaggerDecorator()
 	signInWithOAuth(
 		@Param('service') service: string,
 		@Res({ passthrough: true }) res: Response,
@@ -120,6 +116,7 @@ export class AuthController {
 	}
 
 	@Get(':service/callback')
+	@OAuthCallbackSwaggerDecorator()
 	async oauthCallback(
 		@Param('service') service: string,
 		@Query('code') authorizedCode: string,
@@ -150,6 +147,7 @@ export class AuthController {
 	}
 
 	@Post(':service/signup')
+	@SignUpWithOAuthSwaggerDecorator()
 	async signUpWithOAuth(
 		@Param('service') service: string,
 		@Body('nickname') nickname: string,

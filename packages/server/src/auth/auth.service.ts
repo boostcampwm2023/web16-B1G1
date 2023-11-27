@@ -17,8 +17,8 @@ import { UserEnum } from './enums/user.enum';
 import { JwtEnum } from './enums/jwt.enum';
 import {
 	createJwt,
-	getGitHubAccessToken,
-	getGitHubUserData,
+	getOAuthAccessToken,
+	getOAuthUserData,
 } from '../utils/auth.util';
 import { v4 as uuid } from 'uuid';
 
@@ -103,22 +103,32 @@ export class AuthService {
 		}
 	}
 
-	async oauthGithubCallback(authorizedCode: string) {
+	async oauthCallback(service: string, authorizedCode: string, state?: string) {
 		if (!authorizedCode) {
 			throw new BadRequestException('Authorized Code가 존재하지 않습니다.');
 		}
 
-		const gitHubAccessToken = await getGitHubAccessToken(authorizedCode);
-		const gitHubUser = await getGitHubUserData(gitHubAccessToken);
+		const resourceServerAccessToken = await getOAuthAccessToken(
+			service,
+			authorizedCode,
+			state,
+		);
+		const resourceServerUsername = await getOAuthUserData(
+			service,
+			resourceServerAccessToken,
+		);
 
 		const user = await this.authRepository.findOneBy({
-			username: gitHubUser.username,
+			username: resourceServerUsername,
 		});
 
 		if (!user) {
-			this.redisRepository.set(gitHubUser.username, gitHubAccessToken);
+			this.redisRepository.set(
+				resourceServerUsername,
+				resourceServerAccessToken,
+			);
 			return {
-				username: gitHubUser.username,
+				username: resourceServerUsername,
 				accessToken: null,
 				refreshToken: null,
 			};
@@ -138,23 +148,32 @@ export class AuthService {
 		};
 	}
 
-	async signUpWithGithub(nickname: string, GitHubUsername: any) {
-		let gitHubUserData;
+	async signUpWithOAuth(
+		service: string,
+		nickname: string,
+		resourceServerUsername: any,
+	) {
+		let recivedResourceServerUsername: string;
 		try {
-			const gitHubAccessToken = await this.redisRepository.get(GitHubUsername);
-			gitHubUserData = await getGitHubUserData(gitHubAccessToken);
+			const resourceServerAccessToken: string = await this.redisRepository.get(
+				resourceServerUsername,
+			);
+			recivedResourceServerUsername = await getOAuthUserData(
+				service,
+				resourceServerAccessToken,
+			);
 		} catch (e) {
 			throw new UnauthorizedException('잘못된 접근입니다.');
 		}
 
-		if (gitHubUserData.username !== GitHubUsername) {
+		if (recivedResourceServerUsername !== resourceServerUsername) {
 			throw new UnauthorizedException('잘못된 접근입니다.');
 		}
 
-		this.redisRepository.del(GitHubUsername);
+		this.redisRepository.del(resourceServerUsername);
 
-		const newUser = this.authRepository.create({
-			username: GitHubUsername,
+		const newUser: User = this.authRepository.create({
+			username: resourceServerUsername,
 			password: uuid(),
 			nickname,
 		});

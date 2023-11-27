@@ -49,4 +49,7 @@ export class Board extends BaseEntity {
 		onDelete: 'CASCADE',
 	})
 	user: User;
+
+	@Column({ type: 'varchar', length: 50, nullable: true })
+	star: string;
 }

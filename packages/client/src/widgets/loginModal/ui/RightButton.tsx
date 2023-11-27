@@ -6,7 +6,6 @@ export default function RightButton() {
 
 	return (
 		<Button
-			// onClick={handleLoginClick}
 			size="m"
 			buttonType="CTA-icon"
 			disabled={!(id.length && password.length)}

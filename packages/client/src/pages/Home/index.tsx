@@ -27,3 +27,6 @@ export default function Home() {
 		</>
 	);
 }
+
+// TODO: 내 은하에서는 MAIN의 뒤로가기 버튼 안보이게 하기
+// TODO: 다른 사람 은하에서는 뒤로가기 버튼만 보이게 하기 ?

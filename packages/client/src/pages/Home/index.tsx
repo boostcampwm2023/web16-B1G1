@@ -3,6 +3,8 @@ import { useViewStore } from 'shared/store/useViewStore';
 import { usePostStore } from 'shared/store/usePostStore';
 import PostModal from 'features/postModal/PostModal';
 import { Outlet } from 'react-router-dom';
+import UnderBar from 'shared/ui/underBar/UnderBar';
+import UpperBar from './ui/UpperBar';
 
 export default function Home() {
 	const { view } = useViewStore();
@@ -12,6 +14,10 @@ export default function Home() {
 		<>
 			<Outlet />
 			{view === 'POST' && <PostModal data={data} />}
+
+			<UpperBar />
+			<UnderBar />
+
 			<Screen />
 		</>
 	);

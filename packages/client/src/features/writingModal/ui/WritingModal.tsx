@@ -2,19 +2,18 @@ import { useState } from 'react';
 import { Button, Modal } from 'shared/ui';
 import TextArea from 'shared/ui/textArea/TextArea';
 import { ModalPortal } from 'shared/ui';
-import { useViewStore } from 'shared/store/useViewStore';
-import styled from '@emotion/styled';
 import Images from './Images';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 export default function WritingModal() {
 	const [text, setText] = useState('');
 	const [files, setFiles] = useState<FileList | null>(null);
-	const { setView } = useViewStore();
+	const navigate = useNavigate();
 
 	return (
 		<ModalPortal>
-			<WritingModalLayout
+			<Modal
 				title="글쓰기"
 				rightButton={
 					<Button
@@ -26,17 +25,13 @@ export default function WritingModal() {
 					</Button>
 				}
 				leftButton={<Images onModify={setFiles} />}
-				onClickGoBack={() => setView('DETAIL')}
+				onClickGoBack={() => navigate('/home')}
 			>
 				<TextArea onChange={(text) => setText(text)} />
-			</WritingModalLayout>
+			</Modal>
 		</ModalPortal>
 	);
 }
-
-const WritingModalLayout = styled(Modal)`
-	transform: translate(-10%, -50%);
-`;
 
 const sendToServer = async (text: string, files: FileList | null) => {
 	try {

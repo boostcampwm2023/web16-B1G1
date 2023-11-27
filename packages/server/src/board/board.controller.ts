@@ -34,7 +34,7 @@ import { UserDataDto } from './dto/user-data.dto';
 import { decryptAes } from 'src/utils/aes.util';
 import * as FormData from 'form-data';
 
-@Controller('board')
+@Controller('post')
 @ApiTags('게시글 API')
 export class BoardController {
 	constructor(private readonly boardService: BoardService) {}
@@ -65,12 +65,12 @@ export class BoardController {
 		status: 400,
 		description: '잘못된 요청으로 게시글 조회 실패',
 	})
-	findAllBoards(): Promise<Board[]> {
-		return this.boardService.findAllBoards();
+	findAllBoardsMine(@GetUser() userData: UserDataDto): Promise<Board[]> {
+		const author = userData.nickname;
+		return this.boardService.findAllBoardsByAuthor(author);
 	}
 
 	@Get('by-author')
-	@UseGuards(CookieAuthGuard)
 	@ApiOperation({
 		summary: '작성자별 게시글 조회',
 		description: '작성자별 게시글을 조회합니다.',
@@ -80,17 +80,12 @@ export class BoardController {
 		status: 400,
 		description: '잘못된 요청으로 게시글 조회 실패',
 	})
-	findAllBoardsByAuthor(
-		@Query('author') author: string,
-		@GetUser() userData: UserDataDto,
-	): Promise<Board[]> {
-		// 파라미터 없는 경우 로그인한 사용자의 게시글 조회
-		author = author ? author : userData.nickname;
+	findAllBoardsByAuthor(@Query('author') author: string): Promise<Board[]> {
 		return this.boardService.findAllBoardsByAuthor(author);
 	}
 
+	// TODO: 게시글에 대한 User정보 얻기
 	@Get(':id')
-	@UseGuards(CookieAuthGuard)
 	@ApiOperation({
 		summary: '게시글 상세 조회',
 		description: '게시글을 상세 조회합니다.',

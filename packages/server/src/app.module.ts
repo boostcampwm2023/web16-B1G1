@@ -7,6 +7,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { typeOrmConfig } from './config/typeorm.config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { mongooseConfig } from './config/mongoose.config';
+import { StarModule } from './star/star.module';
 
 @Module({
 	imports: [
@@ -14,6 +15,7 @@ import { mongooseConfig } from './config/mongoose.config';
 		BoardModule,
 		TypeOrmModule.forRoot(typeOrmConfig),
 		MongooseModule.forRoot(mongooseConfig.uri),
+		StarModule,
 	],
 	controllers: [AppController],
 	providers: [AppService],

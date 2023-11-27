@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import IdInputContainer from './ui/IdInputContainer';
 import PwInputContainer from './ui/PwInputContainer';
 import CheckPwInputContainer from './ui/CheckPwInputContainer';
+import { useSignUpStore } from 'shared/store/useSignUpStore';
 
 interface PropsType {
 	changePage: React.Dispatch<{ type: 'NEXT' | 'PREV' }>;
@@ -25,14 +26,17 @@ export default function SignUpModal({ changePage }: PropsType) {
 		setIsAllInputValid(false);
 	}, [validId, validPw, validCheckPw]);
 
-	// const handleGoBackButton = () => {
-	// 	// TODO: 로그인 모달로 이동하도록 하기
-	// };
+	const handleGoBackButton = () => changePage({ type: 'PREV' });
 
 	const handleSignUpButton = () => {
 		if (!isAllInputValid) return;
 
-		// TODO: 회원가입 요청 보낸 후 로그인 모달로 이동
+		useSignUpStore.setState({
+			id: validId,
+			pw: validPw,
+		});
+
+		changePage({ type: 'NEXT' });
 	};
 
 	const signUpButton = (
@@ -50,7 +54,7 @@ export default function SignUpModal({ changePage }: PropsType) {
 		<Modal
 			title="회원가입"
 			rightButton={signUpButton}
-			onClickGoBack={() => changePage({ type: 'PREV' })}
+			onClickGoBack={handleGoBackButton}
 		>
 			<InputBarsContainer>
 				<IdInputContainer setValidId={setValidId} />

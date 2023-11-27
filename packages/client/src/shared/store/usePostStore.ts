@@ -14,6 +14,7 @@ export const usePostStore = create<PostState>((set) => ({
 		position: new THREE.Vector3(0, 0, 0),
 		size: 1,
 		color: '#000000',
+		images: [],
 	},
 	setData: (data: PostData) => set({ data }),
 }));

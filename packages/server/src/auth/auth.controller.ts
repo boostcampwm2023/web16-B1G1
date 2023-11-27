@@ -31,6 +31,11 @@ import {
 import { JwtEnum } from './enums/jwt.enum';
 import { CookieAuthGuard } from './cookie-auth.guard';
 import { UserEnum } from './enums/user.enum';
+import { SignUpSwaggerDecorator } from './decorators/swagger/sign-up-swagger.decorator';
+import { SignInSwaggerDecorator } from './decorators/swagger/sign-in-swagger.decorator';
+import { SignOutSwaggerDecorator } from './decorators/swagger/sign-out-swagger.decorator';
+import { IsAvailableUsernameSwaggerDecorator } from './decorators/swagger/is-available-username-swagger.decorator';
+import { IsAvailableNicknameSwaggerDecorator } from './decorators/swagger/is-available-nickname-swagger.decorator';
 
 @Controller('auth')
 @ApiTags('인증/인가 API')
@@ -39,24 +44,14 @@ export class AuthController {
 
 	@Post('signup')
 	@UsePipes(ValidationPipe)
-	@ApiOperation({ summary: '회원가입', description: '회원가입을 진행합니다.' })
-	@ApiCreatedResponse({ status: 201, description: '회원가입 성공' })
-	@ApiBadRequestResponse({
-		status: 400,
-		description: '잘못된 요청으로 회원가입 실패',
-	})
+	@SignUpSwaggerDecorator()
 	signUp(@Body() signUpUserDto: SignUpUserDto): Promise<Partial<User>> {
 		return this.authService.signUp(signUpUserDto);
 	}
 
 	@Post('signin')
 	@HttpCode(200)
-	@ApiOperation({ summary: '로그인', description: '로그인을 진행합니다.' })
-	@ApiOkResponse({ status: 200, description: '로그인 성공' })
-	@ApiUnauthorizedResponse({
-		status: 401,
-		description: '잘못된 요청으로 로그인 실패',
-	})
+	@SignInSwaggerDecorator()
 	async signIn(
 		@Body() signInUserDto: SignInUserDto,
 		@Res({ passthrough: true }) res: Response,
@@ -76,8 +71,7 @@ export class AuthController {
 
 	@Get('signout')
 	@UseGuards(CookieAuthGuard)
-	@ApiOperation({ summary: '로그아웃', description: '로그아웃을 진행합니다.' })
-	@ApiOkResponse({ status: 200, description: '로그아웃 성공' })
+	@SignOutSwaggerDecorator()
 	async signOut(@Res({ passthrough: true }) res: Response, @Req() req) {
 		await this.authService.signOut(req.user);
 		res.clearCookie(JwtEnum.ACCESS_TOKEN_COOKIE_NAME, {
@@ -92,37 +86,13 @@ export class AuthController {
 	}
 
 	@Get('is-available-username')
-	@ApiOperation({
-		summary: 'username 중복 확인',
-		description: 'username 중복을 확인합니다.',
-	})
-	@ApiOkResponse({ status: 200, description: 'username 중복 확인 성공' })
-	@ApiBadRequestResponse({
-		status: 400,
-		description: '쿼리 스트링에 username이 없음',
-	})
-	@ApiConflictResponse({
-		status: 409,
-		description: 'username 중복',
-	})
+	@IsAvailableUsernameSwaggerDecorator()
 	isAvailableUsername(@Query('username') username: string) {
 		return this.authService.isAvailableUsername(username);
 	}
 
 	@Get('is-available-nickname')
-	@ApiOperation({
-		summary: 'nickname 중복 확인',
-		description: 'nickname 중복을 확인합니다.',
-	})
-	@ApiOkResponse({ status: 200, description: 'nickname 중복 확인 성공' })
-	@ApiBadRequestResponse({
-		status: 400,
-		description: '쿼리 스트링에 nickname이 없음',
-	})
-	@ApiConflictResponse({
-		status: 409,
-		description: 'nickname 중복',
-	})
+	@IsAvailableNicknameSwaggerDecorator()
 	isAvailableNickname(@Query('nickname') nickname: string) {
 		return this.authService.isAvailableNickname(nickname);
 	}

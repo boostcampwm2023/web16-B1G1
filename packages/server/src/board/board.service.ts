@@ -16,6 +16,10 @@ import { UserDataDto } from './dto/user-data.dto';
 import * as AWS from 'aws-sdk';
 import { awsConfig, bucketName } from 'src/config/aws.config';
 import { v1 as uuid } from 'uuid';
+import * as sharp from 'sharp';
+import { InjectModel } from '@nestjs/mongoose';
+import { Star } from './schemas/star.schema';
+import { Model, Types } from 'mongoose';
 
 @Injectable()
 export class BoardService {
@@ -26,6 +30,8 @@ export class BoardService {
 		private readonly imageRepository: Repository<Image>,
 		@InjectRepository(User)
 		private readonly userRepository: Repository<User>,
+		@InjectModel(Star.name)
+		private readonly starModel: Model<Star>,
 	) {}
 
 	async createBoard(
@@ -33,7 +39,7 @@ export class BoardService {
 		userData: UserDataDto,
 		files: Express.Multer.File[],
 	): Promise<Board> {
-		const { title, content } = createBoardDto;
+		const { title, content, star } = createBoardDto;
 
 		const user = await this.userRepository.findOneBy({ id: userData.userId });
 
@@ -43,11 +49,22 @@ export class BoardService {
 			images.push(image);
 		}
 
+		// 별 스타일이 존재하면 MongoDB에 저장
+		let star_id: string;
+		if (star) {
+			const starDoc = new this.starModel({
+				...JSON.parse(star),
+			});
+			await starDoc.save();
+			star_id = starDoc._id.toString();
+		}
+
 		const board = this.boardRepository.create({
 			title,
 			content: encryptAes(content), // AES 암호화하여 저장
 			user,
 			images,
+			star: star_id,
 		});
 		const createdBoard: Board = await this.boardRepository.save(board);
 
@@ -64,6 +81,27 @@ export class BoardService {
 		const boards = await this.boardRepository.findBy({
 			user: { nickname: author },
 		});
+
+		for (let board of boards) {
+			board.content = undefined; // content 제거하여 반환
+			board.user.password = undefined; // user.password 제거하여 반환
+			board.user.created_at = undefined; // user.created_at 제거하여 반환
+			board.likes = undefined; // likes 제거하여 반환
+			board.images = undefined; // images 제거하여 반환
+
+			// star 스타일이 존재하면 MongoDB에서 조회하여 반환
+			if (board.star) {
+				const star = await this.starModel.findById(board.star);
+				if (star) {
+					board.star = JSON.stringify(star);
+				} else {
+					board.star = null;
+				}
+			} else {
+				board.star = undefined;
+			}
+		}
+
 		return boards;
 	}
 
@@ -157,6 +195,11 @@ export class BoardService {
 
 		const { mimetype, buffer, size } = file;
 
+		const resized_buffer = await sharp(buffer)
+			.resize(500, 500, { fit: 'cover' })
+			.toFormat('png', { quality: 100 })
+			.toBuffer();
+
 		const filename = uuid();
 
 		// NCP Object Storage 업로드
@@ -165,7 +208,7 @@ export class BoardService {
 			.putObject({
 				Bucket: bucketName,
 				Key: filename,
-				Body: buffer,
+				Body: resized_buffer,
 				ACL: 'public-read',
 			})
 			.promise();

@@ -7,7 +7,7 @@ interface PropsType {
 
 export default function TopButton({ onClick }: PropsType) {
 	return (
-		<TextButton size="l" onClick={onClick}>
+		<TextButton size="l" onClick={onClick} type="button">
 			<p>둘러보기</p>
 			<RightArrow />
 		</TextButton>

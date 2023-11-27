@@ -16,6 +16,8 @@ const theme = {
 
 		warning: {
 			filled: '#F27A89',
+			filled_10: '#F27A891A',
+			filled_80: '#F27A89CC',
 			hover: '#F49CA7',
 			pressed: '#E65164',
 		},
@@ -24,11 +26,13 @@ const theme = {
 			bdp01: '#05021F',
 			bdp02: '#161335',
 			bdp03: '#241F50',
+			bdp01_80: '#05021FCC',
 		},
 
 		stroke: {
 			default: '#1E1A4D',
 			focus: '#6C55FA',
+			focus_80: '#6C55FACC',
 			sc: '#514B75',
 		},
 

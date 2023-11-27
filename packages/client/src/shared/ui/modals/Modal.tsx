@@ -31,7 +31,7 @@ export default function Modal({
 	return (
 		<Layout {...args}>
 			{onClickGoBack && (
-				<IconButton onClick={onClickGoBack}>
+				<IconButton onClick={onClickGoBack} type="button">
 					<img src={goBackIcon} alt="뒤로가기 버튼" />
 				</IconButton>
 			)}
@@ -71,13 +71,12 @@ const MainLayout = styled.div`
 	display: flex;
 	flex-direction: column;
 	border-radius: 16px;
-	opacity: 80%;
 	padding: 32px;
 	margin: 12px 0 0 0;
 
 	${({ theme: { colors } }) => css`
-		background-color: ${colors.background.bdp01};
-		border: 2px solid ${colors.stroke.focus};
+		background-color: ${colors.background.bdp01_80};
+		border: 2px solid ${colors.stroke.focus_80};
 	`};
 `;
 

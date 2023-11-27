@@ -1,58 +1,50 @@
 import styled from '@emotion/styled';
 import { Button, Modal } from 'shared/ui';
-import InputBar from 'shared/ui/inputBar/InputBar';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import IdInputContainer from './ui/IdInputContainer';
+import PwInputContainer from './ui/PwInputContainer';
+import CheckPwInputContainer from './ui/CheckPwInputContainer';
+import { useSignUpStore } from 'shared/store/useSignUpStore';
 
 interface PropsType {
 	changePage: React.Dispatch<{ type: 'NEXT' | 'PREV' }>;
 }
 
 export default function SignUpModal({ changePage }: PropsType) {
-	const [isAllInputFilled, setIsAllInputFilled] = useState(false);
+	const [validId, setValidId] = useState('');
+	const [validPw, setValidPw] = useState('');
+	const [validCheckPw, setValidCheckPw] = useState('');
 
-	const [inputValues, setInputValues] = useState({
-		id: '',
-		password: '',
-		checkPassword: '',
-	});
+	const [isAllInputValid, setIsAllInputValid] = useState(false);
 
-	// const handleGoBackButton = () => {
-	// 	// TODO: 로그인 모달로 이동하도록 하기
-	// };
+	useEffect(() => {
+		if (validId && validPw && validCheckPw) {
+			setIsAllInputValid(true);
+			return;
+		}
 
-	const handlesignUpButton = () => {
-		if (!isAllInputFilled) return;
+		setIsAllInputValid(false);
+	}, [validId, validPw, validCheckPw]);
 
-		console.log(inputValues);
-		// TODO: 회원가입 요청 보낸 후 로그인 모달로 이동
-	};
+	const handleGoBackButton = () => changePage({ type: 'PREV' });
 
-	const handleInputs = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
-		const { id, value } = target;
+	const handleSignUpButton = () => {
+		if (!isAllInputValid) return;
 
-		setInputValues((prev) => {
-			const updatedValues = { ...prev, [id]: value };
-
-			if (
-				updatedValues.id &&
-				updatedValues.password &&
-				updatedValues.checkPassword
-			) {
-				setIsAllInputFilled(true);
-				return updatedValues;
-			}
-
-			setIsAllInputFilled(false);
-			return updatedValues;
+		useSignUpStore.setState({
+			id: validId,
+			pw: validPw,
 		});
+
+		changePage({ type: 'NEXT' });
 	};
 
 	const signUpButton = (
 		<Button
-			onClick={handlesignUpButton}
+			onClick={handleSignUpButton}
 			buttonType="CTA-icon"
 			size="m"
-			disabled={!isAllInputFilled}
+			disabled={!isAllInputValid}
 		>
 			회원가입
 		</Button>
@@ -62,29 +54,14 @@ export default function SignUpModal({ changePage }: PropsType) {
 		<Modal
 			title="회원가입"
 			rightButton={signUpButton}
-			onClickGoBack={() => changePage({ type: 'PREV' })}
+			onClickGoBack={handleGoBackButton}
 		>
 			<InputBarsContainer>
-				<InputBar
-					id="id"
-					label="아이디"
-					placeholder="아이디를 입력해주세요."
-					isEssential
-					onChange={handleInputs}
-				/>
-				<InputBar
-					id="password"
-					label="비밀번호"
-					placeholder="비밀번호를 입력해주세요."
-					isEssential
-					onChange={handleInputs}
-				/>
-				<InputBar
-					id="checkPassword"
-					label="비밀번호 확인"
-					placeholder="비밀번호를 다시 입력해주세요."
-					isEssential
-					onChange={handleInputs}
+				<IdInputContainer setValidId={setValidId} />
+				<PwInputContainer setValidPw={setValidPw} />
+				<CheckPwInputContainer
+					validPw={validPw}
+					setValidCheckPw={setValidCheckPw}
 				/>
 			</InputBarsContainer>
 		</Modal>

@@ -6,11 +6,14 @@ import { RouterProvider } from 'react-router-dom';
 import { ThemeProvider } from '@emotion/react';
 import theme from 'shared/ui/styles/theme';
 import './global.css';
+import { AxiosInterceptor } from 'shared/apis/AxiosInterceptor';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
 	<React.StrictMode>
 		<ThemeProvider theme={theme}>
-			<RouterProvider router={router} />
+			<AxiosInterceptor>
+				<RouterProvider router={router} />
+			</AxiosInterceptor>
 		</ThemeProvider>
 	</React.StrictMode>,
 );

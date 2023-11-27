@@ -1,87 +1,92 @@
 import styled from '@emotion/styled';
 import { Button, Input } from 'shared/ui';
 import { useState } from 'react';
-import { engOrNumRegex } from '../lib/constants';
 import { Caption } from 'shared/ui/styles';
 import { css } from '@emotion/react';
 import { useEffect } from 'react';
-import { getIsAvailableUsername } from 'shared/apis';
+import { getIsAvailableNickName } from 'shared/apis';
+import { engOrNumRegex } from '../lib/constants';
 
 interface PropsTypes {
-	setValidId: React.Dispatch<React.SetStateAction<string>>;
+	setValidNickName: React.Dispatch<React.SetStateAction<string>>;
 }
 
-type IdStateTypes = 'DEFAULT' | 'VALID' | 'INVALID' | 'DUPLICATED';
+type NickNameStateTypes = 'DEFAULT' | 'VALID' | 'INVALID' | 'DUPLICATED';
 
-const MIN_ID_LENGTH = 4;
+const MIN_ID_LENGTH = 2;
 const MAX_ID_LENGTH = 10;
 
-export default function IdInputContainer({ setValidId }: PropsTypes) {
-	const [id, setId] = useState('');
-	const [idState, setIdState] = useState<IdStateTypes>('DEFAULT');
+export default function NickNameInputContainer({
+	setValidNickName,
+}: PropsTypes) {
+	const [nickName, setNickName] = useState('');
+	const [nickNameState, setNickNameState] =
+		useState<NickNameStateTypes>('DEFAULT');
 
 	useEffect(() => {
-		if (idState === 'VALID') setValidId(id);
-		else setValidId('');
-	}, [id]);
+		if (nickNameState === 'VALID') setValidNickName(nickName);
+		else setValidNickName('');
+	}, [nickName]);
 
-	const handleIdInput = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
+	const handleNickNameInput = ({
+		target,
+	}: React.ChangeEvent<HTMLInputElement>) => {
 		if (!engOrNumRegex.test(target.value)) return;
 		if (target.value.length > MAX_ID_LENGTH) return;
 
-		setIdState('DEFAULT');
-		setId(target.value);
+		setNickNameState('DEFAULT');
+		setNickName(target.value);
 	};
 
 	const handleIdDuplicateCheck = async () => {
-		if (id.length < MIN_ID_LENGTH || id.length > MAX_ID_LENGTH) {
-			setIdState('INVALID');
+		if (nickName.length < MIN_ID_LENGTH || nickName.length > MAX_ID_LENGTH) {
+			setNickNameState('INVALID');
 			return;
 		}
 
 		try {
-			const response = await getIsAvailableUsername(id);
+			const response = await getIsAvailableNickName(nickName);
 
 			if (response) {
-				setIdState('VALID');
-				setValidId(id);
+				setNickNameState('VALID');
+				setValidNickName(nickName);
 				return;
 			}
 		} catch (error) {
-			setIdState('DUPLICATED');
+			setNickNameState('DUPLICATED');
 		}
 	};
 
 	const getMessage = () => {
-		if (idState === 'VALID') return '사용 가능한 아이디입니다.';
-		if (idState === 'DUPLICATED') return '이미 사용중인 아이디입니다.';
-		return `${MIN_ID_LENGTH} - ${MAX_ID_LENGTH}자의 영어/숫자 비밀번호를 입력해주세요.`;
+		if (nickNameState === 'VALID') return '사용 가능한 닉네임입니다.';
+		if (nickNameState === 'DUPLICATED') return '이미 사용중인 닉네임입니다.';
+		return `${MIN_ID_LENGTH} - ${MAX_ID_LENGTH}자의 영어/숫자 닉네임을 입력해주세요.`;
 	};
 
 	return (
 		<Layout>
 			<InputContainer>
 				<IdInput
-					id="id"
-					label="아이디"
-					placeholder="아이디를 입력해주세요."
+					id="nickName"
+					label="닉네임"
+					placeholder="닉네임을 입력해주세요."
 					isEssential
-					value={id}
-					onChange={handleIdInput}
+					value={nickName}
+					onChange={handleNickNameInput}
 					autoComplete="off"
-					state={idState}
+					state={nickNameState}
 				/>
 				<DuplicateCheckButton
 					onClick={handleIdDuplicateCheck}
 					size="m"
 					buttonType="Button"
-					disabled={idState === 'VALID'}
+					disabled={nickNameState === 'VALID'}
 				>
 					중복확인
 				</DuplicateCheckButton>
 			</InputContainer>
 
-			<Message state={idState}>{getMessage()}</Message>
+			<Message state={nickNameState}>{getMessage()}</Message>
 		</Layout>
 	);
 }
@@ -89,6 +94,7 @@ export default function IdInputContainer({ setValidId }: PropsTypes) {
 const Layout = styled.div`
 	display: flex;
 	flex-direction: column;
+	width: 452px;
 `;
 
 const InputContainer = styled.div`
@@ -98,7 +104,7 @@ const InputContainer = styled.div`
 	gap: 8px;
 `;
 
-const IdInput = styled(Input)<{ state: IdStateTypes }>`
+const IdInput = styled(Input)<{ state: NickNameStateTypes }>`
 	${({ state, theme: { colors } }) => {
 		if (state === 'VALID' || state === 'DEFAULT') return;
 
@@ -121,7 +127,7 @@ const DuplicateCheckButton = styled(Button)`
 	padding: 10px 12px;
 `;
 
-const Message = styled.p<{ state: IdStateTypes }>`
+const Message = styled.p<{ state: NickNameStateTypes }>`
 	margin: 4px 0 0 0;
 
 	color: ${({ state, theme: { colors } }) => {

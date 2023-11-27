@@ -13,10 +13,15 @@ export default function Home() {
 	return (
 		<>
 			<Outlet />
+
 			{view === 'POST' && <PostModal data={data} />}
 
-			<UpperBar />
-			<UnderBar />
+			{view === 'MAIN' && (
+				<>
+					<UpperBar />
+					<UnderBar />
+				</>
+			)}
 
 			<Screen />
 		</>

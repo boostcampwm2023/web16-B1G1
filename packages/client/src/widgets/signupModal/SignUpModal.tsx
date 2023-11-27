@@ -5,12 +5,11 @@ import IdInputContainer from './ui/IdInputContainer';
 import PwInputContainer from './ui/PwInputContainer';
 import CheckPwInputContainer from './ui/CheckPwInputContainer';
 import { useSignUpStore } from 'shared/store/useSignUpStore';
+import { useNavigate } from 'react-router-dom';
 
-interface PropsType {
-	changePage: React.Dispatch<{ type: 'NEXT' | 'PREV' }>;
-}
+export default function SignUpModal() {
+	const navigate = useNavigate();
 
-export default function SignUpModal({ changePage }: PropsType) {
 	const [validId, setValidId] = useState('');
 	const [validPw, setValidPw] = useState('');
 	const [validCheckPw, setValidCheckPw] = useState('');
@@ -26,7 +25,7 @@ export default function SignUpModal({ changePage }: PropsType) {
 		setIsAllInputValid(false);
 	}, [validId, validPw, validCheckPw]);
 
-	const handleGoBackButton = () => changePage({ type: 'PREV' });
+	const handleGoBackButton = () => navigate('/login');
 
 	const handleSignUpButton = () => {
 		if (!isAllInputValid) return;
@@ -36,7 +35,7 @@ export default function SignUpModal({ changePage }: PropsType) {
 			pw: validPw,
 		});
 
-		changePage({ type: 'NEXT' });
+		navigate('/nickname');
 	};
 
 	const signUpButton = (

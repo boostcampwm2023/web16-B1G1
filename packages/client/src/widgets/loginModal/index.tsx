@@ -4,11 +4,8 @@ import { useLoginStore } from 'shared/store/userLoginStore';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { BASE_URL } from '@constants';
-interface PropsType {
-	changePage: React.Dispatch<{ type: 'NEXT' | 'PREV' }>;
-}
 
-export default function LoginModal({ changePage }: PropsType) {
+export default function LoginModal() {
 	const { id, password, setPassword } = useLoginStore();
 	const navigate = useNavigate();
 
@@ -33,10 +30,10 @@ export default function LoginModal({ changePage }: PropsType) {
 		>
 			<Modal
 				title="로그인"
-				topButton={<TopButton onClick={() => changePage({ type: 'PREV' })} />}
+				topButton={<TopButton onClick={() => navigate('/')} />}
 				rightButton={<RightButton />}
-				leftButton={<LeftButton onClick={() => changePage({ type: 'NEXT' })} />}
-				onClickGoBack={() => changePage({ type: 'PREV' })}
+				leftButton={<LeftButton onClick={() => navigate('/signup')} />}
+				onClickGoBack={() => navigate('/')}
 				style={{ width: '516px' }}
 			>
 				<LoginContent />

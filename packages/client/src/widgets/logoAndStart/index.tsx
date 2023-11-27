@@ -13,6 +13,7 @@ export default function LogoAndStart() {
 				onClick={() => navigate('/login')}
 				size="l"
 				buttonType="CTA-icon"
+				type="button"
 				style={{ width: '516px', padding: '24px 12px' }}
 			>
 				<Start>시작하기</Start>

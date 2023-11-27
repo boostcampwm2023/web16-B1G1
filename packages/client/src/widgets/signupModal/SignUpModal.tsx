@@ -43,6 +43,7 @@ export default function SignUpModal() {
 			onClick={handleSignUpButton}
 			buttonType="CTA-icon"
 			size="m"
+			type="submit"
 			disabled={!isAllInputValid}
 		>
 			회원가입

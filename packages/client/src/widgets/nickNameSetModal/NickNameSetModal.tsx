@@ -41,6 +41,7 @@ export default function NickNameSetModal() {
 			onClick={handleSaveButton}
 			buttonType="CTA-icon"
 			size="m"
+			type="submit"
 			disabled={!validNickName}
 		>
 			저장

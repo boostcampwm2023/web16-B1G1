@@ -12,14 +12,15 @@ import { Repository } from 'typeorm';
 import { Image } from './entities/image.entity';
 import { encryptAes } from 'src/utils/aes.util';
 import { User } from 'src/auth/entities/user.entity';
-import { UserDataDto } from './dto/user-data.dto';
+import { UserDataDto } from '../auth/dto/user-data.dto';
 import * as AWS from 'aws-sdk';
 import { awsConfig, bucketName } from 'src/config/aws.config';
 import { v1 as uuid } from 'uuid';
 import * as sharp from 'sharp';
 import { InjectModel } from '@nestjs/mongoose';
-import { Star } from './schemas/star.schema';
+import { Star } from '../star/schemas/star.schema';
 import { Model, Types } from 'mongoose';
+import { GetPostByIdResDto } from './dto/get-post-by-id-res.dto';
 
 @Injectable()
 export class BoardService {

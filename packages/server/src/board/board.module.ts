@@ -7,7 +7,7 @@ import { Image } from './entities/image.entity';
 import { AuthModule } from 'src/auth/auth.module';
 import { User } from 'src/auth/entities/user.entity';
 import { MongooseModule } from '@nestjs/mongoose';
-import { Star, StarSchema } from './schemas/star.schema';
+import { Star, StarSchema } from '../star/schemas/star.schema';
 
 @Module({
 	imports: [

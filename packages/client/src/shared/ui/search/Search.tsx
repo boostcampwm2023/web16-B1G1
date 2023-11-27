@@ -15,6 +15,7 @@ export default function Search({
 	inputState,
 	setInputState,
 	placeholder = '',
+	...args
 }: PropsTypes) {
 	const onChangeSearchInput = ({
 		target,
@@ -23,7 +24,7 @@ export default function Search({
 	};
 
 	return (
-		<Layout>
+		<Layout {...args}>
 			<img src={searchIcon} alt="돋보기 아이콘" />
 
 			<SearchInput
@@ -51,13 +52,12 @@ const Layout = styled.div`
 	align-items: center;
 	width: 100%;
 	border-radius: 8px;
-	opacity: 90%;
 	padding: 8px;
-	background-color: ${({ theme: { colors } }) => colors.background.bdp01};
+	background-color: ${({ theme: { colors } }) => colors.background.bdp01_80};
 	border: 1px solid ${({ theme: { colors } }) => colors.stroke.default};
 
 	:hover {
-		border: 1px solid ${({ theme: { colors } }) => colors.stroke.focus};
+		border: 1px solid ${({ theme: { colors } }) => colors.stroke.focus_80};
 	}
 `;
 

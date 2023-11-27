@@ -31,6 +31,7 @@ export default function InputBar({
 const Container = styled.div`
 	display: flex;
 	flex-direction: column;
+	width: 100%;
 `;
 
 const Input = styled.input`

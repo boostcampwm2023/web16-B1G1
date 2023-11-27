@@ -1,19 +1,22 @@
 import { Canvas } from '@react-three/fiber';
 import BackgroundStars from 'features/backgroundStars';
-import Galaxy from '../galaxy/index.tsx';
+import { Galaxy } from '../galaxy';
 import { EffectComposer, Bloom } from '@react-three/postprocessing';
 import { useControls } from 'leva';
-import { useCameraStore } from 'shared/store/useCameraStore.ts';
-import * as THREE from 'three';
+import { CAMERA_POSITION, CAMERA_UP, CAMERA_FAR } from './lib/camera.ts';
 
-export default function LandingScreen() {
+interface PropsType {
+	mousePosition: number[];
+}
+
+export default function LandingScreen({
+	mousePosition: [mouseX, mouseY],
+}: PropsType) {
 	const camera = {
-		position: new THREE.Vector3(4000, 8000, 16000),
-		up: new THREE.Vector3(0, 1, 0.8),
-		far: 500000,
+		position: CAMERA_POSITION,
+		up: CAMERA_UP,
+		far: CAMERA_FAR,
 	};
-
-	const { cameraToCurrentView, setCameraToCurrentView } = useCameraStore();
 
 	const { intensity, mipmapBlur, luminanceThreshold, luminanceSmoothing } =
 		useControls('Bloom', {
@@ -25,12 +28,7 @@ export default function LandingScreen() {
 
 	return (
 		<div style={{ height: '100vh', width: '100vw' }}>
-			<Canvas
-				camera={camera}
-				onWheel={(e) =>
-					setCameraToCurrentView(cameraToCurrentView + e.deltaY / 5)
-				}
-			>
+			<Canvas camera={camera}>
 				<EffectComposer>
 					<Bloom
 						intensity={intensity}
@@ -42,9 +40,10 @@ export default function LandingScreen() {
 
 				<color attach="background" args={['#000']} />
 				<ambientLight color="#fff" intensity={5} />
-				{/* <Controls /> */}
 				<BackgroundStars />
-				<Galaxy />
+				<group rotation={[(mouseY - 0.5) / 5, (mouseX - 0.5) / 5, 0]}>
+					<Galaxy />
+				</group>
 			</Canvas>
 		</div>
 	);

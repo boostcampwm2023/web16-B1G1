@@ -2,9 +2,10 @@ import { useRef } from 'react';
 import { OrbitControls } from '@react-three/drei';
 import * as THREE from 'three';
 import { useCameraStore } from 'shared/store/useCameraStore';
-import { Camera, useFrame } from '@react-three/fiber';
+import { Camera, useFrame, useThree } from '@react-three/fiber';
 import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
-import { useViewStore } from 'shared/store/useWritingStore';
+import { useViewStore } from 'shared/store/useViewStore';
+import { useEffect } from 'react';
 
 const setCameraPosition = (
 	camera: Camera,
@@ -20,16 +21,26 @@ const setCameraPosition = (
 
 export default function Controls() {
 	const controlsRef = useRef<OrbitControlsImpl>(null!);
-	const { cameraToCurrentView, currentView, setCurrentView, targetView } =
-		useCameraStore();
+	const {
+		cameraToCurrentView,
+		setCameraToCurrentView,
+		currentView,
+		setCurrentView,
+		targetView,
+	} = useCameraStore();
 	const { view } = useViewStore();
+	const state = useThree();
+
+	useEffect(() => {
+		setCameraToCurrentView(currentView.distanceTo(state.camera.position));
+	}, []);
 
 	useFrame((state, delta) => {
 		const targetPosition = new THREE.Vector3(0, 0, 0);
 		const LENGTH_LIMIT = 1000 * delta;
 
 		if (targetView) targetView.getWorldPosition(targetPosition);
-		if (view === 'WRITING') {
+		if (view === 'POST') {
 			targetPosition
 				.sub(state.camera.position)
 				.applyAxisAngle(new THREE.Vector3(0, 1, 0), -Math.PI / 6)
@@ -47,7 +58,7 @@ export default function Controls() {
 			if (direction.length() > LENGTH_LIMIT) direction.setLength(LENGTH_LIMIT);
 
 			setCurrentView(currentView.add(direction));
-			if (view !== 'WRITING')
+			if (view !== 'POST')
 				setCameraPosition(state.camera, currentView, cameraToCurrentView);
 
 			controlsRef.current.target = currentView;

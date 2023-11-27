@@ -15,6 +15,7 @@ export default function Search({
 	inputState,
 	setInputState,
 	placeholder = '',
+	...args
 }: PropsTypes) {
 	const onChangeSearchInput = ({
 		target,
@@ -23,7 +24,7 @@ export default function Search({
 	};
 
 	return (
-		<Layout>
+		<Layout {...args}>
 			<img src={searchIcon} alt="돋보기 아이콘" />
 
 			<SearchInput

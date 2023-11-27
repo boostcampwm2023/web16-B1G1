@@ -176,7 +176,7 @@ describe('BoardController (/board, e2e)', () => {
 		const board: CreateBoardDto = {
 			title: 'test',
 			content: 'test',
-			author: 'test',
+			star: '{}',
 		};
 		const newBoard = (
 			await request(app.getHttpServer()).post('/board').send(board)
@@ -194,7 +194,7 @@ describe('BoardController (/board, e2e)', () => {
 		const board: CreateBoardDto = {
 			title: 'test',
 			content: 'test',
-			author: 'test',
+			star: '{}',
 		};
 		const newBoard = (
 			await request(app.getHttpServer()).post('/board').send(board)

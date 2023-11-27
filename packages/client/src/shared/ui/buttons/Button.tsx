@@ -51,7 +51,7 @@ const CustomButton = styled.button<PropsType>`
 			case 'CTA-icon':
 				return css`
 					border: 1px solid ${colors.stroke.focus};
-					background: ${colors.stroke.focus_80}
+					background: ${colors.stroke.focus_80};
 					color: ${colors.text.primary};
 					${size === 'm' ? Body02BD : Body03BD}
 

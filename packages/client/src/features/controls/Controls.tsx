@@ -4,9 +4,8 @@ import * as THREE from 'three';
 import { useCameraStore } from 'shared/store/useCameraStore';
 import { Camera, useFrame, useThree } from '@react-three/fiber';
 import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
-import { useViewStore } from 'shared/store/useWritingStore';
+import { useViewStore } from 'shared/store/useViewStore';
 import { useEffect } from 'react';
-import { CAMERA_POSITION } from '@constants';
 
 const setCameraPosition = (
 	camera: Camera,

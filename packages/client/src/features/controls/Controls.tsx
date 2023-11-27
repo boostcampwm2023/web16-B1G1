@@ -2,9 +2,11 @@ import { useRef } from 'react';
 import { OrbitControls } from '@react-three/drei';
 import * as THREE from 'three';
 import { useCameraStore } from 'shared/store/useCameraStore';
-import { Camera, useFrame } from '@react-three/fiber';
+import { Camera, useFrame, useThree } from '@react-three/fiber';
 import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
 import { useViewStore } from 'shared/store/useWritingStore';
+import { useEffect } from 'react';
+import { CAMERA_POSITION } from '@constants';
 
 const setCameraPosition = (
 	camera: Camera,
@@ -20,9 +22,19 @@ const setCameraPosition = (
 
 export default function Controls() {
 	const controlsRef = useRef<OrbitControlsImpl>(null!);
-	const { cameraToCurrentView, currentView, setCurrentView, targetView } =
-		useCameraStore();
+	const {
+		cameraToCurrentView,
+		setCameraToCurrentView,
+		currentView,
+		setCurrentView,
+		targetView,
+	} = useCameraStore();
 	const { view } = useViewStore();
+	const state = useThree();
+
+	useEffect(() => {
+		setCameraToCurrentView(currentView.distanceTo(state.camera.position));
+	}, []);
 
 	useFrame((state, delta) => {
 		const targetPosition = new THREE.Vector3(0, 0, 0);

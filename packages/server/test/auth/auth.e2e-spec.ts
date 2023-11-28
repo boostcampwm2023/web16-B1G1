@@ -102,8 +102,15 @@ describe('AuthController (/auth, e2e)', () => {
 	// #20 [03-02] 사용자가 정보제공을 허용하여 콜백 API 요청을 받으면, 백엔드 서버는 요청에 포함된 코드를 통해 해당 서비스의 인가 서버에 액세스 토큰을 요청한다.
 	// #21 [03-03] 액세스 토큰을 전달받으면, 백엔드 서버는 액세스 토큰을 통해 해당 서비스의 리소스 서버에 사용자 정보를 요청한다.
 	// #22 [03-04] 사용자 정보를 전달받으면, 필요한 속성만 추출하여 회원 정보를 데이터베이스에 저장한다.
-	// it.todo('GET /auth/oauth/:service');
-	// it.todo('GET /auth/oauth/:service/callback');
+	it('GET /auth/:service/signin', async () => {
+		await request(app.getHttpServer()).get('/auth/github/signin').expect(302);
+
+		await request(app.getHttpServer()).get('/auth/naver/signin').expect(302);
+
+		await request(app.getHttpServer()).get('/auth/google/signin').expect(302);
+	});
+	// it.todo('GET /auth/:service/callback');
+	// it.todo('POST /auth/:service/signup');
 
 	// #27 [04-04] 데이터베이스에서 로그인 데이터로 조회를 하여 비교한다.
 	// #28 [04-05] 없는 회원 정보라면 NotFoundError를 응답한다.

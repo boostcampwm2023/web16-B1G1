@@ -55,10 +55,14 @@ export class AuthController {
 		res.cookie(JwtEnum.ACCESS_TOKEN_COOKIE_NAME, tokens.accessToken, {
 			path: '/',
 			httpOnly: true,
+			sameSite: 'none',
+			secure: true,
 		});
 		res.cookie(JwtEnum.REFRESH_TOKEN_COOKIE_NAME, tokens.refreshToken, {
 			path: '/',
 			httpOnly: true,
+			sameSite: 'none',
+			secure: true,
 		});
 
 		return tokens;
@@ -72,10 +76,14 @@ export class AuthController {
 		res.clearCookie(JwtEnum.ACCESS_TOKEN_COOKIE_NAME, {
 			path: '/',
 			httpOnly: true,
+			sameSite: 'none',
+			secure: true,
 		});
 		res.clearCookie(JwtEnum.REFRESH_TOKEN_COOKIE_NAME, {
 			path: '/',
 			httpOnly: true,
+			sameSite: 'none',
+			secure: true,
 		});
 		return { message: UserEnum.SUCCESS_SIGNOUT_MESSAGE };
 	}

@@ -90,6 +90,11 @@ describe('AuthController (/auth, e2e)', () => {
 			username: newUser.username,
 			nickname: newUser.nickname,
 		});
+
+		await request(app.getHttpServer())
+			.post('/auth/signup')
+			.send(newUser)
+			.expect(409);
 	});
 
 	// #20 [03-02] 사용자가 정보제공을 허용하여 콜백 API 요청을 받으면, 백엔드 서버는 요청에 포함된 코드를 통해 해당 서비스의 인가 서버에 액세스 토큰을 요청한다.

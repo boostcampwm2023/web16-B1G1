@@ -29,35 +29,46 @@ export default function Modal({
 	const isButtonExist = leftButton || rightButton;
 
 	return (
-		<Layout {...args}>
-			{onClickGoBack && (
-				<IconButton onClick={onClickGoBack} type="button">
-					<img src={goBackIcon} alt="뒤로가기 버튼" />
-				</IconButton>
-			)}
-
-			<MainLayout>
-				<UpperLayout>
-					<TitleLayout>
-						<Title>{title}</Title>
-						{topButton}
-					</TitleLayout>
-
-					{description && <Description>{description}</Description>}
-				</UpperLayout>
-
-				{children}
-
-				{isButtonExist && (
-					<ButtonLayout>
-						<div>{leftButton}</div>
-						<div>{rightButton}</div>
-					</ButtonLayout>
+		<Overlay>
+			<Layout {...args}>
+				{onClickGoBack && (
+					<IconButton onClick={onClickGoBack} type="button">
+						<img src={goBackIcon} alt="뒤로가기 버튼" />
+					</IconButton>
 				)}
-			</MainLayout>
-		</Layout>
+
+				<MainLayout>
+					<UpperLayout>
+						<TitleLayout>
+							<Title>{title}</Title>
+							{topButton}
+						</TitleLayout>
+
+						{description && <Description>{description}</Description>}
+					</UpperLayout>
+
+					{children}
+
+					{isButtonExist && (
+						<ButtonLayout>
+							<div>{leftButton}</div>
+							<div>{rightButton}</div>
+						</ButtonLayout>
+					)}
+				</MainLayout>
+			</Layout>
+		</Overlay>
 	);
 }
+
+const Overlay = styled.div`
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 998;
+`;
 
 const Layout = styled.div`
 	position: absolute;

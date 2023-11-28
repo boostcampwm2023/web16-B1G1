@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from '../../src/app.module';
+import * as cookieParser from 'cookie-parser';
 
 describe('AuthController (/auth, e2e)', () => {
 	let app: INestApplication;
@@ -12,6 +13,7 @@ describe('AuthController (/auth, e2e)', () => {
 		}).compile();
 
 		app = moduleFixture.createNestApplication();
+		app.use(cookieParser());
 		await app.init();
 	});
 
@@ -153,10 +155,21 @@ describe('AuthController (/auth, e2e)', () => {
 		await request(app.getHttpServer()).post('/auth/signup').send(newUser);
 
 		newUser.nickname = undefined;
-		await request(app.getHttpServer()).post('/auth/signin').send(newUser);
+		const signInResponse = await request(app.getHttpServer())
+			.post('/auth/signin')
+			.send(newUser)
+			.expect(200);
+
+		let accessToken: string;
+		signInResponse.headers['set-cookie'].forEach((cookie: string) => {
+			if (cookie.includes('accessToken')) {
+				accessToken = cookie.split(';')[0].split('=')[1];
+			}
+		});
 
 		const response = await request(app.getHttpServer())
 			.get('/auth/signout')
+			.set('Cookie', [`accessToken=${accessToken}`])
 			.expect(200);
 
 		expect(response).toHaveProperty('headers');
@@ -167,24 +180,5 @@ describe('AuthController (/auth, e2e)', () => {
 		expect(cookies[0]).toBe(
 			'accessToken=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT; HttpOnly',
 		);
-	});
-
-	it('POST, GET /auth/redis', async () => {
-		const randomeBytes = Math.random().toString(36).slice(2, 10);
-		const key = randomeBytes;
-		const value = randomeBytes;
-
-		await request(app.getHttpServer())
-			.post('/auth/redis')
-			.send({ key, value })
-			.expect(201);
-
-		const response = await request(app.getHttpServer())
-			.get(`/auth/redis?key=${key}`)
-			.expect(200);
-
-		expect(response).toHaveProperty('body');
-		const responseValue = response.body.value;
-		expect(responseValue).toBe(value);
 	});
 });

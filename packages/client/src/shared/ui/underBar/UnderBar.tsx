@@ -7,7 +7,7 @@ import WriteIcon from '@icons/icon-writte-24-white.svg';
 import { MAX_WIDTH1, MAX_WIDTH2 } from 'shared/lib/constants';
 
 export default function UnderBar() {
-	const tempName = '도라에몽도라에몽도라';
+	const tempName = 'ABCDEFGABC';
 
 	return (
 		<Layout>
@@ -65,7 +65,7 @@ const Layout = styled.div`
 	}
 
 	@media (max-width: ${MAX_WIDTH2}px) {
-		width: 1000px;
+		width: 900px;
 	}
 `;
 

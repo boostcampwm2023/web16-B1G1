@@ -5,9 +5,11 @@ import PlanetEditIcon from '@icons/icon-planetedit-24-white.svg';
 import AddIcon from '@icons/icon-add-24-white.svg';
 import WriteIcon from '@icons/icon-writte-24-white.svg';
 import { MAX_WIDTH1, MAX_WIDTH2 } from 'shared/lib/constants';
+import { useNavigate } from 'react-router-dom';
 
 export default function UnderBar() {
-	const tempName = 'ABCDEFGABC';
+	const tempName = '도라에몽도라에몽도라';
+	const navigate = useNavigate();
 
 	return (
 		<Layout>
@@ -33,7 +35,11 @@ export default function UnderBar() {
 					<BigButton size="l" buttonType="Button">
 						<img src={AddIcon} alt="별 스킨 만들기" />별 스킨 만들기
 					</BigButton>
-					<BigButton size="l" buttonType="CTA-icon">
+					<BigButton
+						size="l"
+						buttonType="CTA-icon"
+						onClick={() => navigate('/home/writing')}
+					>
 						<img src={WriteIcon} alt="글쓰기" />
 						글쓰기
 					</BigButton>

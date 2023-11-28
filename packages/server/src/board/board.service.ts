@@ -12,14 +12,15 @@ import { Repository } from 'typeorm';
 import { Image } from './entities/image.entity';
 import { encryptAes } from 'src/utils/aes.util';
 import { User } from 'src/auth/entities/user.entity';
-import { UserDataDto } from './dto/user-data.dto';
+import { UserDataDto } from '../auth/dto/user-data.dto';
 import * as AWS from 'aws-sdk';
 import { awsConfig, bucketName } from 'src/config/aws.config';
 import { v1 as uuid } from 'uuid';
 import * as sharp from 'sharp';
 import { InjectModel } from '@nestjs/mongoose';
-import { Star } from './schemas/star.schema';
+import { Star } from '../star/schemas/star.schema';
 import { Model, Types } from 'mongoose';
+import { GetPostByIdResDto } from './dto/get-post-by-id-res.dto';
 
 @Injectable()
 export class BoardService {
@@ -72,12 +73,12 @@ export class BoardService {
 		return createdBoard;
 	}
 
-	async findAllBoards(): Promise<Board[]> {
-		const boards = await this.boardRepository.find();
-		return boards;
-	}
-
 	async findAllBoardsByAuthor(author: string): Promise<Board[]> {
+		// author 없는 경우 에러 반환
+		if (!author) {
+			throw new BadRequestException('author is required');
+		}
+
 		const boards = await this.boardRepository.findBy({
 			user: { nickname: author },
 		});
@@ -88,6 +89,8 @@ export class BoardService {
 			board.user.created_at = undefined; // user.created_at 제거하여 반환
 			board.likes = undefined; // likes 제거하여 반환
 			board.images = undefined; // images 제거하여 반환
+			board.updated_at = undefined; // updated_at 제거하여 반환
+			board.created_at = undefined; // created_at 제거하여 반환
 
 			// star 스타일이 존재하면 MongoDB에서 조회하여 반환
 			if (board.star) {

@@ -13,7 +13,6 @@ import {
 	ParseIntPipe,
 	UseGuards,
 	UploadedFiles,
-	Res,
 } from '@nestjs/common';
 import { BoardService } from './board.service';
 import { CreateBoardDto } from './dto/create-board.dto';
@@ -30,11 +29,12 @@ import {
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { CookieAuthGuard } from 'src/auth/cookie-auth.guard';
 import { GetUser } from 'src/auth/decorators/get-user.decorator';
-import { UserDataDto } from './dto/user-data.dto';
+import { UserDataDto } from '../auth/dto/user-data.dto';
 import { decryptAes } from 'src/utils/aes.util';
-import * as FormData from 'form-data';
+import { GetPostByIdResDto } from './dto/get-post-by-id-res.dto';
+import { awsConfig, bucketName } from 'src/config/aws.config';
 
-@Controller('board')
+@Controller('post')
 @ApiTags('게시글 API')
 export class BoardController {
 	constructor(private readonly boardService: BoardService) {}
@@ -65,12 +65,12 @@ export class BoardController {
 		status: 400,
 		description: '잘못된 요청으로 게시글 조회 실패',
 	})
-	findAllBoards(): Promise<Board[]> {
-		return this.boardService.findAllBoards();
+	findAllBoardsMine(@GetUser() userData: UserDataDto): Promise<Board[]> {
+		const author = userData.nickname;
+		return this.boardService.findAllBoardsByAuthor(author);
 	}
 
 	@Get('by-author')
-	@UseGuards(CookieAuthGuard)
 	@ApiOperation({
 		summary: '작성자별 게시글 조회',
 		description: '작성자별 게시글을 조회합니다.',
@@ -80,17 +80,12 @@ export class BoardController {
 		status: 400,
 		description: '잘못된 요청으로 게시글 조회 실패',
 	})
-	findAllBoardsByAuthor(
-		@Query('author') author: string,
-		@GetUser() userData: UserDataDto,
-	): Promise<Board[]> {
-		// 파라미터 없는 경우 로그인한 사용자의 게시글 조회
-		author = author ? author : userData.nickname;
+	findAllBoardsByAuthor(@Query('author') author: string): Promise<Board[]> {
 		return this.boardService.findAllBoardsByAuthor(author);
 	}
 
+	// TODO: 게시글에 대한 User정보 얻기
 	@Get(':id')
-	@UseGuards(CookieAuthGuard)
 	@ApiOperation({
 		summary: '게시글 상세 조회',
 		description: '게시글을 상세 조회합니다.',
@@ -102,40 +97,23 @@ export class BoardController {
 	})
 	async findBoardById(
 		@Param('id', ParseIntPipe) id: number,
-		@Res() res,
-	): Promise<void> {
+	): Promise<GetPostByIdResDto> {
 		const found = await this.boardService.findBoardById(id);
 		// AES 복호화
 		if (found.content) {
 			found.content = decryptAes(found.content); // AES 복호화하여 반환
 		}
+		const postData: GetPostByIdResDto = {
+			id: found.id,
+			title: found.title,
+			content: found.content,
+			like_cnt: found.like_cnt,
+			images: found.images.map(
+				(image) => `${awsConfig.endpoint.href}${bucketName}/${image.filename}`,
+			),
+		};
 
-		// 폼 데이터 만들어 반환
-		const formData = new FormData();
-		formData.append('id', found.id.toString());
-		formData.append('title', found.title);
-		formData.append('content', found.content);
-		formData.append('author', found.user.nickname);
-		formData.append('created_at', found.created_at.toString());
-		formData.append('updated_at', found.updated_at.toString());
-		formData.append('like_cnt', found.like_cnt.toString());
-
-		// NCP Object Storage 다운로드
-		const files = [];
-		for (let image of found.images) {
-			const file: Buffer = await this.boardService.downloadFile(image.filename);
-			console.log(file);
-			formData.append('file', file, {
-				filename: image.filename,
-				contentType: image.mimetype,
-			});
-		}
-
-		res.set({
-			'Content-Type': 'multipart/form-data',
-		});
-		formData.pipe(res);
-		// return found;
+		return postData;
 	}
 
 	@Patch(':id')

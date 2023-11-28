@@ -1,4 +1,4 @@
-export class GetPostByIdResDto {
+export class GetBoardByIdResDto {
 	id: number;
 	title: string;
 	content: string;

@@ -20,7 +20,7 @@ import * as sharp from 'sharp';
 import { InjectModel } from '@nestjs/mongoose';
 import { Star } from '../star/schemas/star.schema';
 import { Model, Types } from 'mongoose';
-import { GetPostByIdResDto } from './dto/get-post-by-id-res.dto';
+import { GetBoardByIdResDto } from './dto/get-board-by-id-res.dto';
 
 @Injectable()
 export class BoardService {

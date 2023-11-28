@@ -4,8 +4,10 @@ import { Title01 } from '../styles';
 import PlanetEditIcon from '@icons/icon-planetedit-24-white.svg';
 import AddIcon from '@icons/icon-add-24-white.svg';
 import WriteIcon from '@icons/icon-writte-24-white.svg';
-import { MAX_WIDTH1, MAX_WIDTH2 } from 'shared/lib/constants';
+import { BASE_URL, MAX_WIDTH1, MAX_WIDTH2 } from 'shared/lib/constants';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import Cookies from 'js-cookie';
 
 export default function UnderBar() {
 	const tempName = '도라에몽도라에몽도라';
@@ -17,7 +19,16 @@ export default function UnderBar() {
 
 			<ButtonsContainer>
 				<SmallButtonsContainer>
-					<Button size="m" buttonType="Button">
+					<Button
+						size="m"
+						buttonType="Button"
+						onClick={() => {
+							axios.get(`${BASE_URL}auth/signout`);
+							Cookies.remove('accessToken');
+							Cookies.remove('refreshToken');
+							navigate('/');
+						}}
+					>
 						로그아웃
 					</Button>
 					<Button size="m" buttonType="Button">

@@ -56,22 +56,22 @@ export default function Post({ data, onClick, isSelected }: PropsType) {
 }
 
 const Label = styled.div`
-	transform: translate3d(calc(60%), calc(-30%), 0);
+	transform: translate3d(calc(60%), calc(-70%), 0);
 	background: #fff;
 	color: #000;
 	padding: 10px 15px;
 	border-radius: 5px;
 	font-family: 'Noto Sans KR', sans-serif;
-	width: 100%;
+	width: 200px;
 	text-align: center;
 
 	&::before {
 		content: '';
 		position: absolute;
-		top: 20px;
-		left: -30px;
+		top: 10px;
+		left: -100px;
 		height: 2px;
-		width: 50px;
+		width: 100px;
 		background: #fff;
 	}
 `;

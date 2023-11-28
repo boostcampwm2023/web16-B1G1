@@ -43,6 +43,7 @@ const rightButton = (
 	<Button
 		size="m"
 		buttonType={'warning-border'}
+		type="button"
 		onClick={() => {
 			console.log('삭제');
 		}} // TODO: 삭제 기능 구현

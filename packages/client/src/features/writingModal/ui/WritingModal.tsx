@@ -20,6 +20,7 @@ export default function WritingModal() {
 						onClick={() => sendToServer(text, files)}
 						size="m"
 						buttonType="CTA-icon"
+						type="submit"
 					>
 						다음
 					</Button>

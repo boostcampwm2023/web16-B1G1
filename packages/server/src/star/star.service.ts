@@ -1,5 +1,4 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { CreateStarDto } from './dto/create-star.dto';
 import { UpdateStarDto } from './dto/update-star.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Board } from '../board/entities/board.entity';
@@ -17,10 +16,6 @@ export class StarService {
 		@InjectModel(Star.name)
 		private readonly starModel: Model<Star>,
 	) {}
-
-	create(createStarDto: CreateStarDto) {
-		return 'This action adds a new star';
-	}
 
 	async findAllStarsByAuthor(author: string): Promise<GetStarResDto[]> {
 		// author가 없는 경우 에러 발생
@@ -60,15 +55,7 @@ export class StarService {
 		return starDataList;
 	}
 
-	findOne(id: number) {
-		return `This action returns a #${id} star`;
-	}
-
-	update(id: number, updateStarDto: UpdateStarDto) {
-		return `This action updates a #${id} star`;
-	}
-
-	remove(id: number) {
-		return `This action removes a #${id} star`;
+	updateStarByPostId(post_id: number, updateStarDto: UpdateStarDto) {
+		return `This action updates post #${post_id}'s star`;
 	}
 }

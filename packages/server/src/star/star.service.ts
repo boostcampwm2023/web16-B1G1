@@ -28,9 +28,13 @@ export class StarService {
 			throw new BadRequestException('author is required');
 		}
 
-		const boards = await this.boardRepository.findBy({
-			user: { nickname: author },
-		});
+		const boards = await this.boardRepository
+			.createQueryBuilder()
+			.select(['board.id', 'board.title', 'board.star'])
+			.from(Board, 'board')
+			.leftJoin('board.user', 'user')
+			.where('user.nickname = :nickname', { nickname: author })
+			.getMany();
 
 		const starDataList: GetStarResDto[] = [];
 		for (let board of boards) {

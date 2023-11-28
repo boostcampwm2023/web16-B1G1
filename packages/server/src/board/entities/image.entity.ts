@@ -3,12 +3,14 @@ import {
 	Column,
 	CreateDateColumn,
 	Entity,
+	Index,
 	ManyToOne,
 	PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Board } from './board.entity';
 
 @Entity()
+@Index('idx_filename', ['filename'])
 export class Image extends BaseEntity {
 	@PrimaryGeneratedColumn()
 	id: number;

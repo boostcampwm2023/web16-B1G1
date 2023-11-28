@@ -109,7 +109,22 @@ export class BoardService {
 	}
 
 	async findBoardById(id: number): Promise<Board> {
-		const found: Board = await this.boardRepository.findOneBy({ id });
+		// const found: Board = await this.boardRepository.findOneBy({ id });
+		const found: Board = await this.boardRepository
+			.createQueryBuilder()
+			.select(['board.id', 'board.title', 'board.content', 'board.like_cnt'])
+			.from(Board, 'board')
+			.leftJoinAndMapMany(
+				'board.images',
+				Image,
+				'image',
+				'image.boardId = board.id',
+			)
+			.where('board.id = :id', { id })
+			.getOne();
+
+		console.log(found);
+
 		if (!found) {
 			throw new NotFoundException(`Not found board with id: ${id}`);
 		}

@@ -2,23 +2,15 @@ import { Button } from 'shared/ui';
 import styled from '@emotion/styled';
 import { Title02 } from 'shared/ui/styles';
 import { useNavigate } from 'react-router-dom';
-import Cookies from 'js-cookie';
 
 export default function LogoAndStart() {
 	const navigate = useNavigate();
-
-	const handleStart = () => {
-		const accessToken = Cookies.get('accessToken');
-		const refreshToken = Cookies.get('refreshToken');
-		if (!accessToken || !refreshToken) navigate('/login');
-		else navigate('/home');
-	};
 
 	return (
 		<Container>
 			<Logo>Logo</Logo>
 			<Button
-				onClick={handleStart}
+				onClick={() => navigate('/login')}
 				size="l"
 				buttonType="CTA-icon"
 				type="button"

@@ -4,7 +4,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { BASE_URL } from '@constants';
 import Cookies from 'js-cookie';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function LoginModal() {
 	const [id, setId] = useState(Cookies.get('userId') ?? '');
@@ -35,6 +35,14 @@ export default function LoginModal() {
 			} else console.log(res.status);
 		});
 	};
+
+	useEffect(() => {
+		const accessToken = Cookies.get('accessToken');
+		const refreshToken = Cookies.get('refreshToken');
+		if (accessToken !== undefined && refreshToken !== undefined)
+			navigate('/home');
+	});
+
 	return (
 		<form
 			onSubmit={(e) => {

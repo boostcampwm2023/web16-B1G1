@@ -1,4 +1,4 @@
-import { Board } from 'src/board/entities/board.entity';
+import { Board } from '../../board/entities/board.entity';
 import {
 	Column,
 	CreateDateColumn,

@@ -27,12 +27,12 @@ import {
 	ApiTags,
 } from '@nestjs/swagger';
 import { FilesInterceptor } from '@nestjs/platform-express';
-import { CookieAuthGuard } from 'src/auth/cookie-auth.guard';
-import { GetUser } from 'src/auth/decorators/get-user.decorator';
+import { CookieAuthGuard } from '../auth/cookie-auth.guard';
+import { GetUser } from '../auth/decorators/get-user.decorator';
 import { UserDataDto } from '../auth/dto/user-data.dto';
-import { decryptAes } from 'src/utils/aes.util';
+import { decryptAes } from '../utils/aes.util';
 import { GetPostByIdResDto } from './dto/get-post-by-id-res.dto';
-import { awsConfig, bucketName } from 'src/config/aws.config';
+import { awsConfig, bucketName } from '../config/aws.config';
 
 @Controller('post')
 @ApiTags('게시글 API')

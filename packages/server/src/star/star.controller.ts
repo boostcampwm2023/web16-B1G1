@@ -12,9 +12,9 @@ import {
 import { StarService } from './star.service';
 import { CreateStarDto } from './dto/create-star.dto';
 import { UpdateStarDto } from './dto/update-star.dto';
-import { CookieAuthGuard } from 'src/auth/cookie-auth.guard';
-import { GetUser } from 'src/auth/decorators/get-user.decorator';
-import { UserDataDto } from 'src/auth/dto/user-data.dto';
+import { CookieAuthGuard } from '../auth/cookie-auth.guard';
+import { GetUser } from '../auth/decorators/get-user.decorator';
+import { UserDataDto } from '../auth/dto/user-data.dto';
 import { GetStarResDto } from './dto/get-star-res.dto';
 
 @Controller('star')

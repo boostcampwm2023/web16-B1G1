@@ -2,7 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateStarDto } from './dto/create-star.dto';
 import { UpdateStarDto } from './dto/update-star.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Board } from 'src/board/entities/board.entity';
+import { Board } from '../board/entities/board.entity';
 import { Repository } from 'typeorm';
 import { InjectModel } from '@nestjs/mongoose';
 import { Star } from './schemas/star.schema';

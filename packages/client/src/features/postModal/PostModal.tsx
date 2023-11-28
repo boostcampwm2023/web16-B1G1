@@ -63,7 +63,7 @@ const PostModalLayout = styled(Modal)`
 
 const TextContainer = styled.div`
 	overflow-y: auto;
-	width: 807px;
+	width: 40vw;
 
 	${({ theme: { colors } }) => ({
 		color: colors.text.secondary,

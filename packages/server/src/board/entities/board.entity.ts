@@ -13,7 +13,7 @@ import {
 	UpdateDateColumn,
 } from 'typeorm';
 import { Image } from './image.entity';
-import { User } from 'src/auth/entities/user.entity';
+import { User } from '../../auth/entities/user.entity';
 
 @Entity()
 export class Board extends BaseEntity {

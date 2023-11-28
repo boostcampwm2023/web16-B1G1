@@ -1,10 +1,15 @@
 import { Input } from 'shared/ui';
 import styled from '@emotion/styled';
-import { useLoginStore } from 'shared/store/userLoginStore';
 
-export default function LoginContent() {
-	const { id, setId, password, setPassword } = useLoginStore();
+interface PropsType {
+	useId: [string, React.Dispatch<React.SetStateAction<string>>];
+	usePassword: [string, React.Dispatch<React.SetStateAction<string>>];
+}
 
+export default function LoginContent({
+	useId: [id, setId],
+	usePassword: [password, setPassword],
+}: PropsType) {
 	return (
 		<Container>
 			<Input

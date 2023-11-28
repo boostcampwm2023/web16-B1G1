@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios, { AxiosError } from 'axios';
-
-const BASE_URL = 'wow'; // TODO: Add base url
+import { BASE_URL } from '@constants';
 
 export const useFetch = <T>(api: string) => {
 	const [data, setData] = useState<T>();

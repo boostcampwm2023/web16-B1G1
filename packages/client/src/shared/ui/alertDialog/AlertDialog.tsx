@@ -5,7 +5,7 @@ import { Button } from '..';
 
 interface PropsTypes extends React.HTMLAttributes<HTMLDivElement> {
 	title: string;
-	cancleButtonText: string;
+	cancelButtonText: string;
 	actionButtonText: string;
 	onClickCancelButton: () => void;
 	onClickActionButton: () => void;
@@ -15,7 +15,7 @@ interface PropsTypes extends React.HTMLAttributes<HTMLDivElement> {
 export default function AlertDialog({
 	title,
 	description,
-	cancleButtonText,
+	cancelButtonText,
 	actionButtonText,
 	onClickCancelButton,
 	onClickActionButton,
@@ -34,7 +34,7 @@ export default function AlertDialog({
 						type="button"
 						onClick={onClickCancelButton}
 					>
-						{cancleButtonText}
+						{cancelButtonText}
 					</Button>
 					<Button
 						buttonType="warning"

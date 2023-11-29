@@ -23,12 +23,15 @@ import {
 } from '../utils/auth.util';
 import { v4 as uuid } from 'uuid';
 import { UserDataDto } from './dto/user-data.dto';
+import { ShareLink } from './entities/share_link.entity';
 
 @Injectable()
 export class AuthService {
 	constructor(
 		@InjectRepository(User)
 		private readonly userRepository: Repository<User>,
+		@InjectRepository(ShareLink)
+		private readonly shareLinkRepository: Repository<ShareLink>,
 		private readonly jwtService: JwtService,
 		private readonly redisRepository: RedisRepository,
 	) {}
@@ -218,5 +221,28 @@ export class AuthService {
 
 		updatedUser.password = undefined;
 		return updatedUser;
+	}
+
+	async getShareLink(userData: UserDataDto) {
+		if (userData.status === UserShareStatus.PRIVATE) {
+			throw new BadRequestException('비공개 상태입니다.');
+		}
+
+		const foundLink = await this.shareLinkRepository.findOneBy({
+			user: userData.userId,
+		});
+
+		if (foundLink) {
+			return foundLink;
+		}
+
+		const newLink = this.shareLinkRepository.create({
+			user: userData.userId,
+			link: uuid(),
+		});
+
+		const savedLink = await this.shareLinkRepository.save(newLink);
+		savedLink.user = undefined;
+		return savedLink;
 	}
 }

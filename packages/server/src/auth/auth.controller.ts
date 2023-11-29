@@ -209,4 +209,10 @@ export class AuthController {
 	) {
 		return this.authService.changeStatus(userData, status);
 	}
+
+	@Get('sharelink')
+	@UseGuards(CookieAuthGuard)
+	getShareLink(@GetUser() userData: UserDataDto) {
+		return this.authService.getShareLink(userData);
+	}
 }

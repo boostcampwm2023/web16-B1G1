@@ -4,6 +4,11 @@ import { PostData } from 'shared/lib/types/post';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import styled from '@emotion/styled';
+import { useState } from 'react';
+import AlertDialog from 'shared/ui/alertDialog/AlertDialog';
+import { BASE_URL } from '@constants';
+import { useNavigate, useParams } from 'react-router-dom';
+import axios from 'axios';
 
 interface PropsType {
 	data: PostData;
@@ -11,6 +16,33 @@ interface PropsType {
 
 export default function PostModal({ data }: PropsType) {
 	const { setView } = useViewStore();
+	const [deleteModal, setDeleteModal] = useState(false);
+	const { postId } = useParams();
+	const navigate = useNavigate();
+
+	const rightButton = (
+		<Button
+			size="m"
+			buttonType={'warning-border'}
+			type="button"
+			onClick={() => {
+				setDeleteModal(true);
+			}}
+		>
+			삭제
+		</Button>
+	);
+
+	const handleDelete = async () => {
+		const res = await axios.delete(`${BASE_URL}/post/${postId}`);
+
+		if (res.status === 200) {
+			setDeleteModal(false);
+			setView('MAIN');
+			navigate('/home');
+		}
+	};
+
 	return (
 		<ModalPortal>
 			<PostModalLayout
@@ -35,22 +67,21 @@ export default function PostModal({ data }: PropsType) {
 					</ReactMarkdown>
 				</TextContainer>
 			</PostModalLayout>
+			{deleteModal && (
+				<AlertDialog
+					title="글을 삭제하시겠습니까?"
+					description="삭제 시 복구할 수 없습니다."
+					cancelButtonText="취소"
+					actionButtonText="삭제"
+					onClickCancelButton={() => {
+						setDeleteModal(false);
+					}}
+					onClickActionButton={handleDelete}
+				/>
+			)}
 		</ModalPortal>
 	);
 }
-
-const rightButton = (
-	<Button
-		size="m"
-		buttonType={'warning-border'}
-		type="button"
-		onClick={() => {
-			console.log('삭제');
-		}} // TODO: 삭제 기능 구현
-	>
-		삭제
-	</Button>
-);
 
 const PostModalLayout = styled(Modal)`
 	transform: translate(-10%, -50%);

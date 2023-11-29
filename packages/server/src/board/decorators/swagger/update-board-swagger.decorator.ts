@@ -1,6 +1,8 @@
 import { applyDecorators } from '@nestjs/common';
 import {
 	ApiBadRequestResponse,
+	ApiBody,
+	ApiConsumes,
 	ApiInternalServerErrorResponse,
 	ApiNotFoundResponse,
 	ApiOkResponse,
@@ -11,6 +13,31 @@ import {
 const apiOperation = {
 	summary: '게시글 수정',
 	description: '게시글을 수정합니다.',
+};
+
+const apiConsumes = 'multipart/form-data';
+
+const apiBody = {
+	schema: {
+		type: 'object',
+		properties: {
+			title: {
+				type: 'string',
+				description: '게시글 제목',
+				example: 'test title',
+			},
+			content: {
+				type: 'string',
+				description: '게시글 내용',
+				example: 'test content',
+			},
+			file: {
+				type: 'file',
+				description: '첨부 파일 (이미지)',
+				example: 'test.png',
+			},
+		},
+	},
 };
 
 const apiOkResponse = {
@@ -41,6 +68,8 @@ const apiInternalServerErrorResponse = {
 export const UpdateBoardSwaggerDecorator = () => {
 	return applyDecorators(
 		ApiOperation(apiOperation),
+		ApiConsumes(apiConsumes),
+		ApiBody(apiBody),
 		ApiOkResponse(apiOkResponse),
 		ApiBadRequestResponse(apiBadRequestResponse),
 		ApiUnauthorizedResponse(apiUnauthorizedResponse),

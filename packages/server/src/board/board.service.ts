@@ -88,8 +88,6 @@ export class BoardService {
 			.where('board.id = :id', { id })
 			.getOne();
 
-		console.log(found);
-
 		if (!found) {
 			throw new NotFoundException(`Not found board with id: ${id}`);
 		}
@@ -102,7 +100,10 @@ export class BoardService {
 		userData: UserDataDto,
 		files: Express.Multer.File[],
 	) {
-		const board: Board = await this.findBoardById(id);
+		const board: Board = await this.boardRepository.findOneBy({ id });
+		if (!board) {
+			throw new NotFoundException(`Not found board with id: ${id}`);
+		}
 
 		// 게시글 작성자와 수정 요청자가 다른 경우
 		if (board.user.id !== userData.userId) {
@@ -142,6 +143,7 @@ export class BoardService {
 			...board,
 			...updateBoardDto,
 		});
+		delete updatedBoard.user.password; // password 제거하여 반환
 		return updatedBoard;
 	}
 

@@ -23,3 +23,9 @@ export enum UserEnum {
 
 	SUCCESS_SIGNOUT_MESSAGE = '로그아웃에 성공했습니다.',
 }
+
+export enum UserShareStatus {
+	PUBLIC = 'public',
+	ONLY_LINK = 'only_link',
+	PRIVATE = 'private',
+}

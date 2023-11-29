@@ -6,9 +6,9 @@ import {
 } from '@nestjs/common';
 import { CreateBoardDto } from './dto/create-board.dto';
 import { UpdateBoardDto } from './dto/update-board.dto';
-import { InjectRepository } from '@nestjs/typeorm';
+import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
 import { Board } from './entities/board.entity';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { Image } from './entities/image.entity';
 import { encryptAes } from '../utils/aes.util';
 import { User } from '../auth/entities/user.entity';
@@ -33,6 +33,8 @@ export class BoardService {
 		private readonly userRepository: Repository<User>,
 		@InjectModel(Star.name)
 		private readonly starModel: Model<Star>,
+		@InjectDataSource()
+		private readonly dataSource: DataSource,
 	) {}
 
 	async createBoard(
@@ -198,7 +200,13 @@ export class BoardService {
 	}
 
 	async deleteBoard(id: number, userData: UserDataDto): Promise<void> {
-		const board: Board = await this.boardRepository.findOneBy({ id });
+		// transaction 생성하여 board, image, star, like 테이블 동시에 삭제
+		const queryRunner = this.dataSource.createQueryRunner();
+		await queryRunner.connect();
+
+		// const board: Board = await this.boardRepository.findOneBy({ id });
+		const board: Board = await queryRunner.manager.findOneBy(Board, { id });
+
 		if (!board) {
 			throw new NotFoundException(`Not found board with id: ${id}`);
 		}
@@ -208,23 +216,37 @@ export class BoardService {
 			throw new BadRequestException('You are not the author of this post');
 		}
 
-		// 연관된 이미지 삭제
-		for (const image of board.images) {
-			// 이미지 리포지토리에서 삭제
-			await this.imageRepository.delete({ id: image.id });
-			// NCP Object Storage에서 삭제
-			await this.deleteFile(image.filename);
+		// transaction 시작
+		await queryRunner.startTransaction();
+		try {
+			// 연관된 이미지 삭제
+			for (const image of board.images) {
+				// 이미지 리포지토리에서 삭제
+				// await this.imageRepository.delete({ id: image.id });
+				await queryRunner.manager.delete(Image, { id: image.id });
+				// NCP Object Storage에서 삭제
+				await this.deleteFile(image.filename);
+			}
+
+			// 연관된 별 스타일 삭제
+			if (board.star) {
+				await this.starModel.deleteOne({ _id: board.star });
+			}
+
+			// like 조인테이블 레코드들은 자동으로 삭제됨 (외래키 제약조건 ON DELETE CASCADE)
+
+			// 게시글 삭제
+			// const result = await this.boardRepository.delete({ id });
+			const result = await queryRunner.manager.delete(Board, { id });
+
+			// commit Transaction
+			await queryRunner.commitTransaction();
+		} catch (err) {
+			Logger.error(err);
+			await queryRunner.rollbackTransaction();
+		} finally {
+			await queryRunner.release();
 		}
-
-		// 연관된 별 스타일 삭제
-		if (board.star) {
-			await this.starModel.deleteOne({ _id: board.star });
-		}
-
-		// like 조인테이블 레코드들은 자동으로 삭제됨 (외래키 제약조건 ON DELETE CASCADE)
-
-		// 게시글 삭제
-		const result = await this.boardRepository.delete({ id });
 	}
 
 	async uploadFile(file: Express.Multer.File): Promise<Image> {

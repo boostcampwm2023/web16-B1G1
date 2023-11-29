@@ -61,7 +61,7 @@ const CustomButton = styled.button<PropsType>`
 					}
 
 					&:disabled {
-						border-color: none;
+						border-color: transparent;
 						background: ${colors.primary.disabled};
 						color: ${colors.text.disabled};
 					}
@@ -80,7 +80,7 @@ const CustomButton = styled.button<PropsType>`
 			case 'warning-border':
 				return css`
 					border: 1px solid ${colors.warning.filled};
-					background: none;
+					background: transparent;
 					color: ${colors.warning.filled};
 					${size === 'm' ? Body02ME : Body03ME}
 

@@ -37,6 +37,8 @@ import { SearchUserSwaggerDecorator } from './decorators/swagger/search-user-swa
 import { GetUser } from './decorators/get-user.decorator';
 import { UserDataDto } from './dto/user-data.dto';
 import { StatusValidationPipe } from './pipes/StatusValidationPipe';
+import { ChangeStatusSwaggerDecorator } from './decorators/swagger/change-status-swagger.decorator';
+import { GetShareLinkSwaggerDecorator } from './decorators/swagger/get-share-link-swagger.decorator';
 
 @Controller('auth')
 @ApiTags('인증/인가 API')
@@ -203,6 +205,7 @@ export class AuthController {
 
 	@Patch('status')
 	@UseGuards(CookieAuthGuard)
+	@ChangeStatusSwaggerDecorator()
 	changeStatus(
 		@GetUser() userData: UserDataDto,
 		@Body('status', StatusValidationPipe) status: UserShareStatus,
@@ -212,6 +215,7 @@ export class AuthController {
 
 	@Get('sharelink')
 	@UseGuards(CookieAuthGuard)
+	@GetShareLinkSwaggerDecorator()
 	getShareLink(@GetUser() userData: UserDataDto) {
 		return this.authService.getShareLink(userData);
 	}

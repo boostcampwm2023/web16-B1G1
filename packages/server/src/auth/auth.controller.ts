@@ -13,6 +13,7 @@ import {
 	UnauthorizedException,
 	Param,
 	NotFoundException,
+	BadRequestException,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SignUpUserDto } from './dto/signup-user.dto';
@@ -31,6 +32,7 @@ import { IsAvailableNicknameSwaggerDecorator } from './decorators/swagger/is-ava
 import { SignInWithOAuthSwaggerDecorator } from './decorators/swagger/sign-in-with-oauth-swagger.decorator';
 import { SignUpWithOAuthSwaggerDecorator } from './decorators/swagger/sign-up-with-oauth-swagger.decorator';
 import { OAuthCallbackSwaggerDecorator } from './decorators/swagger/oauth-callback-swagger.decorator';
+import { SearchUserSwaggerDecorator } from './decorators/swagger/search-user-swagger.decorator';
 
 @Controller('auth')
 @ApiTags('인증/인가 API')
@@ -184,7 +186,11 @@ export class AuthController {
 	}
 
 	@Get('search')
+	@SearchUserSwaggerDecorator()
 	searchUser(@Query('nickname') nickname: string) {
+		if (!nickname) {
+			throw new BadRequestException('검색할 닉네임을 입력해주세요.');
+		}
 		return this.authService.searchUser(nickname);
 	}
 }

@@ -26,7 +26,7 @@ import { v4 as uuid } from 'uuid';
 export class AuthService {
 	constructor(
 		@InjectRepository(User)
-		private readonly authRepository: Repository<User>,
+		private readonly userRepository: Repository<User>,
 		private readonly jwtService: JwtService,
 		private readonly redisRepository: RedisRepository,
 	) {}
@@ -41,12 +41,12 @@ export class AuthService {
 		const salt = await bcrypt.genSalt();
 		const hashedPassword = await bcrypt.hash(signUpUserDto.password, salt);
 
-		const newUser = this.authRepository.create({
+		const newUser = this.userRepository.create({
 			...signUpUserDto,
 			password: hashedPassword,
 		});
 
-		const savedUser: User = await this.authRepository.save(newUser);
+		const savedUser: User = await this.userRepository.save(newUser);
 		savedUser.password = undefined;
 
 		return savedUser;
@@ -55,7 +55,7 @@ export class AuthService {
 	async signIn(signInUserDto: SignInUserDto) {
 		const { username, password } = signInUserDto;
 
-		const user = await this.authRepository.findOneBy({ username });
+		const user = await this.userRepository.findOneBy({ username });
 
 		if (!(user && (await bcrypt.compare(password, user.password)))) {
 			throw new UnauthorizedException(UserEnum.FAIL_SIGNIN_MESSAGE);
@@ -80,7 +80,7 @@ export class AuthService {
 			throw new BadRequestException('username is required');
 		}
 
-		const user = await this.authRepository.findOneBy({ username });
+		const user = await this.userRepository.findOneBy({ username });
 
 		if (user) {
 			throw new ConflictException('username already exists');
@@ -94,7 +94,7 @@ export class AuthService {
 			throw new BadRequestException('nickname is required');
 		}
 
-		const user = await this.authRepository.findOneBy({ nickname });
+		const user = await this.userRepository.findOneBy({ nickname });
 
 		if (user) {
 			throw new ConflictException('nickname already exists');
@@ -118,7 +118,7 @@ export class AuthService {
 			resourceServerAccessToken,
 		);
 
-		const user = await this.authRepository.findOneBy({
+		const user = await this.userRepository.findOneBy({
 			username: resourceServerUsername,
 		});
 
@@ -172,15 +172,29 @@ export class AuthService {
 
 		this.redisRepository.del(resourceServerUsername);
 
-		const newUser: User = this.authRepository.create({
+		const newUser: User = this.userRepository.create({
 			username: resourceServerUsername,
 			password: uuid(),
 			nickname,
 		});
 
-		const savedUser: User = await this.authRepository.save(newUser);
+		const savedUser: User = await this.userRepository.save(newUser);
 		savedUser.password = undefined;
 
 		return savedUser;
+	}
+
+	async searchUser(nickname: string): Promise<User[]> {
+		const users: User[] = await this.userRepository
+			.createQueryBuilder('user')
+			.select(['user.id', 'user.nickname'])
+			.where(
+				`MATCH (user.nickname) AGAINST (:nickname IN NATURAL LANGUAGE MODE)`,
+				{
+					nickname,
+				},
+			)
+			.getMany();
+		return users;
 	}
 }

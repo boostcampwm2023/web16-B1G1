@@ -14,7 +14,7 @@ import * as bcrypt from 'bcryptjs';
 import { SignInUserDto } from './dto/signin-user.dto';
 import { JwtService } from '@nestjs/jwt';
 import { RedisRepository } from './redis.repository';
-import { UserEnum } from './enums/user.enum';
+import { UserEnum, UserShareStatus } from './enums/user.enum';
 import { JwtEnum } from './enums/jwt.enum';
 import {
 	createJwt,
@@ -200,5 +200,23 @@ export class AuthService {
 			})
 			.getMany();
 		return users;
+	}
+
+	async changeStatus(userData: UserDataDto, status: UserShareStatus) {
+		const user = await this.userRepository.findOneBy({ id: userData.userId });
+
+		if (!user) {
+			throw new NotFoundException('해당 유저를 찾을 수 없습니다.');
+		}
+
+		if (user.status === status) {
+			throw new BadRequestException('이미 해당 상태입니다.');
+		}
+
+		user.status = status;
+		const updatedUser = await this.userRepository.save(user);
+
+		updatedUser.password = undefined;
+		return updatedUser;
 	}
 }

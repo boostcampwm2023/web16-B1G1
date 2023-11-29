@@ -14,6 +14,7 @@ import {
 	Param,
 	NotFoundException,
 	BadRequestException,
+	Patch,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SignUpUserDto } from './dto/signup-user.dto';
@@ -23,7 +24,7 @@ import { Response } from 'express';
 import { ApiTags } from '@nestjs/swagger';
 import { JwtEnum } from './enums/jwt.enum';
 import { CookieAuthGuard } from './cookie-auth.guard';
-import { UserEnum } from './enums/user.enum';
+import { UserEnum, UserShareStatus } from './enums/user.enum';
 import { SignUpSwaggerDecorator } from './decorators/swagger/sign-up-swagger.decorator';
 import { SignInSwaggerDecorator } from './decorators/swagger/sign-in-swagger.decorator';
 import { SignOutSwaggerDecorator } from './decorators/swagger/sign-out-swagger.decorator';
@@ -35,6 +36,7 @@ import { OAuthCallbackSwaggerDecorator } from './decorators/swagger/oauth-callba
 import { SearchUserSwaggerDecorator } from './decorators/swagger/search-user-swagger.decorator';
 import { GetUser } from './decorators/get-user.decorator';
 import { UserDataDto } from './dto/user-data.dto';
+import { StatusValidationPipe } from './pipes/StatusValidationPipe';
 
 @Controller('auth')
 @ApiTags('인증/인가 API')
@@ -197,5 +199,14 @@ export class AuthController {
 			throw new BadRequestException('검색할 닉네임을 입력해주세요.');
 		}
 		return this.authService.searchUser(nickname);
+	}
+
+	@Patch('status')
+	@UseGuards(CookieAuthGuard)
+	changeStatus(
+		@GetUser() userData: UserDataDto,
+		@Body('status', StatusValidationPipe) status: UserShareStatus,
+	) {
+		return this.authService.changeStatus(userData, status);
 	}
 }

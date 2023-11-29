@@ -1,6 +1,4 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { BoardModule } from './board/board.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -17,7 +15,5 @@ import { StarModule } from './star/star.module';
 		MongooseModule.forRoot(mongooseConfig.uri),
 		StarModule,
 	],
-	controllers: [AppController],
-	providers: [AppService],
 })
 export class AppModule {}

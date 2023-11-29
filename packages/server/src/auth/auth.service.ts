@@ -188,12 +188,9 @@ export class AuthService {
 		const users: User[] = await this.userRepository
 			.createQueryBuilder('user')
 			.select(['user.id', 'user.nickname'])
-			.where(
-				`MATCH (user.nickname) AGAINST (:nickname IN NATURAL LANGUAGE MODE)`,
-				{
-					nickname,
-				},
-			)
+			.where(`MATCH (user.nickname) AGAINST (:nickname IN BOOLEAN MODE)`, {
+				nickname: nickname + '*',
+			})
 			.getMany();
 		return users;
 	}

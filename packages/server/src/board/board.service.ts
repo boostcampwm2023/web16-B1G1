@@ -148,7 +148,12 @@ export class BoardService {
 	}
 
 	async patchLike(id: number, userData: UserDataDto): Promise<Partial<Board>> {
-		const board = await this.findBoardById(id);
+		const board = await this.boardRepository.findOneBy({ id });
+		if (!board) {
+			throw new NotFoundException(`Not found board with id: ${id}`);
+		}
+
+		// 이미 좋아요를 누른 경우
 		if (board.likes.find((user) => user.id === userData.userId)) {
 			throw new BadRequestException('You already liked this post');
 		}
@@ -170,7 +175,12 @@ export class BoardService {
 		id: number,
 		userData: UserDataDto,
 	): Promise<Partial<Board>> {
-		const board = await this.findBoardById(id);
+		const board = await this.boardRepository.findOneBy({ id });
+		if (!board) {
+			throw new NotFoundException(`Not found board with id: ${id}`);
+		}
+
+		// 좋아요를 누르지 않은 경우
 		if (!board.likes.find((user) => user.id === userData.userId)) {
 			throw new BadRequestException('You have not liked this post');
 		}
@@ -188,7 +198,10 @@ export class BoardService {
 	}
 
 	async deleteBoard(id: number, userData: UserDataDto): Promise<void> {
-		const board: Board = await this.findBoardById(id);
+		const board: Board = await this.boardRepository.findOneBy({ id });
+		if (!board) {
+			throw new NotFoundException(`Not found board with id: ${id}`);
+		}
 
 		// 게시글 작성자와 삭제 요청자가 다른 경우
 		if (board.user.id !== userData.userId) {

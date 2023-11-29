@@ -1,6 +1,7 @@
 import {
 	BadRequestException,
 	Injectable,
+	InternalServerErrorException,
 	Logger,
 	NotFoundException,
 } from '@nestjs/common';
@@ -102,7 +103,12 @@ export class BoardService {
 		userData: UserDataDto,
 		files: Express.Multer.File[],
 	) {
-		const board: Board = await this.boardRepository.findOneBy({ id });
+		// transaction 생성하여 board, image, star, like 테이블 동시에 수정
+		const queryRunner = this.dataSource.createQueryRunner();
+		await queryRunner.connect();
+
+		// const board: Board = await this.boardRepository.findOneBy({ id });
+		const board: Board = await queryRunner.manager.findOneBy(Board, { id });
 		if (!board) {
 			throw new NotFoundException(`Not found board with id: ${id}`);
 		}
@@ -119,34 +125,52 @@ export class BoardService {
 			);
 		}
 
-		if (files.length > 0) {
-			const images: Image[] = [];
-			for (const file of files) {
-				const image = await this.uploadFile(file);
-				images.push(image);
+		// transaction 시작
+		await queryRunner.startTransaction();
+		try {
+			if (files.length > 0) {
+				const images: Image[] = [];
+				for (const file of files) {
+					const image = await this.uploadFile(file);
+					images.push(image);
+				}
+				// 기존 이미지 삭제
+				for (const image of board.images) {
+					// 이미지 리포지토리에서 삭제
+					// await this.imageRepository.delete({ id: image.id });
+					await queryRunner.manager.delete(Image, { id: image.id });
+					// NCP Object Storage에서 삭제
+					await this.deleteFile(image.filename);
+				}
+				// 새로운 이미지로 교체
+				board.images = images;
 			}
-			// 기존 이미지 삭제
-			for (const image of board.images) {
-				// 이미지 리포지토리에서 삭제
-				await this.imageRepository.delete({ id: image.id });
-				// NCP Object Storage에서 삭제
-				await this.deleteFile(image.filename);
+
+			// updateBoardDto.content가 존재하면 AES 암호화하여 저장
+			if (updateBoardDto.content) {
+				updateBoardDto.content = encryptAes(updateBoardDto.content);
 			}
-			// 새로운 이미지로 교체
-			board.images = images;
-		}
 
-		// updateBoardDto.content가 존재하면 AES 암호화하여 저장
-		if (updateBoardDto.content) {
-			updateBoardDto.content = encryptAes(updateBoardDto.content);
-		}
+			// const updatedBoard: Board = await this.boardRepository.save({
+			// 	...board,
+			// 	...updateBoardDto,
+			// });
+			const updatedBoard: Board = await queryRunner.manager.save(Board, {
+				...board,
+				...updateBoardDto,
+			});
 
-		const updatedBoard: Board = await this.boardRepository.save({
-			...board,
-			...updateBoardDto,
-		});
-		delete updatedBoard.user.password; // password 제거하여 반환
-		return updatedBoard;
+			// commit Transaction
+			await queryRunner.commitTransaction();
+
+			delete updatedBoard.user.password; // password 제거하여 반환
+			return updatedBoard;
+		} catch (err) {
+			Logger.error(err);
+			await queryRunner.rollbackTransaction();
+		} finally {
+			await queryRunner.release();
+		}
 	}
 
 	async patchLike(id: number, userData: UserDataDto): Promise<Partial<Board>> {

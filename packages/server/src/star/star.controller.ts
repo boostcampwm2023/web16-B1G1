@@ -6,6 +6,7 @@ import {
 	Param,
 	UseGuards,
 	Query,
+	ParseIntPipe,
 } from '@nestjs/common';
 import { StarService } from './star.service';
 import { UpdateStarDto } from './dto/update-star.dto';
@@ -17,6 +18,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { FindAllStarsMineSwaggerDecorator } from './decorators/swagger/find-all-stars-mine-swagger.decorator';
 import { FindAllStarsByAuthorSwaggerDecorator } from './decorators/swagger/find-all-stars-by-author-swagger.decorator';
 import { UpdateStarByPostIdSwaggerDecorator } from './decorators/swagger/update-star-by-post-id-swagger.decorator';
+import { Star } from './schemas/star.schema';
 
 @Controller('star')
 @ApiTags('별 API')
@@ -41,11 +43,17 @@ export class StarController {
 
 	// 게시글 id를 이용해 별 정보를 수정함
 	@Patch(':id')
+	@UseGuards(CookieAuthGuard)
 	@UpdateStarByPostIdSwaggerDecorator()
 	updateStarByPostId(
-		@Param('id') post_id: string,
+		@Param('id', ParseIntPipe) post_id: number,
 		@Body() updateStarDto: UpdateStarDto,
-	) {
-		return this.starService.updateStarByPostId(+post_id, updateStarDto);
+		@GetUser() userData: UserDataDto,
+	): Promise<Star> {
+		return this.starService.updateStarByPostId(
+			post_id,
+			updateStarDto,
+			userData,
+		);
 	}
 }

@@ -74,17 +74,19 @@ export class BoardController {
 		return boardData;
 	}
 
-	// TODO: 사진도 수정할 수 있도록 폼데이터 형태로 받기
+	// 사진도 수정할 수 있도록 폼데이터 형태로 받기
 	@Patch(':id')
 	@UseGuards(CookieAuthGuard)
+	@UseInterceptors(FilesInterceptor('file', 3))
 	@UsePipes(ValidationPipe)
 	@UpdateBoardSwaggerDecorator()
 	updateBoard(
 		@Param('id', ParseIntPipe) id: number,
 		@Body() updateBoardDto: UpdateBoardDto,
 		@GetUser() userData: UserDataDto,
+		@UploadedFiles() files: Express.Multer.File[],
 	) {
-		return this.boardService.updateBoard(id, updateBoardDto, userData);
+		return this.boardService.updateBoard(id, updateBoardDto, userData, files);
 	}
 
 	@Patch(':id/like')
@@ -109,7 +111,7 @@ export class BoardController {
 		return this.boardService.patchUnlike(id, userData);
 	}
 
-	// TODO: 연관된 Image 및 Star도 함께 삭제
+	// 연관된 Image 및 Star, Like도 함께 삭제
 	@Delete(':id')
 	@UseGuards(CookieAuthGuard)
 	@UsePipes(ValidationPipe)

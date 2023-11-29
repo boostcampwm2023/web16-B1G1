@@ -22,6 +22,7 @@ import {
 	getOAuthUserData,
 } from '../utils/auth.util';
 import { v4 as uuid } from 'uuid';
+import { UserDataDto } from './dto/user-data.dto';
 
 @Injectable()
 export class AuthService {
@@ -77,7 +78,7 @@ export class AuthService {
 		return { accessToken, refreshToken };
 	}
 
-	async signOut(user: Partial<User>) {
+	async signOut(user: UserDataDto) {
 		this.redisRepository.del(user.username);
 	}
 

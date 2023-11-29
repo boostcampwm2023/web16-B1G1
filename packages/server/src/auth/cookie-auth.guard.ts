@@ -62,6 +62,7 @@ export class CookieAuthGuard extends AuthGuard('jwt') {
 				id: request.user.userId,
 				username: request.user.username,
 				nickname: request.user.nickname,
+				status: request.user.status,
 			},
 			JwtEnum.ACCESS_TOKEN_TYPE,
 			this.jwtService,

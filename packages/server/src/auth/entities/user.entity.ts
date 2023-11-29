@@ -3,11 +3,13 @@ import {
 	Column,
 	CreateDateColumn,
 	Entity,
+	Index,
 	OneToMany,
 	PrimaryGeneratedColumn,
 } from 'typeorm';
 
 @Entity()
+@Index('IDX_FULLTEXT_NICKNAME', ['nickname'], { fulltext: true })
 export class User {
 	@PrimaryGeneratedColumn()
 	id: number;

@@ -111,7 +111,7 @@ export class BoardController {
 		return this.boardService.patchUnlike(id, userData);
 	}
 
-	// TODO: 연관된 Image 및 Star도 함께 삭제
+	// 연관된 Image 및 Star, Like도 함께 삭제
 	@Delete(':id')
 	@UseGuards(CookieAuthGuard)
 	@UsePipes(ValidationPipe)

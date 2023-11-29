@@ -195,6 +195,22 @@ export class BoardService {
 			throw new BadRequestException('You are not the author of this post');
 		}
 
+		// 연관된 이미지 삭제
+		for (const image of board.images) {
+			// 이미지 리포지토리에서 삭제
+			await this.imageRepository.delete({ id: image.id });
+			// NCP Object Storage에서 삭제
+			await this.deleteFile(image.filename);
+		}
+
+		// 연관된 별 스타일 삭제
+		if (board.star) {
+			await this.starModel.deleteOne({ _id: board.star });
+		}
+
+		// like 조인테이블 레코드들은 자동으로 삭제됨 (외래키 제약조건 ON DELETE CASCADE)
+
+		// 게시글 삭제
 		const result = await this.boardRepository.delete({ id });
 	}
 

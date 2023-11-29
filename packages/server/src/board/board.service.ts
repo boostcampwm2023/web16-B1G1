@@ -100,12 +100,37 @@ export class BoardService {
 		id: number,
 		updateBoardDto: UpdateBoardDto,
 		userData: UserDataDto,
+		files: Express.Multer.File[],
 	) {
 		const board: Board = await this.findBoardById(id);
 
 		// 게시글 작성자와 수정 요청자가 다른 경우
 		if (board.user.id !== userData.userId) {
 			throw new BadRequestException('You are not the author of this post');
+		}
+
+		// star에 대한 수정은 별도 API(PATCH /star/:id)로 처리하므로 400 에러 리턴
+		if (updateBoardDto.star) {
+			throw new BadRequestException(
+				'You cannot update star with this API. use PATCH /star/:id',
+			);
+		}
+
+		if (files.length > 0) {
+			const images: Image[] = [];
+			for (const file of files) {
+				const image = await this.uploadFile(file);
+				images.push(image);
+			}
+			// 기존 이미지 삭제
+			for (const image of board.images) {
+				// 이미지 리포지토리에서 삭제
+				await this.imageRepository.delete({ id: image.id });
+				// NCP Object Storage에서 삭제
+				await this.deleteFile(image.filename);
+			}
+			// 새로운 이미지로 교체
+			board.images = images;
 		}
 
 		// updateBoardDto.content가 존재하면 AES 암호화하여 저장
@@ -218,5 +243,17 @@ export class BoardService {
 		Logger.log(`downloadFile result: ${result.ETag}`);
 
 		return result.Body as Buffer;
+	}
+
+	async deleteFile(filename: string): Promise<void> {
+		// NCP Object Storage에서 파일 삭제
+		AWS.config.update(awsConfig);
+		const result = await new AWS.S3()
+			.deleteObject({
+				Bucket: bucketName,
+				Key: filename,
+			})
+			.promise();
+		Logger.log('deleteFile result:', result);
 	}
 }

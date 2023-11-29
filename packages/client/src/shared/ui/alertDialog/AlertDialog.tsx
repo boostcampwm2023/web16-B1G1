@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { Body02ME, Title01, Title02 } from '../styles';
+import { Body02ME, Title01 } from '../styles';
 import { css } from '@emotion/react';
 import { Button } from '..';
 

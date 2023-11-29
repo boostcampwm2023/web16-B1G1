@@ -10,6 +10,7 @@ import LoginModal from 'widgets/loginModal';
 import SignUpModal from 'widgets/signupModal/SignUpModal';
 import NickNameSetModal from 'widgets/nickNameSetModal/NickNameSetModal';
 import LogoAndStart from 'widgets/logoAndStart';
+import PostModal from 'features/postModal/PostModal';
 
 export const router = createBrowserRouter(
 	createRoutesFromElements(
@@ -22,6 +23,9 @@ export const router = createBrowserRouter(
 			</Route>
 
 			<Route path="/home" element={<Home />}>
+				<Route path=":postId">
+					<Route path="detail" element={<PostModal />} />
+				</Route>
 				<Route path="writing" element={<WritingModal />} />
 			</Route>
 		</>,

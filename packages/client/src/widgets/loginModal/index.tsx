@@ -4,6 +4,9 @@ import { useLoginStore } from 'shared/store/userLoginStore';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { BASE_URL } from '@constants';
+import Cookie from 'js-cookie';
+
+axios.defaults.withCredentials = true;
 
 export default function LoginModal() {
 	const { id, password, setPassword } = useLoginStore();
@@ -16,10 +19,17 @@ export default function LoginModal() {
 			password: password,
 		};
 		setPassword('');
-		axios.post(BASE_URL + 'auth/signin', data).then((res) => {
-			if (res.status === 200) navigate('/home');
-			else console.log(res.status);
-		});
+		axios
+			.post(BASE_URL + 'auth/signin', data, {
+				withCredentials: true,
+			})
+			.then((res) => {
+				if (res.status === 200) {
+					Cookie.set('accessToken', res.data.accessToken);
+					Cookie.set('refreshToken', res.data.refreshToken);
+					navigate('/home');
+				} else console.log(res.status);
+			});
 	};
 	return (
 		<form

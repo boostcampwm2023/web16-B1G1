@@ -182,4 +182,9 @@ export class AuthController {
 
 		return savedUser;
 	}
+
+	@Get('search')
+	searchUser(@Query('nickname') nickname: string) {
+		return this.authService.searchUser(nickname);
+	}
 }

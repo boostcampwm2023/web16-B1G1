@@ -2,6 +2,7 @@ import {
 	BadRequestException,
 	ConflictException,
 	Injectable,
+	NotFoundException,
 	UnauthorizedException,
 } from '@nestjs/common';
 import { SignUpUserDto } from './dto/signup-user.dto';
@@ -57,8 +58,13 @@ export class AuthService {
 
 		const user = await this.userRepository.findOneBy({ username });
 
-		if (!(user && (await bcrypt.compare(password, user.password)))) {
-			throw new UnauthorizedException(UserEnum.FAIL_SIGNIN_MESSAGE);
+		if (!user) {
+			throw new NotFoundException(UserEnum.NOT_EXIST_USERNAME_MESSAGE);
+		}
+
+		const isCorrectPassword = await bcrypt.compare(password, user.password);
+		if (!isCorrectPassword) {
+			throw new UnauthorizedException(UserEnum.UNCORRECT_PASSWORD_MESSAGE);
 		}
 
 		const [accessToken, refreshToken] = await Promise.all([

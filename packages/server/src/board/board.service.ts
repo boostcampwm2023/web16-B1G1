@@ -45,35 +45,73 @@ export class BoardService {
 	): Promise<Board> {
 		const { title, content, star } = createBoardDto;
 
-		const user = await this.userRepository.findOneBy({ id: userData.userId });
+		// transaction 생성하여 board, image, star, like 레코드 동시에 생성
+		const queryRunner = this.dataSource.createQueryRunner();
+		await queryRunner.connect();
 
-		const images: Image[] = [];
-		for (const file of files) {
-			const image = await this.uploadFile(file);
-			images.push(image);
-		}
-
-		// 별 스타일이 존재하면 MongoDB에 저장
-		let star_id: string;
-		if (star) {
-			const starDoc = new this.starModel({
-				...JSON.parse(star),
-			});
-			await starDoc.save();
-			star_id = starDoc._id.toString();
-		}
-
-		const board = this.boardRepository.create({
-			title,
-			content: encryptAes(content), // AES 암호화하여 저장
-			user,
-			images,
-			star: star_id,
+		// const user = await this.userRepository.findOneBy({ id: userData.userId });
+		const user = await queryRunner.manager.findOneBy(User, {
+			id: userData.userId,
 		});
-		const createdBoard: Board = await this.boardRepository.save(board);
 
-		createdBoard.user.password = undefined; // password 제거하여 반환
-		return createdBoard;
+		// transaction 시작
+		await queryRunner.startTransaction();
+		try {
+			const images: Image[] = [];
+			for (const file of files) {
+				// Object Storage에 업로드
+				const imageInfo = await this.uploadFile(file);
+
+				// 이미지 리포지토리에 저장
+				const image = queryRunner.manager.create(Image, {
+					...imageInfo,
+				});
+
+				const createdImage = await queryRunner.manager.save(image);
+
+				images.push(createdImage);
+			}
+
+			// 별 스타일이 존재하면 MongoDB에 저장
+			let star_id: string;
+			if (star) {
+				const starDoc = new this.starModel({
+					...JSON.parse(star),
+				});
+				await starDoc.save();
+				star_id = starDoc._id.toString();
+			}
+
+			// const board = this.boardRepository.create({
+			// 	title,
+			// 	content: encryptAes(content), // AES 암호화하여 저장
+			// 	user,
+			// 	images,
+			// 	star: star_id,
+			// });
+			const board = queryRunner.manager.create(Board, {
+				title,
+				content: encryptAes(content), // AES 암호화하여 저장
+				user,
+				images,
+				star: star_id,
+			});
+			// const createdBoard: Board = await this.boardRepository.save(board);
+			const createdBoard: Board = await queryRunner.manager.save(board);
+
+			// commit transacton
+			await queryRunner.commitTransaction();
+
+			createdBoard.user.password = undefined; // password 제거하여 반환
+			return createdBoard;
+		} catch (error) {
+			Logger.error(error);
+			await queryRunner.rollbackTransaction();
+
+			throw new InternalServerErrorException('Failed to update board');
+		} finally {
+			await queryRunner.release();
+		}
 	}
 
 	async findBoardById(id: number): Promise<Board> {
@@ -131,8 +169,14 @@ export class BoardService {
 			if (files.length > 0) {
 				const images: Image[] = [];
 				for (const file of files) {
-					const image = await this.uploadFile(file);
-					images.push(image);
+					const imageInfo = await this.uploadFile(file);
+
+					const image = queryRunner.manager.create(Image, {
+						...imageInfo,
+					});
+
+					const updatedImage = await queryRunner.manager.save(image);
+					images.push(updatedImage);
 				}
 				// 기존 이미지 삭제
 				for (const image of board.images) {
@@ -168,6 +212,8 @@ export class BoardService {
 		} catch (err) {
 			Logger.error(err);
 			await queryRunner.rollbackTransaction();
+
+			throw new InternalServerErrorException('Failed to update board');
 		} finally {
 			await queryRunner.release();
 		}
@@ -268,17 +314,19 @@ export class BoardService {
 		} catch (err) {
 			Logger.error(err);
 			await queryRunner.rollbackTransaction();
+
+			throw new InternalServerErrorException('Failed to update board');
 		} finally {
 			await queryRunner.release();
 		}
 	}
 
-	async uploadFile(file: Express.Multer.File): Promise<Image> {
+	async uploadFile(file: Express.Multer.File): Promise<any> {
 		if (!file.mimetype.includes('image')) {
 			throw new BadRequestException('Only image files are allowed');
 		}
 
-		const { mimetype, buffer, size } = file;
+		const { buffer } = file;
 
 		const resized_buffer = await sharp(buffer)
 			.resize(500, 500, { fit: 'cover' })
@@ -297,15 +345,19 @@ export class BoardService {
 				ACL: 'public-read',
 			})
 			.promise();
-		Logger.log('uploadFile result:', result);
+		// eTag 없으면 에러 리턴
+		if (!result.ETag) {
+			throw new InternalServerErrorException('Failed to upload file');
+		}
+		Logger.log(`uploadFile result: ${result.ETag}`);
 
-		const updatedImage = await this.imageRepository.save({
-			mimetype,
+		const eTag = result.ETag;
+		return {
+			mimetype: 'image/png',
 			filename,
-			size,
-		});
-
-		return updatedImage;
+			size: resized_buffer.length,
+			eTag,
+		};
 	}
 
 	async downloadFile(filename: string): Promise<Buffer> {

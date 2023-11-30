@@ -24,6 +24,9 @@ export class Image extends BaseEntity {
 	@Column({ type: 'int', nullable: false })
 	size: number;
 
+	@Column({ type: 'varchar', length: 50, nullable: false })
+	eTag: string;
+
 	@CreateDateColumn()
 	created_at: Date;
 

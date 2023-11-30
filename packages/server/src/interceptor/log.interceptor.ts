@@ -7,6 +7,7 @@ import {
 } from '@nestjs/common';
 import { Observable, tap } from 'rxjs';
 import { getRandomId } from '../util/interceptor.util';
+import { LogColorCode } from './log-color.code';
 
 @Injectable()
 export class LogInterceptor implements NestInterceptor {
@@ -17,27 +18,36 @@ export class LogInterceptor implements NestInterceptor {
 		const now = new Date();
 		const req = context.switchToHttp().getRequest();
 		const path = req.originalUrl;
+		const method = req.method;
 
 		const randomId = getRandomId();
-		const blueColor = '\x1b[34m';
-		const purpleColor = '\x1b[35m';
-		const resetColor = '\x1b[0m';
-		let reqLog = `${blueColor}[REQ - ${randomId}]${resetColor} [${path}] [${now.toLocaleString(
+		const reqString = `${LogColorCode.blue}[REQ - ${randomId}]${LogColorCode.reset}`;
+		const pathString = `${LogColorCode.leaf}[${method} ${path}]${LogColorCode.reset}`;
+		const reqTimeString = `${LogColorCode.warmgray}[${now.toLocaleString(
 			'kr',
-		)}]`;
+		)}]${LogColorCode.reset}`;
+		let userString: string;
+
+		let reqLog = `${reqString} ${pathString} ${reqTimeString}`;
 		if (req.user) {
-			reqLog += ` [${req.user.username}]`;
+			userString = `${LogColorCode.purple}[${req.user.username}]${LogColorCode.reset}`;
+			reqLog += ` ${userString}`;
 		}
 		Logger.log(reqLog);
 
 		return next.handle().pipe(
 			tap(() => {
 				const resTime = new Date();
-				let resLog = `${purpleColor}[RES - ${randomId}]${resetColor} [${path}] [${resTime.toLocaleString(
-					'kr',
-				)} - ${resTime.getMilliseconds() - now.getMilliseconds()}ms]`;
+				const resString = `${LogColorCode.orange}[RES - ${randomId}]${LogColorCode.reset}`;
+				const resTimeString = `${
+					LogColorCode.warmgray
+				}[${resTime.toLocaleString('kr')} - ${
+					resTime.getMilliseconds() - now.getMilliseconds()
+				}ms]${LogColorCode.reset}`;
+
+				let resLog = `${resString} ${pathString} ${resTimeString}`;
 				if (req.user) {
-					resLog += ` [${req.user.username}]`;
+					resLog += ` ${userString}`;
 				}
 				Logger.log(resLog);
 			}),

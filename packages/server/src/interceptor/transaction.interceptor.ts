@@ -9,6 +9,7 @@ import {
 import { catchError, Observable, tap } from 'rxjs';
 import { DataSource, QueryRunner } from 'typeorm';
 import { getRandomId } from '../util/interceptor.util';
+import { LogColorCode } from './log-color.code';
 
 @Injectable()
 export class TransactionInterceptor implements NestInterceptor {
@@ -20,50 +21,58 @@ export class TransactionInterceptor implements NestInterceptor {
 	): Promise<Observable<any>> {
 		const req = context.switchToHttp().getRequest();
 		const path = req.originalUrl;
+		const method = req.method;
 
 		const queryRunner: QueryRunner = this.dataSource.createQueryRunner();
 		await queryRunner.connect();
 		await queryRunner.startTransaction();
 
+		const startTime = new Date();
 		const randomId = getRandomId();
-		const now = new Date();
-		const pinkColor = '\x1b[35m';
-		const aquaColor = '\x1b[36m';
-		const redColor = '\x1b[31m';
-		const resetColor = '\x1b[0m';
-		Logger.log(
-			`${pinkColor}[Transaction - ${randomId}]${resetColor} [${path}] [${now.toLocaleString(
-				'kr',
-			)}] - Transaction Start`,
-		);
-		// TODO: transaction 사용하는 부분에서 이 queryRunner를 사용하도록 변경해야 함
+
+		const transactionString = `${LogColorCode.orange}[Transaction - ${randomId}]${LogColorCode.reset}`;
+		const pathString = `${LogColorCode.leaf}[${method} ${path}]${LogColorCode.reset}`;
+		const startTimeString = `${
+			LogColorCode.warmgray
+		}[${startTime.toLocaleString('kr')}]${LogColorCode.reset}`;
+		const transactionMentString = `- ${LogColorCode.orange}Transaction Start${LogColorCode.reset}`;
+
+		const transactionStartLog = `${transactionString} ${pathString} ${startTimeString} ${transactionMentString}`;
+		Logger.log(transactionStartLog);
 		req.queryRunner = queryRunner;
 
 		return next.handle().pipe(
 			catchError(async (error) => {
 				await queryRunner.rollbackTransaction();
 				await queryRunner.release();
-				// TODO: 에러를 로그만 남길지 던져줄지 정해야 함
+
 				const rollbackTime = new Date();
-				Logger.error(
-					`${redColor}[Transaction - ${randomId}]${resetColor} [${path}] [${rollbackTime.toLocaleString(
-						'kr',
-					)}] - Error Encountered, Transaction Rollback`,
-				);
+				const rollbackString = `${LogColorCode.red}[Transaction - ${randomId}]${LogColorCode.reset}`;
+				const rollbackTimeString = `${
+					LogColorCode.warmgray
+				}[${rollbackTime.toLocaleString('kr')}]${LogColorCode.reset}`;
+				const rollbackMentString = `- ${LogColorCode.red}Transaction Rollback${LogColorCode.reset}`;
+
+				const rollbackLog = `${rollbackString} ${pathString} ${rollbackTimeString} ${rollbackMentString}`;
+				Logger.error(rollbackLog);
 				Logger.error(error);
 				throw new InternalServerErrorException("Can't process your request");
 			}),
 			tap(async () => {
 				await queryRunner.commitTransaction();
 				await queryRunner.release();
+
 				const commitTime = new Date();
-				Logger.log(
-					`${aquaColor}[Transaction - ${randomId}]${resetColor} [${path}] [${commitTime.toLocaleString(
-						'kr',
-					)} - ${
-						now.getMilliseconds() - commitTime.getMilliseconds()
-					}ms] - Transaction Commit`,
-				);
+				const commitString = `${LogColorCode.aqua}[Transaction - ${randomId}]${LogColorCode.reset}`;
+				const commitTimeString = `${
+					LogColorCode.warmgray
+				}[${commitTime.toLocaleString('kr')} - ${
+					startTime.getMilliseconds() - commitTime.getMilliseconds()
+				}ms]${LogColorCode.reset}`;
+				const commitMentString = `- ${LogColorCode.aqua}Transaction Commit${LogColorCode.reset}`;
+
+				const commitLog = `${commitString} ${pathString} ${commitTimeString} ${commitMentString}`;
+				Logger.log(commitLog);
 			}),
 		);
 	}

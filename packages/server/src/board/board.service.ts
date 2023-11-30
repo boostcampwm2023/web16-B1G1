@@ -45,35 +45,73 @@ export class BoardService {
 	): Promise<Board> {
 		const { title, content, star } = createBoardDto;
 
-		const user = await this.userRepository.findOneBy({ id: userData.userId });
+		// transaction 생성하여 board, image, star, like 레코드 동시에 생성
+		const queryRunner = this.dataSource.createQueryRunner();
+		await queryRunner.connect();
 
-		const images: Image[] = [];
-		for (const file of files) {
-			const image = await this.uploadFile(file);
-			images.push(image);
-		}
-
-		// 별 스타일이 존재하면 MongoDB에 저장
-		let star_id: string;
-		if (star) {
-			const starDoc = new this.starModel({
-				...JSON.parse(star),
-			});
-			await starDoc.save();
-			star_id = starDoc._id.toString();
-		}
-
-		const board = this.boardRepository.create({
-			title,
-			content: encryptAes(content), // AES 암호화하여 저장
-			user,
-			images,
-			star: star_id,
+		// const user = await this.userRepository.findOneBy({ id: userData.userId });
+		const user = await queryRunner.manager.findOneBy(User, {
+			id: userData.userId,
 		});
-		const createdBoard: Board = await this.boardRepository.save(board);
 
-		createdBoard.user.password = undefined; // password 제거하여 반환
-		return createdBoard;
+		// transaction 시작
+		await queryRunner.startTransaction();
+		try {
+			const images: Image[] = [];
+			for (const file of files) {
+				// Object Storage에 업로드
+				const imageInfo = await this.uploadFile(file);
+
+				// 이미지 리포지토리에 저장
+				const image = queryRunner.manager.create(Image, {
+					...imageInfo,
+				});
+
+				const createdImage = await queryRunner.manager.save(image);
+
+				images.push(createdImage);
+			}
+
+			// 별 스타일이 존재하면 MongoDB에 저장
+			let star_id: string;
+			if (star) {
+				const starDoc = new this.starModel({
+					...JSON.parse(star),
+				});
+				await starDoc.save();
+				star_id = starDoc._id.toString();
+			}
+
+			// const board = this.boardRepository.create({
+			// 	title,
+			// 	content: encryptAes(content), // AES 암호화하여 저장
+			// 	user,
+			// 	images,
+			// 	star: star_id,
+			// });
+			const board = queryRunner.manager.create(Board, {
+				title,
+				content: encryptAes(content), // AES 암호화하여 저장
+				user,
+				images,
+				star: star_id,
+			});
+			// const createdBoard: Board = await this.boardRepository.save(board);
+			const createdBoard: Board = await queryRunner.manager.save(board);
+
+			// commit transacton
+			await queryRunner.commitTransaction();
+
+			createdBoard.user.password = undefined; // password 제거하여 반환
+			return createdBoard;
+		} catch (error) {
+			Logger.error(error);
+			await queryRunner.rollbackTransaction();
+
+			throw new InternalServerErrorException('Failed to update board');
+		} finally {
+			await queryRunner.release();
+		}
 	}
 
 	async findBoardById(id: number): Promise<Board> {

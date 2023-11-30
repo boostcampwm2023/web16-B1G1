@@ -35,7 +35,7 @@ export class TransactionInterceptor implements NestInterceptor {
 		const startTimeString = `${
 			LogColorCode.warmgray
 		}[${startTime.toLocaleString('kr')}]${LogColorCode.reset}`;
-		const transactionMentString = `- ${LogColorCode.orange}Transaction Start$${LogColorCode.reset}`;
+		const transactionMentString = `- ${LogColorCode.orange}Transaction Start${LogColorCode.reset}`;
 
 		const transactionStartLog = `${transactionString} ${pathString} ${startTimeString} ${transactionMentString}`;
 		Logger.log(transactionStartLog);

@@ -5,7 +5,7 @@ import {
 	Logger,
 	NestInterceptor,
 } from '@nestjs/common';
-import { Observable, tap } from 'rxjs';
+import { catchError, Observable, tap } from 'rxjs';
 import { getRandomId } from '../util/interceptor.util';
 import { LogColorCode } from './log-color.code';
 
@@ -36,6 +36,23 @@ export class LogInterceptor implements NestInterceptor {
 		Logger.log(reqLog);
 
 		return next.handle().pipe(
+			catchError((error) => {
+				const errTime = new Date();
+				const errString = `${LogColorCode.red}[ERR - ${randomId}]${LogColorCode.reset}`;
+				const errTimeString = `${
+					LogColorCode.warmgray
+				}[${errTime.toLocaleString('kr')} - ${
+					errTime.getMilliseconds() - now.getMilliseconds()
+				}ms]${LogColorCode.reset}`;
+
+				let errLog = `${errString} ${pathString} ${errTimeString}`;
+				if (req.user) {
+					errLog += ` ${userString}`;
+				}
+				Logger.error(errLog);
+				Logger.error(error);
+				throw error;
+			}),
 			tap(() => {
 				const resTime = new Date();
 				const resString = `${LogColorCode.orange}[RES - ${randomId}]${LogColorCode.reset}`;

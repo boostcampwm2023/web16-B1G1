@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { QueryRunner } from 'typeorm';
 
-export const GetQuerryRunner = createParamDecorator(
+export const GetQueryRunner = createParamDecorator(
 	(data: keyof QueryRunner | undefined, context: ExecutionContext) => {
 		const req = context.switchToHttp().getRequest();
 

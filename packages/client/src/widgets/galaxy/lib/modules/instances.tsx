@@ -28,14 +28,14 @@ export default function Instances({ count, size, color }: PropsType) {
 		for (let arm = 0; arm < ARMS; arm++) {
 			for (let star = 0; star < arms / (ARMS + 1); star++) {
 				tempObject.position.copy(
-					getSpiralPositions((arm * 2 * Math.PI) / ARMS),
+					getSpiralPositions(((2 * Math.PI) / ARMS) * arm),
 				);
 				tempObject.updateMatrix();
 				instancedMeshRef.current.setMatrixAt(index++, tempObject.matrix);
 			}
 		}
 		for (let i = 0; i < center; i++) {
-			tempObject.position.copy(getSpherePositions(2000));
+			tempObject.position.copy(getSpherePositions());
 			tempObject.updateMatrix();
 			instancedMeshRef.current.setMatrixAt(index++, tempObject.matrix);
 		}

@@ -6,6 +6,7 @@ import {
 	NestInterceptor,
 } from '@nestjs/common';
 import { Observable, tap } from 'rxjs';
+import { getRandomId } from '../util/interceptor.util';
 
 @Injectable()
 export class LogInterceptor implements NestInterceptor {
@@ -17,11 +18,11 @@ export class LogInterceptor implements NestInterceptor {
 		const req = context.switchToHttp().getRequest();
 		const path = req.originalUrl;
 
+		const randomId = getRandomId();
 		const blueColor = '\x1b[34m';
 		const purpleColor = '\x1b[35m';
 		const resetColor = '\x1b[0m';
-
-		let reqLog = `${blueColor}[REQ]${resetColor} [${path}] [${now.toLocaleString(
+		let reqLog = `${blueColor}[REQ - ${randomId}]${resetColor} [${path}] [${now.toLocaleString(
 			'kr',
 		)}]`;
 		if (req.user) {
@@ -32,7 +33,7 @@ export class LogInterceptor implements NestInterceptor {
 		return next.handle().pipe(
 			tap(() => {
 				const resTime = new Date();
-				let resLog = `${purpleColor}[RES]${resetColor} [${path}] [${resTime.toLocaleString(
+				let resLog = `${purpleColor}[RES - ${randomId}]${resetColor} [${path}] [${resTime.toLocaleString(
 					'kr',
 				)} - ${resTime.getMilliseconds() - now.getMilliseconds()}ms]`;
 				if (req.user) {

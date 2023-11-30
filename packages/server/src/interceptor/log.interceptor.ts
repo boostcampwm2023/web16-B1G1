@@ -31,9 +31,10 @@ export class LogInterceptor implements NestInterceptor {
 
 		return next.handle().pipe(
 			tap(() => {
-				let resLog = `${purpleColor}[RES]${resetColor} [${path}] [${new Date().toLocaleString(
+				const resTime = new Date();
+				let resLog = `${purpleColor}[RES]${resetColor} [${path}] [${resTime.toLocaleString(
 					'kr',
-				)} - ${new Date().getMilliseconds() - now.getMilliseconds()}ms]`;
+				)} - ${resTime.getMilliseconds() - now.getMilliseconds()}ms]`;
 				if (req.user) {
 					resLog += ` [${req.user.username}]`;
 				}

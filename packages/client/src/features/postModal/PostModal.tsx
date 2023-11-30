@@ -9,6 +9,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useFetch } from 'shared/hooks';
 import { PostData } from 'shared/lib/types/post';
 import { deletePost } from './api/deletePost';
+import ImageSlider from './ui/ImageSlider';
 
 export default function PostModal() {
 	const { setView } = useViewStore();
@@ -50,15 +51,11 @@ export default function PostModal() {
 						navigate(`/home/${postId}`);
 					}}
 				>
-					<ImageContainer>
-						<Image
-							src={
-								data.images[0]
-								// TODO: 여러 이미지 출력할 수 있는 Carousel 구현
-							}
-							alt="img"
-						/>
-					</ImageContainer>
+					{data.images.length && (
+						<ImageContainer>
+							<ImageSlider imageUrls={data.images} />
+						</ImageContainer>
+					)}
 					<TextContainer>
 						<ReactMarkdown remarkPlugins={[remarkGfm]}>
 							{data.content}
@@ -99,8 +96,6 @@ const ImageContainer = styled.div`
 	display: flex;
 	justify-content: center;
 	margin-bottom: 26px;
-`;
-
-const Image = styled.img`
-	width: 649px;
+	width: 100%;
+	height: 100%;
 `;

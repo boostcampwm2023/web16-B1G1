@@ -41,6 +41,7 @@ import { StatusValidationPipe } from './pipes/StatusValidationPipe';
 import { ChangeStatusSwaggerDecorator } from './decorators/swagger/change-status-swagger.decorator';
 import { GetShareLinkSwaggerDecorator } from './decorators/swagger/get-share-link-swagger.decorator';
 import { LogInterceptor } from '../interceptor/log.interceptor';
+import { CheckSignInSwaggerDecorator } from './decorators/swagger/check-sign-in-swagger.decorator';
 
 @Controller('auth')
 @UseInterceptors(LogInterceptor)
@@ -77,6 +78,13 @@ export class AuthController {
 		});
 
 		return tokens;
+	}
+
+	@Get('check-signin')
+	@UseGuards(CookieAuthGuard)
+	@CheckSignInSwaggerDecorator()
+	async checkSignIn(@GetUser() userData: UserDataDto) {
+		return userData;
 	}
 
 	@Get('signout')

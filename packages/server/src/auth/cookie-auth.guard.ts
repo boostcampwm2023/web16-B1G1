@@ -6,7 +6,7 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import { JwtService } from '@nestjs/jwt';
 import { RedisRepository } from './redis.repository';
-import { createJwt } from '../utils/auth.util';
+import { createJwt } from '../util/auth.util';
 import { JwtEnum } from './enums/jwt.enum';
 
 @Injectable()

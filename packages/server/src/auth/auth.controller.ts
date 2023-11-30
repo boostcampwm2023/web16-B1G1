@@ -15,6 +15,7 @@ import {
 	NotFoundException,
 	BadRequestException,
 	Patch,
+	UseInterceptors,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SignUpUserDto } from './dto/signup-user.dto';
@@ -39,8 +40,10 @@ import { UserDataDto } from './dto/user-data.dto';
 import { StatusValidationPipe } from './pipes/StatusValidationPipe';
 import { ChangeStatusSwaggerDecorator } from './decorators/swagger/change-status-swagger.decorator';
 import { GetShareLinkSwaggerDecorator } from './decorators/swagger/get-share-link-swagger.decorator';
+import { LogInterceptor } from '../interceptor/log.interceptor';
 
 @Controller('auth')
+@UseInterceptors(LogInterceptor)
 @ApiTags('인증/인가 API')
 export class AuthController {
 	constructor(private readonly authService: AuthService) {}

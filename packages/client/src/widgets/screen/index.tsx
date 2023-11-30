@@ -6,7 +6,7 @@ import { useControls } from 'leva';
 import { CAMERA_POSITION, CAMERA_FAR } from '@constants';
 import Controls from 'features/controls/Controls.tsx';
 import { useCameraStore } from 'shared/store/useCameraStore.ts';
-import { Posts } from 'entities/posts/index.ts';
+import { Posts } from 'entities/posts';
 
 export default function Screen() {
 	const camera = {

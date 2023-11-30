@@ -3,6 +3,8 @@ import { BASE_URL } from '@constants';
 import Cookies from 'js-cookie';
 import { NavigateFunction } from 'react-router-dom';
 
+axios.defaults.withCredentials = true;
+
 export const postLogin = async (
 	data: {
 		username: string;
@@ -13,7 +15,9 @@ export const postLogin = async (
 	navigate: NavigateFunction,
 ) => {
 	try {
-		const res = await axios.post(BASE_URL + 'auth/signin', data);
+		const res = await axios.post(BASE_URL + 'auth/signin', data, {
+			withCredentials: true,
+		});
 
 		Cookies.set('userId', data.username, { path: '/', expires: 7 });
 		Cookies.set('refreshToken', res.data.refreshToken, {

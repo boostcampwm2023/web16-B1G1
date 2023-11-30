@@ -6,11 +6,11 @@ import { Html } from '@react-three/drei';
 import styled from '@emotion/styled';
 import { useViewStore } from 'shared/store/useViewStore';
 import * as THREE from 'three';
-import { PostData } from 'shared/lib/types/post';
-import { usePostStore } from 'shared/store/usePostStore';
+import { StarData } from 'shared/lib/types/star';
+import { useNavigate } from 'react-router-dom';
 
 interface PropsType {
-	data: PostData;
+	data: StarData;
 	onClick: () => void;
 	isSelected: boolean;
 }
@@ -19,7 +19,7 @@ export default function Post({ data, onClick, isSelected }: PropsType) {
 	const { targetView, setTargetView } = useCameraStore();
 	const meshRef = useRef<THREE.Mesh>(null!);
 	const { view, setView } = useViewStore();
-	const { setData } = usePostStore();
+	const navigate = useNavigate();
 
 	const handleMeshClick = (e: ThreeEvent<MouseEvent>) => {
 		e.stopPropagation();
@@ -28,16 +28,19 @@ export default function Post({ data, onClick, isSelected }: PropsType) {
 		if (meshRef.current !== targetView) {
 			setView('DETAIL');
 			setTargetView(meshRef.current);
+			navigate(`/home/${data.id}`);
 			return;
 		}
 
-		setData(data);
+		navigate(`/home/${data.id}/detail`);
 		setView('POST');
 	};
 
 	return (
 		<Star
-			position={data.position}
+			position={
+				new THREE.Vector3(data.position.x, data.position.y, data.position.z)
+			}
 			size={data.size}
 			color={data.color}
 			onClick={handleMeshClick}
@@ -53,22 +56,22 @@ export default function Post({ data, onClick, isSelected }: PropsType) {
 }
 
 const Label = styled.div`
-	transform: translate3d(calc(60%), calc(-30%), 0);
+	transform: translate3d(calc(60%), calc(-70%), 0);
 	background: #fff;
 	color: #000;
 	padding: 10px 15px;
 	border-radius: 5px;
 	font-family: 'Noto Sans KR', sans-serif;
-	width: 100%;
+	width: 200px;
 	text-align: center;
 
 	&::before {
 		content: '';
 		position: absolute;
-		top: 20px;
-		left: -30px;
+		top: 10px;
+		left: -100px;
 		height: 2px;
-		width: 50px;
+		width: 100px;
 		background: #fff;
 	}
 `;

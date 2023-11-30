@@ -1,41 +1,46 @@
 import { useViewStore } from 'shared/store/useViewStore';
 import { Button, Modal, ModalPortal } from 'shared/ui';
-import { PostData } from 'shared/lib/types/post';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import styled from '@emotion/styled';
+import { useFetch } from 'shared/hooks';
+import { PostData } from 'shared/lib/types/post';
+import { useNavigate, useParams } from 'react-router-dom';
 
-interface PropsType {
-	data: PostData;
-}
-
-export default function PostModal({ data }: PropsType) {
+export default function PostModal() {
 	const { setView } = useViewStore();
+	const { postId } = useParams();
+	const { data } = useFetch<PostData>(`post/${postId}`);
+	const navigate = useNavigate();
+
 	return (
-		<ModalPortal>
-			<PostModalLayout
-				title={data.title}
-				rightButton={rightButton}
-				onClickGoBack={() => {
-					setView('DETAIL');
-				}}
-			>
-				<ImageContainer>
-					<Image
-						src={
-							data.images[0]
-							// TODO: 여러 이미지 출력할 수 있는 Carousel 구현
-						}
-						alt="img"
-					/>
-				</ImageContainer>
-				<TextContainer>
-					<ReactMarkdown remarkPlugins={[remarkGfm]}>
-						{data.content}
-					</ReactMarkdown>
-				</TextContainer>
-			</PostModalLayout>
-		</ModalPortal>
+		data && (
+			<ModalPortal>
+				<PostModalLayout
+					title={data.title}
+					rightButton={rightButton}
+					onClickGoBack={() => {
+						setView('MAIN');
+						navigate(`/home/${postId}`);
+					}}
+				>
+					<ImageContainer>
+						<Image
+							src={
+								data.images[0]
+								// TODO: 여러 이미지 출력할 수 있는 Carousel 구현
+							}
+							alt="img"
+						/>
+					</ImageContainer>
+					<TextContainer>
+						<ReactMarkdown remarkPlugins={[remarkGfm]}>
+							{data.content}
+						</ReactMarkdown>
+					</TextContainer>
+				</PostModalLayout>
+			</ModalPortal>
+		)
 	);
 }
 
@@ -58,7 +63,7 @@ const PostModalLayout = styled(Modal)`
 
 const TextContainer = styled.div`
 	overflow-y: auto;
-	width: 807px;
+	width: 40vw;
 
 	${({ theme: { colors } }) => ({
 		color: colors.text.secondary,

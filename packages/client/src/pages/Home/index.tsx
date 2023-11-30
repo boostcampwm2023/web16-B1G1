@@ -1,20 +1,26 @@
 import Screen from 'widgets/screen';
 import { useViewStore } from 'shared/store/useViewStore';
-import { usePostStore } from 'shared/store/usePostStore';
-import PostModal from 'features/postModal/PostModal';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import UnderBar from 'shared/ui/underBar/UnderBar';
 import UpperBar from './ui/UpperBar';
+import Cookies from 'js-cookie';
+import { useEffect } from 'react';
 
 export default function Home() {
 	const { view } = useViewStore();
-	const { data } = usePostStore();
+	const navigate = useNavigate();
+
+	useEffect(() => {
+		const accessToken = Cookies.get('accessToken');
+		const refreshToken = Cookies.get('refreshToken');
+		if (!accessToken && !refreshToken) {
+			navigate('/');
+		}
+	}, []);
 
 	return (
 		<>
 			<Outlet />
-
-			{view === 'POST' && <PostModal data={data} />}
 
 			{view === 'MAIN' && (
 				<>

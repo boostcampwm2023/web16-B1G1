@@ -10,7 +10,9 @@ export const useFetch = <T>(api: string) => {
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
-				const res = await axios.get(BASE_URL + api);
+				const res = await axios.get(BASE_URL + api, {
+					withCredentials: true,
+				});
 				setData(res.data);
 				setLoading(false);
 			} catch (err) {

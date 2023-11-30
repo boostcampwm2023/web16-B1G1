@@ -20,7 +20,7 @@ import {
 	createJwt,
 	getOAuthAccessToken,
 	getOAuthUserData,
-} from '../utils/auth.util';
+} from '../util/auth.util';
 import { v4 as uuid } from 'uuid';
 import { UserDataDto } from './dto/user-data.dto';
 import { ShareLink } from './entities/share_link.entity';

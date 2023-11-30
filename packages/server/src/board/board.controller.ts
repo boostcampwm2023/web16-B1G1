@@ -22,7 +22,7 @@ import { FilesInterceptor } from '@nestjs/platform-express';
 import { CookieAuthGuard } from '../auth/cookie-auth.guard';
 import { GetUser } from '../auth/decorators/get-user.decorator';
 import { UserDataDto } from '../auth/dto/user-data.dto';
-import { decryptAes } from '../utils/aes.util';
+import { decryptAes } from '../util/aes.util';
 import { GetBoardByIdResDto } from './dto/get-board-by-id-res.dto';
 import { awsConfig, bucketName } from '../config/aws.config';
 import { CreateBoardSwaggerDecorator } from './decorators/swagger/create-board-swagger.decorator';

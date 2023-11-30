@@ -11,7 +11,7 @@ import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
 import { Board } from './entities/board.entity';
 import { DataSource, Repository } from 'typeorm';
 import { Image } from './entities/image.entity';
-import { encryptAes } from '../utils/aes.util';
+import { encryptAes } from '../util/aes.util';
 import { User } from '../auth/entities/user.entity';
 import { UserDataDto } from '../auth/dto/user-data.dto';
 import * as AWS from 'aws-sdk';

@@ -8,8 +8,8 @@ import AlertDialog from 'shared/ui/alertDialog/AlertDialog';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useFetch } from 'shared/hooks';
 import { PostData } from 'shared/lib/types/post';
-import { deletePost } from './api/deletePost';
-import ImageSlider from './ui/ImageSlider';
+import { deletePost } from '../api/deletePost';
+import ImageSlider from './ImageSlider';
 
 export default function PostModal() {
 	const { setView } = useViewStore();

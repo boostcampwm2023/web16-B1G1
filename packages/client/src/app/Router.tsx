@@ -10,7 +10,7 @@ import LoginModal from 'widgets/loginModal';
 import SignUpModal from 'widgets/signupModal/SignUpModal';
 import NickNameSetModal from 'widgets/nickNameSetModal/NickNameSetModal';
 import LogoAndStart from 'widgets/logoAndStart';
-import PostModal from 'features/postModal/PostModal';
+import { PostModal } from 'features/postModal';
 
 export const router = createBrowserRouter(
 	createRoutesFromElements(

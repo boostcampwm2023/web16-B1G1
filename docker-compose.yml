@@ -3,7 +3,7 @@ version: '3'
 services:
   was:
     container_name: was
-    image: qkrwogk/web16-b1g1-be:week2
+    image: qkrwogk/web16-b1g1-be:GITHUB_SHA
     ports:
       - 3000:3000
     env_file:
@@ -12,9 +12,13 @@ services:
       - b1g1-network
   web:
     container_name: web
-    image: qkrwogk/web16-b1g1-fe:week2
+    image: qkrwogk/web16-b1g1-fe:GITHUB_SHA
     ports:
       - 80:80
+      - 443:443
+    volumes:
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
     networks:
       - b1g1-network
 

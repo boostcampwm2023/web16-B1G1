@@ -5,10 +5,13 @@ import UnderBar from 'shared/ui/underBar/UnderBar';
 import UpperBar from './ui/UpperBar';
 import Cookies from 'js-cookie';
 import { useEffect } from 'react';
+import { useLoadingStore } from 'shared/store/useLoadingStore';
+import WarpScreen from 'widgets/warpScreen/WarpScreen';
 
 export default function Home() {
 	const { view } = useViewStore();
 	const navigate = useNavigate();
+	const { isLoading } = useLoadingStore();
 
 	useEffect(() => {
 		const accessToken = Cookies.get('accessToken');
@@ -21,6 +24,8 @@ export default function Home() {
 	return (
 		<>
 			<Outlet />
+
+			{isLoading && <WarpScreen />}
 
 			{view === 'MAIN' && (
 				<>

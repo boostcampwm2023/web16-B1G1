@@ -2,6 +2,7 @@ import axios, { AxiosError } from 'axios';
 import { BASE_URL } from '@constants';
 import Cookies from 'js-cookie';
 import { NavigateFunction } from 'react-router-dom';
+import { useLoadingStore } from 'shared/store/useLoadingStore';
 
 axios.defaults.withCredentials = true;
 
@@ -31,6 +32,15 @@ export const postLogin = async (
 			expires: 1 / 24,
 		});
 		navigate('/home');
+		useLoadingStore.setState({
+			isLoading: true,
+		});
+
+		setTimeout(() => {
+			useLoadingStore.setState({
+				isLoading: false,
+			});
+		}, 5500);
 	} catch (err) {
 		if (err instanceof AxiosError) {
 			if (err.response?.status === 404) setIdState(false);

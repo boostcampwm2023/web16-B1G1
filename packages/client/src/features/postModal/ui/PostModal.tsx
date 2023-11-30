@@ -53,16 +53,18 @@ export default function PostModal() {
 						navigate(`/home/${postId}`);
 					}}
 				>
-					{data.images.length && (
-						<ImageContainer>
-							<ImageSlider imageUrls={data.images} />
-						</ImageContainer>
-					)}
-					<TextContainer>
-						<ReactMarkdown remarkPlugins={[remarkGfm]}>
-							{data.content}
-						</ReactMarkdown>
-					</TextContainer>
+					<Container>
+						{data.images.length && (
+							<ImageContainer>
+								<ImageSlider imageUrls={data.images} />
+							</ImageContainer>
+						)}
+						<TextContainer>
+							<ReactMarkdown remarkPlugins={[remarkGfm]}>
+								{data.content}
+							</ReactMarkdown>
+						</TextContainer>
+					</Container>
 				</PostModalLayout>
 				{deleteModal && (
 					<AlertDialog
@@ -85,10 +87,27 @@ const PostModalLayout = styled(Modal)`
 	transform: translate(-10%, -50%);
 `;
 
-const TextContainer = styled.div`
+const Container = styled.div`
+	height: 50vh;
 	overflow-y: auto;
-	width: 40vw;
 
+	&::-webkit-scrollbar {
+		width: 8px;
+	}
+
+	&::-webkit-scrollbar-track {
+		background-color: ${({ theme }) => theme.colors.text.primary};
+		border-radius: 8px;
+	}
+
+	&::-webkit-scrollbar-thumb {
+		background-color: ${({ theme }) => theme.colors.text.third};
+		border-radius: 4px;
+	}
+`;
+
+const TextContainer = styled.div`
+	width: 40vw;
 	${({ theme: { colors } }) => ({
 		color: colors.text.secondary,
 	})}

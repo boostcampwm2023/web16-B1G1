@@ -7,7 +7,6 @@ import {
 	ARMS_Z_DIST,
 	GALAXY_THICKNESS,
 	SPIRAL,
-	SPIRAL_START,
 } from '../constants';
 
 export const getSpiralPositions = (offset: number) => {

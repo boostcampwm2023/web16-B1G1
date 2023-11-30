@@ -34,11 +34,17 @@ export default function Search({
 			/>
 
 			{inputState ? (
-				<Button onClick={onClick} size="m" buttonType="CTA-icon">
+				<Button onClick={onClick} size="m" buttonType="CTA-icon" type="submit">
 					버튼
 				</Button>
 			) : (
-				<Button onClick={onClick} size="m" buttonType="CTA-icon" disabled>
+				<Button
+					onClick={onClick}
+					size="m"
+					buttonType="CTA-icon"
+					type="submit"
+					disabled
+				>
 					버튼
 				</Button>
 			)}

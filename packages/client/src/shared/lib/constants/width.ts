@@ -1,2 +1,2 @@
 export const MAX_WIDTH1 = 1210;
-export const MAX_WIDTH2 = 1030;
+export const MAX_WIDTH2 = 930;

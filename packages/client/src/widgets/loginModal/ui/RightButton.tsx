@@ -1,16 +1,12 @@
 import { Button } from 'shared/ui';
-import { useLoginStore } from 'shared/store/userLoginStore';
 
-export default function RightButton() {
-	const { id, password } = useLoginStore();
+interface PropsType {
+	disabled: boolean;
+}
 
+export default function RightButton({ disabled }: PropsType) {
 	return (
-		<Button
-			size="m"
-			buttonType="CTA-icon"
-			disabled={!(id.length && password.length)}
-			type="submit"
-		>
+		<Button size="m" buttonType="CTA-icon" disabled={disabled} type="submit">
 			로그인
 		</Button>
 	);

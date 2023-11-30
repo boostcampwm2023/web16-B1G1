@@ -15,7 +15,9 @@ export default function Galaxy() {
 			const count = STARS_NUM * starTypes.percentage[i];
 			const size = starTypes.size[i];
 			const color = starTypes.color[i];
-			starList.push(<Instances count={count} size={size} color={color} />);
+			starList.push(
+				<Instances count={count} size={size} color={color} key={i} />,
+			);
 		}
 		return starList;
 	}, []);

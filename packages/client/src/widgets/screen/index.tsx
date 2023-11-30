@@ -6,7 +6,7 @@ import { useControls } from 'leva';
 import { CAMERA_POSITION, CAMERA_FAR } from '@constants';
 import Controls from 'features/controls/Controls.tsx';
 import { useCameraStore } from 'shared/store/useCameraStore.ts';
-import { Posts } from 'entities/posts/index.ts';
+import { Posts } from 'entities/posts';
 
 export default function Screen() {
 	const camera = {
@@ -23,13 +23,16 @@ export default function Screen() {
 			luminanceThreshold: { value: 0.9, min: 0, max: 1, step: 0.01 },
 			luminanceSmoothing: { value: 0.025, min: 0, max: 2, step: 0.01 },
 		});
+	const { wheelSpeed } = useControls('Controls', {
+		wheelSpeed: { value: 3, min: 0.1, max: 5, step: 0.01 },
+	});
 
 	return (
 		<div style={{ height: '100vh', width: '100vw' }}>
 			<Canvas
 				camera={camera}
 				onWheel={(e) =>
-					setCameraToCurrentView(cameraToCurrentView + e.deltaY / 5)
+					setCameraToCurrentView(cameraToCurrentView + e.deltaY * wheelSpeed)
 				}
 			>
 				<EffectComposer>

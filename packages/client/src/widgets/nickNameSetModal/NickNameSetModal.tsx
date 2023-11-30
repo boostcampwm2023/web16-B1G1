@@ -4,16 +4,11 @@ import NickNameInputContainer from './ui/NickNameInputContainer';
 import { postSignUp } from 'shared/apis';
 import { useSignUpStore } from 'shared/store/useSignUpStore';
 import { useToastStore } from 'shared/store/useToastStore';
+import { useNavigate } from 'react-router-dom';
 
-interface PropsTypes {
-	changePage: React.Dispatch<{
-		type: 'NEXT' | 'PREV' | 'SET';
-		pageIndex?: number;
-	}>;
-}
-
-export default function NickNameSetModal({ changePage }: PropsTypes) {
+export default function NickNameSetModal() {
 	const [validNickName, setValidNickName] = useState('');
+	const navigate = useNavigate();
 
 	const handleSaveButton = async () => {
 		// TODO: 소셜로그인 시 로직 따로 추가해야 함
@@ -28,7 +23,7 @@ export default function NickNameSetModal({ changePage }: PropsTypes) {
 			});
 
 			if (response) {
-				changePage({ type: 'SET', pageIndex: 1 });
+				navigate('/login');
 
 				useToastStore.setState({
 					text: '회원가입이 완료되었습니다.',
@@ -46,6 +41,7 @@ export default function NickNameSetModal({ changePage }: PropsTypes) {
 			onClick={handleSaveButton}
 			buttonType="CTA-icon"
 			size="m"
+			type="submit"
 			disabled={!validNickName}
 		>
 			저장

@@ -13,50 +13,51 @@ import {
 	UnauthorizedException,
 	Param,
 	NotFoundException,
+	BadRequestException,
+	Patch,
+	UseInterceptors,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SignUpUserDto } from './dto/signup-user.dto';
 import { User } from './entities/user.entity';
 import { SignInUserDto } from './dto/signin-user.dto';
 import { Response } from 'express';
-import {
-	ApiBadRequestResponse,
-	ApiConflictResponse,
-	ApiCreatedResponse,
-	ApiOkResponse,
-	ApiOperation,
-	ApiTags,
-	ApiUnauthorizedResponse,
-} from '@nestjs/swagger';
+import { ApiTags } from '@nestjs/swagger';
 import { JwtEnum } from './enums/jwt.enum';
 import { CookieAuthGuard } from './cookie-auth.guard';
-import { UserEnum } from './enums/user.enum';
+import { UserEnum, UserShareStatus } from './enums/user.enum';
+import { SignUpSwaggerDecorator } from './decorators/swagger/sign-up-swagger.decorator';
+import { SignInSwaggerDecorator } from './decorators/swagger/sign-in-swagger.decorator';
+import { SignOutSwaggerDecorator } from './decorators/swagger/sign-out-swagger.decorator';
+import { IsAvailableUsernameSwaggerDecorator } from './decorators/swagger/is-available-username-swagger.decorator';
+import { IsAvailableNicknameSwaggerDecorator } from './decorators/swagger/is-available-nickname-swagger.decorator';
+import { SignInWithOAuthSwaggerDecorator } from './decorators/swagger/sign-in-with-oauth-swagger.decorator';
+import { SignUpWithOAuthSwaggerDecorator } from './decorators/swagger/sign-up-with-oauth-swagger.decorator';
+import { OAuthCallbackSwaggerDecorator } from './decorators/swagger/oauth-callback-swagger.decorator';
+import { SearchUserSwaggerDecorator } from './decorators/swagger/search-user-swagger.decorator';
+import { GetUser } from './decorators/get-user.decorator';
+import { UserDataDto } from './dto/user-data.dto';
+import { StatusValidationPipe } from './pipes/StatusValidationPipe';
+import { ChangeStatusSwaggerDecorator } from './decorators/swagger/change-status-swagger.decorator';
+import { GetShareLinkSwaggerDecorator } from './decorators/swagger/get-share-link-swagger.decorator';
+import { LogInterceptor } from '../interceptor/log.interceptor';
 
 @Controller('auth')
+@UseInterceptors(LogInterceptor)
 @ApiTags('인증/인가 API')
 export class AuthController {
 	constructor(private readonly authService: AuthService) {}
 
 	@Post('signup')
 	@UsePipes(ValidationPipe)
-	@ApiOperation({ summary: '회원가입', description: '회원가입을 진행합니다.' })
-	@ApiCreatedResponse({ status: 201, description: '회원가입 성공' })
-	@ApiBadRequestResponse({
-		status: 400,
-		description: '잘못된 요청으로 회원가입 실패',
-	})
+	@SignUpSwaggerDecorator()
 	signUp(@Body() signUpUserDto: SignUpUserDto): Promise<Partial<User>> {
 		return this.authService.signUp(signUpUserDto);
 	}
 
 	@Post('signin')
 	@HttpCode(200)
-	@ApiOperation({ summary: '로그인', description: '로그인을 진행합니다.' })
-	@ApiOkResponse({ status: 200, description: '로그인 성공' })
-	@ApiUnauthorizedResponse({
-		status: 401,
-		description: '잘못된 요청으로 로그인 실패',
-	})
+	@SignInSwaggerDecorator()
 	async signIn(
 		@Body() signInUserDto: SignInUserDto,
 		@Res({ passthrough: true }) res: Response,
@@ -65,10 +66,14 @@ export class AuthController {
 		res.cookie(JwtEnum.ACCESS_TOKEN_COOKIE_NAME, tokens.accessToken, {
 			path: '/',
 			httpOnly: true,
+			sameSite: 'none',
+			secure: true,
 		});
 		res.cookie(JwtEnum.REFRESH_TOKEN_COOKIE_NAME, tokens.refreshToken, {
 			path: '/',
 			httpOnly: true,
+			sameSite: 'none',
+			secure: true,
 		});
 
 		return tokens;
@@ -76,58 +81,41 @@ export class AuthController {
 
 	@Get('signout')
 	@UseGuards(CookieAuthGuard)
-	@ApiOperation({ summary: '로그아웃', description: '로그아웃을 진행합니다.' })
-	@ApiOkResponse({ status: 200, description: '로그아웃 성공' })
-	async signOut(@Res({ passthrough: true }) res: Response, @Req() req) {
-		await this.authService.signOut(req.user);
+	@SignOutSwaggerDecorator()
+	async signOut(
+		@Res({ passthrough: true }) res: Response,
+		@GetUser() userData: UserDataDto,
+	) {
+		await this.authService.signOut(userData);
 		res.clearCookie(JwtEnum.ACCESS_TOKEN_COOKIE_NAME, {
 			path: '/',
 			httpOnly: true,
+			sameSite: 'none',
+			secure: true,
 		});
 		res.clearCookie(JwtEnum.REFRESH_TOKEN_COOKIE_NAME, {
 			path: '/',
 			httpOnly: true,
+			sameSite: 'none',
+			secure: true,
 		});
 		return { message: UserEnum.SUCCESS_SIGNOUT_MESSAGE };
 	}
 
 	@Get('is-available-username')
-	@ApiOperation({
-		summary: 'username 중복 확인',
-		description: 'username 중복을 확인합니다.',
-	})
-	@ApiOkResponse({ status: 200, description: 'username 중복 확인 성공' })
-	@ApiBadRequestResponse({
-		status: 400,
-		description: '쿼리 스트링에 username이 없음',
-	})
-	@ApiConflictResponse({
-		status: 409,
-		description: 'username 중복',
-	})
+	@IsAvailableUsernameSwaggerDecorator()
 	isAvailableUsername(@Query('username') username: string) {
 		return this.authService.isAvailableUsername(username);
 	}
 
 	@Get('is-available-nickname')
-	@ApiOperation({
-		summary: 'nickname 중복 확인',
-		description: 'nickname 중복을 확인합니다.',
-	})
-	@ApiOkResponse({ status: 200, description: 'nickname 중복 확인 성공' })
-	@ApiBadRequestResponse({
-		status: 400,
-		description: '쿼리 스트링에 nickname이 없음',
-	})
-	@ApiConflictResponse({
-		status: 409,
-		description: 'nickname 중복',
-	})
+	@IsAvailableNicknameSwaggerDecorator()
 	isAvailableNickname(@Query('nickname') nickname: string) {
 		return this.authService.isAvailableNickname(nickname);
 	}
 
 	@Get(':service/signin')
+	@SignInWithOAuthSwaggerDecorator()
 	signInWithOAuth(
 		@Param('service') service: string,
 		@Res({ passthrough: true }) res: Response,
@@ -150,6 +138,7 @@ export class AuthController {
 	}
 
 	@Get(':service/callback')
+	@OAuthCallbackSwaggerDecorator()
 	async oauthCallback(
 		@Param('service') service: string,
 		@Query('code') authorizedCode: string,
@@ -180,6 +169,7 @@ export class AuthController {
 	}
 
 	@Post(':service/signup')
+	@SignUpWithOAuthSwaggerDecorator()
 	async signUpWithOAuth(
 		@Param('service') service: string,
 		@Body('nickname') nickname: string,
@@ -205,5 +195,31 @@ export class AuthController {
 		});
 
 		return savedUser;
+	}
+
+	@Get('search')
+	@SearchUserSwaggerDecorator()
+	searchUser(@Query('nickname') nickname: string) {
+		if (!nickname) {
+			throw new BadRequestException('검색할 닉네임을 입력해주세요.');
+		}
+		return this.authService.searchUser(nickname);
+	}
+
+	@Patch('status')
+	@UseGuards(CookieAuthGuard)
+	@ChangeStatusSwaggerDecorator()
+	changeStatus(
+		@GetUser() userData: UserDataDto,
+		@Body('status', StatusValidationPipe) status: UserShareStatus,
+	) {
+		return this.authService.changeStatus(userData, status);
+	}
+
+	@Get('sharelink')
+	@UseGuards(CookieAuthGuard)
+	@GetShareLinkSwaggerDecorator()
+	getShareLink(@GetUser() userData: UserDataDto) {
+		return this.authService.getShareLink(userData);
 	}
 }

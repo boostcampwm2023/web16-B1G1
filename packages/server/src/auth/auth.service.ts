@@ -2,6 +2,7 @@ import {
 	BadRequestException,
 	ConflictException,
 	Injectable,
+	NotFoundException,
 	UnauthorizedException,
 } from '@nestjs/common';
 import { SignUpUserDto } from './dto/signup-user.dto';
@@ -13,20 +14,24 @@ import * as bcrypt from 'bcryptjs';
 import { SignInUserDto } from './dto/signin-user.dto';
 import { JwtService } from '@nestjs/jwt';
 import { RedisRepository } from './redis.repository';
-import { UserEnum } from './enums/user.enum';
+import { UserEnum, UserShareStatus } from './enums/user.enum';
 import { JwtEnum } from './enums/jwt.enum';
 import {
 	createJwt,
 	getOAuthAccessToken,
 	getOAuthUserData,
-} from '../utils/auth.util';
+} from '../util/auth.util';
 import { v4 as uuid } from 'uuid';
+import { UserDataDto } from './dto/user-data.dto';
+import { ShareLink } from './entities/share_link.entity';
 
 @Injectable()
 export class AuthService {
 	constructor(
 		@InjectRepository(User)
-		private readonly authRepository: Repository<User>,
+		private readonly userRepository: Repository<User>,
+		@InjectRepository(ShareLink)
+		private readonly shareLinkRepository: Repository<ShareLink>,
 		private readonly jwtService: JwtService,
 		private readonly redisRepository: RedisRepository,
 	) {}
@@ -41,12 +46,12 @@ export class AuthService {
 		const salt = await bcrypt.genSalt();
 		const hashedPassword = await bcrypt.hash(signUpUserDto.password, salt);
 
-		const newUser = this.authRepository.create({
+		const newUser = this.userRepository.create({
 			...signUpUserDto,
 			password: hashedPassword,
 		});
 
-		const savedUser: User = await this.authRepository.save(newUser);
+		const savedUser: User = await this.userRepository.save(newUser);
 		savedUser.password = undefined;
 
 		return savedUser;
@@ -55,10 +60,15 @@ export class AuthService {
 	async signIn(signInUserDto: SignInUserDto) {
 		const { username, password } = signInUserDto;
 
-		const user = await this.authRepository.findOneBy({ username });
+		const user = await this.userRepository.findOneBy({ username });
 
-		if (!(user && (await bcrypt.compare(password, user.password)))) {
-			throw new UnauthorizedException(UserEnum.FAIL_SIGNIN_MESSAGE);
+		if (!user) {
+			throw new NotFoundException(UserEnum.NOT_EXIST_USERNAME_MESSAGE);
+		}
+
+		const isCorrectPassword = await bcrypt.compare(password, user.password);
+		if (!isCorrectPassword) {
+			throw new UnauthorizedException(UserEnum.UNCORRECT_PASSWORD_MESSAGE);
 		}
 
 		const [accessToken, refreshToken] = await Promise.all([
@@ -71,7 +81,7 @@ export class AuthService {
 		return { accessToken, refreshToken };
 	}
 
-	async signOut(user: Partial<User>) {
+	async signOut(user: UserDataDto) {
 		this.redisRepository.del(user.username);
 	}
 
@@ -80,7 +90,7 @@ export class AuthService {
 			throw new BadRequestException('username is required');
 		}
 
-		const user = await this.authRepository.findOneBy({ username });
+		const user = await this.userRepository.findOneBy({ username });
 
 		if (user) {
 			throw new ConflictException('username already exists');
@@ -94,7 +104,7 @@ export class AuthService {
 			throw new BadRequestException('nickname is required');
 		}
 
-		const user = await this.authRepository.findOneBy({ nickname });
+		const user = await this.userRepository.findOneBy({ nickname });
 
 		if (user) {
 			throw new ConflictException('nickname already exists');
@@ -118,7 +128,7 @@ export class AuthService {
 			resourceServerAccessToken,
 		);
 
-		const user = await this.authRepository.findOneBy({
+		const user = await this.userRepository.findOneBy({
 			username: resourceServerUsername,
 		});
 
@@ -172,15 +182,67 @@ export class AuthService {
 
 		this.redisRepository.del(resourceServerUsername);
 
-		const newUser: User = this.authRepository.create({
+		const newUser: User = this.userRepository.create({
 			username: resourceServerUsername,
 			password: uuid(),
 			nickname,
 		});
 
-		const savedUser: User = await this.authRepository.save(newUser);
+		const savedUser: User = await this.userRepository.save(newUser);
 		savedUser.password = undefined;
 
 		return savedUser;
+	}
+
+	async searchUser(nickname: string): Promise<User[]> {
+		const users: User[] = await this.userRepository
+			.createQueryBuilder('user')
+			.select(['user.id', 'user.nickname'])
+			.where(`MATCH (user.nickname) AGAINST (:nickname IN BOOLEAN MODE)`, {
+				nickname: nickname + '*',
+			})
+			.getMany();
+		return users;
+	}
+
+	async changeStatus(userData: UserDataDto, status: UserShareStatus) {
+		const user = await this.userRepository.findOneBy({ id: userData.userId });
+
+		if (!user) {
+			throw new NotFoundException('해당 유저를 찾을 수 없습니다.');
+		}
+
+		if (user.status === status) {
+			throw new BadRequestException('이미 해당 상태입니다.');
+		}
+
+		user.status = status;
+		const updatedUser = await this.userRepository.save(user);
+
+		updatedUser.password = undefined;
+		return updatedUser;
+	}
+
+	async getShareLink(userData: UserDataDto) {
+		if (userData.status === UserShareStatus.PRIVATE) {
+			throw new BadRequestException('비공개 상태입니다.');
+		}
+
+		const foundLink = await this.shareLinkRepository.findOneBy({
+			user: userData.userId,
+		});
+
+		if (foundLink) {
+			return foundLink;
+		}
+
+		const newLink = this.shareLinkRepository.create({
+			user: userData.userId,
+			link: uuid(),
+		});
+
+		const savedLink = await this.shareLinkRepository.save(newLink);
+		savedLink.user = undefined;
+		return savedLink;
 	}
 }

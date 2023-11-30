@@ -10,8 +10,9 @@ async function bootstrap() {
 
 	// cors 허용
 	app.enableCors({
-		origin: true,
+		origin: ['https://www.xn--bj0b03z.site', 'http://localhost:5173'],
 		credentials: true,
+		methods: ['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
 	});
 
 	const config = new DocumentBuilder()

@@ -12,9 +12,6 @@ export class SignInUserDto {
 		example: 'test user',
 		required: true,
 	})
-	@IsNotEmpty({ message: UserEnum.USERNAME_NOTEMPTY_MESSAGE as string })
-	@IsString({ message: UserEnum.USERNAME_ISSTRING_MESSAGE as string })
-	@IsUsername()
 	username: string;
 
 	@ApiProperty({
@@ -22,8 +19,5 @@ export class SignInUserDto {
 		example: 'test password',
 		required: true,
 	})
-	@IsNotEmpty({ message: UserEnum.PASSWORD_NOTEMPTY_MESSAGE as string })
-	@IsString({ message: UserEnum.PASSWORD_ISSTRING_MESSAGE as string })
-	@IsPassword()
 	password: string;
 }

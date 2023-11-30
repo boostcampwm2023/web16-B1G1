@@ -15,6 +15,7 @@ export async function createJwt(
 		userId: user.id,
 		username: user.username,
 		nickname: user.nickname,
+		status: user.status,
 		type,
 	};
 	const jwt = await jwtService.sign(payload, {

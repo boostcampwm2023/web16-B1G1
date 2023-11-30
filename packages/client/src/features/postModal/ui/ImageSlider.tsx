@@ -23,16 +23,6 @@ export default function ImageSlider({ imageUrls }: PropsType) {
 		});
 	};
 
-	const Images = () => {
-		return (
-			<>
-				{imageUrls.map((url) => {
-					return <Image key={url} src={url} index={imageIndex} />;
-				})}
-			</>
-		);
-	};
-
 	const Dots = () => {
 		return (
 			<>
@@ -48,7 +38,9 @@ export default function ImageSlider({ imageUrls }: PropsType) {
 	return (
 		<Layout>
 			<CurrentImage>
-				<Images />
+				{imageUrls.map((url) => {
+					return <Image key={url} src={url} index={imageIndex} />;
+				})}
 			</CurrentImage>
 			<Button onClick={handlePrev} style={{ left: 0 }}>
 				<ArrowBigLeft />

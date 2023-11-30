@@ -1,26 +1,26 @@
 import { applyDecorators } from '@nestjs/common';
 import {
-	ApiOperation,
 	ApiBadRequestResponse,
 	ApiOkResponse,
+	ApiOperation,
 } from '@nestjs/swagger';
 
 const apiOperation = {
-	summary: '로그아웃',
-	description: '쿠키의 토큰을 읽어 해당 회원의 로그아웃을 진행합니다.',
+	summary: '공유 링크 가져오기',
+	description: '공유 링크를 가져옵니다.',
 };
 
 const apiOkResponse = {
 	status: 200,
-	description: '로그아웃 성공으로 쿠키의 토큰과 Redis의 토큰 정보가 삭제됨',
+	description: '공유 링크 가져오기 성공',
 };
 
 const apiBadRequestResponse = {
 	status: 400,
-	description: '쿠키에 토큰이 없음(로그인 하지 않은 회원)',
+	description: '유저가 비공개 상태임',
 };
 
-export const SignOutSwaggerDecorator = () => {
+export const GetShareLinkSwaggerDecorator = () => {
 	return applyDecorators(
 		ApiOperation(apiOperation),
 		ApiOkResponse(apiOkResponse),

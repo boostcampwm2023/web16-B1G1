@@ -185,7 +185,7 @@ describe('AuthController (/auth, e2e)', () => {
 
 		expect(cookies.length).toBeGreaterThan(0);
 		expect(cookies[0]).toBe(
-			'accessToken=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT; HttpOnly',
+			'accessToken=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT; HttpOnly; Secure; SameSite=None',
 		);
 	});
 });

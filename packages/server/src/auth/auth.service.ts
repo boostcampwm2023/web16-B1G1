@@ -14,7 +14,7 @@ import * as bcrypt from 'bcryptjs';
 import { SignInUserDto } from './dto/signin-user.dto';
 import { JwtService } from '@nestjs/jwt';
 import { RedisRepository } from './redis.repository';
-import { UserEnum } from './enums/user.enum';
+import { UserEnum, UserShareStatus } from './enums/user.enum';
 import { JwtEnum } from './enums/jwt.enum';
 import {
 	createJwt,
@@ -22,12 +22,16 @@ import {
 	getOAuthUserData,
 } from '../utils/auth.util';
 import { v4 as uuid } from 'uuid';
+import { UserDataDto } from './dto/user-data.dto';
+import { ShareLink } from './entities/share_link.entity';
 
 @Injectable()
 export class AuthService {
 	constructor(
 		@InjectRepository(User)
 		private readonly userRepository: Repository<User>,
+		@InjectRepository(ShareLink)
+		private readonly shareLinkRepository: Repository<ShareLink>,
 		private readonly jwtService: JwtService,
 		private readonly redisRepository: RedisRepository,
 	) {}
@@ -77,7 +81,7 @@ export class AuthService {
 		return { accessToken, refreshToken };
 	}
 
-	async signOut(user: Partial<User>) {
+	async signOut(user: UserDataDto) {
 		this.redisRepository.del(user.username);
 	}
 
@@ -199,5 +203,46 @@ export class AuthService {
 			})
 			.getMany();
 		return users;
+	}
+
+	async changeStatus(userData: UserDataDto, status: UserShareStatus) {
+		const user = await this.userRepository.findOneBy({ id: userData.userId });
+
+		if (!user) {
+			throw new NotFoundException('해당 유저를 찾을 수 없습니다.');
+		}
+
+		if (user.status === status) {
+			throw new BadRequestException('이미 해당 상태입니다.');
+		}
+
+		user.status = status;
+		const updatedUser = await this.userRepository.save(user);
+
+		updatedUser.password = undefined;
+		return updatedUser;
+	}
+
+	async getShareLink(userData: UserDataDto) {
+		if (userData.status === UserShareStatus.PRIVATE) {
+			throw new BadRequestException('비공개 상태입니다.');
+		}
+
+		const foundLink = await this.shareLinkRepository.findOneBy({
+			user: userData.userId,
+		});
+
+		if (foundLink) {
+			return foundLink;
+		}
+
+		const newLink = this.shareLinkRepository.create({
+			user: userData.userId,
+			link: uuid(),
+		});
+
+		const savedLink = await this.shareLinkRepository.save(newLink);
+		savedLink.user = undefined;
+		return savedLink;
 	}
 }

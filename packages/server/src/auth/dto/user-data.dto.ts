@@ -12,4 +12,8 @@ export class UserDataDto {
 	@IsNotEmpty()
 	@IsString()
 	nickname: string;
+
+	@IsNotEmpty()
+	@IsString()
+	status: string;
 }

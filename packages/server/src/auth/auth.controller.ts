@@ -13,6 +13,8 @@ import {
 	UnauthorizedException,
 	Param,
 	NotFoundException,
+	BadRequestException,
+	Patch,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SignUpUserDto } from './dto/signup-user.dto';
@@ -22,7 +24,7 @@ import { Response } from 'express';
 import { ApiTags } from '@nestjs/swagger';
 import { JwtEnum } from './enums/jwt.enum';
 import { CookieAuthGuard } from './cookie-auth.guard';
-import { UserEnum } from './enums/user.enum';
+import { UserEnum, UserShareStatus } from './enums/user.enum';
 import { SignUpSwaggerDecorator } from './decorators/swagger/sign-up-swagger.decorator';
 import { SignInSwaggerDecorator } from './decorators/swagger/sign-in-swagger.decorator';
 import { SignOutSwaggerDecorator } from './decorators/swagger/sign-out-swagger.decorator';
@@ -31,6 +33,12 @@ import { IsAvailableNicknameSwaggerDecorator } from './decorators/swagger/is-ava
 import { SignInWithOAuthSwaggerDecorator } from './decorators/swagger/sign-in-with-oauth-swagger.decorator';
 import { SignUpWithOAuthSwaggerDecorator } from './decorators/swagger/sign-up-with-oauth-swagger.decorator';
 import { OAuthCallbackSwaggerDecorator } from './decorators/swagger/oauth-callback-swagger.decorator';
+import { SearchUserSwaggerDecorator } from './decorators/swagger/search-user-swagger.decorator';
+import { GetUser } from './decorators/get-user.decorator';
+import { UserDataDto } from './dto/user-data.dto';
+import { StatusValidationPipe } from './pipes/StatusValidationPipe';
+import { ChangeStatusSwaggerDecorator } from './decorators/swagger/change-status-swagger.decorator';
+import { GetShareLinkSwaggerDecorator } from './decorators/swagger/get-share-link-swagger.decorator';
 
 @Controller('auth')
 @ApiTags('인증/인가 API')
@@ -71,8 +79,11 @@ export class AuthController {
 	@Get('signout')
 	@UseGuards(CookieAuthGuard)
 	@SignOutSwaggerDecorator()
-	async signOut(@Res({ passthrough: true }) res: Response, @Req() req) {
-		await this.authService.signOut(req.user);
+	async signOut(
+		@Res({ passthrough: true }) res: Response,
+		@GetUser() userData: UserDataDto,
+	) {
+		await this.authService.signOut(userData);
 		res.clearCookie(JwtEnum.ACCESS_TOKEN_COOKIE_NAME, {
 			path: '/',
 			httpOnly: true,
@@ -184,7 +195,28 @@ export class AuthController {
 	}
 
 	@Get('search')
+	@SearchUserSwaggerDecorator()
 	searchUser(@Query('nickname') nickname: string) {
+		if (!nickname) {
+			throw new BadRequestException('검색할 닉네임을 입력해주세요.');
+		}
 		return this.authService.searchUser(nickname);
+	}
+
+	@Patch('status')
+	@UseGuards(CookieAuthGuard)
+	@ChangeStatusSwaggerDecorator()
+	changeStatus(
+		@GetUser() userData: UserDataDto,
+		@Body('status', StatusValidationPipe) status: UserShareStatus,
+	) {
+		return this.authService.changeStatus(userData, status);
+	}
+
+	@Get('sharelink')
+	@UseGuards(CookieAuthGuard)
+	@GetShareLinkSwaggerDecorator()
+	getShareLink(@GetUser() userData: UserDataDto) {
+		return this.authService.getShareLink(userData);
 	}
 }

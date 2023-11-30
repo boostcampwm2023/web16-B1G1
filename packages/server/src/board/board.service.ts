@@ -131,8 +131,14 @@ export class BoardService {
 			if (files.length > 0) {
 				const images: Image[] = [];
 				for (const file of files) {
-					const image = await this.uploadFile(file);
-					images.push(image);
+					const imageInfo = await this.uploadFile(file);
+
+					const image = queryRunner.manager.create(Image, {
+						...imageInfo,
+					});
+
+					const updatedImage = await queryRunner.manager.save(image);
+					images.push(updatedImage);
 				}
 				// 기존 이미지 삭제
 				for (const image of board.images) {
@@ -168,6 +174,8 @@ export class BoardService {
 		} catch (err) {
 			Logger.error(err);
 			await queryRunner.rollbackTransaction();
+
+			throw new InternalServerErrorException('Failed to update board');
 		} finally {
 			await queryRunner.release();
 		}
@@ -268,17 +276,19 @@ export class BoardService {
 		} catch (err) {
 			Logger.error(err);
 			await queryRunner.rollbackTransaction();
+
+			throw new InternalServerErrorException('Failed to update board');
 		} finally {
 			await queryRunner.release();
 		}
 	}
 
-	async uploadFile(file: Express.Multer.File): Promise<Image> {
+	async uploadFile(file: Express.Multer.File): Promise<any> {
 		if (!file.mimetype.includes('image')) {
 			throw new BadRequestException('Only image files are allowed');
 		}
 
-		const { mimetype, buffer, size } = file;
+		const { buffer } = file;
 
 		const resized_buffer = await sharp(buffer)
 			.resize(500, 500, { fit: 'cover' })
@@ -297,15 +307,19 @@ export class BoardService {
 				ACL: 'public-read',
 			})
 			.promise();
-		Logger.log('uploadFile result:', result);
+		// eTag 없으면 에러 리턴
+		if (!result.ETag) {
+			throw new InternalServerErrorException('Failed to upload file');
+		}
+		Logger.log(`uploadFile result: ${result.ETag}`);
 
-		const updatedImage = await this.imageRepository.save({
-			mimetype,
+		const eTag = result.ETag;
+		return {
+			mimetype: 'image/png',
 			filename,
-			size,
-		});
-
-		return updatedImage;
+			size: resized_buffer.length,
+			eTag,
+		};
 	}
 
 	async downloadFile(filename: string): Promise<Buffer> {

@@ -31,8 +31,10 @@ import { UpdateBoardSwaggerDecorator } from './decorators/swagger/update-board-s
 import { PatchLikeSwaggerDecorator } from './decorators/swagger/patch-like-swagger.decorator';
 import { PatchUnlikeSwaggerDecorator } from './decorators/swagger/patch-unlike-swagger.decorator';
 import { DeleteBoardSwaggerDecorator } from './decorators/swagger/delete-board-by-id-swagger.decorator';
+import { LogInterceptor } from '../interceptor/log.interceptor';
 
 @Controller('post')
+@UseInterceptors(LogInterceptor)
 @ApiTags('게시글 API')
 export class BoardController {
 	constructor(private readonly boardService: BoardService) {}

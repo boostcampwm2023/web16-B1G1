@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 
 const instance = axios.create({
 	baseURL: 'https://www.별글.site/api/',
+	withCredentials: true,
 });
 
 interface Props {

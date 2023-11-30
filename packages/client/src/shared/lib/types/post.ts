@@ -1,8 +1,6 @@
 export interface PostData {
+	id: number;
 	title: string;
-	position: THREE.Vector3;
-	size: number;
-	color: string;
 	content: string;
 	images: string[];
 }

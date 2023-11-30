@@ -1,25 +1,27 @@
 import {
 	BadRequestException,
 	Injectable,
+	InternalServerErrorException,
 	Logger,
 	NotFoundException,
 } from '@nestjs/common';
 import { CreateBoardDto } from './dto/create-board.dto';
 import { UpdateBoardDto } from './dto/update-board.dto';
-import { InjectRepository } from '@nestjs/typeorm';
+import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
 import { Board } from './entities/board.entity';
-import { Repository } from 'typeorm';
+import { DataSource, DeleteResult, QueryRunner, Repository } from 'typeorm';
 import { Image } from './entities/image.entity';
-import { encryptAes } from 'src/utils/aes.util';
-import { User } from 'src/auth/entities/user.entity';
-import { UserDataDto } from './dto/user-data.dto';
+import { encryptAes } from '../util/aes.util';
+import { User } from '../auth/entities/user.entity';
+import { UserDataDto } from '../auth/dto/user-data.dto';
 import * as AWS from 'aws-sdk';
-import { awsConfig, bucketName } from 'src/config/aws.config';
+import { awsConfig, bucketName } from '../config/aws.config';
 import { v1 as uuid } from 'uuid';
 import * as sharp from 'sharp';
 import { InjectModel } from '@nestjs/mongoose';
-import { Star } from './schemas/star.schema';
+import { Star } from '../star/schemas/star.schema';
 import { Model, Types } from 'mongoose';
+import { GetBoardByIdResDto } from './dto/get-board-by-id-res.dto';
 
 @Injectable()
 export class BoardService {
@@ -38,15 +40,28 @@ export class BoardService {
 		createBoardDto: CreateBoardDto,
 		userData: UserDataDto,
 		files: Express.Multer.File[],
+		queryRunner: QueryRunner,
 	): Promise<Board> {
 		const { title, content, star } = createBoardDto;
 
-		const user = await this.userRepository.findOneBy({ id: userData.userId });
+		// const user = await this.userRepository.findOneBy({ id: userData.userId });
+		const user = await queryRunner.manager.findOneBy(User, {
+			id: userData.userId,
+		});
 
 		const images: Image[] = [];
 		for (const file of files) {
-			const image = await this.uploadFile(file);
-			images.push(image);
+			// Object Storage에 업로드
+			const imageInfo = await this.uploadFile(file);
+
+			// 이미지 리포지토리에 저장
+			const image = queryRunner.manager.create(Image, {
+				...imageInfo,
+			});
+
+			const createdImage = await queryRunner.manager.save(image);
+
+			images.push(createdImage);
 		}
 
 		// 별 스타일이 존재하면 MongoDB에 저장
@@ -59,54 +74,42 @@ export class BoardService {
 			star_id = starDoc._id.toString();
 		}
 
-		const board = this.boardRepository.create({
+		// const board = this.boardRepository.create({
+		// 	title,
+		// 	content: encryptAes(content), // AES 암호화하여 저장
+		// 	user,
+		// 	images,
+		// 	star: star_id,
+		// });
+		const board = queryRunner.manager.create(Board, {
 			title,
 			content: encryptAes(content), // AES 암호화하여 저장
 			user,
 			images,
 			star: star_id,
 		});
-		const createdBoard: Board = await this.boardRepository.save(board);
+		// const createdBoard: Board = await this.boardRepository.save(board);
+		const createdBoard: Board = await queryRunner.manager.save(board);
 
 		createdBoard.user.password = undefined; // password 제거하여 반환
 		return createdBoard;
 	}
 
-	async findAllBoards(): Promise<Board[]> {
-		const boards = await this.boardRepository.find();
-		return boards;
-	}
-
-	async findAllBoardsByAuthor(author: string): Promise<Board[]> {
-		const boards = await this.boardRepository.findBy({
-			user: { nickname: author },
-		});
-
-		for (let board of boards) {
-			board.content = undefined; // content 제거하여 반환
-			board.user.password = undefined; // user.password 제거하여 반환
-			board.user.created_at = undefined; // user.created_at 제거하여 반환
-			board.likes = undefined; // likes 제거하여 반환
-			board.images = undefined; // images 제거하여 반환
-
-			// star 스타일이 존재하면 MongoDB에서 조회하여 반환
-			if (board.star) {
-				const star = await this.starModel.findById(board.star);
-				if (star) {
-					board.star = JSON.stringify(star);
-				} else {
-					board.star = null;
-				}
-			} else {
-				board.star = undefined;
-			}
-		}
-
-		return boards;
-	}
-
 	async findBoardById(id: number): Promise<Board> {
-		const found: Board = await this.boardRepository.findOneBy({ id });
+		// const found: Board = await this.boardRepository.findOneBy({ id });
+		const found: Board = await this.boardRepository
+			.createQueryBuilder()
+			.select(['board.id', 'board.title', 'board.content', 'board.like_cnt'])
+			.from(Board, 'board')
+			.leftJoinAndMapMany(
+				'board.images',
+				Image,
+				'image',
+				'image.boardId = board.id',
+			)
+			.where('board.id = :id', { id })
+			.getOne();
+
 		if (!found) {
 			throw new NotFoundException(`Not found board with id: ${id}`);
 		}
@@ -117,12 +120,49 @@ export class BoardService {
 		id: number,
 		updateBoardDto: UpdateBoardDto,
 		userData: UserDataDto,
+		files: Express.Multer.File[],
+		queryRunner: QueryRunner,
 	) {
-		const board: Board = await this.findBoardById(id);
+		// const board: Board = await this.boardRepository.findOneBy({ id });
+		const board: Board = await queryRunner.manager.findOneBy(Board, { id });
+		if (!board) {
+			throw new NotFoundException(`Not found board with id: ${id}`);
+		}
 
 		// 게시글 작성자와 수정 요청자가 다른 경우
 		if (board.user.id !== userData.userId) {
 			throw new BadRequestException('You are not the author of this post');
+		}
+
+		// star에 대한 수정은 별도 API(PATCH /star/:id)로 처리하므로 400 에러 리턴
+		if (updateBoardDto.star) {
+			throw new BadRequestException(
+				'You cannot update star with this API. use PATCH /star/:id',
+			);
+		}
+
+		if (files.length > 0) {
+			const images: Image[] = [];
+			for (const file of files) {
+				const imageInfo = await this.uploadFile(file);
+
+				const image = queryRunner.manager.create(Image, {
+					...imageInfo,
+				});
+
+				const updatedImage = await queryRunner.manager.save(image);
+				images.push(updatedImage);
+			}
+			// 기존 이미지 삭제
+			for (const image of board.images) {
+				// 이미지 리포지토리에서 삭제
+				// await this.imageRepository.delete({ id: image.id });
+				await queryRunner.manager.delete(Image, { id: image.id });
+				// NCP Object Storage에서 삭제
+				await this.deleteFile(image.filename);
+			}
+			// 새로운 이미지로 교체
+			board.images = images;
 		}
 
 		// updateBoardDto.content가 존재하면 AES 암호화하여 저장
@@ -130,15 +170,26 @@ export class BoardService {
 			updateBoardDto.content = encryptAes(updateBoardDto.content);
 		}
 
-		const updatedBoard: Board = await this.boardRepository.save({
+		// const updatedBoard: Board = await this.boardRepository.save({
+		// 	...board,
+		// 	...updateBoardDto,
+		// });
+		const updatedBoard: Board = await queryRunner.manager.save(Board, {
 			...board,
 			...updateBoardDto,
 		});
+
+		delete updatedBoard.user.password; // password 제거하여 반환
 		return updatedBoard;
 	}
 
 	async patchLike(id: number, userData: UserDataDto): Promise<Partial<Board>> {
-		const board = await this.findBoardById(id);
+		const board = await this.boardRepository.findOneBy({ id });
+		if (!board) {
+			throw new NotFoundException(`Not found board with id: ${id}`);
+		}
+
+		// 이미 좋아요를 누른 경우
 		if (board.likes.find((user) => user.id === userData.userId)) {
 			throw new BadRequestException('You already liked this post');
 		}
@@ -160,7 +211,12 @@ export class BoardService {
 		id: number,
 		userData: UserDataDto,
 	): Promise<Partial<Board>> {
-		const board = await this.findBoardById(id);
+		const board = await this.boardRepository.findOneBy({ id });
+		if (!board) {
+			throw new NotFoundException(`Not found board with id: ${id}`);
+		}
+
+		// 좋아요를 누르지 않은 경우
 		if (!board.likes.find((user) => user.id === userData.userId)) {
 			throw new BadRequestException('You have not liked this post');
 		}
@@ -177,23 +233,51 @@ export class BoardService {
 		return { like_cnt: updatedBoard.like_cnt };
 	}
 
-	async deleteBoard(id: number, userData: UserDataDto): Promise<void> {
-		const board: Board = await this.findBoardById(id);
+	async deleteBoard(
+		id: number,
+		userData: UserDataDto,
+		queryRunner: QueryRunner,
+	): Promise<DeleteResult> {
+		// const board: Board = await this.boardRepository.findOneBy({ id });
+		const board: Board = await queryRunner.manager.findOneBy(Board, { id });
+
+		if (!board) {
+			throw new NotFoundException(`Not found board with id: ${id}`);
+		}
 
 		// 게시글 작성자와 삭제 요청자가 다른 경우
 		if (board.user.id !== userData.userId) {
 			throw new BadRequestException('You are not the author of this post');
 		}
 
-		const result = await this.boardRepository.delete({ id });
+		// 연관된 이미지 삭제
+		for (const image of board.images) {
+			// 이미지 리포지토리에서 삭제
+			// await this.imageRepository.delete({ id: image.id });
+			await queryRunner.manager.delete(Image, { id: image.id });
+			// NCP Object Storage에서 삭제
+			await this.deleteFile(image.filename);
+		}
+
+		// 연관된 별 스타일 삭제
+		if (board.star) {
+			await this.starModel.deleteOne({ _id: board.star });
+		}
+
+		// like 조인테이블 레코드들은 자동으로 삭제됨 (외래키 제약조건 ON DELETE CASCADE)
+
+		// 게시글 삭제
+		// await this.boardRepository.delete({ id });
+		const result = await queryRunner.manager.delete(Board, { id });
+		return result;
 	}
 
-	async uploadFile(file: Express.Multer.File): Promise<Image> {
+	async uploadFile(file: Express.Multer.File): Promise<any> {
 		if (!file.mimetype.includes('image')) {
 			throw new BadRequestException('Only image files are allowed');
 		}
 
-		const { mimetype, buffer, size } = file;
+		const { buffer } = file;
 
 		const resized_buffer = await sharp(buffer)
 			.resize(500, 500, { fit: 'cover' })
@@ -212,15 +296,19 @@ export class BoardService {
 				ACL: 'public-read',
 			})
 			.promise();
-		Logger.log('uploadFile result:', result);
+		// eTag 없으면 에러 리턴
+		if (!result.ETag) {
+			throw new InternalServerErrorException('Failed to upload file');
+		}
+		Logger.log(`uploadFile result: ${result.ETag}`);
 
-		const updatedImage = await this.imageRepository.save({
-			mimetype,
+		const eTag = result.ETag;
+		return {
+			mimetype: 'image/png',
 			filename,
-			size,
-		});
-
-		return updatedImage;
+			size: resized_buffer.length,
+			eTag,
+		};
 	}
 
 	async downloadFile(filename: string): Promise<Buffer> {
@@ -235,5 +323,17 @@ export class BoardService {
 		Logger.log(`downloadFile result: ${result.ETag}`);
 
 		return result.Body as Buffer;
+	}
+
+	async deleteFile(filename: string): Promise<void> {
+		// NCP Object Storage에서 파일 삭제
+		AWS.config.update(awsConfig);
+		await new AWS.S3()
+			.deleteObject({
+				Bucket: bucketName,
+				Key: filename,
+			})
+			.promise();
+		Logger.log(`${filename} deleted from NCP Object Storage`);
 	}
 }

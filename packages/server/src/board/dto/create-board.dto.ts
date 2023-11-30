@@ -26,7 +26,7 @@ export class CreateBoardDto {
 	@ApiProperty({
 		description: '별 스타일',
 		example: '{"color":"#000000", "position":{ "x": 50, "y": 0, "z": -50}}',
-		required: false,
+		required: true,
 	})
 	star: string;
 }

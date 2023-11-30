@@ -6,7 +6,7 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import { JwtService } from '@nestjs/jwt';
 import { RedisRepository } from './redis.repository';
-import { createJwt } from '../utils/auth.util';
+import { createJwt } from '../util/auth.util';
 import { JwtEnum } from './enums/jwt.enum';
 
 @Injectable()
@@ -28,18 +28,18 @@ export class CookieAuthGuard extends AuthGuard('jwt') {
 
 		const accessToken = request.cookies['accessToken'];
 		try {
-			const { userId, username, nickname } =
+			const { userId, username, nickname, status } =
 				this.jwtService.verify(accessToken);
 
-			request.user = { userId, username, nickname };
+			request.user = { userId, username, nickname, status };
 			return true;
 		} catch (error) {}
 
 		const refreshToken = request.cookies['refreshToken'];
 		try {
-			const { userId, username, nickname } =
+			const { userId, username, nickname, status } =
 				this.jwtService.verify(refreshToken);
-			request.user = { userId, username, nickname };
+			request.user = { userId, username, nickname, status };
 		} catch (error) {
 			response.clearCookie(JwtEnum.ACCESS_TOKEN_COOKIE_NAME);
 			response.clearCookie(JwtEnum.REFRESH_TOKEN_COOKIE_NAME);
@@ -62,6 +62,7 @@ export class CookieAuthGuard extends AuthGuard('jwt') {
 				id: request.user.userId,
 				username: request.user.username,
 				nickname: request.user.nickname,
+				status: request.user.status,
 			},
 			JwtEnum.ACCESS_TOKEN_TYPE,
 			this.jwtService,

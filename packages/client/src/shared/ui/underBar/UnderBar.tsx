@@ -1,37 +1,60 @@
 import styled from '@emotion/styled';
 import { Button } from 'shared/ui';
-import { css } from '@emotion/react';
 import { Title01 } from '../styles';
 import PlanetEditIcon from '@icons/icon-planetedit-24-white.svg';
 import AddIcon from '@icons/icon-add-24-white.svg';
 import WriteIcon from '@icons/icon-writte-24-white.svg';
-import { MAX_WIDTH1, MAX_WIDTH2 } from 'shared/lib/constants';
+import { BASE_URL, MAX_WIDTH1, MAX_WIDTH2 } from 'shared/lib/constants';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import Cookies from 'js-cookie';
 
 export default function UnderBar() {
 	const tempName = '도라에몽도라에몽도라';
+	const navigate = useNavigate();
 
 	return (
 		<Layout>
 			<Name>{tempName}님의 은하</Name>
 
 			<ButtonsContainer>
-				<LogoutButton size="l" buttonType="Button">
-					로그아웃
-				</LogoutButton>
+				<SmallButtonsContainer>
+					<Button
+						size="m"
+						buttonType="Button"
+						onClick={() => {
+							axios.get(`${BASE_URL}auth/signout`);
+							Cookies.remove('accessToken');
+							Cookies.remove('refreshToken');
+							navigate('/');
+						}}
+					>
+						로그아웃
+					</Button>
+					<Button size="m" buttonType="Button">
+						공유하기
+					</Button>
+				</SmallButtonsContainer>
 
 				<Line />
 
-				<SpaceEditButton size="l" buttonType="Button">
-					<img src={PlanetEditIcon} alt="우주 수정하기" />
-					우주 수정하기
-				</SpaceEditButton>
-				<SkinCreateButton size="l" buttonType="Button">
-					<img src={AddIcon} alt="별 스킨 만들기" />별 스킨 만들기
-				</SkinCreateButton>
-				<WritingButton size="l" buttonType="CTA-icon">
-					<img src={WriteIcon} alt="글쓰기" />
-					글쓰기
-				</WritingButton>
+				<BigButtonsContainer>
+					<BigButton size="l" buttonType="Button">
+						<img src={PlanetEditIcon} alt="우주 수정하기" />
+						우주 수정하기
+					</BigButton>
+					<BigButton size="l" buttonType="Button">
+						<img src={AddIcon} alt="별 스킨 만들기" />별 스킨 만들기
+					</BigButton>
+					<BigButton
+						size="l"
+						buttonType="CTA-icon"
+						onClick={() => navigate('/home/writing')}
+					>
+						<img src={WriteIcon} alt="글쓰기" />
+						글쓰기
+					</BigButton>
+				</BigButtonsContainer>
 			</ButtonsContainer>
 		</Layout>
 	);
@@ -59,8 +82,28 @@ const Layout = styled.div`
 	}
 
 	@media (max-width: ${MAX_WIDTH2}px) {
-		width: 1000px;
+		width: 900px;
 	}
+`;
+
+const ButtonsContainer = styled.div`
+	display: flex;
+`;
+
+const SmallButtonsContainer = styled.div`
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+`;
+
+const BigButtonsContainer = styled.div`
+	display: flex;
+	gap: 8px;
+`;
+
+const BigButton = styled(Button)`
+	width: 150px;
+	height: 76px;
 `;
 
 const Name = styled.p`
@@ -68,35 +111,7 @@ const Name = styled.p`
 	${Title01}
 `;
 
-const ButtonsContainer = styled.div`
-	display: flex;
-`;
-
-const ButtonBasicStyle = css`
-	width: 155px;
-	height: 70px;
-`;
-
-const LogoutButton = styled(Button)`
-	height: 70px;
-	margin: 0 24px 0 0;
-`;
-
-const SpaceEditButton = styled(Button)`
-	${ButtonBasicStyle}
-	margin: 0 8px 0 0;
-`;
-
-const SkinCreateButton = styled(Button)`
-	${ButtonBasicStyle}
-	margin: 0 16px 0 0;
-`;
-
-const WritingButton = styled(Button)`
-	${ButtonBasicStyle}
-`;
-
 const Line = styled.div`
-	margin: 0 24px 0 0;
+	margin: 0 18px;
 	border-left: 1px solid ${({ theme }) => theme.colors.stroke.sc};
 `;

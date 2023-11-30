@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios, { AxiosError } from 'axios';
-
-const BASE_URL = 'wow'; // TODO: Add base url
+import { BASE_URL } from '@constants';
 
 export const useFetch = <T>(api: string) => {
 	const [data, setData] = useState<T>();
@@ -11,7 +10,9 @@ export const useFetch = <T>(api: string) => {
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
-				const res = await axios.get(BASE_URL + api);
+				const res = await axios.get(BASE_URL + api, {
+					withCredentials: true,
+				});
 				setData(res.data);
 				setLoading(false);
 			} catch (err) {

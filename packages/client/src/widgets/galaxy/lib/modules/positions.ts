@@ -22,14 +22,27 @@ export const getSpiralPositions = (offset: number) => {
 	return new THREE.Vector3(r * Math.cos(theta), y, r * Math.sin(theta));
 };
 
-export const getSpherePositions = (radius: number) => {
+// export const getSpiralPositions = () => {
+// 	const x = getGaussianRandomFloat(0, ARMS_X_DIST);
+// 	const y = getGaussianRandomFloat(0, GALAXY_THICKNESS);
+// 	const z = getGaussianRandomFloat(0, ARMS_Z_DIST);
+// 	const r = Math.sqrt(x ** 2 + z ** 2);
+// 	if (r < SPIRAL_START) return new THREE.Vector3(x, y, z);
+
+// 	const theta = Math.log(r / SPIRAL_START) * SPIRAL * -Math.PI;
+// 	const yAxis = new THREE.Vector3(0, 1, 0);
+
+// 	return new THREE.Vector3(x, y, z).applyAxisAngle(yAxis, theta);
+// };
+
+export const getSpherePositions = () => {
 	const x = getRandomFloat(0, Math.PI * 2);
 	const y = getGaussianRandomFloat(0, Math.PI / 5);
-	const r = getGaussianRandomFloat(0, radius);
+	const r = getGaussianRandomFloat(0, 1);
 
 	return new THREE.Vector3(
-		((r * Math.sin(x) * Math.cos(y)) / radius) * GALAXY_THICKNESS * 5,
-		((r * Math.sin(y)) / radius) * GALAXY_THICKNESS * 4,
-		((r * Math.cos(x) * Math.cos(y)) / radius) * GALAXY_THICKNESS * 5,
+		r * Math.sin(x) * Math.cos(y) * ARMS_X_DIST,
+		r * Math.sin(y) * GALAXY_THICKNESS * 4,
+		r * Math.cos(x) * Math.cos(y) * ARMS_X_DIST,
 	);
 };

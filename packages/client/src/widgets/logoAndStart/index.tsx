@@ -1,20 +1,19 @@
 import { Button } from 'shared/ui';
 import styled from '@emotion/styled';
-import React from 'react';
 import { Title02 } from 'shared/ui/styles';
+import { useNavigate } from 'react-router-dom';
 
-interface PropsType {
-	changePage: React.Dispatch<{ type: 'NEXT' | 'PREV' }>;
-}
+export default function LogoAndStart() {
+	const navigate = useNavigate();
 
-export default function LogoAndStart({ changePage }: PropsType) {
 	return (
 		<Container>
 			<Logo>Logo</Logo>
 			<Button
-				onClick={() => changePage({ type: 'NEXT' })}
+				onClick={() => navigate('/login')}
 				size="l"
 				buttonType="CTA-icon"
+				type="button"
 				style={{ width: '516px', padding: '24px 12px' }}
 			>
 				<Start>시작하기</Start>

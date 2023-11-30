@@ -23,12 +23,32 @@ export default function ImageSlider({ imageUrls }: PropsType) {
 		});
 	};
 
-	return (
-		<Layout>
-			<CurrentImage>
+	const Images = () => {
+		return (
+			<>
 				{imageUrls.map((url) => {
 					return <Image key={url} src={url} index={imageIndex} />;
 				})}
+			</>
+		);
+	};
+
+	const Dots = () => {
+		return (
+			<>
+				{imageUrls.map((_, index) => (
+					<Dot onClick={() => setImageIndex(index)}>
+						{index === imageIndex ? <CircleDot /> : <Circle />}
+					</Dot>
+				))}
+			</>
+		);
+	};
+
+	return (
+		<Layout>
+			<CurrentImage>
+				<Images />
 			</CurrentImage>
 			<Button onClick={handlePrev} style={{ left: 0 }}>
 				<ArrowBigLeft />
@@ -37,11 +57,7 @@ export default function ImageSlider({ imageUrls }: PropsType) {
 				<ArrowBigRight />
 			</Button>
 			<Pagination>
-				{imageUrls.map((_, index) => (
-					<Dot onClick={() => setImageIndex(index)}>
-						{index === imageIndex ? <CircleDot /> : <Circle />}
-					</Dot>
-				))}
+				<Dots />
 			</Pagination>
 		</Layout>
 	);

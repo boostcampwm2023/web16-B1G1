@@ -51,7 +51,7 @@ export default function PostModal() {
 						navigate(`/home/${postId}`);
 					}}
 				>
-					{data.images.length > 0 && (
+					{data.images.length && (
 						<ImageContainer>
 							<ImageSlider imageUrls={data.images} />
 						</ImageContainer>

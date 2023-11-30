@@ -33,10 +33,12 @@ export default function PostModal() {
 
 	const handleDelete = async () => {
 		const res = await deletePost(postId!);
+		setDeleteModal(false);
 		if (res.status === 200) {
-			setDeleteModal(false);
 			setView('MAIN');
 			navigate('/home');
+		} else {
+			alert('글 삭제 실패');
 		}
 	};
 

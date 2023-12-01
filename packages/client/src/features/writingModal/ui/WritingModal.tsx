@@ -5,11 +5,13 @@ import { ModalPortal } from 'shared/ui';
 import Images from './Images';
 import { useNavigate } from 'react-router-dom';
 import { sendPost } from '../api/sendPost';
+import { useViewStore } from 'shared/store';
 
 export default function WritingModal() {
 	const [text, setText] = useState('');
 	const [files, setFiles] = useState<FileList | null>(null);
 	const navigate = useNavigate();
+	const { setView } = useViewStore();
 
 	const handleSendPost = async () => {
 		const response = await sendPost(text, files);
@@ -36,7 +38,10 @@ export default function WritingModal() {
 					</Button>
 				}
 				leftButton={<Images onModify={setFiles} />}
-				onClickGoBack={() => navigate('/home')}
+				onClickGoBack={() => {
+					setView('MAIN');
+					navigate('/home');
+				}}
 			>
 				<TextArea onChange={(text) => setText(text)} />
 			</Modal>

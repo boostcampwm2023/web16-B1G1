@@ -6,12 +6,14 @@ import AddIcon from '@icons/icon-add-24-white.svg';
 import WriteIcon from '@icons/icon-writte-24-white.svg';
 import { BASE_URL, MAX_WIDTH1, MAX_WIDTH2 } from 'shared/lib/constants';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import Cookies from 'js-cookie';
+import instance from 'shared/apis/AxiosInterceptor';
+import { useViewStore } from 'shared/store';
 
 export default function UnderBar() {
 	const tempName = '도라에몽도라에몽도라';
 	const navigate = useNavigate();
+	const { setView } = useViewStore();
 
 	return (
 		<Layout>
@@ -22,8 +24,8 @@ export default function UnderBar() {
 					<Button
 						size="m"
 						buttonType="Button"
-						onClick={() => {
-							axios.get(`${BASE_URL}auth/signout`);
+						onClick={async () => {
+							await instance.get(`${BASE_URL}auth/signout`);
 							Cookies.remove('accessToken');
 							Cookies.remove('refreshToken');
 							navigate('/');
@@ -49,7 +51,10 @@ export default function UnderBar() {
 					<BigButton
 						size="l"
 						buttonType="CTA-icon"
-						onClick={() => navigate('/home/writing')}
+						onClick={() => {
+							setView('WRITING');
+							navigate('/home/writing');
+						}}
 					>
 						<img src={WriteIcon} alt="글쓰기" />
 						글쓰기

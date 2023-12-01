@@ -2,35 +2,32 @@ import { Button } from 'shared/ui';
 import styled from '@emotion/styled';
 import { Title02 } from 'shared/ui/styles';
 import { useNavigate } from 'react-router-dom';
+import logo from 'assets/logo.png';
 
 export default function LogoAndStart() {
 	const navigate = useNavigate();
 
 	return (
-		<Container>
-			<Logo>Logo</Logo>
-			<Button
-				onClick={() => navigate('/login')}
-				size="l"
-				buttonType="CTA-icon"
-				type="button"
-				style={{ width: '516px', padding: '24px 12px' }}
-			>
-				<Start>시작하기</Start>
-			</Button>
-		</Container>
+		<>
+			<BackDrop />
+			<Container>
+				<Logo src={logo} />
+				<Button
+					onClick={() => navigate('/login')}
+					size="l"
+					buttonType="CTA-icon"
+					type="button"
+					style={{ width: '516px', padding: '24px 12px' }}
+				>
+					<Start>시작하기</Start>
+				</Button>
+			</Container>
+		</>
 	);
 }
 
-const Logo = styled.div`
-	display: flex;
-	background: rgba(255, 255, 255, 0.2);
-	border-radius: 16px;
-	color: white;
-	width: 700px;
-	height: 180px;
-	align-items: center;
-	justify-content: center;
+const Logo = styled.img`
+	width: 350px;
 `;
 
 const Container = styled.div`
@@ -47,4 +44,17 @@ const Container = styled.div`
 
 const Start = styled.div`
 	${Title02}
+`;
+
+const BackDrop = styled.div`
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: black;
+	opacity: 0.6;
+	width: 100%;
+	height: 100%;
+	z-index: 1;
 `;

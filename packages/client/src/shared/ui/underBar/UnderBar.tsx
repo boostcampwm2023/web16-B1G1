@@ -11,13 +11,13 @@ import instance from 'shared/apis/AxiosInterceptor';
 import { useViewStore } from 'shared/store';
 
 export default function UnderBar() {
-	const tempName = '도라에몽도라에몽도라';
+	const userName = Cookies.get('userId');
 	const navigate = useNavigate();
 	const { setView } = useViewStore();
 
 	return (
 		<Layout>
-			<Name>{tempName}님의 은하</Name>
+			<Name>{userName}님의 은하</Name>
 
 			<ButtonsContainer>
 				<SmallButtonsContainer>

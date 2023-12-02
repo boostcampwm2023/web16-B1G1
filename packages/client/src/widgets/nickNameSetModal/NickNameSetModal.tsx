@@ -5,10 +5,13 @@ import { postSignUp } from 'shared/apis';
 import { useSignUpStore } from 'shared/store/useSignUpStore';
 import { useToastStore } from 'shared/store/useToastStore';
 import { useNavigate } from 'react-router-dom';
+import { useCheckLogin } from 'shared/hooks';
 
 export default function NickNameSetModal() {
 	const [validNickName, setValidNickName] = useState('');
 	const navigate = useNavigate();
+
+	useCheckLogin();
 
 	const handleSaveButton = async () => {
 		// TODO: 소셜로그인 시 로직 따로 추가해야 함

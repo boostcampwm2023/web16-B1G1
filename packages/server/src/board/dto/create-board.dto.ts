@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString, MaxLength } from 'class-validator';
+import { IsJSON, IsNotEmpty, IsString, MaxLength } from 'class-validator';
 
 export class CreateBoardDto {
 	@IsNotEmpty({ message: '게시글 제목은 필수 입력입니다.' })
@@ -20,4 +20,13 @@ export class CreateBoardDto {
 		required: true,
 	})
 	content: string;
+
+	@IsNotEmpty({ message: '별 스타일은 필수 입력입니다.' })
+	@IsJSON({ message: '별 스타일은 JSON 형식으로 입력해야 합니다.' })
+	@ApiProperty({
+		description: '별 스타일',
+		example: '{"color":"#000000", "position":{ "x": 50, "y": 0, "z": -50}}',
+		required: false,
+	})
+	star: string;
 }

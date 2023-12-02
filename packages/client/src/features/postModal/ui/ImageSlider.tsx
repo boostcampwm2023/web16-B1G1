@@ -42,22 +42,24 @@ export default function ImageSlider({ imageUrls }: PropsType) {
 					return <Image key={url} src={url} index={imageIndex} />;
 				})}
 			</CurrentImage>
-			<Button onClick={handlePrev} style={{ left: 0 }}>
-				<ArrowBigLeft />
-			</Button>
-			<Button onClick={handleNext} style={{ right: 0 }}>
-				<ArrowBigRight />
-			</Button>
-			<Pagination>
-				<Dots />
-			</Pagination>
+			{imageUrls.length > 1 && (
+				<>
+					<Button onClick={handlePrev} style={{ left: 0 }}>
+						<ArrowBigLeft />
+					</Button>
+					<Button onClick={handleNext} style={{ right: 0 }}>
+						<ArrowBigRight />
+					</Button>
+					<Pagination>
+						<Dots />
+					</Pagination>
+				</>
+			)}
 		</Layout>
 	);
 }
 
 const Layout = styled.div`
-	width: 500px;
-	height: 500px;
 	position: relative;
 `;
 

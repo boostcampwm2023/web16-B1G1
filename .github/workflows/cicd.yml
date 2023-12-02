@@ -1,0 +1,84 @@
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '20.x'
+
+      - name: Install yarn
+        run: npm install -g yarn
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+
+      - name: Test and Build with yarn
+        run: |
+          yarn install
+          yarn workspace client build
+
+      - name: Build and Push Docker image
+        run: |
+          docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/web16-b1g1-fe:${{ github.sha }} -f ./Dockerfile-web . 
+          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/web16-b1g1-fe:${{ github.sha }}
+          docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/web16-b1g1-be:${{ github.sha }} -f ./Dockerfile-was .
+          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/web16-b1g1-be:${{ github.sha }}
+
+      - name: make docker-compose file
+        run: |
+          sed -i "s/GITHUB_SHA/${{ github.sha }}/g" docker-compose.yml
+
+      - name: send docker-compose file with scp
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          source: docker-compose.yml
+          target: /app
+
+      - name: make .env file
+        run: |
+          echo ${{ secrets.ENV }} > .env
+
+      - name: send .env file with scp
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          source: .env
+          target: /app
+
+      - name: Deploy with SSH
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            cd /app
+            docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/web16-b1g1-fe:${{ github.sha }}
+            docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/web16-b1g1-be:${{ github.sha }}
+            docker stop $(docker ps -a -q)
+            docker rm $(docker ps -a -q)
+            docker-compose up -d
+            rm -rf .env docker-compose.yml

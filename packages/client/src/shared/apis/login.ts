@@ -2,6 +2,7 @@ import axios, { AxiosError } from 'axios';
 import { BASE_URL } from '@constants';
 import Cookies from 'js-cookie';
 import { NavigateFunction } from 'react-router-dom';
+import { useScreenSwitchStore } from 'shared/store/useScreenSwitchState';
 
 axios.defaults.withCredentials = true;
 
@@ -20,17 +21,21 @@ export const postLogin = async (
 		});
 
 		Cookies.set('userId', data.username, { path: '/', expires: 7 });
+
 		Cookies.set('refreshToken', res.data.refreshToken, {
 			path: '/',
 			secure: true,
 			expires: 1,
 		});
+
 		Cookies.set('accessToken', res.data.accessToken, {
 			path: '/',
 			secure: true,
 			expires: 1 / 24,
 		});
+
 		navigate('/home');
+		useScreenSwitchStore.setState({ isSwitching: true });
 	} catch (err) {
 		if (err instanceof AxiosError) {
 			if (err.response?.status === 404) setIdState(false);

@@ -12,7 +12,7 @@ interface PropsType {
 
 export default function Instances({ count, size, color }: PropsType) {
 	const instancedMeshRef = useRef<THREE.InstancedMesh>(null!);
-	const geometry = new THREE.SphereGeometry(size * 5, 8, 4);
+	const geometry = new THREE.SphereGeometry(size * 5, 16, 8);
 	const material = new THREE.MeshStandardMaterial({
 		color: color,
 		emissive: color,

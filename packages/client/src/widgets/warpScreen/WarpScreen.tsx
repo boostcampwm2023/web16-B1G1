@@ -62,7 +62,7 @@ const SpaceWarp = () => {
 			return;
 		}
 
-		if (state.camera.position.y > 0) state.camera.position.y -= 280;
+		if (state.camera.position.y > 0) state.camera.position.y -= 700;
 	});
 
 	if (isWarpEnd) return null;

@@ -19,7 +19,7 @@ export default function WritingModal() {
 		const response = await sendPost(title, content, files);
 		if (response!.status === 201) {
 			navigate('/home');
-			// TODO: home에서 별 정보 refetching
+			window.location.reload();
 		} else {
 			alert('글쓰기 실패');
 		}

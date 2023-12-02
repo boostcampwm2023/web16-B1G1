@@ -37,6 +37,7 @@ export default function PostModal() {
 		if (res.status === 200) {
 			setView('MAIN');
 			navigate('/home');
+			window.location.reload();
 		} else {
 			alert('글 삭제 실패');
 		}

@@ -2,8 +2,9 @@ import { Modal } from 'shared/ui';
 import { TopButton, LeftButton, RightButton, LoginContent } from './ui';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { postLogin } from 'shared/apis';
+import { useCheckLogin } from 'shared/hooks';
 
 export default function LoginModal() {
 	const [id, setId] = useState(Cookies.get('userId') ?? '');
@@ -26,11 +27,7 @@ export default function LoginModal() {
 		postLogin(data, setIdState, setPasswordState, navigate);
 	};
 
-	useEffect(() => {
-		const accessToken = Cookies.get('accessToken');
-		const refreshToken = Cookies.get('refreshToken');
-		if (refreshToken || accessToken) navigate('/home');
-	});
+	useCheckLogin();
 
 	return (
 		<form

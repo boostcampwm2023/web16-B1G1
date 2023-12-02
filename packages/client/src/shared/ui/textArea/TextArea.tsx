@@ -147,6 +147,7 @@ const Wrapper = styled.div<{ css: SerializedStyles }>`
 	padding: 8px;
 	margin-top: 9px;
 	margin-right: 9px;
+	color: ${theme.colors.text.secondary};
 `;
 
 const scrollStyle = css`

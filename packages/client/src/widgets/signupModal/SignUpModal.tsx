@@ -6,6 +6,7 @@ import PwInputContainer from './ui/PwInputContainer';
 import CheckPwInputContainer from './ui/CheckPwInputContainer';
 import { useSignUpStore } from 'shared/store/useSignUpStore';
 import { useNavigate } from 'react-router-dom';
+import { useCheckLogin } from 'shared/hooks';
 
 export default function SignUpModal() {
 	const navigate = useNavigate();
@@ -15,6 +16,8 @@ export default function SignUpModal() {
 	const [validCheckPw, setValidCheckPw] = useState('');
 
 	const [isAllInputValid, setIsAllInputValid] = useState(false);
+
+	useCheckLogin();
 
 	useEffect(() => {
 		if (validId && validPw && validCheckPw) {

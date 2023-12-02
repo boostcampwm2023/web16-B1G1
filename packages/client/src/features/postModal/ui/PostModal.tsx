@@ -37,6 +37,7 @@ export default function PostModal() {
 		if (res.status === 200) {
 			setView('MAIN');
 			navigate('/home');
+			window.location.reload();
 		} else {
 			alert('글 삭제 실패');
 		}
@@ -54,7 +55,7 @@ export default function PostModal() {
 					}}
 				>
 					<Container>
-						{data.images.length && (
+						{data.images.length > 0 && (
 							<ImageContainer>
 								<ImageSlider imageUrls={data.images} />
 							</ImageContainer>

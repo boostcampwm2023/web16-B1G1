@@ -11,11 +11,15 @@ const dummyStarData = {
 	},
 }; // TODO: 별 커스텀 데이터로 변경
 
-export const sendPost = async (text: string, files: FileList | null) => {
+export const sendPost = async (
+	title: string,
+	content: string,
+	files: FileList | null,
+) => {
 	try {
 		const formData = new FormData();
-		formData.append('title', '제목');
-		formData.append('content', text);
+		formData.append('title', title !== '' ? title : '제목 없음');
+		formData.append('content', content !== '' ? content : '내용 없음');
 		formData.append('star', JSON.stringify(dummyStarData));
 		if (files) {
 			for (let i = 0; i < files.length; i++) formData.append('file', files[i]);

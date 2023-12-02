@@ -40,7 +40,7 @@ export default function Instances({ count, size, color }: PropsType) {
 			instancedMeshRef.current.setMatrixAt(index++, tempObject.matrix);
 		}
 		instancedMeshRef.current.instanceMatrix.needsUpdate = true;
-	});
+	}, []);
 
 	useFrame(({ camera: { position } }) => {
 		const cameraDistance = new THREE.Vector3(0, 0, 0).distanceTo(position);

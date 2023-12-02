@@ -3,15 +3,15 @@ import { useViewStore } from 'shared/store/useViewStore';
 import { Outlet, useNavigate } from 'react-router-dom';
 import UnderBar from 'shared/ui/underBar/UnderBar';
 import UpperBar from './ui/UpperBar';
-import { useLoadingStore } from 'shared/store/useLoadingStore';
 import WarpScreen from 'widgets/warpScreen/WarpScreen';
 import { useEffect } from 'react';
 import instance from 'shared/apis/AxiosInterceptor';
 import { BASE_URL } from '@constants';
+import { useScreenSwitchStore } from 'shared/store/useScreenSwitchState';
 
 export default function Home() {
 	const { view } = useViewStore();
-	const { isLoading } = useLoadingStore();
+	const { isSwitching } = useScreenSwitchStore();
 	const navigate = useNavigate();
 
 	useEffect(() => {
@@ -33,7 +33,7 @@ export default function Home() {
 		<>
 			<Outlet />
 
-			{isLoading && <WarpScreen />}
+			{isSwitching && <WarpScreen />}
 
 			{view === 'MAIN' && (
 				<>

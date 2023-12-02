@@ -8,15 +8,15 @@ import { Body04Me } from '../styles';
 
 interface PropsType {
 	onChange: (text: string) => void;
-	width?: number;
-	height?: number;
+	width?: string;
+	height?: string;
 	maxLength?: number;
 }
 
 export default function TextArea({
 	onChange,
-	width = 851,
-	height = 406,
+	width = '851px',
+	height = '406px',
 	maxLength = 1000,
 }: PropsType) {
 	const [tabIndex, setTabIndex] = useState(0);
@@ -71,10 +71,10 @@ export default function TextArea({
 	);
 }
 
-const Section = styled.section<{ width: number; height: number }>`
+const Section = styled.section<{ width: string; height: string }>`
 	${Body04Me}
-	width: ${({ width }) => width}px;
-	height: ${({ height }) => height}px;
+	width: ${({ width }) => width};
+	height: ${({ height }) => height};
 	background-color: ${theme.colors.background.bdp03};
 	color: ${theme.colors.text.third};
 	border-radius: 4px;

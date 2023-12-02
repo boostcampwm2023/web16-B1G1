@@ -1,6 +1,6 @@
 import { useFrame } from '@react-three/fiber';
 import { getRandomFloat, getRandomInt } from '@utils/random';
-import { useState, useRef, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import * as THREE from 'three';
 import {
 	SPACE_WARP_LINES_NUM,
@@ -11,6 +11,8 @@ import {
 	SPACE_WARP_Y_MIN,
 } from '../lib/constants';
 import { BACKGROUND_STAR_COLORS } from 'features/backgroundStars/lib/constants';
+import { useEffect } from 'react';
+import { useScreenSwitchStore } from 'shared/store/useScreenSwitchState';
 
 const geSpaceWarpLinesInfo = () => {
 	const positions = Array.from({ length: SPACE_WARP_LINES_NUM }, () => {
@@ -33,8 +35,6 @@ const geSpaceWarpLinesInfo = () => {
 };
 
 export default function SpaceWarp() {
-	const linesRef = useRef<THREE.LineSegments>(null!);
-
 	const [lerpFactor, setLerpFactor] = useState(0);
 	const [isWarpEnd, setIsWarpEnd] = useState(false);
 
@@ -53,17 +53,22 @@ export default function SpaceWarp() {
 			state.scene.background instanceof THREE.Color
 		) {
 			state.scene.background.lerp(new THREE.Color(0x000000), lerpFactor);
-			setLerpFactor((prev) => prev + 0.01);
+			setLerpFactor((prev) => prev + 0.03);
 			return;
 		}
 
 		if (state.camera.position.y > 0) state.camera.position.y -= 700;
 	});
 
+	useEffect(() => {
+		if (lerpFactor < 1) return;
+		useScreenSwitchStore.setState({ isSwitching: false });
+	}, [lerpFactor]);
+
 	if (isWarpEnd) return null;
 
 	return (
-		<lineSegments ref={linesRef}>
+		<lineSegments>
 			<bufferGeometry attach="geometry">
 				<bufferAttribute
 					attach="attributes-position"
@@ -78,6 +83,7 @@ export default function SpaceWarp() {
 					itemSize={3}
 				/>
 			</bufferGeometry>
+
 			<lineBasicMaterial attach="material" vertexColors={true} />
 		</lineSegments>
 	);

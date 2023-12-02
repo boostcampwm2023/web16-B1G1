@@ -54,7 +54,7 @@ export default function PostModal() {
 					}}
 				>
 					<Container>
-						{data.images.length && (
+						{data.images.length > 0 && (
 							<ImageContainer>
 								<ImageSlider imageUrls={data.images} />
 							</ImageContainer>

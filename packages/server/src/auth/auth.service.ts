@@ -2,6 +2,7 @@ import {
 	BadRequestException,
 	ConflictException,
 	Injectable,
+	InternalServerErrorException,
 	NotFoundException,
 	UnauthorizedException,
 } from '@nestjs/common';
@@ -224,12 +225,14 @@ export class AuthService {
 	}
 
 	async getShareLink(userData: UserDataDto) {
-		if (userData.status === UserShareStatus.PRIVATE) {
-			throw new BadRequestException('비공개 상태입니다.');
+		const user = await this.userRepository.findOneBy({ id: userData.userId });
+
+		if (user.status === UserShareStatus.PRIVATE) {
+			throw new UnauthorizedException('비공개 상태입니다.');
 		}
 
 		const foundLink = await this.shareLinkRepository.findOneBy({
-			user: userData.userId,
+			user: user.id,
 		});
 
 		if (foundLink) {
@@ -237,7 +240,7 @@ export class AuthService {
 		}
 
 		const newLink = this.shareLinkRepository.create({
-			user: userData.userId,
+			user: user.id,
 			link: uuid(),
 		});
 

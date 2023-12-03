@@ -35,6 +35,7 @@ import { LogInterceptor } from '../interceptor/log.interceptor';
 import { TransactionInterceptor } from '../interceptor/transaction.interceptor';
 import { GetQueryRunner } from '../interceptor/decorators/get-querry-runner.decorator';
 import { DeleteResult, QueryRunner } from 'typeorm';
+import { GetIsLikedSwaggerDecorator } from './decorators/swagger/get-is-liked-swagged.decorator';
 
 @Controller('post')
 @UseInterceptors(LogInterceptor)
@@ -84,6 +85,16 @@ export class BoardController {
 		};
 
 		return boardData;
+	}
+
+	@Get(':id/is-liked')
+	@UseGuards(CookieAuthGuard)
+	@GetIsLikedSwaggerDecorator()
+	async getIsLiked(
+		@Param('id', ParseIntPipe) id: number,
+		@GetUser() userData: UserDataDto,
+	): Promise<boolean> {
+		return this.boardService.getIsLiked(id, userData);
 	}
 
 	// 사진도 수정할 수 있도록 폼데이터 형태로 받기

@@ -4,6 +4,7 @@ import goBackIcon from '@icons/icon-back-32-white.svg';
 import { MAX_WIDTH1, MAX_WIDTH2 } from '@constants';
 import { useState, useEffect } from 'react';
 import { getNickNames } from 'shared/apis/search';
+import { useScreenSwitchStore } from 'shared/store/useScreenSwitchState';
 
 export default function UpperBar() {
 	const [searchValue, setSearchValue] = useState('');
@@ -36,6 +37,11 @@ export default function UpperBar() {
 		})();
 	}, [debouncedSearchValue]);
 
+	const handleSearchButton = () => {
+		// TODO: 해당 사용자 페이지로 이동
+		useScreenSwitchStore.setState({ isSwitching: true });
+	};
+
 	return (
 		<Layout>
 			<IconButton onClick={() => {}}>
@@ -43,7 +49,7 @@ export default function UpperBar() {
 			</IconButton>
 
 			<SearchBar
-				onClick={() => {}}
+				onClick={handleSearchButton}
 				inputState={searchValue}
 				setInputState={setSearchValue}
 				placeholder="닉네임을 입력하세요"

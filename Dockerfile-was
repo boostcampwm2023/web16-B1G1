@@ -1,4 +1,4 @@
-FROM node:20-alpine
+FROM node:20-alpine AS builder
 
 WORKDIR /app
 
@@ -6,6 +6,18 @@ ADD . /app
 
 RUN SHARP_IGNORE_GLOBAL_LIBVIPS=1 npm_config_arch=x64 npm_config_platform=linux yarn workspace server add sharp@0.32.6
 RUN yarn workspace server build
+
+FROM node:20-alpine AS runner
+
+WORKDIR /app
+
+COPY --from=builder /app/packages/server/dist /app/packages/server/dist
+COPY --from=builder /app/packages/server/package.json /app/packages/server/package.json
+COPY --from=builder /app/.yarn /app/.yarn
+COPY --from=builder /app/.pnp.cjs /app/.pnp.cjs
+COPY --from=builder /app/.yarnrc.yml /app/.yarnrc.yml
+COPY --from=builder /app/yarn.lock /app/yarn.lock
+COPY --from=builder /app/package.json /app/package.json
 
 EXPOSE 3000
 

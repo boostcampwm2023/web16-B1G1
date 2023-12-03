@@ -4,12 +4,16 @@ import goBackIcon from '@icons/icon-back-32-white.svg';
 import { MAX_WIDTH1, MAX_WIDTH2 } from '@constants';
 import { useState, useEffect } from 'react';
 import { getNickNames } from 'shared/apis/search';
-import { useScreenSwitchStore } from 'shared/store/useScreenSwitchState';
+import { useScreenSwitchStore } from 'shared/store/useScreenSwitchStore';
+import { useOwnerStore } from 'shared/store/useOwnerStore';
 
 export default function UpperBar() {
 	const [searchValue, setSearchValue] = useState('');
 	const [debouncedSearchValue, setDebouncedSearchValue] = useState('');
 	const [searchResults, setSearchResults] = useState([]);
+
+	const { isMyPage, setIsMyPage } = useOwnerStore();
+	const { setIsSwitching } = useScreenSwitchStore();
 
 	const DEBOUNCE_TIME = 200;
 
@@ -33,18 +37,31 @@ export default function UpperBar() {
 				.map((data: { nickname: string; id: number }) => data.nickname)
 				.slice(0, 5);
 
+			// TODO: 본인 닉네임은 안뜨도록 하기
+
 			setSearchResults(nickNames);
 		})();
 	}, [debouncedSearchValue]);
 
 	const handleSearchButton = () => {
 		// TODO: 해당 사용자 페이지로 이동
-		useScreenSwitchStore.setState({ isSwitching: true });
+
+		setSearchValue('');
+		setDebouncedSearchValue('');
+		setSearchResults([]);
+
+		setIsMyPage(false);
+		setIsSwitching(true);
 	};
+
+	const iconButtonVisibility = isMyPage ? 'hidden' : 'visible';
 
 	return (
 		<Layout>
-			<IconButton onClick={() => {}}>
+			<IconButton
+				onClick={() => {}}
+				style={{ visibility: iconButtonVisibility }}
+			>
 				<img src={goBackIcon} alt="뒤로가기" />
 			</IconButton>
 

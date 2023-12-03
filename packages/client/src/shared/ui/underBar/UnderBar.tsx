@@ -2,18 +2,23 @@ import styled from '@emotion/styled';
 import { Button } from 'shared/ui';
 import { Title01 } from '../styles';
 import PlanetEditIcon from '@icons/icon-planetedit-24-white.svg';
+import PlanerEditIconGray from '@icons/icon-planetedit-24-gray.svg';
 import AddIcon from '@icons/icon-add-24-white.svg';
+import AddIconGray from '@icons/icon-add-24-gray.svg';
 import WriteIcon from '@icons/icon-writte-24-white.svg';
+import WriteIconGray from '@icons/icon-writte-24-gray.svg';
 import { BASE_URL, MAX_WIDTH1, MAX_WIDTH2 } from 'shared/lib/constants';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import instance from 'shared/apis/AxiosInterceptor';
 import { useViewStore } from 'shared/store';
+import { useOwnerStore } from 'shared/store/useOwnerStore';
 
 export default function UnderBar() {
 	const userName = Cookies.get('userId');
 	const navigate = useNavigate();
 	const { setView } = useViewStore();
+	const { isMyPage } = useOwnerStore();
 
 	return (
 		<Layout>
@@ -33,7 +38,8 @@ export default function UnderBar() {
 					>
 						로그아웃
 					</Button>
-					<Button size="m" buttonType="Button">
+
+					<Button size="m" buttonType="Button" disabled={!isMyPage}>
 						공유하기
 					</Button>
 				</SmallButtonsContainer>
@@ -41,22 +47,29 @@ export default function UnderBar() {
 				<Line />
 
 				<BigButtonsContainer>
-					<BigButton size="l" buttonType="Button">
-						<img src={PlanetEditIcon} alt="우주 수정하기" />
+					<BigButton size="l" buttonType="Button" disabled={!isMyPage}>
+						<img
+							src={isMyPage ? PlanetEditIcon : PlanerEditIconGray}
+							alt="우주 수정하기"
+						/>
 						우주 수정하기
 					</BigButton>
-					<BigButton size="l" buttonType="Button">
-						<img src={AddIcon} alt="별 스킨 만들기" />별 스킨 만들기
+
+					<BigButton size="l" buttonType="Button" disabled={!isMyPage}>
+						<img src={isMyPage ? AddIcon : AddIconGray} alt="별 스킨 만들기" />
+						별 스킨 만들기
 					</BigButton>
+
 					<BigButton
 						size="l"
 						buttonType="CTA-icon"
+						disabled={!isMyPage}
 						onClick={() => {
 							setView('WRITING');
 							navigate('/home/writing');
 						}}
 					>
-						<img src={WriteIcon} alt="글쓰기" />
+						<img src={isMyPage ? WriteIcon : WriteIconGray} alt="글쓰기" />
 						글쓰기
 					</BigButton>
 				</BigButtonsContainer>

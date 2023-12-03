@@ -224,8 +224,8 @@ export class AuthService {
 		return updatedUser;
 	}
 
-	async getShareLink(userData: UserDataDto) {
-		const user = await this.userRepository.findOneBy({ id: userData.userId });
+	async getShareLinkByNickname(nickname: string) {
+		const user = await this.userRepository.findOneBy({ nickname });
 
 		if (user.status === UserShareStatus.PRIVATE) {
 			throw new UnauthorizedException('비공개 상태입니다.');

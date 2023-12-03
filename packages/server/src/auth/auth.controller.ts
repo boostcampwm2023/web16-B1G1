@@ -210,10 +210,9 @@ export class AuthController {
 	}
 
 	@Get('sharelink')
-	@UseGuards(CookieAuthGuard)
 	@GetShareLinkSwaggerDecorator()
-	getShareLink(@GetUser() userData: UserDataDto) {
-		return this.authService.getShareLink(userData);
+	getShareLinkByNickname(@Query('nickname') nickname: string) {
+		return this.authService.getShareLinkByNickname(nickname);
 	}
 
 	@Get('sharelink/:shareLink')

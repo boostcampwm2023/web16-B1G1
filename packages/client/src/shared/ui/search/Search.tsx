@@ -47,7 +47,7 @@ export default function Search({
 					type="submit"
 					disabled={!inputState}
 				>
-					버튼
+					검색
 				</Button>
 			</InputLayout>
 

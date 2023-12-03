@@ -2,7 +2,7 @@ import axios, { AxiosError } from 'axios';
 import { BASE_URL } from '@constants';
 import Cookies from 'js-cookie';
 import { NavigateFunction } from 'react-router-dom';
-import { useScreenSwitchStore } from 'shared/store/useScreenSwitchState';
+import { useScreenSwitchStore } from 'shared/store/useScreenSwitchStore';
 
 axios.defaults.withCredentials = true;
 

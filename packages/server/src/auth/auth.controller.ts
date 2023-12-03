@@ -43,6 +43,7 @@ import { GetShareLinkSwaggerDecorator } from './decorators/swagger/get-share-lin
 import { LogInterceptor } from '../interceptor/log.interceptor';
 import { CheckSignInSwaggerDecorator } from './decorators/swagger/check-sign-in-swagger.decorator';
 import { cookieOptionsConfig } from '../config/cookie.config';
+import { GetUsernameByShareLinkSwaggerDecorator } from './decorators/swagger/get-username-by-sharelink.decorator';
 
 @Controller('auth')
 @UseInterceptors(LogInterceptor)
@@ -216,6 +217,7 @@ export class AuthController {
 	}
 
 	@Get('sharelink/:shareLink')
+	@GetUsernameByShareLinkSwaggerDecorator()
 	getUsernameByShareLink(@Param('shareLink') shareLink: string) {
 		return this.authService.getUsernameByShareLink(shareLink);
 	}

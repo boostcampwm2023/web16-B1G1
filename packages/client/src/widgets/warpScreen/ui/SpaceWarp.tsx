@@ -12,7 +12,7 @@ import {
 } from '../lib/constants';
 import { BACKGROUND_STAR_COLORS } from 'features/backgroundStars/lib/constants';
 import { useEffect } from 'react';
-import { useScreenSwitchStore } from 'shared/store/useScreenSwitchState';
+import { useScreenSwitchStore } from 'shared/store/useScreenSwitchStore';
 
 const geSpaceWarpLinesInfo = () => {
 	const positions = Array.from({ length: SPACE_WARP_LINES_NUM }, () => {
@@ -40,6 +40,8 @@ export default function SpaceWarp() {
 
 	const [positions, colors] = useMemo(() => geSpaceWarpLinesInfo(), []);
 
+	const { setIsSwitching } = useScreenSwitchStore();
+
 	useFrame((state) => {
 		if (state.camera.position.y < 0 && !isWarpEnd) {
 			state.scene.background = new THREE.Color(0xffffff);
@@ -62,7 +64,7 @@ export default function SpaceWarp() {
 
 	useEffect(() => {
 		if (lerpFactor < 1) return;
-		useScreenSwitchStore.setState({ isSwitching: false });
+		setIsSwitching(false);
 	}, [lerpFactor]);
 
 	if (isWarpEnd) return null;

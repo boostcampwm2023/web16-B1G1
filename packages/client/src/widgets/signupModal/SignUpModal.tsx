@@ -17,6 +17,8 @@ export default function SignUpModal() {
 
 	const [isAllInputValid, setIsAllInputValid] = useState(false);
 
+	const { setId, setPw } = useSignUpStore();
+
 	useCheckLogin();
 
 	useEffect(() => {
@@ -33,10 +35,8 @@ export default function SignUpModal() {
 	const handleSignUpButton = () => {
 		if (!isAllInputValid) return;
 
-		useSignUpStore.setState({
-			id: validId,
-			pw: validPw,
-		});
+		setId(validId);
+		setPw(validPw);
 
 		navigate('/nickname');
 	};

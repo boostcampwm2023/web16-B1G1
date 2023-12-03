@@ -16,7 +16,7 @@ export default function Search({
 	inputState,
 	setInputState,
 	placeholder = '',
-	results,
+	results = [],
 	...args
 }: PropsTypes) {
 	const onChangeSearchInput = ({
@@ -24,6 +24,10 @@ export default function Search({
 	}: React.ChangeEvent<HTMLInputElement>) => {
 		setInputState(target.value);
 	};
+
+	const resultsContents = results.map((result, index) => (
+		<Result key={index}>{result}</Result>
+	));
 
 	return (
 		<Layout {...args}>
@@ -47,13 +51,7 @@ export default function Search({
 				</Button>
 			</InputLayout>
 
-			{results && (
-				<ResultsLayout>
-					{results.map((result) => (
-						<Result>{result}</Result>
-					))}
-				</ResultsLayout>
-			)}
+			{results.length > 0 && <ResultsLayout>{resultsContents}</ResultsLayout>}
 		</Layout>
 	);
 }

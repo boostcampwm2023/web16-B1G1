@@ -4,7 +4,7 @@ WORKDIR /app
 
 ADD . /app
 
-RUN SHARP_IGNORE_GLOBAL_LIBVIPS=1 npm_config_arch=x64 npm_config_platform=linux yarn workspace server add sharp
+RUN SHARP_IGNORE_GLOBAL_LIBVIPS=1 npm_config_arch=x64 npm_config_platform=linux yarn workspace server add sharp@0.32.6
 RUN yarn workspace server build
 
 EXPOSE 3000

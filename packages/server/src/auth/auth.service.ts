@@ -2,6 +2,7 @@ import {
 	BadRequestException,
 	ConflictException,
 	Injectable,
+	InternalServerErrorException,
 	NotFoundException,
 	UnauthorizedException,
 } from '@nestjs/common';
@@ -223,13 +224,15 @@ export class AuthService {
 		return updatedUser;
 	}
 
-	async getShareLink(userData: UserDataDto) {
-		if (userData.status === UserShareStatus.PRIVATE) {
-			throw new BadRequestException('비공개 상태입니다.');
+	async getShareLinkByNickname(nickname: string) {
+		const user = await this.userRepository.findOneBy({ nickname });
+
+		if (user.status === UserShareStatus.PRIVATE) {
+			throw new UnauthorizedException('비공개 상태입니다.');
 		}
 
 		const foundLink = await this.shareLinkRepository.findOneBy({
-			user: userData.userId,
+			user: user.id,
 		});
 
 		if (foundLink) {
@@ -237,12 +240,38 @@ export class AuthService {
 		}
 
 		const newLink = this.shareLinkRepository.create({
-			user: userData.userId,
+			user: user.id,
 			link: uuid(),
 		});
 
 		const savedLink = await this.shareLinkRepository.save(newLink);
 		savedLink.user = undefined;
 		return savedLink;
+	}
+
+	async getUsernameByShareLink(shareLink: string) {
+		const foundLink = await this.shareLinkRepository.findOneBy({
+			link: shareLink,
+		});
+
+		if (!foundLink) {
+			throw new NotFoundException('존재하지 않는 링크입니다.');
+		}
+
+		const linkUser = await this.userRepository.findOneBy({
+			id: foundLink.user,
+		});
+
+		if (!linkUser) {
+			throw new InternalServerErrorException(
+				'링크에 대한 사용자가 존재하지 않습니다.',
+			);
+		}
+
+		if (linkUser.status === UserShareStatus.PRIVATE) {
+			throw new UnauthorizedException('비공개 상태입니다.');
+		}
+
+		return linkUser.username;
 	}
 }

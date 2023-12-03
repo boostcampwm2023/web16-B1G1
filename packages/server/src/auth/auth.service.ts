@@ -248,4 +248,30 @@ export class AuthService {
 		savedLink.user = undefined;
 		return savedLink;
 	}
+
+	async getUsernameByShareLink(shareLink: string) {
+		const foundLink = await this.shareLinkRepository.findOneBy({
+			link: shareLink,
+		});
+
+		if (!foundLink) {
+			throw new NotFoundException('존재하지 않는 링크입니다.');
+		}
+
+		const linkUser = await this.userRepository.findOneBy({
+			id: foundLink.user,
+		});
+
+		if (!linkUser) {
+			throw new InternalServerErrorException(
+				'링크에 대한 사용자가 존재하지 않습니다.',
+			);
+		}
+
+		if (linkUser.status === UserShareStatus.PRIVATE) {
+			throw new UnauthorizedException('비공개 상태입니다.');
+		}
+
+		return linkUser.username;
+	}
 }

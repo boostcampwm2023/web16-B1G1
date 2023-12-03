@@ -215,4 +215,9 @@ export class AuthController {
 	getShareLink(@GetUser() userData: UserDataDto) {
 		return this.authService.getShareLink(userData);
 	}
+
+	@Get('sharelink/:shareLink')
+	getUsernameByShareLink(@Param('shareLink') shareLink: string) {
+		return this.authService.getUsernameByShareLink(shareLink);
+	}
 }

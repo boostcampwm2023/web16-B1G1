@@ -16,8 +16,8 @@ export class ShareLink {
 	link: string;
 
 	@OneToOne(() => User, (user) => user.id, {
-		onDelete: 'CASCADE',
 		eager: false,
+		onDelete: 'CASCADE',
 	})
 	@JoinColumn()
 	user: number;

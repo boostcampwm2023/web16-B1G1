@@ -37,9 +37,15 @@ export class User {
 	@CreateDateColumn()
 	created_at: Date;
 
-	@OneToMany(() => Board, (board) => board.user, { eager: false })
+	@OneToMany(() => Board, (board) => board.user, {
+		eager: false,
+		onDelete: 'CASCADE',
+	})
 	boards: Board[];
 
-	@OneToOne(() => ShareLink, (shareLink) => shareLink.user)
+	@OneToOne(() => ShareLink, (shareLink) => shareLink.user, {
+		eager: false,
+		onDelete: 'SET NULL',
+	})
 	shareLink: ShareLink;
 }

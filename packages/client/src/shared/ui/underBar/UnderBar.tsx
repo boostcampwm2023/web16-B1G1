@@ -19,7 +19,7 @@ export default function UnderBar() {
 	const navigate = useNavigate();
 
 	const { setView } = useViewStore();
-	const { isMyPage } = useOwnerStore();
+	const { isMyPage, pageOwnerNickName } = useOwnerStore();
 
 	const handleLogoutButton = async () => {
 		await instance.get(`${BASE_URL}auth/signout`);
@@ -34,7 +34,7 @@ export default function UnderBar() {
 
 	return (
 		<Layout>
-			<Name>{nickName}님의 은하</Name>
+			<Name>{isMyPage ? nickName : pageOwnerNickName}님의 은하</Name>
 
 			<ButtonsContainer>
 				<SmallButtonsContainer>

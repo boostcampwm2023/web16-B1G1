@@ -21,7 +21,7 @@ import { AuthService } from './auth.service';
 import { SignUpUserDto } from './dto/signup-user.dto';
 import { User } from './entities/user.entity';
 import { SignInUserDto } from './dto/signin-user.dto';
-import { Response } from 'express';
+import { CookieOptions, Response } from 'express';
 import { ApiTags } from '@nestjs/swagger';
 import { JwtEnum } from './enums/jwt.enum';
 import { CookieAuthGuard } from './cookie-auth.guard';
@@ -42,6 +42,7 @@ import { ChangeStatusSwaggerDecorator } from './decorators/swagger/change-status
 import { GetShareLinkSwaggerDecorator } from './decorators/swagger/get-share-link-swagger.decorator';
 import { LogInterceptor } from '../interceptor/log.interceptor';
 import { CheckSignInSwaggerDecorator } from './decorators/swagger/check-sign-in-swagger.decorator';
+import { cookieOptionsConfig } from '../config/cookie.config';
 
 @Controller('auth')
 @UseInterceptors(LogInterceptor)
@@ -64,18 +65,16 @@ export class AuthController {
 		@Res({ passthrough: true }) res: Response,
 	) {
 		const tokens = await this.authService.signIn(signInUserDto);
-		res.cookie(JwtEnum.ACCESS_TOKEN_COOKIE_NAME, tokens.accessToken, {
-			path: '/',
-			httpOnly: true,
-			sameSite: 'none',
-			secure: true,
-		});
-		res.cookie(JwtEnum.REFRESH_TOKEN_COOKIE_NAME, tokens.refreshToken, {
-			path: '/',
-			httpOnly: true,
-			sameSite: 'none',
-			secure: true,
-		});
+		res.cookie(
+			JwtEnum.ACCESS_TOKEN_COOKIE_NAME,
+			tokens.accessToken,
+			cookieOptionsConfig,
+		);
+		res.cookie(
+			JwtEnum.REFRESH_TOKEN_COOKIE_NAME,
+			tokens.refreshToken,
+			cookieOptionsConfig,
+		);
 
 		return tokens;
 	}
@@ -95,18 +94,8 @@ export class AuthController {
 		@GetUser() userData: UserDataDto,
 	) {
 		await this.authService.signOut(userData);
-		res.clearCookie(JwtEnum.ACCESS_TOKEN_COOKIE_NAME, {
-			path: '/',
-			httpOnly: true,
-			sameSite: 'none',
-			secure: true,
-		});
-		res.clearCookie(JwtEnum.REFRESH_TOKEN_COOKIE_NAME, {
-			path: '/',
-			httpOnly: true,
-			sameSite: 'none',
-			secure: true,
-		});
+		res.clearCookie(JwtEnum.ACCESS_TOKEN_COOKIE_NAME, cookieOptionsConfig);
+		res.clearCookie(JwtEnum.REFRESH_TOKEN_COOKIE_NAME, cookieOptionsConfig);
 		return { message: UserEnum.SUCCESS_SIGNOUT_MESSAGE };
 	}
 
@@ -157,21 +146,20 @@ export class AuthController {
 			await this.authService.oauthCallback(service, authorizedCode, state);
 
 		if (username) {
-			res.cookie(`${service}Username`, username, {
-				path: '/',
-				httpOnly: true,
-			});
+			res.cookie(`${service}Username`, username, cookieOptionsConfig);
 			return { username };
 		}
 
-		res.cookie(JwtEnum.ACCESS_TOKEN_COOKIE_NAME, accessToken, {
-			path: '/',
-			httpOnly: true,
-		});
-		res.cookie(JwtEnum.REFRESH_TOKEN_COOKIE_NAME, refreshToken, {
-			path: '/',
-			httpOnly: true,
-		});
+		res.cookie(
+			JwtEnum.ACCESS_TOKEN_COOKIE_NAME,
+			accessToken,
+			cookieOptionsConfig,
+		);
+		res.cookie(
+			JwtEnum.REFRESH_TOKEN_COOKIE_NAME,
+			refreshToken,
+			cookieOptionsConfig,
+		);
 
 		return { accessToken, refreshToken };
 	}
@@ -197,10 +185,7 @@ export class AuthController {
 			resourceServerUsername,
 		);
 
-		res.clearCookie(`${service}Username`, {
-			path: '/',
-			httpOnly: true,
-		});
+		res.clearCookie(`${service}Username`, cookieOptionsConfig);
 
 		return savedUser;
 	}

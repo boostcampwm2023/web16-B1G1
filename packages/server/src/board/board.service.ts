@@ -183,6 +183,20 @@ export class BoardService {
 		return updatedBoard;
 	}
 
+	async getIsLiked(id: number, userData: UserDataDto): Promise<boolean> {
+		const board: Board = await this.boardRepository.findOneBy({ id });
+		if (!board) {
+			throw new NotFoundException(`Not found board with id: ${id}`);
+		}
+
+		// 이미 좋아요를 누른 경우
+		if (board.likes.find((user) => user.id === userData.userId)) {
+			return true;
+		}
+
+		return false;
+	}
+
 	async patchLike(id: number, userData: UserDataDto): Promise<Partial<Board>> {
 		const board = await this.boardRepository.findOneBy({ id });
 		if (!board) {

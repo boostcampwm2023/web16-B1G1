@@ -21,6 +21,7 @@ export default function OauthLogin() {
 }
 
 const Container = styled.div`
+	margin: 20px 0 0 0;
 	display: flex;
 	justify-content: space-evenly;
 

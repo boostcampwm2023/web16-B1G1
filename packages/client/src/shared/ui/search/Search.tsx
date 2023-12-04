@@ -26,7 +26,9 @@ export default function Search({
 	};
 
 	const resultsContents = results.map((result, index) => (
-		<Result key={index}>{result}</Result>
+		<Result key={index} onClick={() => setInputState(result)}>
+			{result}
+		</Result>
 	));
 
 	return (

@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react';
 import { getNickNames } from 'shared/apis/search';
 import { useScreenSwitchStore } from 'shared/store/useScreenSwitchStore';
 import { useOwnerStore } from 'shared/store/useOwnerStore';
+import Cookies from 'js-cookie';
 
 export default function UpperBar() {
 	const [searchValue, setSearchValue] = useState('');
@@ -14,6 +15,9 @@ export default function UpperBar() {
 
 	const { isMyPage, setIsMyPage } = useOwnerStore();
 	const { setIsSwitching } = useScreenSwitchStore();
+	const { setPageOwnerNickName } = useOwnerStore();
+
+	const userNickName = Cookies.get('nickname');
 
 	const DEBOUNCE_TIME = 200;
 
@@ -35,16 +39,15 @@ export default function UpperBar() {
 			const nickNameDatas = await getNickNames(debouncedSearchValue);
 			const nickNames = nickNameDatas
 				.map((data: { nickname: string; id: number }) => data.nickname)
+				.filter((nickName: string) => nickName !== userNickName)
 				.slice(0, 5);
-
-			// TODO: 본인 닉네임은 안뜨도록 하기
 
 			setSearchResults(nickNames);
 		})();
 	}, [debouncedSearchValue]);
 
-	const handleSearchButton = () => {
-		// TODO: 해당 사용자 페이지로 이동
+	const handleSearchButton = async () => {
+		setPageOwnerNickName(debouncedSearchValue);
 
 		setSearchValue('');
 		setDebouncedSearchValue('');
@@ -56,10 +59,15 @@ export default function UpperBar() {
 
 	const iconButtonVisibility = isMyPage ? 'hidden' : 'visible';
 
+	const handleGoBackButton = () => {
+		setIsMyPage(true);
+		setIsSwitching(true);
+	};
+
 	return (
 		<Layout>
 			<IconButton
-				onClick={() => {}}
+				onClick={handleGoBackButton}
 				style={{ visibility: iconButtonVisibility }}
 			>
 				<img src={goBackIcon} alt="뒤로가기" />

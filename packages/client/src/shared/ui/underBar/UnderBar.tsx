@@ -15,27 +15,30 @@ import { useViewStore } from 'shared/store';
 import { useOwnerStore } from 'shared/store/useOwnerStore';
 
 export default function UnderBar() {
-	const userName = Cookies.get('userId');
+	const nickName = Cookies.get('nickname');
 	const navigate = useNavigate();
+
 	const { setView } = useViewStore();
-	const { isMyPage } = useOwnerStore();
+	const { isMyPage, pageOwnerNickName } = useOwnerStore();
+
+	const handleLogoutButton = async () => {
+		await instance.get(`${BASE_URL}auth/signout`);
+
+		Cookies.remove('accessToken');
+		Cookies.remove('refreshToken');
+		Cookies.remove('userId');
+		Cookies.remove('nickname');
+
+		navigate('/');
+	};
 
 	return (
 		<Layout>
-			<Name>{userName}님의 은하</Name>
+			<Name>{isMyPage ? nickName : pageOwnerNickName}님의 은하</Name>
 
 			<ButtonsContainer>
 				<SmallButtonsContainer>
-					<Button
-						size="m"
-						buttonType="Button"
-						onClick={async () => {
-							await instance.get(`${BASE_URL}auth/signout`);
-							Cookies.remove('accessToken');
-							Cookies.remove('refreshToken');
-							navigate('/');
-						}}
-					>
+					<Button size="m" buttonType="Button" onClick={handleLogoutButton}>
 						로그아웃
 					</Button>
 

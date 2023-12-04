@@ -32,25 +32,27 @@ export default function Home() {
 	const { setSpiral, setStart, setThickness, setZDist } = useGalaxyStore();
 
 	useEffect(() => {
-		const checkLogin = async () => {
+		(async () => {
 			try {
 				const res = await instance({
 					method: 'GET',
 					url: `/auth/check-signin`,
 				});
-				if (res.status !== 200) {
-					navigate('/login');
-				}
+
+				if (res.status !== 200) navigate('/login');
 			} catch (error) {
-				console.error(error);
 				navigate('/login');
 			}
+<<<<<<< HEAD
 		};
 		checkLogin();
 		getSignInInfo().then((res) => {
 			Cookies.set('nickname', res.nickname);
 			setNickname(res.nickname);
 		});
+=======
+		})();
+>>>>>>> 460c149 (🎨 Change checkLogin function to IIFE)
 	}, []);
 
 	useEffect(() => {

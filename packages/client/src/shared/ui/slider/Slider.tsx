@@ -72,7 +72,7 @@ const Container = styled.div`
 	}
 
 	input {
-		width: 75px;
+		width: 90px;
 		text-align: right;
 	}
 

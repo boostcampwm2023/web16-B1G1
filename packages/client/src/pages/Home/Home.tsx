@@ -43,16 +43,12 @@ export default function Home() {
 			} catch (error) {
 				navigate('/login');
 			}
-<<<<<<< HEAD
-		};
-		checkLogin();
+		})();
+
 		getSignInInfo().then((res) => {
 			Cookies.set('nickname', res.nickname);
 			setNickname(res.nickname);
 		});
-=======
-		})();
->>>>>>> 460c149 (🎨 Change checkLogin function to IIFE)
 	}, []);
 
 	useEffect(() => {

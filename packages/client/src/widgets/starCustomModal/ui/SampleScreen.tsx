@@ -1,12 +1,12 @@
 import { Canvas } from '@react-three/fiber';
 import { EffectComposer, Bloom } from '@react-three/postprocessing';
-import Star from 'features/star';
 import * as THREE from 'three';
 import { OrbitControls } from '@react-three/drei';
 import { shapeTypes } from '@constants';
 import leftArrowIcon from '@icons/icon-arrow-left-32-white.svg';
 import rightArrowIcon from '@icons/icon-arrow-right-32-white.svg';
 import styled from '@emotion/styled';
+import Star from 'features/star/Star';
 
 interface PropsType {
 	shape: number;

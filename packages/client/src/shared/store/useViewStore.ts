@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-type view = 'MAIN' | 'DETAIL' | 'POST' | 'WRITING' | 'CUSTOM';
+type view = 'MAIN' | 'DETAIL' | 'POST' | 'WRITING' | 'CUSTOM' | 'SHARE';
 
 interface ViewState {
 	view: view;

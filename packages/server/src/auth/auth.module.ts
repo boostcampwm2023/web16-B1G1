@@ -9,12 +9,15 @@ import { jwtConfig } from '../config/jwt.config';
 import { RedisRepository } from './redis.repository';
 import { CookieAuthGuard } from './cookie-auth.guard';
 import { ShareLink } from './entities/share_link.entity';
+import { MongooseModule } from '@nestjs/mongoose';
+import { Galaxy, GalaxySchema } from 'src/galaxy/schemas/galaxy.schema';
 
 @Module({
 	imports: [
 		PassportModule.register({ defaultStrategy: 'jwt' }),
 		JwtModule.register(jwtConfig),
 		TypeOrmModule.forFeature([User, ShareLink]),
+		MongooseModule.forFeature([{ name: Galaxy.name, schema: GalaxySchema }]),
 	],
 	controllers: [AuthController],
 	providers: [AuthService, CookieAuthGuard, RedisRepository],

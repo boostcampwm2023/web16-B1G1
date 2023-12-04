@@ -8,6 +8,7 @@ import { JwtService } from '@nestjs/jwt';
 import { RedisRepository } from './redis.repository';
 import { createJwt } from '../util/auth.util';
 import { JwtEnum } from './enums/jwt.enum';
+import { cookieOptionsConfig } from '../config/cookie.config';
 
 @Injectable()
 export class CookieAuthGuard extends AuthGuard('jwt') {
@@ -41,8 +42,14 @@ export class CookieAuthGuard extends AuthGuard('jwt') {
 				this.jwtService.verify(refreshToken);
 			request.user = { userId, username, nickname, status };
 		} catch (error) {
-			response.clearCookie(JwtEnum.ACCESS_TOKEN_COOKIE_NAME);
-			response.clearCookie(JwtEnum.REFRESH_TOKEN_COOKIE_NAME);
+			response.clearCookie(
+				JwtEnum.ACCESS_TOKEN_COOKIE_NAME,
+				cookieOptionsConfig,
+			);
+			response.clearCookie(
+				JwtEnum.REFRESH_TOKEN_COOKIE_NAME,
+				cookieOptionsConfig,
+			);
 			throw new UnauthorizedException('로그인이 필요합니다.');
 		}
 
@@ -52,8 +59,14 @@ export class CookieAuthGuard extends AuthGuard('jwt') {
 				refreshToken,
 			))
 		) {
-			response.clearCookie(JwtEnum.ACCESS_TOKEN_COOKIE_NAME);
-			response.clearCookie(JwtEnum.REFRESH_TOKEN_COOKIE_NAME);
+			response.clearCookie(
+				JwtEnum.ACCESS_TOKEN_COOKIE_NAME,
+				cookieOptionsConfig,
+			);
+			response.clearCookie(
+				JwtEnum.REFRESH_TOKEN_COOKIE_NAME,
+				cookieOptionsConfig,
+			);
 			throw new UnauthorizedException('로그인이 필요합니다.');
 		}
 
@@ -67,10 +80,11 @@ export class CookieAuthGuard extends AuthGuard('jwt') {
 			JwtEnum.ACCESS_TOKEN_TYPE,
 			this.jwtService,
 		);
-		response.cookie(JwtEnum.ACCESS_TOKEN_COOKIE_NAME, newAccessToken, {
-			path: '/',
-			httpOnly: true,
-		});
+		response.cookie(
+			JwtEnum.ACCESS_TOKEN_COOKIE_NAME,
+			newAccessToken,
+			cookieOptionsConfig,
+		);
 		return true;
 	}
 }

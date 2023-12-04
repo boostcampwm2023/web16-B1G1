@@ -56,7 +56,9 @@ export class TransactionInterceptor implements NestInterceptor {
 				const rollbackLog = `${rollbackString} ${pathString} ${rollbackTimeString} ${rollbackMentString}`;
 				Logger.error(rollbackLog);
 				Logger.error(error);
-				throw new InternalServerErrorException("Can't process your request");
+
+				// 서비스 단에서 반환하는 에러 메시지를 그대로 반환
+				throw error;
 			}),
 			tap(async () => {
 				await queryRunner.commitTransaction();

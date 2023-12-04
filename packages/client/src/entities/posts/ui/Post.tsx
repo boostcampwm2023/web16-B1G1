@@ -8,18 +8,20 @@ import { useViewStore } from 'shared/store/useViewStore';
 import * as THREE from 'three';
 import { StarData } from 'shared/lib/types/star';
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import theme from 'shared/ui/styles/theme';
 
 interface PropsType {
 	data: StarData;
 	onClick: () => void;
-	isSelected: boolean;
 }
 
-export default function Post({ data, onClick, isSelected }: PropsType) {
+export default function Post({ data, onClick }: PropsType) {
 	const { targetView, setTargetView } = useCameraStore();
 	const { view, setView } = useViewStore();
 
 	const meshRef = useRef<THREE.Mesh>(null!);
+	const [isHovered, setIsHovered] = useState(false);
 
 	const navigate = useNavigate();
 
@@ -38,6 +40,16 @@ export default function Post({ data, onClick, isSelected }: PropsType) {
 		setView('POST');
 	};
 
+	const handlePointerOver = (e: React.MouseEvent) => {
+		e.stopPropagation();
+		setIsHovered(true);
+	};
+
+	const handlePointerOut = (e: React.MouseEvent) => {
+		e.stopPropagation();
+		setIsHovered(false);
+	};
+
 	return (
 		<Star
 			position={
@@ -47,8 +59,10 @@ export default function Post({ data, onClick, isSelected }: PropsType) {
 			color={data.color}
 			onClick={handleMeshClick}
 			ref={meshRef}
+			onPointerOver={handlePointerOver}
+			onPointerOut={handlePointerOut}
 		>
-			{view === 'DETAIL' && isSelected && (
+			{view === 'DETAIL' && isHovered && (
 				<Html>
 					<Label>{data.title}</Label>
 				</Html>
@@ -58,14 +72,15 @@ export default function Post({ data, onClick, isSelected }: PropsType) {
 }
 
 const Label = styled.div`
-	transform: translate3d(calc(-50%), calc(-250%), 0); // TODO: 수정 예정
-	background-color: #fff;
-	opacity: 0.5;
 	padding: 10px 15px;
 	border-radius: 5px;
 	width: fit-content;
 	max-width: 200px; // TODO: 수정 예정
 	text-align: center;
+	background-color: ${theme.colors.background.bdp01_80};
+	border: 1px solid ${theme.colors.stroke.sc};
+	color: ${theme.colors.text.secondary};
+	transform: translate3d(calc(-50%), calc(-250%), 0); // TODO: 수정 예정
 
 	overflow: hidden;
 	text-overflow: ellipsis;

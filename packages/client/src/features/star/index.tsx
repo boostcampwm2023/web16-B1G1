@@ -6,14 +6,26 @@ import { useForwardRef } from 'shared/hooks';
 
 interface PropsType {
 	children?: React.ReactNode;
-	onClick?: (e: ThreeEvent<MouseEvent>) => void;
 	position: THREE.Vector3;
 	size: number;
 	color: string;
+	onClick?: (e: ThreeEvent<MouseEvent>) => void;
+	onPointerOver?: (e: React.MouseEvent) => void;
+	onPointerOut?: (e: React.MouseEvent) => void;
 }
 
 const Star = forwardRef<THREE.Mesh, PropsType>((props, ref) => {
 	const innerRef = useForwardRef(ref);
+
+	const {
+		children,
+		position,
+		size,
+		color,
+		onClick,
+		onPointerOver,
+		onPointerOut,
+	} = props;
 
 	useFrame((state) => {
 		const cameraDistance = innerRef.current.position.distanceTo(
@@ -29,14 +41,20 @@ const Star = forwardRef<THREE.Mesh, PropsType>((props, ref) => {
 	});
 
 	return (
-		<mesh ref={innerRef} position={props.position} onClick={props.onClick}>
-			<sphereGeometry args={[props.size, 32, 16]} />
+		<mesh
+			ref={innerRef}
+			position={position}
+			onClick={onClick}
+			onPointerOver={onPointerOver}
+			onPointerOut={onPointerOut}
+		>
+			<sphereGeometry args={[size, 32, 16]} />
 			<meshStandardMaterial
-				color={props.color}
-				emissive={props.color}
+				color={color}
+				emissive={color}
 				emissiveIntensity={2}
 			/>
-			{props.children}
+			{children}
 		</mesh>
 	);
 });

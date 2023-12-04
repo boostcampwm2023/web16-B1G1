@@ -17,8 +17,10 @@ interface PropsType {
 
 export default function Post({ data, onClick, isSelected }: PropsType) {
 	const { targetView, setTargetView } = useCameraStore();
-	const meshRef = useRef<THREE.Mesh>(null!);
 	const { view, setView } = useViewStore();
+
+	const meshRef = useRef<THREE.Mesh>(null!);
+
 	const navigate = useNavigate();
 
 	const handleMeshClick = (e: ThreeEvent<MouseEvent>) => {
@@ -56,22 +58,16 @@ export default function Post({ data, onClick, isSelected }: PropsType) {
 }
 
 const Label = styled.div`
-	transform: translate3d(calc(60%), calc(-70%), 0);
-	background: #fff;
-	color: #000;
+	transform: translate3d(calc(-50%), calc(-250%), 0); // TODO: 수정 예정
+	background-color: #fff;
+	opacity: 0.5;
 	padding: 10px 15px;
 	border-radius: 5px;
-	font-family: 'Noto Sans KR', sans-serif;
-	width: 200px;
+	width: fit-content;
+	max-width: 200px; // TODO: 수정 예정
 	text-align: center;
 
-	&::before {
-		content: '';
-		position: absolute;
-		top: 10px;
-		left: -100px;
-		height: 2px;
-		width: 100px;
-		background: #fff;
-	}
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 `;

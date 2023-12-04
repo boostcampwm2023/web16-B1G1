@@ -16,27 +16,7 @@ export const postLogin = async (
 	navigate: NavigateFunction,
 ) => {
 	try {
-		const res = await instance({
-			method: 'POST',
-			url: `/auth/signin`,
-			data,
-			withCredentials: true,
-		});
-
 		Cookies.set('userId', data.username, { path: '/', expires: 7 });
-
-		Cookies.set('refreshToken', res.data.refreshToken, {
-			path: '/',
-			secure: true,
-			expires: 1,
-		});
-
-		Cookies.set('accessToken', res.data.accessToken, {
-			path: '/',
-			secure: true,
-			expires: 1 / 24,
-		});
-
 		navigate('/home');
 		useScreenSwitchStore.setState({ isSwitching: true });
 	} catch (err) {

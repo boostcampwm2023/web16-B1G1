@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-import { BASE_URL } from '@constants';
 import { useNavigate } from 'react-router-dom';
 import instance from 'shared/apis/AxiosInterceptor';
 
@@ -8,7 +7,10 @@ export const useCheckLogin = () => {
 	useEffect(() => {
 		const checkLogin = async () => {
 			try {
-				const res = await instance.get(`${BASE_URL}auth/check-signin`);
+				const res = await instance({
+					method: 'GET',
+					url: '/auth/check-signin',
+				});
 				if (res.status === 200) {
 					navigate('/home');
 				}

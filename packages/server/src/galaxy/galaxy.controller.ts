@@ -7,12 +7,17 @@ import {
 	Param,
 	Delete,
 	UseInterceptors,
+	UseGuards,
+	Query,
 } from '@nestjs/common';
 import { GalaxyService } from './galaxy.service';
 import { CreateGalaxyDto } from './dto/create-galaxy.dto';
 import { UpdateGalaxyDto } from './dto/update-galaxy.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { LogInterceptor } from 'src/interceptor/log.interceptor';
+import { CookieAuthGuard } from 'src/auth/cookie-auth.guard';
+import { GetUser } from 'src/auth/decorators/get-user.decorator';
+import { UserDataDto } from 'src/auth/dto/user-data.dto';
 
 @Controller('galaxy')
 @UseInterceptors(LogInterceptor)
@@ -20,28 +25,27 @@ import { LogInterceptor } from 'src/interceptor/log.interceptor';
 export class GalaxyController {
 	constructor(private readonly galaxyService: GalaxyService) {}
 
-	@Post()
-	create(@Body() createGalaxyDto: CreateGalaxyDto) {
-		return this.galaxyService.create(createGalaxyDto);
-	}
-
+	// 로그인한 사용자의 은하 정보를 가져옴
 	@Get()
-	findAll() {
-		return this.galaxyService.findAll();
+	@UseGuards(CookieAuthGuard)
+	findGalaxyMine(@GetUser() userData: UserDataDto) {
+		const nickname = userData.nickname;
+		return this.galaxyService.findGalaxyByNickname(nickname);
 	}
 
-	@Get(':id')
-	findOne(@Param('id') id: string) {
-		return this.galaxyService.findOne(+id);
+	// 닉네임을 이용해 은하 정보를 가져옴
+	@Get('by-nickname')
+	findGalaxyByNickname(@Query('nickname') nickname: string) {
+		return this.galaxyService.findGalaxyByNickname(nickname);
 	}
 
-	@Patch(':id')
-	update(@Param('id') id: string, @Body() updateGalaxyDto: UpdateGalaxyDto) {
-		return this.galaxyService.update(+id, updateGalaxyDto);
-	}
-
-	@Delete(':id')
-	remove(@Param('id') id: string) {
-		return this.galaxyService.remove(+id);
+	// 로그인한 사용자의 은하 정보를 수정함
+	@Patch()
+	@UseGuards(CookieAuthGuard)
+	updateGalaxyMine(
+		@Body() updateGalaxyDto: UpdateGalaxyDto,
+		@GetUser() userData: UserDataDto,
+	) {
+		return this.galaxyService.updateGalaxyMine(updateGalaxyDto, userData);
 	}
 }

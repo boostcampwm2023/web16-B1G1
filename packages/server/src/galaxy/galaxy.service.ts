@@ -1,26 +1,26 @@
 import { Injectable } from '@nestjs/common';
-import { CreateGalaxyDto } from './dto/create-galaxy.dto';
 import { UpdateGalaxyDto } from './dto/update-galaxy.dto';
+import { InjectModel } from '@nestjs/mongoose';
+import { Galaxy } from './schemas/galaxy.schema';
+import { Model } from 'mongoose';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { User } from 'src/auth/entities/user.entity';
 
 @Injectable()
 export class GalaxyService {
-  create(createGalaxyDto: CreateGalaxyDto) {
-    return 'This action adds a new galaxy';
-  }
+	constructor(
+		@InjectRepository(User)
+		private readonly userRepository: Repository<User>,
+		@InjectModel(Galaxy.name)
+		private readonly galaxyModel: Model<Galaxy>,
+	) {}
 
-  findAll() {
-    return `This action returns all galaxy`;
-  }
+	async findGalaxyByNickname(nickname: string) {
+		return { nickname };
+	}
 
-  findOne(id: number) {
-    return `This action returns a #${id} galaxy`;
-  }
-
-  update(id: number, updateGalaxyDto: UpdateGalaxyDto) {
-    return `This action updates a #${id} galaxy`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} galaxy`;
-  }
+	async updateGalaxyMine(updateGalaxyDto: UpdateGalaxyDto, userData: any) {
+		return { updateGalaxyDto, userData };
+	}
 }

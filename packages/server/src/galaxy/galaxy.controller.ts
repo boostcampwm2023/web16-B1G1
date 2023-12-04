@@ -11,7 +11,6 @@ import {
 	Query,
 } from '@nestjs/common';
 import { GalaxyService } from './galaxy.service';
-import { CreateGalaxyDto } from './dto/create-galaxy.dto';
 import { UpdateGalaxyDto } from './dto/update-galaxy.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { LogInterceptor } from 'src/interceptor/log.interceptor';

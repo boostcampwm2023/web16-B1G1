@@ -38,7 +38,7 @@ export default function LandingScreen({
 					/>
 				</EffectComposer>
 
-				<color attach="background" args={['#000']} />
+				<color attach="background" args={['#070614']} />
 				<ambientLight color="#fff" intensity={5} />
 				<BackgroundStars />
 				<group rotation={[(mouseY - 0.5) / 5, (mouseX - 0.5) / 5, 0]}>

@@ -44,7 +44,7 @@ export default function Screen() {
 					/>
 				</EffectComposer>
 
-				<color attach="background" args={['#000']} />
+				<color attach="background" args={['#070614']} />
 				<ambientLight color="#fff" intensity={5} />
 				<Controls />
 				<BackgroundStars />

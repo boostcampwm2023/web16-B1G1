@@ -4,26 +4,32 @@ import NickNameInputContainer from './ui/NickNameInputContainer';
 import { postSignUp } from 'shared/apis';
 import { useSignUpStore } from 'shared/store/useSignUpStore';
 import { useToastStore } from 'shared/store/useToastStore';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useCheckLogin } from 'shared/hooks';
 
 export default function NickNameSetModal() {
 	const [validNickName, setValidNickName] = useState('');
 	const navigate = useNavigate();
+	const { platform } = useParams();
 
 	useCheckLogin();
 
 	const handleSaveButton = async () => {
-		// TODO: 소셜로그인 시 로직 따로 추가해야 함
-
-		const { id, pw } = useSignUpStore.getState();
-
 		try {
-			const response = await postSignUp({
-				username: id,
-				password: pw,
-				nickname: validNickName,
-			});
+			let response;
+			if (!platform) {
+				const { id, pw } = useSignUpStore.getState();
+				response = await postSignUp({
+					username: id,
+					password: pw,
+					nickname: validNickName,
+				});
+			} else {
+				response = await postSignUp({
+					nickname: validNickName,
+					platform: platform,
+				});
+			}
 
 			if (response) {
 				navigate('/login');

@@ -19,25 +19,37 @@ export const getIsAvailableNickName = async (nickname: string) => {
 };
 
 interface PostSignUpTypes {
-	username: string;
-	password: string;
+	username?: string;
+	password?: string;
 	nickname: string;
+	platform?: string;
 }
 
 export const postSignUp = async ({
 	username,
 	password,
 	nickname,
+	platform,
 }: PostSignUpTypes) => {
-	const { data } = await instance({
-		method: 'POST',
-		url: '/auth/signup',
-		data: {
-			username,
-			password,
-			nickname,
-		},
-	});
-
-	return data;
+	if (!platform) {
+		const { data } = await instance({
+			method: 'POST',
+			url: '/auth/signup',
+			data: {
+				username,
+				password,
+				nickname,
+			},
+		});
+		return data;
+	} else {
+		const { data } = await instance({
+			method: 'POST',
+			url: `/auth/${platform}/signup`,
+			data: {
+				nickname,
+			},
+		});
+		return data;
+	}
 };

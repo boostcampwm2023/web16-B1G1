@@ -16,7 +16,8 @@ export default function NickNameSetModal() {
 	const handleSaveButton = async () => {
 		// TODO: 소셜로그인 시 로직 따로 추가해야 함
 
-		const { id, pw } = useSignUpStore.getState();
+		const { id, pw } = useSignUpStore();
+		const { setText } = useToastStore();
 
 		try {
 			const response = await postSignUp({
@@ -27,15 +28,10 @@ export default function NickNameSetModal() {
 
 			if (response) {
 				navigate('/login');
-
-				useToastStore.setState({
-					text: '회원가입이 완료되었습니다.',
-				});
+				setText('회원가입이 완료되었습니다.');
 			}
 		} catch (error) {
-			useToastStore.setState({
-				text: '회원가입에 실패했습니다.',
-			});
+			setText('회원가입에 실패했습니다.');
 		}
 	};
 

@@ -3,7 +3,7 @@ import { TopButton, LeftButton, RightButton, LoginContent } from './ui';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { useState } from 'react';
-import { postLogin } from 'shared/apis';
+import { getSignInInfo, postLogin } from 'shared/apis';
 import { useCheckLogin } from 'shared/hooks';
 
 export default function LoginModal() {
@@ -17,14 +17,17 @@ export default function LoginModal() {
 		return id.length && password.length && idState && passwordState;
 	};
 
-	const handleLoginSubmit = () => {
+	const handleLoginSubmit = async () => {
 		if (!isValid()) return;
 		const data = {
 			username: id,
 			password: password,
 		};
 		setPassword('');
-		postLogin(data, setIdState, setPasswordState, navigate);
+		await postLogin(data, setIdState, setPasswordState, navigate);
+
+		const { nickname } = await getSignInInfo();
+		Cookies.set('nickname', nickname);
 	};
 
 	useCheckLogin();

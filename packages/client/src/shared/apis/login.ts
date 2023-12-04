@@ -1,7 +1,8 @@
 import axios, { AxiosError } from 'axios';
 import Cookies from 'js-cookie';
 import { NavigateFunction } from 'react-router-dom';
-import { useScreenSwitchStore } from 'shared/store/useScreenSwitchState';
+import { useScreenSwitchStore } from 'shared/store/useScreenSwitchStore';
+import instance from './AxiosInterceptor';
 
 axios.defaults.withCredentials = true;
 
@@ -25,4 +26,13 @@ export const postLogin = async (
 			else alert(err);
 		} else alert(err);
 	}
+};
+
+export const getSignInInfo = async () => {
+	const { data } = await instance({
+		method: 'GET',
+		url: `/auth/check-signin`,
+	});
+
+	return data;
 };

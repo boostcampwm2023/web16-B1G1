@@ -6,7 +6,7 @@ import UpperBar from './ui/UpperBar';
 import WarpScreen from 'widgets/warpScreen/WarpScreen';
 import { useEffect } from 'react';
 import instance from 'shared/apis/AxiosInterceptor';
-import { useScreenSwitchStore } from 'shared/store/useScreenSwitchState';
+import { useScreenSwitchStore } from 'shared/store/useScreenSwitchStore';
 
 export default function Home() {
 	const { view } = useViewStore();
@@ -48,6 +48,3 @@ export default function Home() {
 		</>
 	);
 }
-
-// TODO: 내 은하에서는 MAIN의 뒤로가기 버튼 안보이게 하기
-// TODO: 다른 사람 은하에서는 뒤로가기 버튼만 보이게 하기 ?

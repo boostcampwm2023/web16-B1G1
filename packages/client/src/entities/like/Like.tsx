@@ -99,7 +99,12 @@ export default function Like({ postId, count }: PropsType) {
 		>
 			<Heart
 				style={{ marginRight: '10px' }}
-				color={state.isLiked ? 'red' : theme.colors.stroke.default}
+				color={
+					state.isLiked
+						? theme.colors.warning.pressed
+						: theme.colors.stroke.default
+				}
+				fill={state.isLiked ? theme.colors.warning.pressed : 'none'}
 			/>
 			{state.likeCount}
 		</Button>

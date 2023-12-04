@@ -1,4 +1,4 @@
-import Screen from 'widgets/screen';
+import Screen from 'widgets/screen/Screen';
 import { useViewStore } from 'shared/store/useViewStore';
 import { Outlet, useNavigate } from 'react-router-dom';
 import UnderBar from 'widgets/underBar/UnderBar';

@@ -2,11 +2,12 @@ import { Canvas } from '@react-three/fiber';
 import BackgroundStars from 'features/backgroundStars';
 import { Galaxy } from '../galaxy';
 import { EffectComposer, Bloom } from '@react-three/postprocessing';
-import { useControls } from 'leva';
+import { Leva, useControls } from 'leva';
 import { CAMERA_POSITION, CAMERA_FAR } from '@constants';
 import Controls from 'features/controls/Controls.tsx';
 import { useCameraStore } from 'shared/store/useCameraStore.ts';
 import { Posts } from 'entities/posts';
+import styled from '@emotion/styled';
 
 export default function Screen() {
 	const camera = {
@@ -44,13 +45,24 @@ export default function Screen() {
 					/>
 				</EffectComposer>
 
-				<color attach="background" args={['#000']} />
+				<color attach="background" args={['#070614']} />
 				<ambientLight color="#fff" intensity={5} />
 				<Controls />
 				<BackgroundStars />
 				<Galaxy />
 				<Posts />
 			</Canvas>
+			<LevaWrapper>
+				<Leva fill collapsed />
+			</LevaWrapper>
 		</div>
 	);
 }
+
+const LevaWrapper = styled.div`
+	position: absolute;
+	top: 5%;
+	right: 50%;
+	transform: translateX(50%);
+	z-index: 100;
+`;

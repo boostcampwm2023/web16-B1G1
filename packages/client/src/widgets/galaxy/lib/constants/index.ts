@@ -1,11 +1,4 @@
-export const ARMS = 2;
 export const STARS_NUM = 10000;
-export const ARMS_X_MEAN = 4000;
-export const ARMS_X_DIST = 2000;
-export const ARMS_Z_MEAN = 1500;
-export const ARMS_Z_DIST = 1500;
-export const GALAXY_THICKNESS = 300;
-export const SPIRAL = 2;
 
 export const DISTANCE_LIMIT = 3000;
 
@@ -15,8 +8,9 @@ export const starTypes = {
 	size: [0.7, 0.7, 1.15, 1.48, 2.0, 2.5, 3.5],
 };
 
-// export const ARMS_X_DIST = 5000;
-// export const ARMS_Z_DIST = 1000;
-// export const GALAXY_THICKNESS = 300;
-// export const SPIRAL = 1.2;
-// export const SPIRAL_START = 1000;
+export const ARMS_X_DIST = 5000;
+export const ARMS_Z_DIST = 1000;
+export const GALAXY_THICKNESS = 300;
+export const SPIRAL = 1.2;
+export const SPIRAL_START = 1000;
+export const STARS_DENSITY = 0.5;

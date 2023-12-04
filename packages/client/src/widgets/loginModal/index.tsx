@@ -2,8 +2,9 @@ import { Modal } from 'shared/ui';
 import { TopButton, LeftButton, RightButton, LoginContent } from './ui';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
-import { useState, useEffect } from 'react';
-import { postLogin } from 'shared/apis';
+import { useState } from 'react';
+import { getSignInInfo, postLogin } from 'shared/apis';
+import { useCheckLogin } from 'shared/hooks';
 
 export default function LoginModal() {
 	const [id, setId] = useState(Cookies.get('userId') ?? '');
@@ -16,21 +17,20 @@ export default function LoginModal() {
 		return id.length && password.length && idState && passwordState;
 	};
 
-	const handleLoginSubmit = () => {
+	const handleLoginSubmit = async () => {
 		if (!isValid()) return;
 		const data = {
 			username: id,
 			password: password,
 		};
 		setPassword('');
-		postLogin(data, setIdState, setPasswordState, navigate);
+		await postLogin(data, setIdState, setPasswordState, navigate);
+
+		const { nickname } = await getSignInInfo();
+		Cookies.set('nickname', nickname);
 	};
 
-	useEffect(() => {
-		const accessToken = Cookies.get('accessToken');
-		const refreshToken = Cookies.get('refreshToken');
-		if (refreshToken || accessToken) navigate('/home');
-	});
+	useCheckLogin();
 
 	return (
 		<form

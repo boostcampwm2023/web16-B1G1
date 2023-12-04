@@ -3,7 +3,7 @@ import theme from '../styles/theme';
 import { Body02ME, Body03ME } from '../styles';
 
 interface PropsType extends React.InputHTMLAttributes<HTMLInputElement> {
-	label: string;
+	label?: string;
 	id: string;
 	placeholder: string;
 	isEssential?: boolean;
@@ -18,10 +18,12 @@ export default function InputBar({
 }: PropsType) {
 	return (
 		<Container>
-			<LabelContainer>
-				<LabelText htmlFor={id}>{label}</LabelText>
-				{isEssential && <LabelStar>*</LabelStar>}
-			</LabelContainer>
+			{label && (
+				<LabelContainer>
+					<LabelText htmlFor={id}>{label}</LabelText>
+					{isEssential && <LabelStar>*</LabelStar>}
+				</LabelContainer>
+			)}
 
 			<Input id={id} placeholder={placeholder} {...args} />
 		</Container>
@@ -31,7 +33,7 @@ export default function InputBar({
 const Container = styled.div`
 	display: flex;
 	flex-direction: column;
-	width: 100%;
+	/* width: 100%; */
 `;
 
 const Input = styled.input`

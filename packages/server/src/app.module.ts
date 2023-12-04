@@ -7,6 +7,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { mongooseConfig } from './config/mongoose.config';
 import { StarModule } from './star/star.module';
 import { GalaxyModule } from './galaxy/galaxy.module';
+import { AdminModule } from './admin/admin.module';
 
 @Module({
 	imports: [
@@ -16,6 +17,7 @@ import { GalaxyModule } from './galaxy/galaxy.module';
 		MongooseModule.forRoot(mongooseConfig.uri),
 		StarModule,
 		GalaxyModule,
+		AdminModule,
 	],
 })
 export class AppModule {}

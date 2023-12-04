@@ -16,6 +16,11 @@ export const postLogin = async (
 	navigate: NavigateFunction,
 ) => {
 	try {
+		await instance({
+			method: 'POST',
+			url: '/auth/signin',
+			data,
+		});
 		Cookies.set('userId', data.username, { path: '/', expires: 7 });
 		navigate('/home');
 		useScreenSwitchStore.setState({ isSwitching: true });

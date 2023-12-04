@@ -1,7 +1,6 @@
 import { Canvas } from '@react-three/fiber';
 import { EffectComposer, Bloom } from '@react-three/postprocessing';
 import { Galaxy } from 'widgets/galaxy';
-import { useCustomStore } from 'shared/store';
 
 export default function SampleScreen() {
 	return (

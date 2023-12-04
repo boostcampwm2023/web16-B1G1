@@ -6,6 +6,7 @@ import { typeOrmConfig } from './config/typeorm.config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { mongooseConfig } from './config/mongoose.config';
 import { StarModule } from './star/star.module';
+import { GalaxyModule } from './galaxy/galaxy.module';
 
 @Module({
 	imports: [
@@ -14,6 +15,7 @@ import { StarModule } from './star/star.module';
 		TypeOrmModule.forRoot(typeOrmConfig),
 		MongooseModule.forRoot(mongooseConfig.uri),
 		StarModule,
+		GalaxyModule,
 	],
 })
 export class AppModule {}

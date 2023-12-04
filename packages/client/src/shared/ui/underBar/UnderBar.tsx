@@ -50,11 +50,15 @@ export default function UnderBar() {
 				<Line />
 
 				<BigButtonsContainer>
-					<BigButton size="l" buttonType="Button" disabled={!isMyPage}>
-						<img
-							src={isMyPage ? PlanetEditIcon : PlanerEditIconGray}
-							alt="우주 수정하기"
-						/>
+					<BigButton
+						size="l"
+						buttonType="Button"
+						onClick={() => {
+							setView('CUSTOM');
+							navigate('/home/custom');
+						}}
+					>
+						<img src={PlanetEditIcon} alt="우주 수정하기" />
 						우주 수정하기
 					</BigButton>
 

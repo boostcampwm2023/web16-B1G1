@@ -2,8 +2,6 @@ import { useEffect, useReducer, useState } from 'react';
 import { Heart } from 'lucide-react';
 import { Button } from 'shared/ui';
 import theme from 'shared/ui/styles/theme';
-import { BASE_URL } from '@constants';
-import { useFetch } from 'shared/hooks';
 import instance from 'shared/apis/AxiosInterceptor';
 
 interface PropsType {

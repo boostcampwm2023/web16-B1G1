@@ -1,8 +1,8 @@
 import axios, { AxiosError } from 'axios';
-import { BASE_URL } from '@constants';
 import Cookies from 'js-cookie';
 import { NavigateFunction } from 'react-router-dom';
-import { useScreenSwitchStore } from 'shared/store/useScreenSwitchState';
+import { useScreenSwitchStore } from 'shared/store/useScreenSwitchStore';
+import instance from './AxiosInterceptor';
 
 axios.defaults.withCredentials = true;
 
@@ -16,7 +16,10 @@ export const postLogin = async (
 	navigate: NavigateFunction,
 ) => {
 	try {
-		const res = await axios.post(BASE_URL + 'auth/signin', data, {
+		const res = await instance({
+			method: 'POST',
+			url: `/auth/signin`,
+			data,
 			withCredentials: true,
 		});
 
@@ -43,4 +46,13 @@ export const postLogin = async (
 			else alert(err);
 		} else alert(err);
 	}
+};
+
+export const getSignInInfo = async () => {
+	const { data } = await instance({
+		method: 'GET',
+		url: `/auth/check-signin`,
+	});
+
+	return data;
 };

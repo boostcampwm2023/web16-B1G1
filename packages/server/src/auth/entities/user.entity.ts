@@ -48,4 +48,7 @@ export class User {
 		onDelete: 'SET NULL',
 	})
 	shareLink: ShareLink;
+
+	@Column({ type: 'varchar', length: 50, nullable: true })
+	galaxy: string;
 }

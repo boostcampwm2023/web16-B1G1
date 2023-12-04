@@ -1,8 +1,8 @@
 import Screen from 'widgets/screen';
 import { useViewStore } from 'shared/store/useViewStore';
 import { Outlet, useNavigate } from 'react-router-dom';
-import UnderBar from 'shared/ui/underBar/UnderBar';
-import UpperBar from './ui/UpperBar';
+import UnderBar from 'widgets/underBar/UnderBar';
+import UpperBar from '../../widgets/upperBar/UpperBar';
 import WarpScreen from 'widgets/warpScreen/WarpScreen';
 import { useEffect, useState } from 'react';
 import instance from 'shared/apis/AxiosInterceptor';

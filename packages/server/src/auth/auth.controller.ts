@@ -21,7 +21,7 @@ import { AuthService } from './auth.service';
 import { SignUpUserDto } from './dto/signup-user.dto';
 import { User } from './entities/user.entity';
 import { SignInUserDto } from './dto/signin-user.dto';
-import { CookieOptions, Response } from 'express';
+import { Response } from 'express';
 import { ApiTags } from '@nestjs/swagger';
 import { JwtEnum } from './enums/jwt.enum';
 import { CookieAuthGuard } from './cookie-auth.guard';
@@ -147,7 +147,7 @@ export class AuthController {
 
 		if (username) {
 			res.cookie(`${service}Username`, username, cookieOptionsConfig);
-			return { username };
+			res.redirect(`/nickname/${service}`);
 		}
 
 		res.cookie(
@@ -160,8 +160,7 @@ export class AuthController {
 			refreshToken,
 			cookieOptionsConfig,
 		);
-
-		return { accessToken, refreshToken };
+		res.redirect('/login');
 	}
 
 	@Post(':service/signup')
@@ -179,15 +178,14 @@ export class AuthController {
 			throw new UnauthorizedException('잘못된 접근입니다.');
 		}
 
-		const savedUser = await this.authService.signUpWithOAuth(
+		await this.authService.signUpWithOAuth(
 			service,
 			nickname,
 			resourceServerUsername,
 		);
 
 		res.clearCookie(`${service}Username`, cookieOptionsConfig);
-
-		return savedUser;
+		res.redirect('/login');
 	}
 
 	@Get('search')

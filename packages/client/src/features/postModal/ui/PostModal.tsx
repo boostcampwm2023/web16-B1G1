@@ -10,6 +10,7 @@ import { useFetch } from 'shared/hooks';
 import { PostData } from 'shared/lib/types/post';
 import { deletePost } from '../api/deletePost';
 import ImageSlider from './ImageSlider';
+import Like from 'entities/like/Like';
 
 export default function PostModal() {
 	const { setView } = useViewStore();
@@ -53,6 +54,7 @@ export default function PostModal() {
 						setView('MAIN');
 						navigate(`/home/${postId}`);
 					}}
+					leftButton={<Like postId={postId!} count={data.like_cnt ?? 0} />}
 				>
 					<Container>
 						{data.images.length > 0 && (

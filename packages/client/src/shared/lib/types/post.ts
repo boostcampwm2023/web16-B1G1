@@ -3,4 +3,5 @@ export interface PostData {
 	title: string;
 	content: string;
 	images: string[];
+	like_cnt?: number;
 }

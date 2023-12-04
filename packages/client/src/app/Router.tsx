@@ -11,6 +11,7 @@ import SignUpModal from 'widgets/signupModal/SignUpModal';
 import NickNameSetModal from 'widgets/nickNameSetModal/NickNameSetModal';
 import LogoAndStart from 'widgets/logoAndStart';
 import { PostModal } from 'features/postModal';
+import GalaxyCustom from 'widgets/galaxyCustom';
 
 export const router = createBrowserRouter(
 	createRoutesFromElements(
@@ -19,7 +20,9 @@ export const router = createBrowserRouter(
 				<Route index element={<LogoAndStart />} />
 				<Route path="login" element={<LoginModal />} />
 				<Route path="signup" element={<SignUpModal />} />
-				<Route path="nickname" element={<NickNameSetModal />} />
+				<Route path="nickname" element={<NickNameSetModal />}>
+					<Route path=":platform" />
+				</Route>
 			</Route>
 
 			<Route path="/home" element={<Home />}>
@@ -27,6 +30,7 @@ export const router = createBrowserRouter(
 					<Route path="detail" element={<PostModal />} />
 				</Route>
 				<Route path="writing" element={<WritingModal />} />
+				<Route path="custom" element={<GalaxyCustom />} />
 			</Route>
 		</>,
 	),

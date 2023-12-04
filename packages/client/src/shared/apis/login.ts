@@ -1,8 +1,8 @@
 import axios, { AxiosError } from 'axios';
-import { BASE_URL } from '@constants';
 import Cookies from 'js-cookie';
 import { NavigateFunction } from 'react-router-dom';
-import { useLoadingStore } from 'shared/store/useLoadingStore';
+import { useScreenSwitchStore } from 'shared/store/useScreenSwitchStore';
+import instance from './AxiosInterceptor';
 
 axios.defaults.withCredentials = true;
 
@@ -16,31 +16,9 @@ export const postLogin = async (
 	navigate: NavigateFunction,
 ) => {
 	try {
-		const res = await axios.post(BASE_URL + 'auth/signin', data, {
-			withCredentials: true,
-		});
-
 		Cookies.set('userId', data.username, { path: '/', expires: 7 });
-		Cookies.set('refreshToken', res.data.refreshToken, {
-			path: '/',
-			secure: true,
-			expires: 1,
-		});
-		Cookies.set('accessToken', res.data.accessToken, {
-			path: '/',
-			secure: true,
-			expires: 1 / 24,
-		});
 		navigate('/home');
-		useLoadingStore.setState({
-			isLoading: true,
-		});
-
-		setTimeout(() => {
-			useLoadingStore.setState({
-				isLoading: false,
-			});
-		}, 5500);
+		useScreenSwitchStore.setState({ isSwitching: true });
 	} catch (err) {
 		if (err instanceof AxiosError) {
 			if (err.response?.status === 404) setIdState(false);
@@ -48,4 +26,13 @@ export const postLogin = async (
 			else alert(err);
 		} else alert(err);
 	}
+};
+
+export const getSignInInfo = async () => {
+	const { data } = await instance({
+		method: 'GET',
+		url: `/auth/check-signin`,
+	});
+
+	return data;
 };

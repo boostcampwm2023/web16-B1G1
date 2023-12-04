@@ -2,6 +2,7 @@ import {
 	BadRequestException,
 	ConflictException,
 	Injectable,
+	InternalServerErrorException,
 	NotFoundException,
 	UnauthorizedException,
 } from '@nestjs/common';
@@ -24,6 +25,9 @@ import {
 import { v4 as uuid } from 'uuid';
 import { UserDataDto } from './dto/user-data.dto';
 import { ShareLink } from './entities/share_link.entity';
+import { InjectModel } from '@nestjs/mongoose';
+import { Galaxy } from 'src/galaxy/schemas/galaxy.schema';
+import { Model } from 'mongoose';
 
 @Injectable()
 export class AuthService {
@@ -34,6 +38,8 @@ export class AuthService {
 		private readonly shareLinkRepository: Repository<ShareLink>,
 		private readonly jwtService: JwtService,
 		private readonly redisRepository: RedisRepository,
+		@InjectModel(Galaxy.name)
+		private readonly starModel: Model<Galaxy>,
 	) {}
 
 	async signUp(signUpUserDto: SignUpUserDto): Promise<Partial<User>> {
@@ -46,9 +52,15 @@ export class AuthService {
 		const salt = await bcrypt.genSalt();
 		const hashedPassword = await bcrypt.hash(signUpUserDto.password, salt);
 
+		// galaxy도 default로 MongoDB에 저장 후 id 반환
+		const galaxyDoc = new this.starModel({});
+		await galaxyDoc.save();
+		const galaxy_id: string = galaxyDoc._id.toString();
+
 		const newUser = this.userRepository.create({
 			...signUpUserDto,
 			password: hashedPassword,
+			galaxy: galaxy_id,
 		});
 
 		const savedUser: User = await this.userRepository.save(newUser);
@@ -223,13 +235,15 @@ export class AuthService {
 		return updatedUser;
 	}
 
-	async getShareLink(userData: UserDataDto) {
-		if (userData.status === UserShareStatus.PRIVATE) {
-			throw new BadRequestException('비공개 상태입니다.');
+	async getShareLinkByNickname(nickname: string) {
+		const user = await this.userRepository.findOneBy({ nickname });
+
+		if (user.status === UserShareStatus.PRIVATE) {
+			throw new UnauthorizedException('비공개 상태입니다.');
 		}
 
 		const foundLink = await this.shareLinkRepository.findOneBy({
-			user: userData.userId,
+			user: user.id,
 		});
 
 		if (foundLink) {
@@ -237,12 +251,38 @@ export class AuthService {
 		}
 
 		const newLink = this.shareLinkRepository.create({
-			user: userData.userId,
+			user: user.id,
 			link: uuid(),
 		});
 
 		const savedLink = await this.shareLinkRepository.save(newLink);
 		savedLink.user = undefined;
 		return savedLink;
+	}
+
+	async getUsernameByShareLink(shareLink: string) {
+		const foundLink = await this.shareLinkRepository.findOneBy({
+			link: shareLink,
+		});
+
+		if (!foundLink) {
+			throw new NotFoundException('존재하지 않는 링크입니다.');
+		}
+
+		const linkUser = await this.userRepository.findOneBy({
+			id: foundLink.user,
+		});
+
+		if (!linkUser) {
+			throw new InternalServerErrorException(
+				'링크에 대한 사용자가 존재하지 않습니다.',
+			);
+		}
+
+		if (linkUser.status === UserShareStatus.PRIVATE) {
+			throw new UnauthorizedException('비공개 상태입니다.');
+		}
+
+		return linkUser.username;
 	}
 }

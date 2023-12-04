@@ -41,6 +41,8 @@ import { StatusValidationPipe } from './pipes/StatusValidationPipe';
 import { ChangeStatusSwaggerDecorator } from './decorators/swagger/change-status-swagger.decorator';
 import { GetShareLinkSwaggerDecorator } from './decorators/swagger/get-share-link-swagger.decorator';
 import { LogInterceptor } from '../interceptor/log.interceptor';
+import { CheckSignInSwaggerDecorator } from './decorators/swagger/check-sign-in-swagger.decorator';
+import { cookieOptionsConfig } from '../config/cookie.config';
 
 @Controller('auth')
 @UseInterceptors(LogInterceptor)
@@ -63,20 +65,25 @@ export class AuthController {
 		@Res({ passthrough: true }) res: Response,
 	) {
 		const tokens = await this.authService.signIn(signInUserDto);
-		res.cookie(JwtEnum.ACCESS_TOKEN_COOKIE_NAME, tokens.accessToken, {
-			path: '/',
-			httpOnly: true,
-			sameSite: 'none',
-			secure: true,
-		});
-		res.cookie(JwtEnum.REFRESH_TOKEN_COOKIE_NAME, tokens.refreshToken, {
-			path: '/',
-			httpOnly: true,
-			sameSite: 'none',
-			secure: true,
-		});
+		res.cookie(
+			JwtEnum.ACCESS_TOKEN_COOKIE_NAME,
+			tokens.accessToken,
+			cookieOptionsConfig,
+		);
+		res.cookie(
+			JwtEnum.REFRESH_TOKEN_COOKIE_NAME,
+			tokens.refreshToken,
+			cookieOptionsConfig,
+		);
 
 		return tokens;
+	}
+
+	@Get('check-signin')
+	@UseGuards(CookieAuthGuard)
+	@CheckSignInSwaggerDecorator()
+	async checkSignIn(@GetUser() userData: UserDataDto) {
+		return userData;
 	}
 
 	@Get('signout')
@@ -87,18 +94,8 @@ export class AuthController {
 		@GetUser() userData: UserDataDto,
 	) {
 		await this.authService.signOut(userData);
-		res.clearCookie(JwtEnum.ACCESS_TOKEN_COOKIE_NAME, {
-			path: '/',
-			httpOnly: true,
-			sameSite: 'none',
-			secure: true,
-		});
-		res.clearCookie(JwtEnum.REFRESH_TOKEN_COOKIE_NAME, {
-			path: '/',
-			httpOnly: true,
-			sameSite: 'none',
-			secure: true,
-		});
+		res.clearCookie(JwtEnum.ACCESS_TOKEN_COOKIE_NAME, cookieOptionsConfig);
+		res.clearCookie(JwtEnum.REFRESH_TOKEN_COOKIE_NAME, cookieOptionsConfig);
 		return { message: UserEnum.SUCCESS_SIGNOUT_MESSAGE };
 	}
 
@@ -149,23 +146,21 @@ export class AuthController {
 			await this.authService.oauthCallback(service, authorizedCode, state);
 
 		if (username) {
-			res.cookie(`${service}Username`, username, {
-				path: '/',
-				httpOnly: true,
-			});
-			return { username };
+			res.cookie(`${service}Username`, username, cookieOptionsConfig);
+			res.redirect(`/nickname/${service}`);
 		}
 
-		res.cookie(JwtEnum.ACCESS_TOKEN_COOKIE_NAME, accessToken, {
-			path: '/',
-			httpOnly: true,
-		});
-		res.cookie(JwtEnum.REFRESH_TOKEN_COOKIE_NAME, refreshToken, {
-			path: '/',
-			httpOnly: true,
-		});
-
-		return { accessToken, refreshToken };
+		res.cookie(
+			JwtEnum.ACCESS_TOKEN_COOKIE_NAME,
+			accessToken,
+			cookieOptionsConfig,
+		);
+		res.cookie(
+			JwtEnum.REFRESH_TOKEN_COOKIE_NAME,
+			refreshToken,
+			cookieOptionsConfig,
+		);
+		res.redirect('/login');
 	}
 
 	@Post(':service/signup')
@@ -183,18 +178,14 @@ export class AuthController {
 			throw new UnauthorizedException('잘못된 접근입니다.');
 		}
 
-		const savedUser = await this.authService.signUpWithOAuth(
+		await this.authService.signUpWithOAuth(
 			service,
 			nickname,
 			resourceServerUsername,
 		);
 
-		res.clearCookie(`${service}Username`, {
-			path: '/',
-			httpOnly: true,
-		});
-
-		return savedUser;
+		res.clearCookie(`${service}Username`, cookieOptionsConfig);
+		res.redirect('/login');
 	}
 
 	@Get('search')
@@ -217,9 +208,13 @@ export class AuthController {
 	}
 
 	@Get('sharelink')
-	@UseGuards(CookieAuthGuard)
 	@GetShareLinkSwaggerDecorator()
-	getShareLink(@GetUser() userData: UserDataDto) {
-		return this.authService.getShareLink(userData);
+	getShareLinkByNickname(@Query('nickname') nickname: string) {
+		return this.authService.getShareLinkByNickname(nickname);
+	}
+
+	@Get('sharelink/:shareLink')
+	getUsernameByShareLink(@Param('shareLink') shareLink: string) {
+		return this.authService.getUsernameByShareLink(shareLink);
 	}
 }

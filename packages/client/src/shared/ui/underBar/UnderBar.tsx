@@ -3,35 +3,45 @@ import { Button } from 'shared/ui';
 import { Title01 } from '../styles';
 import PlanetEditIcon from '@icons/icon-planetedit-24-white.svg';
 import AddIcon from '@icons/icon-add-24-white.svg';
+import AddIconGray from '@icons/icon-add-24-gray.svg';
 import WriteIcon from '@icons/icon-writte-24-white.svg';
+import WriteIconGray from '@icons/icon-writte-24-gray.svg';
 import { BASE_URL, MAX_WIDTH1, MAX_WIDTH2 } from 'shared/lib/constants';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import Cookies from 'js-cookie';
+import instance from 'shared/apis/AxiosInterceptor';
+import { useViewStore } from 'shared/store';
+import { useOwnerStore } from 'shared/store/useOwnerStore';
 
 export default function UnderBar() {
-	const tempName = '도라에몽도라에몽도라';
+	const nickName = Cookies.get('nickname');
 	const navigate = useNavigate();
+
+	const { setView } = useViewStore();
+	const { isMyPage, pageOwnerNickName } = useOwnerStore();
+
+	const handleLogoutButton = async () => {
+		await instance.get(`${BASE_URL}auth/signout`);
+
+		Cookies.remove('accessToken');
+		Cookies.remove('refreshToken');
+		Cookies.remove('userId');
+		Cookies.remove('nickname');
+
+		navigate('/');
+	};
 
 	return (
 		<Layout>
-			<Name>{tempName}님의 은하</Name>
+			<Name>{isMyPage ? nickName : pageOwnerNickName}님의 은하</Name>
 
 			<ButtonsContainer>
 				<SmallButtonsContainer>
-					<Button
-						size="m"
-						buttonType="Button"
-						onClick={() => {
-							axios.get(`${BASE_URL}auth/signout`);
-							Cookies.remove('accessToken');
-							Cookies.remove('refreshToken');
-							navigate('/');
-						}}
-					>
+					<Button size="m" buttonType="Button" onClick={handleLogoutButton}>
 						로그아웃
 					</Button>
-					<Button size="m" buttonType="Button">
+
+					<Button size="m" buttonType="Button" disabled={!isMyPage}>
 						공유하기
 					</Button>
 				</SmallButtonsContainer>
@@ -39,19 +49,33 @@ export default function UnderBar() {
 				<Line />
 
 				<BigButtonsContainer>
-					<BigButton size="l" buttonType="Button">
+					<BigButton
+						size="l"
+						buttonType="Button"
+						onClick={() => {
+							setView('CUSTOM');
+							navigate('/home/custom');
+						}}
+					>
 						<img src={PlanetEditIcon} alt="우주 수정하기" />
 						우주 수정하기
 					</BigButton>
-					<BigButton size="l" buttonType="Button">
-						<img src={AddIcon} alt="별 스킨 만들기" />별 스킨 만들기
+
+					<BigButton size="l" buttonType="Button" disabled={!isMyPage}>
+						<img src={isMyPage ? AddIcon : AddIconGray} alt="별 스킨 만들기" />
+						별 스킨 만들기
 					</BigButton>
+
 					<BigButton
 						size="l"
 						buttonType="CTA-icon"
-						onClick={() => navigate('/home/writing')}
+						disabled={!isMyPage}
+						onClick={() => {
+							setView('WRITING');
+							navigate('/home/writing');
+						}}
 					>
-						<img src={WriteIcon} alt="글쓰기" />
+						<img src={isMyPage ? WriteIcon : WriteIconGray} alt="글쓰기" />
 						글쓰기
 					</BigButton>
 				</BigButtonsContainer>

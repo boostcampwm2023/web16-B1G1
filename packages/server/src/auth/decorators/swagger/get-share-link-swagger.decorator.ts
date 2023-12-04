@@ -7,7 +7,9 @@ import {
 
 const apiOperation = {
 	summary: '공유 링크 가져오기',
-	description: '공유 링크를 가져옵니다.',
+	description:
+		'공유 링크를 가져옵니다.\n' +
+		'쿼리스트링에 nickname={닉네임}을 넣어주세요.',
 };
 
 const apiOkResponse = {

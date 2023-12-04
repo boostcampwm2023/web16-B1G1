@@ -4,35 +4,43 @@ import NickNameInputContainer from './ui/NickNameInputContainer';
 import { postSignUp } from 'shared/apis';
 import { useSignUpStore } from 'shared/store/useSignUpStore';
 import { useToastStore } from 'shared/store/useToastStore';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useCheckLogin } from 'shared/hooks';
 
 export default function NickNameSetModal() {
 	const [validNickName, setValidNickName] = useState('');
 	const navigate = useNavigate();
+	const { platform } = useParams();
+
+	useCheckLogin();
 
 	const handleSaveButton = async () => {
 		// TODO: 소셜로그인 시 로직 따로 추가해야 함
 
-		const { id, pw } = useSignUpStore.getState();
+		const { setText } = useToastStore();
 
 		try {
-			const response = await postSignUp({
-				username: id,
-				password: pw,
-				nickname: validNickName,
-			});
+			let response;
+			if (!platform) {
+				const { id, pw } = useSignUpStore();
+				response = await postSignUp({
+					username: id,
+					password: pw,
+					nickname: validNickName,
+				});
+			} else {
+				response = await postSignUp({
+					nickname: validNickName,
+					platform: platform,
+				});
+			}
 
 			if (response) {
 				navigate('/login');
-
-				useToastStore.setState({
-					text: '회원가입이 완료되었습니다.',
-				});
+				setText('회원가입이 완료되었습니다.');
 			}
 		} catch (error) {
-			useToastStore.setState({
-				text: '회원가입에 실패했습니다.',
-			});
+			setText('회원가입에 실패했습니다.');
 		}
 	};
 

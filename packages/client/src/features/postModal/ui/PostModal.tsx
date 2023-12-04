@@ -10,6 +10,7 @@ import { useFetch } from 'shared/hooks';
 import { PostData } from 'shared/lib/types/post';
 import { deletePost } from '../api/deletePost';
 import ImageSlider from './ImageSlider';
+import Like from 'entities/like/Like';
 
 export default function PostModal() {
 	const { setView } = useViewStore();
@@ -37,6 +38,7 @@ export default function PostModal() {
 		if (res.status === 200) {
 			setView('MAIN');
 			navigate('/home');
+			window.location.reload();
 		} else {
 			alert('글 삭제 실패');
 		}
@@ -52,9 +54,10 @@ export default function PostModal() {
 						setView('MAIN');
 						navigate(`/home/${postId}`);
 					}}
+					leftButton={<Like postId={postId!} count={data.like_cnt ?? 0} />}
 				>
 					<Container>
-						{data.images.length && (
+						{data.images.length > 0 && (
 							<ImageContainer>
 								<ImageSlider imageUrls={data.images} />
 							</ImageContainer>

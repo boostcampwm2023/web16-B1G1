@@ -1,5 +1,4 @@
 import axios, { AxiosError } from 'axios';
-import { BASE_URL } from '@constants';
 import Cookies from 'js-cookie';
 import { NavigateFunction } from 'react-router-dom';
 import { useScreenSwitchStore } from 'shared/store/useScreenSwitchState';
@@ -16,24 +15,7 @@ export const postLogin = async (
 	navigate: NavigateFunction,
 ) => {
 	try {
-		const res = await axios.post(BASE_URL + 'auth/signin', data, {
-			withCredentials: true,
-		});
-
 		Cookies.set('userId', data.username, { path: '/', expires: 7 });
-
-		Cookies.set('refreshToken', res.data.refreshToken, {
-			path: '/',
-			secure: true,
-			expires: 1,
-		});
-
-		Cookies.set('accessToken', res.data.accessToken, {
-			path: '/',
-			secure: true,
-			expires: 1 / 24,
-		});
-
 		navigate('/home');
 		useScreenSwitchStore.setState({ isSwitching: true });
 	} catch (err) {

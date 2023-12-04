@@ -6,7 +6,6 @@ import UpperBar from './ui/UpperBar';
 import WarpScreen from 'widgets/warpScreen/WarpScreen';
 import { useEffect } from 'react';
 import instance from 'shared/apis/AxiosInterceptor';
-import { BASE_URL } from '@constants';
 import { useScreenSwitchStore } from 'shared/store/useScreenSwitchState';
 
 export default function Home() {
@@ -17,7 +16,10 @@ export default function Home() {
 	useEffect(() => {
 		const checkLogin = async () => {
 			try {
-				const res = await instance.get(`${BASE_URL}auth/check-signin`);
+				const res = await instance({
+					method: 'GET',
+					url: `/auth/check-signin`,
+				});
 				if (res.status !== 200) {
 					navigate('/login');
 				}

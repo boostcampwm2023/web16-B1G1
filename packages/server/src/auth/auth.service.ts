@@ -25,6 +25,9 @@ import {
 import { v4 as uuid } from 'uuid';
 import { UserDataDto } from './dto/user-data.dto';
 import { ShareLink } from './entities/share_link.entity';
+import { InjectModel } from '@nestjs/mongoose';
+import { Galaxy } from 'src/galaxy/schemas/galaxy.schema';
+import { Model } from 'mongoose';
 
 @Injectable()
 export class AuthService {
@@ -35,6 +38,8 @@ export class AuthService {
 		private readonly shareLinkRepository: Repository<ShareLink>,
 		private readonly jwtService: JwtService,
 		private readonly redisRepository: RedisRepository,
+		@InjectModel(Galaxy.name)
+		private readonly starModel: Model<Galaxy>,
 	) {}
 
 	async signUp(signUpUserDto: SignUpUserDto): Promise<Partial<User>> {
@@ -47,9 +52,15 @@ export class AuthService {
 		const salt = await bcrypt.genSalt();
 		const hashedPassword = await bcrypt.hash(signUpUserDto.password, salt);
 
+		// galaxy도 default로 MongoDB에 저장 후 id 반환
+		const galaxyDoc = new this.starModel({});
+		await galaxyDoc.save();
+		const galaxy_id: string = galaxyDoc._id.toString();
+
 		const newUser = this.userRepository.create({
 			...signUpUserDto,
 			password: hashedPassword,
+			galaxy: galaxy_id,
 		});
 
 		const savedUser: User = await this.userRepository.save(newUser);

@@ -10,23 +10,22 @@ export class HttpExceptionFilter {
 		const method = request.method;
 		const status = exception.getStatus();
 
-		try {
-			fs.readFileSync('./logs/exceptions.log').toString();
-		} catch (error) {
-			fs.mkdirSync('./logs');
-			fs.writeFileSync('./logs/exceptions.log', '');
+		const now = new Date();
+		const koreanTime = new Date(now.getTime() + 9 * 60 * 60 * 1000);
+		const date = `${koreanTime.getFullYear()}-${
+			koreanTime.getMonth() + 1
+		}-${koreanTime.getDate()}`;
+		if (!fs.existsSync('./logs/exceptions')) {
+			fs.mkdirSync('./logs/exceptions', { recursive: true });
 		}
 
-		let log = `[${new Date().toISOString()}] [${method} ${request.url}] [${status} ${exception.name}] - ${exception.message}\n`;
+		let log = `[${koreanTime.toISOString()}] [${method} ${
+			request.url
+		}] [${status} ${exception.name}] - ${exception.message}\n`;
 		if (request.user) {
 			log = log.trim() + ` [${request.user.username}]\n`;
 		}
-		fs.appendFileSync(
-			'./logs/exceptions.log',
-			log,
-		);
-
-
+		fs.appendFileSync(`./logs/exceptions/${date}.log`, log);
 
 		response.status(status).json({
 			path: `${method} ${request.url}`,

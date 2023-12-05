@@ -10235,6 +10235,15 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["os-utils", [\
+      ["npm:0.0.14", {\
+        "packageLocation": "./.yarn/cache/os-utils-npm-0.0.14-139244a17c-58fb91364b.zip/node_modules/os-utils/",\
+        "packageDependencies": [\
+          ["os-utils", "npm:0.0.14"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["p-limit", [\
       ["npm:2.3.0", {\
         "packageLocation": "./.yarn/cache/p-limit-npm-2.3.0-94a0310039-8da01ac53e.zip/node_modules/p-limit/",\
@@ -11471,6 +11480,7 @@ const RAW_RUNTIME_STATE =
           ["jest", "virtual:2499dbb93d824027565d71b0716c4fb8b548ad61955d0a0286bfb3c5b4058e227894b6691d96808c00f576db14870018375210362c26ee321ea99fd6ed041c74#npm:29.7.0"],\
           ["mongoose", "npm:8.0.1"],\
           ["mysql2", "npm:3.6.3"],\
+          ["os-utils", "npm:0.0.14"],\
           ["passport", "npm:0.6.0"],\
           ["passport-jwt", "npm:4.0.1"],\
           ["prettier", "npm:3.1.0"],\

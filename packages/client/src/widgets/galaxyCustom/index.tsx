@@ -1,6 +1,12 @@
 import { Modal } from 'shared/ui';
 import { useNavigate } from 'react-router-dom';
-import { RightButton, SampleScreen, Sliders } from './ui';
+import {
+	RightButton,
+	SampleScreen,
+	Sliders,
+	LeftButton,
+	TopButton,
+} from './ui';
 import { useViewStore } from 'shared/store';
 import styled from '@emotion/styled';
 import { useGalaxyStore, useCustomStore } from 'shared/store';
@@ -34,6 +40,8 @@ export default function GalaxyCustom() {
 					setView('MAIN');
 				}}
 				rightButton={<RightButton />}
+				leftButton={<LeftButton />}
+				topButton={<TopButton />}
 			>
 				<Container>
 					<SampleScreen />

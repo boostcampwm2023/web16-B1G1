@@ -17,8 +17,6 @@ export default function NickNameSetModal() {
 	useCheckLogin();
 
 	const handleSaveButton = async () => {
-		// TODO: 소셜로그인 시 로직 따로 추가해야 함
-
 		try {
 			let response;
 			if (!platform) {

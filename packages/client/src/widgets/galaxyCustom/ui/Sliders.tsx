@@ -19,7 +19,7 @@ export default function Sliders() {
 		<Container>
 			<Slider
 				id="나선팔 꼬인 정도"
-				min={0.5}
+				min={0.2}
 				max={3}
 				step={0.1}
 				value={spiral}

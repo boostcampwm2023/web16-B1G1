@@ -18,7 +18,8 @@ export const postLogin = async (
 	try {
 		Cookies.set('userId', data.username, { path: '/', expires: 7 });
 		navigate('/home');
-		useScreenSwitchStore.setState({ isSwitching: true });
+		const { setIsSwitching } = useScreenSwitchStore();
+		setIsSwitching(true);
 	} catch (err) {
 		if (err instanceof AxiosError) {
 			if (err.response?.status === 404) setIdState(false);

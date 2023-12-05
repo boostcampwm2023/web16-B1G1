@@ -13,16 +13,14 @@ export default function NickNameSetModal() {
 	const { platform } = useParams();
 
 	useCheckLogin();
-
+	const { setText } = useToastStore();
+	const { id, pw } = useSignUpStore();
 	const handleSaveButton = async () => {
 		// TODO: 소셜로그인 시 로직 따로 추가해야 함
-
-		const { setText } = useToastStore();
 
 		try {
 			let response;
 			if (!platform) {
-				const { id, pw } = useSignUpStore();
 				response = await postSignUp({
 					username: id,
 					password: pw,

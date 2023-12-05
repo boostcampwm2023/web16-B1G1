@@ -26,8 +26,8 @@ export default function Instances({ count, size, color, isCustom }: PropsType) {
 		: useGalaxyStore();
 
 	useEffect(() => {
-		const center = count * density;
-		const arms = count - center;
+		const arms = count * density;
+		const center = count - arms;
 		let index = 0;
 
 		for (let i = 0; i < arms; i++) {

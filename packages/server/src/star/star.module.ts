@@ -6,12 +6,19 @@ import { Board } from '../board/entities/board.entity';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Star, StarSchema } from './schemas/star.schema';
 import { AuthModule } from '../auth/auth.module';
+import {
+	Exception,
+	ExceptionSchema,
+} from '../exception-filter/exception.schema';
 
 @Module({
 	imports: [
 		TypeOrmModule.forFeature([Board]),
 		AuthModule,
-		MongooseModule.forFeature([{ name: Star.name, schema: StarSchema }]),
+		MongooseModule.forFeature([
+			{ name: Star.name, schema: StarSchema },
+			{ name: Exception.name, schema: ExceptionSchema },
+		]),
 	],
 	controllers: [StarController],
 	providers: [StarService],

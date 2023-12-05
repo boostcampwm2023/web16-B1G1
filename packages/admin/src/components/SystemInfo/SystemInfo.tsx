@@ -34,6 +34,30 @@ export default function SystemInfo() {
 					</tr>
 				</tbody>
 			</Table>
+			<Table>
+				<thead>
+					<tr>
+						{systemInfo.diskUsageHead &&
+							(systemInfo.diskUsageHead as any).map(
+								(head: string, index: number) => <th key={index}>{head}</th>,
+							)}
+					</tr>
+				</thead>
+				<tbody>
+					{systemInfo.diskUsage &&
+						(systemInfo.diskUsage as any).map(
+							(line: string[], index: number) => {
+								return (
+									<tr key={index}>
+										{line.map((item: string, index: number) => (
+											<td key={index}>{item}</td>
+										))}
+									</tr>
+								);
+							},
+						)}
+				</tbody>
+			</Table>
 		</div>
 	);
 }

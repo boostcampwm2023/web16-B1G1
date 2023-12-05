@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 
 interface PropsType extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-	onClick?: () => void;
+	onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 	children: React.ReactNode;
 }
 

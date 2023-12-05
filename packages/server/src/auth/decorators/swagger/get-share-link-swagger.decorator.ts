@@ -1,6 +1,7 @@
 import { applyDecorators } from '@nestjs/common';
 import {
 	ApiBadRequestResponse,
+	ApiNotFoundResponse,
 	ApiOkResponse,
 	ApiOperation,
 } from '@nestjs/swagger';
@@ -19,7 +20,12 @@ const apiOkResponse = {
 
 const apiBadRequestResponse = {
 	status: 400,
-	description: '유저가 비공개 상태임',
+	description: '쿼리스트링에 nickname을 입력하지 않음',
+};
+
+const apiNotFoundResponse = {
+	status: 404,
+	description: 'nickname에 해당하는 유저가 존재하지 않음',
 };
 
 export const GetShareLinkSwaggerDecorator = () => {
@@ -27,5 +33,6 @@ export const GetShareLinkSwaggerDecorator = () => {
 		ApiOperation(apiOperation),
 		ApiOkResponse(apiOkResponse),
 		ApiBadRequestResponse(apiBadRequestResponse),
+		ApiNotFoundResponse(apiNotFoundResponse),
 	);
 };

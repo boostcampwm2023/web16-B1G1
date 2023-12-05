@@ -2,11 +2,7 @@ import { BadRequestException, PipeTransform } from '@nestjs/common';
 import { UserShareStatus } from '../enums/user.enum';
 
 export class StatusValidationPipe implements PipeTransform {
-	readonly statusOptions = [
-		UserShareStatus.PRIVATE,
-		UserShareStatus.ONLY_LINK,
-		UserShareStatus.PUBLIC,
-	];
+	readonly statusOptions = [UserShareStatus.PRIVATE, UserShareStatus.PUBLIC];
 
 	transform(value: any) {
 		value = value.toLowerCase();

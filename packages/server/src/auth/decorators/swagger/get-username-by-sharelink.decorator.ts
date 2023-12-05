@@ -1,10 +1,9 @@
 import { applyDecorators } from '@nestjs/common';
 import {
-	ApiBadRequestResponse,
 	ApiInternalServerErrorResponse,
+	ApiNotFoundResponse,
 	ApiOkResponse,
 	ApiOperation,
-	ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 
 const apiOperation = {
@@ -17,14 +16,9 @@ const apiOkResponse = {
 	description: '해당 공유링크를 가진 사용자의 닉네임 조회 성공',
 };
 
-const apiBadRequestResponse = {
+const apiNotFoundResponse = {
 	status: 400,
 	description: '해당 공유링크를 가진 사용자가 없음',
-};
-
-const apiUnauthorizedResponse = {
-	status: 401,
-	description: '해당 유저는 비공개상태임',
 };
 
 const apiInternalServerErrorResponse = {
@@ -36,8 +30,7 @@ export const GetUsernameByShareLinkSwaggerDecorator = () => {
 	return applyDecorators(
 		ApiOperation(apiOperation),
 		ApiOkResponse(apiOkResponse),
-		ApiBadRequestResponse(apiBadRequestResponse),
-		ApiUnauthorizedResponse(apiUnauthorizedResponse),
+		ApiNotFoundResponse(apiNotFoundResponse),
 		ApiInternalServerErrorResponse(apiInternalServerErrorResponse),
 	);
 };

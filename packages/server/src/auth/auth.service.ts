@@ -219,6 +219,7 @@ export class AuthService {
 			.where(`MATCH (user.nickname) AGAINST (:nickname IN BOOLEAN MODE)`, {
 				nickname: nickname + '*',
 			})
+			.andWhere('user.status = :status', { status: UserShareStatus.PUBLIC })
 			.getMany();
 		return users;
 	}
@@ -242,10 +243,14 @@ export class AuthService {
 	}
 
 	async getShareLinkByNickname(nickname: string) {
+		if (!nickname) {
+			throw new BadRequestException('nickname을 입력해주세요.');
+		}
+
 		const user = await this.userRepository.findOneBy({ nickname });
 
-		if (user.status === UserShareStatus.PRIVATE) {
-			throw new UnauthorizedException('비공개 상태입니다.');
+		if (!user) {
+			throw new NotFoundException('해당 유저를 찾을 수 없습니다.');
 		}
 
 		const foundLink = await this.shareLinkRepository.findOneBy({
@@ -283,10 +288,6 @@ export class AuthService {
 			throw new InternalServerErrorException(
 				'링크에 대한 사용자가 존재하지 않습니다.',
 			);
-		}
-
-		if (linkUser.status === UserShareStatus.PRIVATE) {
-			throw new UnauthorizedException('비공개 상태입니다.');
 		}
 
 		return linkUser.username;

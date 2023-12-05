@@ -9,4 +9,9 @@ export class AdminController {
 	getAllPosts() {
 		return this.adminService.getAllPosts();
 	}
+
+	@Get('system-info')
+	getSystemInfo() {
+		return this.adminService.getSystemInfo();
+	}
 }

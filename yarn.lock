@@ -8110,6 +8110,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"os-utils@npm:^0.0.14":
+  version: 0.0.14
+  resolution: "os-utils@npm:0.0.14"
+  checksum: 58fb91364bc332129b36e034e09bd3faa0e23a23681b2ab1d8c6b5d01d40d46af70c9e311290dc8a5efae90830768f217bd1cfb539428acc13ba1c72caa673e9
+  languageName: node
+  linkType: hard
+
 "p-limit@npm:^2.2.0":
   version: 2.3.0
   resolution: "p-limit@npm:2.3.0"
@@ -9194,6 +9201,7 @@ __metadata:
     jest: "npm:^29.5.0"
     mongoose: "npm:^8.0.1"
     mysql2: "npm:^3.6.3"
+    os-utils: "npm:^0.0.14"
     passport: "npm:^0.6.0"
     passport-jwt: "npm:^4.0.1"
     prettier: "npm:^3.0.0"

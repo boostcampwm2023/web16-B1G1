@@ -2,9 +2,9 @@
 export const Nav = () => {
 	return (
 		<div>
-			<a href="/">Home</a>
-			<a href="/about">About</a>
-			<a href="/abc">Test</a>
+			<a href="/admin">Home</a>
+			<a href="/admin/about">About</a>
+			<a href="/admin/abc">Test</a>
 		</div>
 	);
 };

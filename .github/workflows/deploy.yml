@@ -28,6 +28,7 @@ jobs:
         run: |
           yarn install
           yarn workspace client build
+          yarn workspace admin build
 
       - name: Build and Push Docker image
         run: |

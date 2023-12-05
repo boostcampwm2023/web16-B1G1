@@ -12,6 +12,7 @@ import {
 	ParseIntPipe,
 	UseGuards,
 	UploadedFiles,
+	UseFilters,
 } from '@nestjs/common';
 import { BoardService } from './board.service';
 import { CreateBoardDto } from './dto/create-board.dto';
@@ -36,6 +37,7 @@ import { TransactionInterceptor } from '../interceptor/transaction.interceptor';
 import { GetQueryRunner } from '../interceptor/decorators/get-querry-runner.decorator';
 import { DeleteResult, QueryRunner } from 'typeorm';
 import { GetIsLikedSwaggerDecorator } from './decorators/swagger/get-is-liked-swagged.decorator';
+import { HttpExceptionFilter } from '../exception-filter/http.exception-filter';
 
 @Controller('post')
 @UseInterceptors(LogInterceptor)
@@ -47,6 +49,7 @@ export class BoardController {
 	@UseGuards(CookieAuthGuard)
 	@UseInterceptors(FilesInterceptor('file', 3))
 	@UseInterceptors(TransactionInterceptor)
+	@UseFilters(HttpExceptionFilter)
 	@UsePipes(ValidationPipe)
 	@CreateBoardSwaggerDecorator()
 	createBoard(

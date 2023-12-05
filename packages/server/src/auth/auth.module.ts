@@ -11,13 +11,20 @@ import { CookieAuthGuard } from './cookie-auth.guard';
 import { ShareLink } from './entities/share_link.entity';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Galaxy, GalaxySchema } from 'src/galaxy/schemas/galaxy.schema';
+import {
+	Exception,
+	ExceptionSchema,
+} from '../exception-filter/exception.schema';
 
 @Module({
 	imports: [
 		PassportModule.register({ defaultStrategy: 'jwt' }),
 		JwtModule.register(jwtConfig),
 		TypeOrmModule.forFeature([User, ShareLink]),
-		MongooseModule.forFeature([{ name: Galaxy.name, schema: GalaxySchema }]),
+		MongooseModule.forFeature([
+			{ name: Galaxy.name, schema: GalaxySchema },
+			{ name: Exception.name, schema: ExceptionSchema },
+		]),
 	],
 	controllers: [AuthController],
 	providers: [AuthService, CookieAuthGuard, RedisRepository],

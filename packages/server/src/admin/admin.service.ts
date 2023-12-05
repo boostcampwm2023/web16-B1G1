@@ -6,6 +6,7 @@ import { Repository } from 'typeorm';
 import { LogInterceptor } from '../interceptor/log.interceptor';
 import { HttpExceptionFilter } from '../exception-filter/http.exception-filter';
 import * as osUtils from 'os-utils';
+import { exec } from 'child_process';
 
 @Injectable()
 @UseInterceptors(LogInterceptor)
@@ -52,12 +53,30 @@ export class AdminService {
 		const memUsagePercent = usedMem / totalMem;
 		const memUsage = `${Math.floor(memUsagePercent * 100 * 100) / 100}%`;
 
+		// 디스크 사용량
+		const diskUsageString: string = await new Promise((resolve) => {
+			exec('df -h', (error, stdout, stderr) => {
+				resolve(stdout);
+			});
+		});
+		const diskUsageRows = diskUsageString.split('\n');
+		const diskUsage = [];
+		diskUsageRows.forEach((row) => {
+			const rowSplit = row.split(' ');
+			const rowSplitFiltered = rowSplit.filter((item) => item !== '');
+			diskUsage.push(rowSplitFiltered);
+		});
+		// header는 따로 전송
+		const diskUsageHead = diskUsage.shift();
+
 		// 시스템 정보 객체로 반환
 		const systemInfo = {
 			platform,
 			cpuCount,
 			cpuUsage,
 			memUsage,
+			diskUsageHead,
+			diskUsage,
 		};
 
 		return systemInfo;

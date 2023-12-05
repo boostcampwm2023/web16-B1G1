@@ -21,7 +21,7 @@ import { AuthService } from './auth.service';
 import { SignUpUserDto } from './dto/signup-user.dto';
 import { User } from './entities/user.entity';
 import { SignInUserDto } from './dto/signin-user.dto';
-import { CookieOptions, Response } from 'express';
+import { Response } from 'express';
 import { ApiTags } from '@nestjs/swagger';
 import { JwtEnum } from './enums/jwt.enum';
 import { CookieAuthGuard } from './cookie-auth.guard';
@@ -84,7 +84,8 @@ export class AuthController {
 	@UseGuards(CookieAuthGuard)
 	@CheckSignInSwaggerDecorator()
 	async checkSignIn(@GetUser() userData: UserDataDto) {
-		return userData;
+		const user = await this.authService.findUserById(userData.userId);
+		return user;
 	}
 
 	@Get('signout')

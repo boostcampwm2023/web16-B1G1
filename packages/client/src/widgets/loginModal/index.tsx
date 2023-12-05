@@ -3,7 +3,7 @@ import { TopButton, LeftButton, RightButton, LoginContent } from './ui';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { useState } from 'react';
-import { getSignInInfo, postLogin } from 'shared/apis';
+import { postLogin } from 'shared/apis';
 import { useCheckLogin } from 'shared/hooks';
 
 export default function LoginModal() {
@@ -25,9 +25,6 @@ export default function LoginModal() {
 		};
 		setPassword('');
 		await postLogin(data, setIdState, setPasswordState, navigate);
-
-		const { nickname } = await getSignInInfo();
-		Cookies.set('nickname', nickname);
 	};
 
 	useCheckLogin();

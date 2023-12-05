@@ -9,16 +9,16 @@ function App() {
 	return (
 		<>
 			<Nav>
-				<a href="/">Home</a>
-				<a href="/about">About</a>
-				<a href="/abc">Test</a>
-				<a href="/board">Board</a>
+				<a href="/admin">Home</a>
+				<a href="/admin/about">About</a>
+				<a href="/admin/abc">Test</a>
+				<a href="/admin/board">Board</a>
 			</Nav>
 			<Routes>
-				<Route path="/" element={<div>Home</div>} />
-				<Route path="/about" element={<div>About</div>} />
-				<Route path="/abc" element={<TestComponent />} />
-				<Route path="/board" element={<Board />} />
+				<Route path="/admin" element={<div>Home</div>} />
+				<Route path="/admin/about" element={<div>About</div>} />
+				<Route path="/admin/abc" element={<TestComponent />} />
+				<Route path="/admin/board" element={<Board />} />
 			</Routes>
 		</>
 	);

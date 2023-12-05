@@ -1,8 +1,15 @@
 import { ArgumentsHost, Catch, HttpException } from '@nestjs/common';
-import * as fs from 'fs';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { Exception } from './exception.schema';
 
 @Catch(HttpException)
 export class HttpExceptionFilter {
+	constructor(
+		@InjectModel(Exception.name)
+		private readonly exceptionModel: Model<Exception>,
+	) {}
+
 	catch(exception: HttpException, host: ArgumentsHost) {
 		const context = host.switchToHttp();
 		const request = context.getRequest();
@@ -10,28 +17,15 @@ export class HttpExceptionFilter {
 		const method = request.method;
 		const status = exception.getStatus();
 
-		const now = new Date();
-		const koreanTime = new Date(now.getTime() + 9 * 60 * 60 * 1000);
-		const date = `${koreanTime.getFullYear()}-${
-			koreanTime.getMonth() + 1
-		}-${koreanTime.getDate()}`;
-		if (!fs.existsSync('./logs/exceptions')) {
-			fs.mkdirSync('./logs/exceptions', { recursive: true });
-		}
-
-		let log = `[${koreanTime.toISOString()}] [${method} ${
-			request.url
-		}] [${status} ${exception.name}] - ${exception.message}\n`;
-		if (request.user) {
-			log = log.trim() + ` [${request.user.username}]\n`;
-		}
-		fs.appendFileSync(`./logs/exceptions/${date}.log`, log);
-
-		response.status(status).json({
+		const exceptionData = {
 			path: `${method} ${request.url}`,
 			error: `${status} ${exception.name}`,
 			message: exception.message,
 			timestamp: new Date().toISOString(),
-		});
+		};
+		const saveException = new this.exceptionModel(exceptionData);
+		saveException.save();
+
+		response.status(status).json(exceptionData);
 	}
 }

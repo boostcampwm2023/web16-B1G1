@@ -4,14 +4,17 @@ import { Outlet, useNavigate } from 'react-router-dom';
 import UnderBar from 'shared/ui/underBar/UnderBar';
 import UpperBar from './ui/UpperBar';
 import WarpScreen from 'widgets/warpScreen/WarpScreen';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import instance from 'shared/apis/AxiosInterceptor';
 import { useScreenSwitchStore } from 'shared/store/useScreenSwitchStore';
+import Cookies from 'js-cookie';
+import { getSignInInfo } from 'shared/apis';
 
 export default function Home() {
 	const { view } = useViewStore();
 	const { isSwitching } = useScreenSwitchStore();
 	const navigate = useNavigate();
+	const [nickName, setNickName] = useState('');
 
 	useEffect(() => {
 		const checkLogin = async () => {
@@ -29,6 +32,10 @@ export default function Home() {
 			}
 		};
 		checkLogin();
+		getSignInInfo().then((res) => {
+			Cookies.set('nickname', res.nickname);
+			setNickName(res.nickname);
+		});
 	}, []);
 
 	return (
@@ -40,7 +47,7 @@ export default function Home() {
 			{view === 'MAIN' && (
 				<>
 					<UpperBar />
-					<UnderBar />
+					<UnderBar nickName={nickName} />
 				</>
 			)}
 

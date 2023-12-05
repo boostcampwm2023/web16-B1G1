@@ -13,8 +13,11 @@ import instance from 'shared/apis/AxiosInterceptor';
 import { useViewStore } from 'shared/store';
 import { useOwnerStore } from 'shared/store/useOwnerStore';
 
-export default function UnderBar() {
-	const nickName = Cookies.get('nickname');
+interface PropsType {
+	nickName: string;
+}
+
+export default function UnderBar({ nickName }: PropsType) {
 	const navigate = useNavigate();
 
 	const { setView } = useViewStore();

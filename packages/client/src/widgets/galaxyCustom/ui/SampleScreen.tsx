@@ -4,7 +4,7 @@ import { Galaxy } from 'widgets/galaxy';
 
 export default function SampleScreen() {
 	return (
-		<div style={{ height: '480px', width: '480px' }}>
+		<div style={{ height: '400px', width: '400px' }}>
 			<Canvas
 				camera={{
 					position: [0, 20000, 0],

@@ -17,13 +17,11 @@ export const useCameraStore = create<CameraState>()((set) => ({
 	targetView: null,
 	setTargetView: (star: THREE.Mesh | null) => set({ targetView: star }),
 	cameraToCurrentView: CAMERA_MIN_DISTANCE,
-	setCameraToCurrentView: (distance: number) =>
-		set({
-			cameraToCurrentView:
-				distance < CAMERA_MIN_DISTANCE
-					? CAMERA_MIN_DISTANCE
-					: distance > CAMERA_MAX_DISTANCE
-					  ? CAMERA_MAX_DISTANCE
-					  : distance,
-		}),
+	setCameraToCurrentView: (distance: number) => {
+		if (distance < CAMERA_MIN_DISTANCE)
+			set({ cameraToCurrentView: CAMERA_MIN_DISTANCE });
+		else if (distance > CAMERA_MAX_DISTANCE)
+			set({ cameraToCurrentView: CAMERA_MAX_DISTANCE });
+		else set({ cameraToCurrentView: distance });
+	},
 }));

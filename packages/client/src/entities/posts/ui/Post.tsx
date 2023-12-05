@@ -36,8 +36,8 @@ export default function Post({ data, onClick }: PropsType) {
 			return;
 		}
 
-		navigate(`/home/${data.id}/detail`);
 		setView('POST');
+		navigate(`/home/${data.id}/detail`);
 	};
 
 	const handlePointerOver = (e: React.MouseEvent) => {

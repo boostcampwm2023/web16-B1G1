@@ -12,4 +12,9 @@ export class AdminService {
 		@InjectRepository(Board)
 		private readonly boardRepository: Repository<Board>,
 	) {}
+
+	async getAllPosts() {
+		const posts = await this.boardRepository.find();
+		return posts;
+	}
 }

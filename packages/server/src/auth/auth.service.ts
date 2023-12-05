@@ -42,6 +42,12 @@ export class AuthService {
 		private readonly starModel: Model<Galaxy>,
 	) {}
 
+	async findUserById(id: number): Promise<User> {
+		const user = await this.userRepository.findOneBy({ id });
+		user.password = undefined;
+		return user;
+	}
+
 	async signUp(signUpUserDto: SignUpUserDto): Promise<Partial<User>> {
 		const { username, nickname } = signUpUserDto;
 		await Promise.all([

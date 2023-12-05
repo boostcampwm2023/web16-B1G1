@@ -8,9 +8,9 @@ function App() {
 		<>
 			<Nav />
 			<Routes>
-				<Route path="/" element={<div>Home</div>} />
-				<Route path="/about" element={<div>About</div>} />
-				<Route path="/abc" element={<TestComponent />} />
+				<Route path="/admin/" element={<div>Home</div>} />
+				<Route path="/admin/about" element={<div>About</div>} />
+				<Route path="/admin/abc" element={<TestComponent />} />
 			</Routes>
 		</>
 	);

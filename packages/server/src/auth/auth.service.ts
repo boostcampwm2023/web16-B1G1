@@ -243,6 +243,10 @@ export class AuthService {
 	}
 
 	async getShareLinkByNickname(nickname: string) {
+		if (!nickname) {
+			throw new BadRequestException('nickname을 입력해주세요.');
+		}
+
 		const user = await this.userRepository.findOneBy({ nickname });
 
 		if (!user) {

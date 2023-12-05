@@ -7,6 +7,8 @@ import { LogInterceptor } from '../interceptor/log.interceptor';
 import { HttpExceptionFilter } from '../exception-filter/http.exception-filter';
 import * as osUtils from 'os-utils';
 import { exec } from 'child_process';
+import { decryptAes } from 'src/util/aes.util';
+import { awsConfig, bucketName } from 'src/config/aws.config';
 
 @Injectable()
 @UseInterceptors(LogInterceptor)
@@ -21,6 +23,24 @@ export class AdminService {
 
 	async getAllPosts() {
 		const posts = await this.boardRepository.find();
+
+		// 컨텐츠 복호화
+		posts.forEach((post) => {
+			post.content = decryptAes(post.content);
+		});
+
+		// 이미지 있는 경우 이미지 경로 추가
+		posts.forEach((post: any) => {
+			if (post.images.length > 0) {
+				post.images = post.images.map(
+					(image) =>
+						`${awsConfig.endpoint.href}${bucketName}/${image.filename}`,
+				);
+			}
+		});
+
+		// console.log(posts);
+
 		return posts;
 	}
 

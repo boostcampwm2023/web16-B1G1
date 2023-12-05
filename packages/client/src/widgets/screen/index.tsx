@@ -8,8 +8,10 @@ import Controls from 'features/controls/Controls.tsx';
 import { useCameraStore } from 'shared/store/useCameraStore.ts';
 import { Posts } from 'entities/posts';
 import styled from '@emotion/styled';
+import { useViewStore } from 'shared/store';
 
 export default function Screen() {
+	const { view } = useViewStore();
 	const camera = {
 		position: CAMERA_POSITION,
 		far: CAMERA_FAR,
@@ -53,7 +55,7 @@ export default function Screen() {
 				<Posts />
 			</Canvas>
 			<LevaWrapper>
-				<Leva fill collapsed />
+				<Leva fill collapsed hidden={view !== 'MAIN'} />
 			</LevaWrapper>
 		</div>
 	);

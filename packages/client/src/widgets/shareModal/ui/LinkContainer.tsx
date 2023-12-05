@@ -1,12 +1,23 @@
 import styled from '@emotion/styled';
 import { useToastStore } from 'shared/store';
 import { Button, Input } from 'shared/ui';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { getShareLink } from 'shared/apis/share';
+import Cookies from 'js-cookie';
 
 export default function LinkContainer() {
-	const [shareLink, setShareLink] = useState('링크임당');
+	const [shareLink, setShareLink] = useState('');
 
 	const { setText } = useToastStore();
+
+	useEffect(() => {
+		const nickName = Cookies.get('nickname') as string;
+
+		(async () => {
+			const shareLinkData = await getShareLink(nickName);
+			setShareLink(shareLinkData);
+		})();
+	}, []);
 
 	const copyToClipboard = () => {
 		navigator.clipboard.writeText(shareLink);

@@ -1,12 +1,26 @@
 import styled from '@emotion/styled';
 import { Body02ME, Body03ME } from 'shared/ui/styles';
-import { useState } from 'react';
 import checkIcon from '@icons/icon-check-purple.svg';
+import { useEffect } from 'react';
+import { getSignInInfo } from 'shared/apis';
 
-export default function SearchSetContainer() {
-	const [isSearchable, setIsSearchable] = useState(false);
+interface PropsTypes {
+	isSearchable: boolean;
+	setIsSearchable: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
+export default function SearchSetContainer({
+	isSearchable,
+	setIsSearchable,
+}: PropsTypes) {
 	const handleCheckBox = () => setIsSearchable(!isSearchable);
+
+	useEffect(() => {
+		(async () => {
+			const res = await getSignInInfo();
+			console.log(res);
+		})();
+	}, []);
 
 	return (
 		<Layout>

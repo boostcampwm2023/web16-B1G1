@@ -1,11 +1,23 @@
 import { Button, Modal } from 'shared/ui';
 import LinkContainer from './ui/LinkContainer';
 import SearchSetContainer from './ui/SearchSetContainer';
+import { useState } from 'react';
 
 export default function ShareModal() {
+	const [isSearchable, setIsSearchable] = useState(false);
+
+	const handleSaveButton = () => {
+		// TODO: 공개 상태가 바뀌었다면 API 호출
+	};
+
 	const rightButton = (
-		<Button buttonType="CTA-icon" size="m" type="submit">
-			적용
+		<Button
+			buttonType="CTA-icon"
+			size="m"
+			type="submit"
+			onClick={handleSaveButton}
+		>
+			저장
 		</Button>
 	);
 
@@ -18,7 +30,10 @@ export default function ShareModal() {
 			rightButton={rightButton}
 			onClickGoBack={handleGoBackButton}
 		>
-			<SearchSetContainer />
+			<SearchSetContainer
+				isSearchable={isSearchable}
+				setIsSearchable={setIsSearchable}
+			/>
 			<LinkContainer />
 		</Modal>
 	);

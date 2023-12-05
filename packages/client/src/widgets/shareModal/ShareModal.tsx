@@ -1,16 +1,8 @@
-import { Button, Input, Modal } from 'shared/ui';
-import { useState } from 'react';
-import styled from '@emotion/styled';
-import checkIcon from '@icons/icon-check-purple.svg';
-import { Body02ME, Body03ME } from 'shared/ui/styles';
-import { useToastStore } from 'shared/store';
+import { Button, Modal } from 'shared/ui';
+import LinkContainer from './ui/LinkContainer';
+import SearchSetContainer from './ui/SearchSetContainer';
 
 export default function ShareModal() {
-	const [isSearchable, setIsSearchable] = useState(false);
-	const [shareLink, setShareLink] = useState('링크임당');
-
-	const { setText } = useToastStore();
-
 	const rightButton = (
 		<Button buttonType="CTA-icon" size="m" type="submit">
 			적용
@@ -19,13 +11,6 @@ export default function ShareModal() {
 
 	const handleGoBackButton = () => {};
 
-	const handleCheckBox = () => setIsSearchable(!isSearchable);
-
-	const copyToClipboard = () => {
-		navigator.clipboard.writeText(shareLink);
-		setText('링크가 복사되었습니다.');
-	};
-
 	return (
 		<Modal
 			title="공유하기"
@@ -33,89 +18,8 @@ export default function ShareModal() {
 			rightButton={rightButton}
 			onClickGoBack={handleGoBackButton}
 		>
-			<SearchSetContainer>
-				<SearchSetLabel>검색 허용</SearchSetLabel>
-				<SearchSetCheckBox
-					type="checkbox"
-					checked={isSearchable}
-					onChange={handleCheckBox}
-				/>
-				<SearchSetDescription>
-					{isSearchable
-						? '다른 사람이 내 은하를 검색할 수 있습니다.'
-						: '다른 사람이 내 은하를 검색할 수 없습니다.'}
-				</SearchSetDescription>
-			</SearchSetContainer>
-
-			<LinkContainer>
-				<LinkCopyButton
-					size="m"
-					buttonType="CTA-icon"
-					onClick={copyToClipboard}
-				>
-					링크 복사
-				</LinkCopyButton>
-				<Input
-					id="share-link"
-					type="url"
-					disabled
-					placeholder=""
-					value={shareLink}
-					style={{ width: '300px' }}
-				/>
-			</LinkContainer>
+			<SearchSetContainer />
+			<LinkContainer />
 		</Modal>
 	);
 }
-
-const SearchSetContainer = styled.div`
-	display: flex;
-	align-items: center;
-	margin: 0 0 24px 0;
-`;
-
-const SearchSetLabel = styled.label`
-	font-size: 16px;
-	color: ${({ theme: { colors } }) => colors.text.primary};
-	padding: 0 8px;
-	margin: 0 12px 0 0;
-
-	${Body03ME}
-`;
-
-const SearchSetDescription = styled.p`
-	font-size: 14px;
-	color: ${({ theme: { colors } }) => colors.text.secondary};
-	margin: 0 0 0 10px;
-	${Body02ME}
-`;
-
-const SearchSetCheckBox = styled.input`
-	width: 23px;
-	height: 23px;
-	cursor: pointer;
-	border-radius: 5px;
-	background-color: white;
-	appearance: none;
-	-webkit-appearance: none;
-	-moz-appearance: none;
-
-	&:checked {
-		appearance: none;
-		background-image: url(${checkIcon});
-		background-size: 18px;
-		background-repeat: no-repeat;
-		background-position: center;
-	}
-`;
-
-const LinkContainer = styled.div`
-	display: flex;
-	align-items: center;
-	gap: 8px;
-`;
-
-const LinkCopyButton = styled(Button)`
-	white-space: nowrap;
-	height: 43px;
-`;

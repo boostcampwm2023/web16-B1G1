@@ -219,6 +219,7 @@ export class AuthService {
 			.where(`MATCH (user.nickname) AGAINST (:nickname IN BOOLEAN MODE)`, {
 				nickname: nickname + '*',
 			})
+			.andWhere('user.status = :status', { status: UserShareStatus.PUBLIC })
 			.getMany();
 		return users;
 	}

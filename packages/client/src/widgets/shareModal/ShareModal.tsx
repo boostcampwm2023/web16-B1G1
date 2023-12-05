@@ -29,7 +29,7 @@ export default function ShareModal() {
 	return (
 		<Modal
 			title="공유하기"
-			description="링크를 복사하고 친구들에게 공유해보세요"
+			description="링크를 복사하고 친구들에게 공유해보세요."
 			rightButton={rightButton}
 			onClickGoBack={handleGoBackButton}
 		>
@@ -48,17 +48,21 @@ export default function ShareModal() {
 			</SearchSetContainer>
 
 			<LinkContainer>
+				<LinkCopyButton
+					size="m"
+					buttonType="CTA-icon"
+					onClick={copyToClipboard}
+				>
+					링크 복사
+				</LinkCopyButton>
 				<Input
 					id="share-link"
 					type="url"
 					disabled
 					placeholder=""
 					value={shareLink}
-					style={{ width: '200px' }}
+					style={{ width: '300px' }}
 				/>
-				<Button size="m" buttonType="CTA-icon" onClick={copyToClipboard}>
-					복사
-				</Button>
 			</LinkContainer>
 		</Modal>
 	);
@@ -67,12 +71,14 @@ export default function ShareModal() {
 const SearchSetContainer = styled.div`
 	display: flex;
 	align-items: center;
+	margin: 0 0 24px 0;
 `;
 
 const SearchSetLabel = styled.label`
 	font-size: 16px;
-	color: ${({ theme: { colors } }) => colors.text.secondary};
-	margin-right: 16px;
+	color: ${({ theme: { colors } }) => colors.text.primary};
+	padding: 0 8px;
+	margin: 0 12px 0 0;
 
 	${Body03ME}
 `;
@@ -80,8 +86,7 @@ const SearchSetLabel = styled.label`
 const SearchSetDescription = styled.p`
 	font-size: 14px;
 	color: ${({ theme: { colors } }) => colors.text.secondary};
-	margin-top: 4px;
-
+	margin: 0 0 0 10px;
 	${Body02ME}
 `;
 
@@ -107,4 +112,10 @@ const SearchSetCheckBox = styled.input`
 const LinkContainer = styled.div`
 	display: flex;
 	align-items: center;
+	gap: 8px;
+`;
+
+const LinkCopyButton = styled(Button)`
+	white-space: nowrap;
+	height: 43px;
 `;

@@ -1,7 +1,6 @@
 import { Canvas } from '@react-three/fiber';
 import { EffectComposer, Bloom } from '@react-three/postprocessing';
 import { Galaxy } from 'widgets/galaxy';
-import { useCustomStore } from 'shared/store';
 
 export default function SampleScreen() {
 	return (
@@ -20,7 +19,7 @@ export default function SampleScreen() {
 						luminanceSmoothing={0.025}
 					/>
 				</EffectComposer>
-				<color attach="background" args={['#000']} />
+				<color attach="background" args={['#070614']} />
 				<ambientLight color="#fff" intensity={5} />
 				<Galaxy number={2000} isCustom={true} />
 			</Canvas>

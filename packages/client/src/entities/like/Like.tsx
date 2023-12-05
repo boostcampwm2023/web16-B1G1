@@ -2,8 +2,6 @@ import { useEffect, useReducer, useState } from 'react';
 import { Heart } from 'lucide-react';
 import { Button } from 'shared/ui';
 import theme from 'shared/ui/styles/theme';
-import { BASE_URL } from '@constants';
-import { useFetch } from 'shared/hooks';
 import instance from 'shared/apis/AxiosInterceptor';
 
 interface PropsType {
@@ -51,10 +49,10 @@ export default function Like({ postId, count }: PropsType) {
 
 	useEffect(() => {
 		const fetchLike = async () => {
-			const { data, error } = useFetch<boolean>(
-				`${BASE_URL}post/${postId}/is-liked`,
-			);
-			if (error) return;
+			const { data } = await instance({
+				method: 'GET',
+				url: `/post/${postId}/is-liked`,
+			});
 			dispatch({ type: SET_LIKE, bool: data });
 		};
 		fetchLike();
@@ -67,7 +65,7 @@ export default function Like({ postId, count }: PropsType) {
 			setButtonDisabled(true);
 			const res = await instance({
 				method: 'patch',
-				url: `/post/${postId}/is-liked`,
+				url: `/post/${postId}/like`,
 			});
 			if (res.status === 200) dispatch({ type: LIKE });
 		} finally {

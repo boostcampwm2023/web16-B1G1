@@ -11,6 +11,8 @@ export default function NickNameSetModal() {
 	const [validNickName, setValidNickName] = useState('');
 	const navigate = useNavigate();
 	const { platform } = useParams();
+	const { setText } = useToastStore();
+	const { id, pw } = useSignUpStore();
 
 	useCheckLogin();
 	const { setText } = useToastStore();

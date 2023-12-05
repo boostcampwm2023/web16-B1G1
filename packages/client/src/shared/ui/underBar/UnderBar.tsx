@@ -2,7 +2,6 @@ import styled from '@emotion/styled';
 import { Button } from 'shared/ui';
 import { Title01 } from '../styles';
 import PlanetEditIcon from '@icons/icon-planetedit-24-white.svg';
-import PlanerEditIconGray from '@icons/icon-planetedit-24-gray.svg';
 import AddIcon from '@icons/icon-add-24-white.svg';
 import AddIconGray from '@icons/icon-add-24-gray.svg';
 import WriteIcon from '@icons/icon-writte-24-white.svg';

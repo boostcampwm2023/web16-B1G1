@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import * as THREE from 'three';
-import { CAMERA_MIN_DISTANCE } from '@constants';
+import { CAMERA_MIN_DISTANCE, CAMERA_MAX_DISTANCE } from '@constants';
 
 interface CameraState {
 	currentView: THREE.Vector3;
@@ -20,6 +20,10 @@ export const useCameraStore = create<CameraState>()((set) => ({
 	setCameraToCurrentView: (distance: number) =>
 		set({
 			cameraToCurrentView:
-				distance > CAMERA_MIN_DISTANCE ? distance : CAMERA_MIN_DISTANCE,
+				distance < CAMERA_MIN_DISTANCE
+					? CAMERA_MIN_DISTANCE
+					: distance > CAMERA_MAX_DISTANCE
+					  ? CAMERA_MAX_DISTANCE
+					  : distance,
 		}),
 }));

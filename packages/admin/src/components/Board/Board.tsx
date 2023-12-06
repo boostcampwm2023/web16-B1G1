@@ -16,10 +16,9 @@ export default function Board() {
 
 	const getBoardDetail = async (e: React.MouseEvent<HTMLButtonElement>) => {
 		// 이벤트 위임으로 선택한 tr의 id값을 가져온다.
-		const id = Number((e.target as any).closest('tr').id);
+		const id = Number((e.target as HTMLButtonElement).closest('tr')!.id);
 		const data = boardList.find((board: any) => board.id === id);
 		setBoardDetail(data as any);
-		console.log(boardDetail);
 	};
 
 	return (
@@ -49,7 +48,7 @@ export default function Board() {
 							<td>{board.created_at}</td>
 							<td>{board.updated_at}</td>
 							<td>
-								<Button onClick={(e) => getBoardDetail(e)}>상세 보기</Button>
+								<Button onClick={getBoardDetail}>상세 보기</Button>
 							</td>
 						</tr>
 					))}
@@ -57,7 +56,7 @@ export default function Board() {
 			</Table>
 			<div>
 				{boardDetail &&
-					(Object.keys(boardDetail) as any).map((detail: any) => {
+					Object.keys(boardDetail)?.map((detail: any) => {
 						return (
 							<div>
 								<div>{detail + ' | ' + boardDetail[detail]}</div>

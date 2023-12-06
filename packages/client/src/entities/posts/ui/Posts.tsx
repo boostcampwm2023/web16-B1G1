@@ -5,16 +5,19 @@ import { StarData } from 'shared/lib/types/star';
 import { useOwnerStore } from 'shared/store/useOwnerStore';
 import { getPostListByNickName } from 'shared/apis/star';
 import { useEffect } from 'react';
+import { useViewStore } from 'shared/store';
 
 export default function Posts() {
-	const [post, setPost] = useState(0);
 	const [postData, setPostData] = useState<StarData[]>();
 
 	const { isMyPage, pageOwnerNickName } = useOwnerStore();
+	const { view } = useViewStore();
 
 	const myPostData = useFetch<StarData[]>('star').data;
 
 	useEffect(() => {
+		if (view !== 'MAIN') return;
+
 		if (isMyPage) {
 			setPostData(myPostData);
 			return;
@@ -24,7 +27,7 @@ export default function Posts() {
 			const otherPostData = await getPostListByNickName(pageOwnerNickName);
 			setPostData(otherPostData);
 		})();
-	}, [isMyPage, myPostData]);
+	}, [isMyPage, myPostData, view]);
 
 	return (
 		<>
@@ -32,9 +35,9 @@ export default function Posts() {
 				postData.map((data, index) => (
 					<Post
 						key={index}
-						data={data}
-						onClick={() => setPost(index)}
-						isSelected={post === index}
+						data={data.star}
+						postId={data.id}
+						title={data.title}
 					/>
 				))}
 		</>

@@ -18,6 +18,7 @@ import SizeSlider from './ui/SizeSlider';
 import BrightnessSlider from './ui/BrightnessSlider';
 import { getRandomFloat } from '@utils/random';
 import { ARMS_X_DIST } from 'widgets/galaxy/lib/constants';
+import { shapeTypes } from '@constants';
 
 export default function StarCustomModal() {
 	const { setView } = useViewStore();
@@ -38,7 +39,7 @@ export default function StarCustomModal() {
 
 	const handleSubmit = async () => {
 		const starData = {
-			shape,
+			shape: shapeTypes[shape],
 			color,
 			size,
 			brightness,
@@ -59,7 +60,7 @@ export default function StarCustomModal() {
 		}
 
 		const res = await sendPost(formData);
-		if (res?.status === 200) {
+		if (res?.status === 201) {
 			setText('별을 생성했습니다.');
 			setView('MAIN');
 			navigate('/home');

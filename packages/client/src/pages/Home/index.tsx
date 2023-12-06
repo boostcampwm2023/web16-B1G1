@@ -9,12 +9,17 @@ import instance from 'shared/apis/AxiosInterceptor';
 import { useScreenSwitchStore } from 'shared/store/useScreenSwitchStore';
 import Cookies from 'js-cookie';
 import { getSignInInfo } from 'shared/apis';
+import { Toast } from 'shared/ui';
+import { useToastStore } from 'shared/store';
 
 export default function Home() {
+	const [nickName, setNickName] = useState('');
+
 	const { view } = useViewStore();
 	const { isSwitching } = useScreenSwitchStore();
+	const { text } = useToastStore();
+
 	const navigate = useNavigate();
-	const [nickName, setNickName] = useState('');
 
 	useEffect(() => {
 		const checkLogin = async () => {
@@ -43,6 +48,7 @@ export default function Home() {
 			<Outlet />
 
 			{isSwitching && <WarpScreen />}
+			{text && <Toast>{text}</Toast>}
 
 			{view === 'MAIN' && (
 				<>

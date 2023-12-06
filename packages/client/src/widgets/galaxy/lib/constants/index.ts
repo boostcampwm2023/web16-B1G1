@@ -1,4 +1,4 @@
-export const STARS_NUM = 10000;
+export const STARS_NUM = 6000;
 
 export const DISTANCE_LIMIT = 3000;
 

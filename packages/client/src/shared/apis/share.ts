@@ -8,3 +8,15 @@ export const getShareLink = async (nickName: string) => {
 
 	return data;
 };
+
+export const patchShareStatus = async (status: 'private' | 'public') => {
+	const { data } = await instance({
+		method: 'PATCH',
+		url: `/auth/status`,
+		data: {
+			status,
+		},
+	});
+
+	return data;
+};

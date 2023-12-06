@@ -11,5 +11,5 @@ export const useSignUpStore = create<SignUpState>((set) => ({
 	id: '',
 	pw: '',
 	setId: (id) => set((state) => ({ ...state, id })),
-	setPw: (password) => set((state) => ({ ...state, password })),
+	setPw: (pw) => set((state) => ({ ...state, pw })),
 }));

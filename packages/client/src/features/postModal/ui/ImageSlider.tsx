@@ -61,6 +61,7 @@ export default function ImageSlider({ imageUrls }: PropsType) {
 
 const Layout = styled.div`
 	position: relative;
+	width: 18vw;
 `;
 
 const CurrentImage = styled.div`

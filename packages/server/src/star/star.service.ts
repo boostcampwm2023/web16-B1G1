@@ -43,16 +43,13 @@ export class StarService {
 			const star = await this.starModel.findOne({ _id: board.star });
 			if (!star) continue;
 
-			// $, _로 시작하는 모든 속성 제거
-			for (let key in star) {
-				if (key.startsWith('$') || key.startsWith('_')) {
-					delete star[key];
-				}
-			}
+			// __v 필드 제거
+			star.__v = undefined;
+			console.log(star);
 
 			starDataList.push({
 				id: board.id,
-				...star,
+				star,
 				title: board.title,
 			});
 		}

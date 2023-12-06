@@ -1,8 +1,13 @@
 import * as THREE from 'three';
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { DISTANCE_LIMIT } from '../constants';
-import { getSpiralPositions, getSpherePositions } from '.';
+import { DISTANCE_LIMIT, STARS_DENSITY } from '../constants';
+import {
+	getSpiralPositions,
+	getSpherePositions,
+	setSpiralPositions,
+	setSpherePositions,
+} from '.';
 import { useGalaxyStore, useCustomStore } from 'shared/store';
 
 interface PropsType {
@@ -21,18 +26,33 @@ export default function Instances({ count, size, color, isCustom }: PropsType) {
 		emissiveIntensity: 2,
 	});
 	const tempObject = new THREE.Object3D();
-	const { density, zDist, thickness, spiral, start } = isCustom
+	const { zDist, thickness, spiral, start } = isCustom
 		? useCustomStore()
 		: useGalaxyStore();
+	const arms = count * STARS_DENSITY;
+	const center = count - arms;
+
+	let [spiralPositions, spherePositions] = useMemo(() => {
+		const spirals = [];
+		const spheres = [];
+		for (let i = 0; i < arms; i++) {
+			const position = getSpiralPositions();
+			spirals.push(position);
+		}
+		for (let i = 0; i < center; i++) {
+			const position = getSpherePositions();
+			spheres.push(position);
+		}
+		return [spirals, spheres];
+	}, []);
 
 	useEffect(() => {
-		const center = count * density;
-		const arms = count - center;
 		let index = 0;
 
 		for (let i = 0; i < arms; i++) {
 			tempObject.position.copy(
-				getSpiralPositions({
+				setSpiralPositions({
+					position: spiralPositions[i],
 					z_dist: zDist,
 					thickness: thickness,
 					spiral: spiral,
@@ -43,12 +63,14 @@ export default function Instances({ count, size, color, isCustom }: PropsType) {
 			instancedMeshRef.current.setMatrixAt(index++, tempObject.matrix);
 		}
 		for (let i = 0; i < center; i++) {
-			tempObject.position.copy(getSpherePositions(thickness));
+			tempObject.position.copy(
+				setSpherePositions(spherePositions[i], thickness),
+			);
 			tempObject.updateMatrix();
 			instancedMeshRef.current.setMatrixAt(index++, tempObject.matrix);
 		}
 		instancedMeshRef.current.instanceMatrix.needsUpdate = true;
-	}, []);
+	}, [zDist, thickness, spiral, start]);
 
 	useFrame(({ camera: { position } }) => {
 		const cameraDistance = new THREE.Vector3(0, 0, 0).distanceTo(position);

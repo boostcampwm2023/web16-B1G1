@@ -54,20 +54,22 @@ export default function SignUpModal() {
 	);
 
 	return (
-		<Modal
-			title="회원가입"
-			rightButton={signUpButton}
-			onClickGoBack={handleGoBackButton}
-		>
-			<InputBarsContainer>
-				<IdInputContainer setValidId={setValidId} />
-				<PwInputContainer setValidPw={setValidPw} />
-				<CheckPwInputContainer
-					validPw={validPw}
-					setValidCheckPw={setValidCheckPw}
-				/>
-			</InputBarsContainer>
-		</Modal>
+		<form>
+			<Modal
+				title="회원가입"
+				rightButton={signUpButton}
+				onClickGoBack={handleGoBackButton}
+			>
+				<InputBarsContainer>
+					<IdInputContainer setValidId={setValidId} />
+					<PwInputContainer setValidPw={setValidPw} />
+					<CheckPwInputContainer
+						validPw={validPw}
+						setValidCheckPw={setValidCheckPw}
+					/>
+				</InputBarsContainer>
+			</Modal>
+		</form>
 	);
 }
 

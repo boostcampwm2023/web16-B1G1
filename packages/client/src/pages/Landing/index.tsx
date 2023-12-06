@@ -6,7 +6,7 @@ import { Outlet } from 'react-router-dom';
 
 export default function Landing() {
 	const [mouse, setMouse] = useState([0.5, 0.5]);
-	const { text } = useToastStore.getState();
+	const { text } = useToastStore();
 
 	return (
 		<div

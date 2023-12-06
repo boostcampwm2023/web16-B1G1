@@ -16,6 +16,7 @@ import {
 	BadRequestException,
 	Patch,
 	UseInterceptors,
+	UseFilters,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SignUpUserDto } from './dto/signup-user.dto';
@@ -43,9 +44,12 @@ import { GetShareLinkSwaggerDecorator } from './decorators/swagger/get-share-lin
 import { LogInterceptor } from '../interceptor/log.interceptor';
 import { CheckSignInSwaggerDecorator } from './decorators/swagger/check-sign-in-swagger.decorator';
 import { cookieOptionsConfig } from '../config/cookie.config';
+import { GetUsernameByShareLinkSwaggerDecorator } from './decorators/swagger/get-username-by-sharelink.decorator';
+import { HttpExceptionFilter } from '../exception-filter/http.exception-filter';
 
 @Controller('auth')
 @UseInterceptors(LogInterceptor)
+@UseFilters(HttpExceptionFilter)
 @ApiTags('인증/인가 API')
 export class AuthController {
 	constructor(private readonly authService: AuthService) {}
@@ -83,7 +87,8 @@ export class AuthController {
 	@UseGuards(CookieAuthGuard)
 	@CheckSignInSwaggerDecorator()
 	async checkSignIn(@GetUser() userData: UserDataDto) {
-		return userData;
+		const user = await this.authService.findUserById(userData.userId);
+		return user;
 	}
 
 	@Get('signout')
@@ -214,6 +219,7 @@ export class AuthController {
 	}
 
 	@Get('sharelink/:shareLink')
+	@GetUsernameByShareLinkSwaggerDecorator()
 	getUsernameByShareLink(@Param('shareLink') shareLink: string) {
 		return this.authService.getUsernameByShareLink(shareLink);
 	}

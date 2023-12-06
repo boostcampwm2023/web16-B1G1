@@ -4,14 +4,11 @@ import {
 	GALAXY_THICKNESS,
 	SPIRAL,
 	SPIRAL_START,
-	STARS_DENSITY,
 } from 'widgets/galaxy/lib/constants';
 
 interface GalaxyState {
 	spiral: number;
 	setSpiral: (value: number) => void;
-	density: number;
-	setDensity: (value: number) => void;
 	start: number;
 	setStart: (value: number) => void;
 	thickness: number;
@@ -23,8 +20,6 @@ interface GalaxyState {
 export const useGalaxyStore = create<GalaxyState>((set) => ({
 	spiral: SPIRAL,
 	setSpiral: (value: number) => set({ spiral: value }),
-	density: STARS_DENSITY,
-	setDensity: (value: number) => set({ density: value }),
 	start: SPIRAL_START,
 	setStart: (value: number) => set({ start: value }),
 	thickness: GALAXY_THICKNESS,

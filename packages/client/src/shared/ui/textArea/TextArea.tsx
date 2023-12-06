@@ -11,6 +11,7 @@ interface PropsType {
 	width?: string;
 	height?: string;
 	maxLength?: number;
+	value?: string;
 }
 
 export default function TextArea({
@@ -18,9 +19,10 @@ export default function TextArea({
 	width = '851px',
 	height = '406px',
 	maxLength = 1000,
+	value = '',
 }: PropsType) {
 	const [tabIndex, setTabIndex] = useState(0);
-	const [text, setText] = useState('');
+	const [text, setText] = useState(value);
 	const isWrite = tabIndex === 0;
 	const isPreview = tabIndex === 1;
 
@@ -30,7 +32,7 @@ export default function TextArea({
 
 	const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
 		setText(e.currentTarget.value);
-		onChange(text);
+		onChange(e.currentTarget.value);
 	};
 
 	return (

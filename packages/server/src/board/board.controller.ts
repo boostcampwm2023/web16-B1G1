@@ -66,7 +66,7 @@ export class BoardController {
 		);
 	}
 
-	// TODO: 게시글에 대한 User정보 얻기
+	// 게시글에 대한 User정보 얻기
 	@Get(':id')
 	@FindBoardByIdSwaggerDecorator()
 	async findBoardById(

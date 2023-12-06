@@ -64,19 +64,17 @@ export default function Home() {
 
 	useEffect(() => {
 		getGalaxy(pageOwnerNickName).then((res) => {
-			if (!res.spiral && spiral !== SPIRAL) setSpiral(SPIRAL);
-			else if (res.spiral && res.spiral !== spiral) setSpiral(res.spiral);
+			if (!res.spiral) setSpiral(SPIRAL);
+			else setSpiral(res.spiral);
 
-			if (!res.start && start !== SPIRAL_START) setStart(SPIRAL_START);
-			else if (res.start && res.start !== start) setStart(res.start);
+			if (!res.start) setStart(SPIRAL_START);
+			else setStart(res.start);
 
-			if (!res.thickness && thickness !== GALAXY_THICKNESS)
-				setThickness(GALAXY_THICKNESS);
-			else if (res.thickness && res.thickness !== thickness)
-				setThickness(res.thickness);
+			if (!res.thickness) setThickness(GALAXY_THICKNESS);
+			else setThickness(res.thickness);
 
-			if (!res.zDist && zDist !== ARMS_Z_DIST) setZDist(ARMS_Z_DIST);
-			else if (res.zDist && res.zDist !== zDist) setZDist(res.zDist);
+			if (!res.zDist) setZDist(ARMS_Z_DIST);
+			else setZDist(res.zDist);
 		});
 	}, [pageOwnerNickName]);
 

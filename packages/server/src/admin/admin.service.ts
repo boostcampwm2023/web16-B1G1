@@ -6,6 +6,9 @@ import { Repository } from 'typeorm';
 import { LogInterceptor } from '../interceptor/log.interceptor';
 import { HttpExceptionFilter } from '../exception-filter/http.exception-filter';
 import * as osUtils from 'os-utils';
+import { exec } from 'child_process';
+import { decryptAes } from 'src/util/aes.util';
+import { awsConfig, bucketName } from 'src/config/aws.config';
 
 @Injectable()
 @UseInterceptors(LogInterceptor)
@@ -20,6 +23,24 @@ export class AdminService {
 
 	async getAllPosts() {
 		const posts = await this.boardRepository.find();
+
+		// 컨텐츠 복호화
+		posts.forEach((post) => {
+			post.content = decryptAes(post.content);
+		});
+
+		// 이미지 있는 경우 이미지 경로 추가
+		posts.forEach((post: any) => {
+			if (post.images.length > 0) {
+				post.images = post.images.map(
+					(image) =>
+						`${awsConfig.endpoint.href}${bucketName}/${image.filename}`,
+				);
+			}
+		});
+
+		// console.log(posts);
+
 		return posts;
 	}
 
@@ -52,12 +73,30 @@ export class AdminService {
 		const memUsagePercent = usedMem / totalMem;
 		const memUsage = `${Math.floor(memUsagePercent * 100 * 100) / 100}%`;
 
+		// 디스크 사용량
+		const diskUsageString: string = await new Promise((resolve) => {
+			exec('df -h', (error, stdout, stderr) => {
+				resolve(stdout);
+			});
+		});
+		const diskUsageRows = diskUsageString.split('\n');
+		const diskUsage = [];
+		diskUsageRows.forEach((row) => {
+			const rowSplit = row.split(' ');
+			const rowSplitFiltered = rowSplit.filter((item) => item !== '');
+			diskUsage.push(rowSplitFiltered);
+		});
+		// header는 따로 전송
+		const diskUsageHead = diskUsage.shift();
+
 		// 시스템 정보 객체로 반환
 		const systemInfo = {
 			platform,
 			cpuCount,
 			cpuUsage,
 			memUsage,
+			diskUsageHead,
+			diskUsage,
 		};
 
 		return systemInfo;

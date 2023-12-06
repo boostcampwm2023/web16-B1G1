@@ -24,7 +24,7 @@ export default function Screen() {
 		mipmapBlur: { value: false },
 	});
 	const { wheelSpeed } = useControls('Controls', {
-		wheelSpeed: { value: 3, min: 0.1, max: 5, step: 0.01 },
+		wheelSpeed: { value: 3, min: 0.1, max: 30, step: 0.1 },
 	});
 
 	return (

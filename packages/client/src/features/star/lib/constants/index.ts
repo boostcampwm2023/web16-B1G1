@@ -1,1 +1,1 @@
-export const DISTANCE_LIMIT = 3000;
+export const DISTANCE_LIMIT = 5000;

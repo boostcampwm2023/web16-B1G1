@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import Button from '../shared/Button';
-import Table from '../shared/Table';
+import Table, { TD, TH } from '../shared/Table';
 
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
@@ -19,18 +19,18 @@ export default function SystemInfo() {
 			<Table>
 				<thead>
 					<tr>
-						<th>플랫폼</th>
-						<th>CPU 수</th>
-						<th>CPU 사용량</th>
-						<th>메모리 사용량</th>
+						<TH>플랫폼</TH>
+						<TH>CPU 수</TH>
+						<TH>CPU 사용량</TH>
+						<TH>메모리 사용량</TH>
 					</tr>
 				</thead>
 				<tbody>
 					<tr>
-						<td>{systemInfo.platform}</td>
-						<td>{systemInfo.cpuCount}</td>
-						<td>{systemInfo.cpuUsage}</td>
-						<td>{systemInfo.memUsage}</td>
+						<TD>{systemInfo.platform}</TD>
+						<TD>{systemInfo.cpuCount}</TD>
+						<TD>{systemInfo.cpuUsage}</TD>
+						<TD>{systemInfo.memUsage}</TD>
 					</tr>
 				</tbody>
 			</Table>
@@ -38,22 +38,24 @@ export default function SystemInfo() {
 				<thead>
 					<tr>
 						{systemInfo.diskUsageHead &&
-							systemInfo.diskUsageHead?.map((head: string, index: number) => (
-								<th key={index}>{head}</th>
-							))}
+							systemInfo.diskUsageHead?.map(
+								(head: string, index: number) => <TH key={index}>{head}</TH>,
+							)}
 					</tr>
 				</thead>
 				<tbody>
 					{systemInfo.diskUsage &&
-						systemInfo.diskUsage?.map((line: string[], index: number) => {
-							return (
-								<tr key={index}>
-									{line.map((item: string, index: number) => (
-										<td key={index}>{item}</td>
-									))}
-								</tr>
-							);
-						})}
+						systemInfo.diskUsage?.map(
+							(line: string[], index: number) => {
+								return (
+									<tr key={index}>
+										{line.map((item: string, index: number) => (
+											<TD key={index}>{item}</TD>
+										))}
+									</tr>
+								);
+							},
+						)}
 				</tbody>
 			</Table>
 		</div>

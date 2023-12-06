@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import Button from '../shared/Button';
-import Table from '../shared/Table';
+import Table, { TD, TH } from '../shared/Table';
 
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
@@ -27,29 +27,29 @@ export default function Board() {
 			<Table>
 				<thead>
 					<tr>
-						<th>번호</th>
-						<th>제목</th>
-						<th>작성자</th>
-						<th>좋아요</th>
-						<th>이미지 수</th>
-						<th>작성일시</th>
-						<th>수정일시</th>
-						<th>상세보기</th>
+						<TH>번호</TH>
+						<TH>제목</TH>
+						<TH>작성자</TH>
+						<TH>좋아요</TH>
+						<TH>이미지 수</TH>
+						<TH>작성일시</TH>
+						<TH>수정일시</TH>
+						<TH>상세보기</TH>
 					</tr>
 				</thead>
 				<tbody>
 					{boardList.map((board: any) => (
 						<tr key={board.id} id={board.id}>
-							<td>{board.id}</td>
-							<td>{board.title}</td>
-							<td>{board.user.nickname}</td>
-							<td>{board.like_cnt}</td>
-							<td>{board.images.length}</td>
-							<td>{board.created_at}</td>
-							<td>{board.updated_at}</td>
-							<td>
+							<TD>{board.id}</TD>
+							<TD>{board.title}</TD>
+							<TD>{board.user.nickname}</TD>
+							<TD>{board.like_cnt}</TD>
+							<TD>{board.images.length}</TD>
+							<TD>{board.created_at}</TD>
+							<TD>{board.updated_at}</TD>
+							<TD>
 								<Button onClick={getBoardDetail}>상세 보기</Button>
-							</td>
+							</TD>
 						</tr>
 					))}
 				</tbody>
@@ -58,9 +58,7 @@ export default function Board() {
 				{boardDetail &&
 					Object.keys(boardDetail)?.map((detail: any) => {
 						return (
-							<div>
-								<div>{detail + ' | ' + boardDetail[detail]}</div>
-							</div>
+						  <div>{detail + ' | ' + boardDetail[detail]}</div>
 						);
 					})}
 			</div>

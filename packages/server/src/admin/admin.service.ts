@@ -9,6 +9,8 @@ import * as osUtils from 'os-utils';
 import { exec } from 'child_process';
 import { decryptAes } from 'src/util/aes.util';
 import { awsConfig, bucketName } from 'src/config/aws.config';
+import { InjectModel } from '@nestjs/mongoose';
+import { Exception } from '../exception-filter/exception.schema';
 
 @Injectable()
 @UseInterceptors(LogInterceptor)
@@ -19,6 +21,8 @@ export class AdminService {
 		private readonly userRepository: Repository<User>,
 		@InjectRepository(Board)
 		private readonly boardRepository: Repository<Board>,
+		@InjectModel(Exception.name)
+		private readonly exceptionModel: Repository<Exception>,
 	) {}
 
 	async getAllPosts() {
@@ -98,5 +102,10 @@ export class AdminService {
 		};
 
 		return systemInfo;
+	}
+
+	async getAllExceptions() {
+		const exceptions = await this.exceptionModel.find();
+		return exceptions;
 	}
 }

@@ -22,6 +22,7 @@ import {
 			{ name: Exception.name, schema: ExceptionSchema },
 		]),
 	],
+	controllers: [BoardController],
 	providers: [BoardService],
 })
 export class BoardModule {}

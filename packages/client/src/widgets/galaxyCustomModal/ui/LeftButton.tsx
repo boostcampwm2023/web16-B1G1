@@ -8,21 +8,12 @@ import {
 } from 'widgets/galaxy/lib/constants';
 
 export default function LeftButton() {
-	const {
-		spiral,
-		setSpiral,
-		start,
-		setStart,
-		zDist,
-		setZDist,
-		thickness,
-		setThickness,
-	} = useCustomStore();
+	const { setSpiral, setStart, setZDist, setThickness } = useCustomStore();
 	const handleClick = () => {
-		if (spiral !== SPIRAL) setSpiral(SPIRAL);
-		if (start !== SPIRAL_START) setStart(SPIRAL_START);
-		if (zDist !== ARMS_Z_DIST) setZDist(ARMS_Z_DIST);
-		if (thickness !== GALAXY_THICKNESS) setThickness(GALAXY_THICKNESS);
+		setSpiral(SPIRAL);
+		setStart(SPIRAL_START);
+		setZDist(ARMS_Z_DIST);
+		setThickness(GALAXY_THICKNESS);
 	};
 	return (
 		<Button

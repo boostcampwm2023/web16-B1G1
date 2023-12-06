@@ -31,12 +31,10 @@ export class AdminService {
 
 		// 이미지 있는 경우 이미지 경로 추가
 		posts.forEach((post: any) => {
-			if (post.images.length > 0) {
-				post.images = post.images.map(
-					(image) =>
-						`${awsConfig.endpoint.href}${bucketName}/${image.filename}`,
-				);
-			}
+			if (post.images.length <= 0) return;
+			post.images = post.images.map(
+				(image) => `${awsConfig.endpoint.href}${bucketName}/${image.filename}`,
+			);
 		});
 
 		// console.log(posts);

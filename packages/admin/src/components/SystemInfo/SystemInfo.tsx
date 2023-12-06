@@ -38,14 +38,14 @@ export default function SystemInfo() {
 				<thead>
 					<tr>
 						{systemInfo.diskUsageHead &&
-							(systemInfo.diskUsageHead as any).map(
+							systemInfo.diskUsageHead?.map(
 								(head: string, index: number) => <TH key={index}>{head}</TH>,
 							)}
 					</tr>
 				</thead>
 				<tbody>
 					{systemInfo.diskUsage &&
-						(systemInfo.diskUsage as any).map(
+						systemInfo.diskUsage?.map(
 							(line: string[], index: number) => {
 								return (
 									<tr key={index}>

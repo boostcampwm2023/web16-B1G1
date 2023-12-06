@@ -29,6 +29,8 @@ export default function GalaxyCustom() {
 			onSubmit={(e) => {
 				e.preventDefault();
 				handleSubmit();
+				navigate('/home');
+				setView('MAIN');
 			}}
 		>
 			<Modal

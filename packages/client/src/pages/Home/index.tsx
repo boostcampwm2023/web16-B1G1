@@ -22,7 +22,6 @@ export default function Home() {
 	const { text } = useToastStore();
 
 	const navigate = useNavigate();
-	const [nickName, setNickName] = useState('');
 	const {
 		spiral,
 		setSpiral,

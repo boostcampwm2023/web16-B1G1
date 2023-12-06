@@ -16,6 +16,8 @@ import { usePostStore } from 'shared/store';
 import { sendPost } from './apis/sendPost';
 import SizeSlider from './ui/SizeSlider';
 import BrightnessSlider from './ui/BrightnessSlider';
+import { getRandomFloat } from '@utils/random';
+import { ARMS_X_DIST } from 'widgets/galaxy/lib/constants';
 
 export default function StarCustomModal() {
 	const { setView } = useViewStore();
@@ -35,7 +37,17 @@ export default function StarCustomModal() {
 	};
 
 	const handleSubmit = async () => {
-		const starData = { shape, color, size, brightness };
+		const starData = {
+			shape,
+			color,
+			size,
+			brightness,
+			position: {
+				x: getRandomFloat(-ARMS_X_DIST, ARMS_X_DIST),
+				y: 0,
+				z: getRandomFloat(-ARMS_X_DIST, ARMS_X_DIST),
+			},
+		};
 		const formData = new FormData();
 
 		formData.append('star', JSON.stringify(starData));

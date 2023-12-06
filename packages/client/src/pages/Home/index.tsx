@@ -29,16 +29,7 @@ export default function Home() {
 	const [nickname, setNickname] = useState('');
 
 	const navigate = useNavigate();
-	const {
-		spiral,
-		setSpiral,
-		start,
-		setStart,
-		thickness,
-		setThickness,
-		zDist,
-		setZDist,
-	} = useGalaxyStore();
+	const { setSpiral, setStart, setThickness, setZDist } = useGalaxyStore();
 
 	useEffect(() => {
 		const checkLogin = async () => {

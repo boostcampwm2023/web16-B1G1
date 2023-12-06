@@ -9,6 +9,7 @@ import { useCameraStore } from 'shared/store/useCameraStore.ts';
 import { Posts } from 'entities/posts';
 import styled from '@emotion/styled';
 import { useViewStore } from 'shared/store';
+import { CameraLight } from './ui';
 
 export default function Screen() {
 	const { view } = useViewStore();
@@ -45,11 +46,12 @@ export default function Screen() {
 				</EffectComposer>
 
 				<color attach="background" args={['#070614']} />
-				<ambientLight color="#fff" intensity={5} />
+				<ambientLight color="#fff" intensity={2} />
 				<Controls />
 				<BackgroundStars />
 				<Galaxy />
 				<Posts />
+				<CameraLight />
 			</Canvas>
 			<LevaWrapper>
 				<Leva fill collapsed hidden={view !== 'MAIN'} />

@@ -61,7 +61,7 @@ const Container = styled.div`
 
 	p {
 		${Body03ME}
-		color: white;
+		color: ${({ theme: { colors } }) => colors.text.primary};
 		white-space: nowrap;
 	}
 
@@ -77,7 +77,13 @@ const Container = styled.div`
 	}
 
 	input[type='range'] {
-		width: 200px;
+		width: 150px;
+	}
+
+	input[type='number']::-webkit-outer-spin-button,
+	input[type='number']::-webkit-inner-spin-button {
+		-webkit-appearance: none;
+		margin: 0;
 	}
 `;
 

@@ -1,10 +1,12 @@
+import React from 'react';
+
 interface PropsType {
-	setData: any;
+	setCondition: React.Dispatch<React.SetStateAction<{}>>;
 }
 
-export default function Filter({ setData }: PropsType) {
+export default function Filter({ setCondition }: PropsType) {
 	setTimeout(() => {
-		setData([]);
+		setCondition({});
 	}, 2000);
 	return <div>Filter</div>;
 }

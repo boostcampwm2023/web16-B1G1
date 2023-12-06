@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import { Button } from 'shared/ui';
 import { Title01 } from '../styles';
 import PlanetEditIcon from '@icons/icon-planetedit-24-white.svg';
+import PlanetEditIconGray from '@icons/icon-planetedit-24-gray.svg';
 import AddIcon from '@icons/icon-add-24-white.svg';
 import AddIconGray from '@icons/icon-add-24-gray.svg';
 import WriteIcon from '@icons/icon-writte-24-white.svg';
@@ -14,10 +15,10 @@ import { useViewStore } from 'shared/store';
 import { useOwnerStore } from 'shared/store/useOwnerStore';
 
 interface PropsType {
-	nickName: string;
+	nickname: string;
 }
 
-export default function UnderBar({ nickName }: PropsType) {
+export default function UnderBar({ nickname }: PropsType) {
 	const navigate = useNavigate();
 
 	const { setView } = useViewStore();
@@ -35,7 +36,7 @@ export default function UnderBar({ nickName }: PropsType) {
 
 	return (
 		<Layout>
-			<Name>{isMyPage ? nickName : pageOwnerNickName}님의 은하</Name>
+			<Name>{isMyPage ? nickname : pageOwnerNickName}님의 은하</Name>
 
 			<ButtonsContainer>
 				<SmallButtonsContainer>
@@ -58,9 +59,13 @@ export default function UnderBar({ nickName }: PropsType) {
 							setView('CUSTOM');
 							navigate('/home/galaxy-custom');
 						}}
+						disabled={!isMyPage}
 					>
-						<img src={PlanetEditIcon} alt="우주 수정하기" />
-						우주 수정하기
+						<img
+							src={isMyPage ? PlanetEditIcon : PlanetEditIconGray}
+							alt="우주 수정하기"
+						/>
+						은하 수정하기
 					</BigButton>
 
 					<BigButton size="l" buttonType="Button" disabled={!isMyPage}>

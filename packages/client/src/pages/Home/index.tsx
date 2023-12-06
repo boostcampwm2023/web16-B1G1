@@ -13,13 +13,20 @@ import { getGalaxy } from 'shared/apis';
 import { useGalaxyStore } from 'shared/store';
 import { Toast } from 'shared/ui';
 import { useToastStore } from 'shared/store';
+import { useOwnerStore } from 'shared/store/useOwnerStore';
+import {
+	SPIRAL,
+	GALAXY_THICKNESS,
+	SPIRAL_START,
+	ARMS_Z_DIST,
+} from 'widgets/galaxy/lib/constants';
 
 export default function Home() {
-	const [nickName, setNickName] = useState('');
-
 	const { view } = useViewStore();
 	const { isSwitching } = useScreenSwitchStore();
 	const { text } = useToastStore();
+	const { pageOwnerNickName } = useOwnerStore();
+	const [nickname, setNickname] = useState('');
 
 	const navigate = useNavigate();
 	const {
@@ -51,16 +58,27 @@ export default function Home() {
 		checkLogin();
 		getSignInInfo().then((res) => {
 			Cookies.set('nickname', res.nickname);
-			setNickName(res.nickname);
-		});
-		getGalaxy(nickName).then((res) => {
-			if (res.spiral && res.spiral !== spiral) setSpiral(res.spiral);
-			if (res.start && res.start !== start) setStart(res.start);
-			if (res.thickness && res.thickness !== thickness)
-				setThickness(res.thickness);
-			if (res.zDist && res.zDist !== zDist) setZDist(res.zDist);
+			setNickname(res.nickname);
 		});
 	}, []);
+
+	useEffect(() => {
+		getGalaxy(pageOwnerNickName).then((res) => {
+			if (!res.spiral && spiral !== SPIRAL) setSpiral(SPIRAL);
+			else if (res.spiral && res.spiral !== spiral) setSpiral(res.spiral);
+
+			if (!res.start && start !== SPIRAL_START) setStart(SPIRAL_START);
+			else if (res.start && res.start !== start) setStart(res.start);
+
+			if (!res.thickness && thickness !== GALAXY_THICKNESS)
+				setThickness(GALAXY_THICKNESS);
+			else if (res.thickness && res.thickness !== thickness)
+				setThickness(res.thickness);
+
+			if (!res.zDist && zDist !== ARMS_Z_DIST) setZDist(ARMS_Z_DIST);
+			else if (res.zDist && res.zDist !== zDist) setZDist(res.zDist);
+		});
+	}, [pageOwnerNickName]);
 
 	return (
 		<>
@@ -72,7 +90,7 @@ export default function Home() {
 			{view === 'MAIN' && (
 				<>
 					<UpperBar />
-					<UnderBar nickName={nickName} />
+					<UnderBar nickname={nickname} />
 				</>
 			)}
 

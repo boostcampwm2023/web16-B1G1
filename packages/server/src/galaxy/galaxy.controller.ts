@@ -9,6 +9,7 @@ import {
 	UseInterceptors,
 	UseGuards,
 	Query,
+	UseFilters,
 } from '@nestjs/common';
 import { GalaxyService } from './galaxy.service';
 import { UpdateGalaxyDto } from './dto/update-galaxy.dto';
@@ -20,9 +21,11 @@ import { UserDataDto } from 'src/auth/dto/user-data.dto';
 import { FindGalaxyMineSwaggerDecorator } from './decorators/swagger/find-galaxy-mine-swagger.decorator';
 import { FindGalaxyByNicknameSwaggerDecorator } from './decorators/swagger/find-galaxy-by-nickname-swagger.decorator';
 import { UpdateGalaxyMineSwaggerDecorator } from './decorators/swagger/update-galaxy-mine-swagger.decorator';
+import { HttpExceptionFilter } from '../exception-filter/http.exception-filter';
 
 @Controller('galaxy')
 @UseInterceptors(LogInterceptor)
+@UseFilters(HttpExceptionFilter)
 @ApiTags('은하 API')
 export class GalaxyController {
 	constructor(private readonly galaxyService: GalaxyService) {}

@@ -8,6 +8,7 @@ import {
 	Query,
 	ParseIntPipe,
 	UseInterceptors,
+	UseFilters,
 } from '@nestjs/common';
 import { StarService } from './star.service';
 import { UpdateStarDto } from './dto/update-star.dto';
@@ -21,9 +22,11 @@ import { FindAllStarsByAuthorSwaggerDecorator } from './decorators/swagger/find-
 import { UpdateStarByPostIdSwaggerDecorator } from './decorators/swagger/update-star-by-post-id-swagger.decorator';
 import { Star } from './schemas/star.schema';
 import { LogInterceptor } from '../interceptor/log.interceptor';
+import { HttpExceptionFilter } from '../exception-filter/http.exception-filter';
 
 @Controller('star')
 @UseInterceptors(LogInterceptor)
+@UseFilters(HttpExceptionFilter)
 @ApiTags('별 API')
 export class StarController {
 	constructor(private readonly starService: StarService) {}

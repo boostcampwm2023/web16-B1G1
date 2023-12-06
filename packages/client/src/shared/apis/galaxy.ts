@@ -16,7 +16,14 @@ export const getGalaxy = async (nickname: string) => {
 	return data;
 };
 
-export const postGalaxy = async (galaxyStyle: Object) => {
+interface GalaxyStyle {
+	spiral?: number;
+	start?: number;
+	zDist?: number;
+	thickness?: number;
+}
+
+export const postGalaxy = async (galaxyStyle: GalaxyStyle) => {
 	const { data } = await instance({
 		method: 'PATCH',
 		url: `/galaxy`,

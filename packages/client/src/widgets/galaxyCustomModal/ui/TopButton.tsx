@@ -3,13 +3,13 @@ import { useCustomStore, useGalaxyStore } from 'shared/store';
 import { RotateCcw } from 'lucide-react';
 
 export default function TopButton() {
-	const custom = useCustomStore();
+	const { setSpiral, setStart, setZDist, setThickness } = useCustomStore();
 	const { spiral, start, zDist, thickness } = useGalaxyStore();
 	const handleClick = () => {
-		if (custom.spiral !== spiral) custom.setSpiral(spiral);
-		if (custom.start !== start) custom.setStart(start);
-		if (custom.zDist !== zDist) custom.setZDist(zDist);
-		if (custom.thickness !== thickness) custom.setThickness(thickness);
+		setSpiral(spiral);
+		setStart(start);
+		setZDist(zDist);
+		setThickness(thickness);
 	};
 
 	return (

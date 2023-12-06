@@ -1,4 +1,3 @@
-import Star from 'features/star';
 import { useRef } from 'react';
 import { useCameraStore } from 'shared/store/useCameraStore';
 import { ThreeEvent } from '@react-three/fiber';
@@ -10,6 +9,7 @@ import { StarType } from 'shared/lib/types/star';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import theme from 'shared/ui/styles/theme';
+import Star from 'features/star/Star';
 
 interface PropsType {
 	data: StarType;

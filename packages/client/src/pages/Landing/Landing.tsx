@@ -1,4 +1,4 @@
-import LandingScreen from 'widgets/landingScreen';
+import LandingScreen from 'widgets/landingScreen/LandingScreen';
 import { useState } from 'react';
 import { useToastStore } from 'shared/store/useToastStore';
 import { Toast } from 'shared/ui';

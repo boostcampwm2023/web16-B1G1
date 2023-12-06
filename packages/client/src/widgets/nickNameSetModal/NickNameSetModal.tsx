@@ -41,6 +41,11 @@ export default function NickNameSetModal() {
 		}
 	};
 
+	const handleGoBackButton = () => {
+		if (!platform) return navigate('/signup');
+		return navigate('/login');
+	};
+
 	const saveButton = (
 		<Button
 			onClick={handleSaveButton}
@@ -58,6 +63,7 @@ export default function NickNameSetModal() {
 			title="닉네임 설정"
 			rightButton={saveButton}
 			description="서비스 이용에 사용할 닉네임을 정해주세요"
+			onClickGoBack={handleGoBackButton}
 		>
 			<NickNameInputContainer setValidNickName={setValidNickName} />
 		</Modal>

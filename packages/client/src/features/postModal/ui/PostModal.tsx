@@ -13,6 +13,7 @@ import ImageSlider from './ImageSlider';
 import Like from 'entities/like/Like';
 import InputBar from 'shared/ui/inputBar/InputBar';
 import instance from 'shared/apis/AxiosInterceptor';
+import { useToastStore } from 'shared/store';
 
 export default function PostModal() {
 	const { setView } = useViewStore();
@@ -23,6 +24,7 @@ export default function PostModal() {
 	const [isEdit, setIsEdit] = useState(false);
 	const [content, setContent] = useState('');
 	const [title, setTitle] = useState('');
+	const { setText } = useToastStore();
 
 	useEffect(() => {
 		setContent(data?.content ?? '');
@@ -40,9 +42,10 @@ export default function PostModal() {
 		});
 		if (res.status === 200) {
 			setIsEdit(false);
+			setText('글이 수정되었습니다.');
 			refetch();
 		} else {
-			alert('글 수정 실패');
+			setText('글 수정에 실패했습니다.');
 		}
 	};
 
@@ -68,7 +71,7 @@ export default function PostModal() {
 				setIsEdit(true);
 			}}
 		>
-			수정하기
+			수정
 		</Button>
 	);
 
@@ -81,7 +84,7 @@ export default function PostModal() {
 				setIsEdit(false);
 			}}
 		>
-			취소하기
+			취소
 		</Button>
 	);
 
@@ -95,7 +98,7 @@ export default function PostModal() {
 				handleEditSave();
 			}}
 		>
-			저장하기
+			저장
 		</Button>
 	);
 
@@ -103,11 +106,12 @@ export default function PostModal() {
 		const res = await deletePost(postId!);
 		setDeleteModal(false);
 		if (res.status === 200) {
+			setText('글을 삭제했습니다.');
 			setView('MAIN');
 			navigate('/home');
-			window.location.reload();
+			// window.location.reload();
 		} else {
-			alert('글 삭제 실패');
+			setText('글 삭제에 실패했습니다.');
 		}
 	};
 

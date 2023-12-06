@@ -4,3 +4,4 @@ export * from './useToastStore';
 export * from './useViewStore';
 export * from './useCustomStore';
 export * from './useGalaxyStore';
+export * from './usePostStore';

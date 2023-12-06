@@ -28,7 +28,6 @@ export default function UnderBar({ nickName }: PropsType) {
 
 		Cookies.remove('accessToken');
 		Cookies.remove('refreshToken');
-		Cookies.remove('userId');
 		Cookies.remove('nickname');
 
 		navigate('/');
@@ -57,7 +56,7 @@ export default function UnderBar({ nickName }: PropsType) {
 						buttonType="Button"
 						onClick={() => {
 							setView('CUSTOM');
-							navigate('/home/custom');
+							navigate('/home/galaxy-custom');
 						}}
 					>
 						<img src={PlanetEditIcon} alt="우주 수정하기" />

@@ -3,31 +3,36 @@ import * as THREE from 'three';
 import { useFrame, ThreeEvent } from '@react-three/fiber';
 import { DISTANCE_LIMIT } from './lib/constants';
 import { useForwardRef } from 'shared/hooks';
+import { Geometry } from './model';
+import { ShapeType } from '@constants';
 
 interface PropsType {
 	children?: React.ReactNode;
 	position: THREE.Vector3;
 	size: number;
 	color: string;
+	brightness: number;
 	onClick?: (e: ThreeEvent<MouseEvent>) => void;
-	onPointerOver?: (e: React.MouseEvent) => void;
-	onPointerOut?: (e: React.MouseEvent) => void;
+	onPointerOver?: (e: ThreeEvent<MouseEvent>) => void;
+	onPointerOut?: (e: ThreeEvent<MouseEvent>) => void;
+	shape?: ShapeType;
 }
 
 const Star = forwardRef<THREE.Mesh, PropsType>((props, ref) => {
 	const innerRef = useForwardRef(ref);
-
 	const {
 		children,
 		position,
 		size,
 		color,
+		brightness,
 		onClick,
 		onPointerOver,
 		onPointerOut,
+		shape,
 	} = props;
 
-	useFrame((state) => {
+	useFrame((state, delta) => {
 		const cameraDistance = innerRef.current.position.distanceTo(
 			state.camera.position,
 		);
@@ -38,6 +43,9 @@ const Star = forwardRef<THREE.Mesh, PropsType>((props, ref) => {
 			innerRef.current!.scale.y = scale;
 			innerRef.current!.scale.z = scale;
 		}
+
+		innerRef.current.rotation.x += delta / 5;
+		innerRef.current.rotation.y += delta / 5;
 	});
 
 	return (
@@ -48,11 +56,18 @@ const Star = forwardRef<THREE.Mesh, PropsType>((props, ref) => {
 			onPointerOver={onPointerOver}
 			onPointerOut={onPointerOut}
 		>
-			<sphereGeometry args={[size, 32, 16]} />
-			<meshStandardMaterial
+			<Geometry size={size} shape={shape} />
+			{/* <meshStandardMaterial
 				color={color}
 				emissive={color}
 				emissiveIntensity={2}
+				roughness={1}
+				metalness={0.5}
+			/> */}
+			<meshToonMaterial
+				color={color}
+				emissive={color}
+				emissiveIntensity={brightness}
 			/>
 			{children}
 		</mesh>

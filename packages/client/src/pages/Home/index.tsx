@@ -11,12 +11,17 @@ import Cookies from 'js-cookie';
 import { getSignInInfo } from 'shared/apis';
 import { getGalaxy } from 'shared/apis';
 import { useGalaxyStore } from 'shared/store';
+import { Toast } from 'shared/ui';
+import { useToastStore } from 'shared/store';
 
 export default function Home() {
+	const [nickName, setNickName] = useState('');
+
 	const { view } = useViewStore();
 	const { isSwitching } = useScreenSwitchStore();
+	const { text } = useToastStore();
+
 	const navigate = useNavigate();
-	const [nickName, setNickName] = useState('');
 	const {
 		spiral,
 		setSpiral,
@@ -62,6 +67,7 @@ export default function Home() {
 			<Outlet />
 
 			{isSwitching && <WarpScreen />}
+			{text && <Toast>{text}</Toast>}
 
 			{view === 'MAIN' && (
 				<>

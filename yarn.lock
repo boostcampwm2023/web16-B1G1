@@ -942,6 +942,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@icons/material@npm:^0.2.4":
+  version: 0.2.4
+  resolution: "@icons/material@npm:0.2.4"
+  peerDependencies:
+    react: "*"
+  checksum: 133518adf91010704b716e7671fc28bcc3c461dc4f4a56ad3a73a955b9993dfaa22494579e9377247fd3318baebe8e4ae7962c01bffeaca0044722c09baa9d73
+  languageName: node
+  linkType: hard
+
 "@ioredis/commands@npm:^1.1.1":
   version: 1.2.0
   resolution: "@ioredis/commands@npm:1.2.0"
@@ -2765,6 +2774,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/react-color@npm:^3.0.10":
+  version: 3.0.10
+  resolution: "@types/react-color@npm:3.0.10"
+  dependencies:
+    "@types/react": "npm:*"
+    "@types/reactcss": "npm:*"
+  checksum: e25c98906825c930ad51f801791554d01fc4b205552d350e81b9c855a5f32a68fc44204769642cdcef631b9e87c87adddd3a1d3a8ed5cc12ccb9e176478a6ece
+  languageName: node
+  linkType: hard
+
 "@types/react-dom@npm:^18.2.7":
   version: 18.2.15
   resolution: "@types/react-dom@npm:18.2.15"
@@ -2821,6 +2840,15 @@ __metadata:
     "@types/scheduler": "npm:*"
     csstype: "npm:^3.0.2"
   checksum: 79dd5d23da05bec54e7423ca17096e345eb8fd80a3bf8dd916bb5cdd60677d27c298523aa5b245d090fcc4ec100cfd58c1af4631fbac709d0a9d8be75f9d78a9
+  languageName: node
+  linkType: hard
+
+"@types/reactcss@npm:*":
+  version: 1.2.10
+  resolution: "@types/reactcss@npm:1.2.10"
+  dependencies:
+    "@types/react": "npm:*"
+  checksum: d53d833c89105e63f20bb204737cf1fbc03fe18be02d3820f12e352cbaf40c273389ca09e5d6c400c68641c291c07804b9765ab44c7dac2ebae28d46c72dcedb
   languageName: node
   linkType: hard
 
@@ -4389,6 +4417,7 @@ __metadata:
     "@types/js-cookie": "npm:^3.0.6"
     "@types/node": "npm:^20.9.2"
     "@types/react": "npm:^18.2.15"
+    "@types/react-color": "npm:^3.0.10"
     "@types/react-dom": "npm:^18.2.7"
     "@types/react-router-dom": "npm:^5.3.3"
     "@types/three": "npm:^0.158.2"
@@ -4404,6 +4433,7 @@ __metadata:
     leva: "npm:^0.9.35"
     lucide-react: "npm:^0.294.0"
     react: "npm:^18.2.0"
+    react-color: "npm:^2.19.3"
     react-dom: "npm:^18.2.0"
     react-markdown: "npm:^9.0.1"
     react-router-dom: "npm:^6.18.0"
@@ -7741,6 +7771,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"lodash-es@npm:^4.17.15":
+  version: 4.17.21
+  resolution: "lodash-es@npm:4.17.21"
+  checksum: fb407355f7e6cd523a9383e76e6b455321f0f153a6c9625e21a8827d10c54c2a2341bd2ae8d034358b60e07325e1330c14c224ff582d04612a46a4f0479ff2f2
+  languageName: node
+  linkType: hard
+
 "lodash.clamp@npm:^4.0.3":
   version: 4.0.3
   resolution: "lodash.clamp@npm:4.0.3"
@@ -7839,7 +7876,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash@npm:4.17.21, lodash@npm:^4.17.15, lodash@npm:^4.17.21":
+"lodash@npm:4.17.21, lodash@npm:^4.0.1, lodash@npm:^4.17.15, lodash@npm:^4.17.21":
   version: 4.17.21
   resolution: "lodash@npm:4.17.21"
   checksum: d8cbea072bb08655bb4c989da418994b073a608dffa608b09ac04b43a791b12aeae7cd7ad919aa4c925f33b48490b5cfe6c1f71d827956071dae2e7bb3a6b74c
@@ -8031,6 +8068,13 @@ __metadata:
   version: 3.0.3
   resolution: "markdown-table@npm:3.0.3"
   checksum: 47433a3f31e4637a184e38e873ab1d2fadfb0106a683d466fec329e99a2d8dfa09f091fa42202c6f13ec94aef0199f449a684b28042c636f2edbc1b7e1811dcd
+  languageName: node
+  linkType: hard
+
+"material-colors@npm:^1.2.1":
+  version: 1.2.6
+  resolution: "material-colors@npm:1.2.6"
+  checksum: 6502ab25b23b783cca4112946bc28a64fdba8bf8efcfbb1e76028d21ecc4b88a2b1338dacf1b64e4b6af46ab98984080586002cdaa9428dc91f6fdcc6909b12a
   languageName: node
   linkType: hard
 
@@ -9667,7 +9711,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prop-types@npm:^15.6.0, prop-types@npm:^15.8.1":
+"prop-types@npm:^15.5.10, prop-types@npm:^15.6.0, prop-types@npm:^15.8.1":
   version: 15.8.1
   resolution: "prop-types@npm:15.8.1"
   dependencies:
@@ -9833,6 +9877,23 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-color@npm:^2.19.3":
+  version: 2.19.3
+  resolution: "react-color@npm:2.19.3"
+  dependencies:
+    "@icons/material": "npm:^0.2.4"
+    lodash: "npm:^4.17.15"
+    lodash-es: "npm:^4.17.15"
+    material-colors: "npm:^1.2.1"
+    prop-types: "npm:^15.5.10"
+    reactcss: "npm:^1.2.0"
+    tinycolor2: "npm:^1.4.1"
+  peerDependencies:
+    react: "*"
+  checksum: 6f9fce9ff3014926d960abccd5d79ecb391a41f835a4b85663fd48ff933554391222f40ed8cfc5417305d47b1e480023981ec22e13c3b16b0d8d718270fa815e
+  languageName: node
+  linkType: hard
+
 "react-colorful@npm:^5.5.1":
   version: 5.6.1
   resolution: "react-colorful@npm:5.6.1"
@@ -9982,6 +10043,15 @@ __metadata:
   dependencies:
     loose-envify: "npm:^1.1.0"
   checksum: b562d9b569b0cb315e44b48099f7712283d93df36b19a39a67c254c6686479d3980b7f013dc931f4a5a3ae7645eae6386b4aa5eea933baa54ecd0f9acb0902b8
+  languageName: node
+  linkType: hard
+
+"reactcss@npm:^1.2.0":
+  version: 1.2.3
+  resolution: "reactcss@npm:1.2.3"
+  dependencies:
+    lodash: "npm:^4.0.1"
+  checksum: a3aceb0fbfd58312f0c7fadbe92920e6536ec24d17ebee44fd4a14dd831d413fff5c2df0e85579b440667935e57a06876325cbd1368d3131824a8c2ec43b7978
   languageName: node
   linkType: hard
 
@@ -11243,6 +11313,13 @@ __metadata:
   version: 2.3.8
   resolution: "through@npm:2.3.8"
   checksum: 4b09f3774099de0d4df26d95c5821a62faee32c7e96fb1f4ebd54a2d7c11c57fe88b0a0d49cf375de5fee5ae6bf4eb56dbbf29d07366864e2ee805349970d3cc
+  languageName: node
+  linkType: hard
+
+"tinycolor2@npm:^1.4.1":
+  version: 1.6.0
+  resolution: "tinycolor2@npm:1.6.0"
+  checksum: 9aa79a36ba2c2a87cb221453465cabacd04b9e35f9694373e846fdc78b1c768110f81e581ea41440106c0f24d9a023891d0887e8075885e790ac40eb0e74a5c1
   languageName: node
   linkType: hard
 

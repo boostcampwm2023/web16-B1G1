@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom';
+import { Link, Route, Routes } from 'react-router-dom';
 import './App.css';
 
 import Board from './components/Board/Board.tsx';
@@ -10,10 +10,10 @@ function App() {
 	return (
 		<>
 			<Nav>
-				<a href="/admin">Home</a>
-				<a href="/admin/board">Board</a>
-				<a href="/admin/system-info">System Info</a>
-				<a href={'/admin/exception-statistics'}>Exception Statistics</a>
+				<Link to={'/admin'}>Home</Link>
+				<Link to={'/admin/board'}>Board</Link>
+				<Link to={'/admin/system-info'}>System Info</Link>
+				<Link to={'/admin/exception-statistics'}>Exception Statistics</Link>
 			</Nav>
 			<Routes>
 				<Route path="/admin" element={<div>Home</div>} />

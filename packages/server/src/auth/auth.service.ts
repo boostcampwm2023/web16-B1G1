@@ -200,10 +200,16 @@ export class AuthService {
 
 		this.redisRepository.del(resourceServerUsername);
 
+		// galaxy도 default로 MongoDB에 저장 후 id 반환
+		const galaxyDoc = new this.starModel({});
+		await galaxyDoc.save();
+		const galaxy_id: string = galaxyDoc._id.toString();
+
 		const newUser: User = this.userRepository.create({
 			username: resourceServerUsername,
 			password: uuid(),
 			nickname,
+			galaxy: galaxy_id,
 		});
 
 		const savedUser: User = await this.userRepository.save(newUser);

@@ -13,11 +13,7 @@ import instance from 'shared/apis/AxiosInterceptor';
 import { useViewStore } from 'shared/store';
 import { useOwnerStore } from 'shared/store/useOwnerStore';
 
-interface PropsType {
-	nickName: string;
-}
-
-export default function UnderBar({ nickName }: PropsType) {
+export default function UnderBar() {
 	const navigate = useNavigate();
 
 	const { setView } = useViewStore();
@@ -35,7 +31,7 @@ export default function UnderBar({ nickName }: PropsType) {
 
 	return (
 		<Layout>
-			<Name>{isMyPage ? nickName : pageOwnerNickName}님의 은하</Name>
+			<Name>{pageOwnerNickName}님의 은하</Name>
 
 			<ButtonsContainer>
 				<SmallButtonsContainer>

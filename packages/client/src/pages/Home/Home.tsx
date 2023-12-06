@@ -1,8 +1,8 @@
-import Screen from 'widgets/screen';
+import Screen from 'widgets/screen/Screen';
 import { useViewStore } from 'shared/store/useViewStore';
 import { Outlet, useNavigate } from 'react-router-dom';
-import UnderBar from 'shared/ui/underBar/UnderBar';
-import UpperBar from './ui/UpperBar';
+import UnderBar from 'widgets/underBar/UnderBar';
+import UpperBar from '../../widgets/upperBar/UpperBar';
 import WarpScreen from 'widgets/warpScreen/WarpScreen';
 import { useEffect, useState } from 'react';
 import instance from 'shared/apis/AxiosInterceptor';
@@ -32,21 +32,19 @@ export default function Home() {
 	const { setSpiral, setStart, setThickness, setZDist } = useGalaxyStore();
 
 	useEffect(() => {
-		const checkLogin = async () => {
+		(async () => {
 			try {
 				const res = await instance({
 					method: 'GET',
 					url: `/auth/check-signin`,
 				});
-				if (res.status !== 200) {
-					navigate('/login');
-				}
+
+				if (res.status !== 200) navigate('/login');
 			} catch (error) {
-				console.error(error);
 				navigate('/login');
 			}
-		};
-		checkLogin();
+		})();
+
 		getSignInInfo().then((res) => {
 			Cookies.set('nickname', res.nickname);
 			setNickname(res.nickname);

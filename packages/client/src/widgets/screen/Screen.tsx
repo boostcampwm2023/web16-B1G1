@@ -1,5 +1,5 @@
 import { Canvas } from '@react-three/fiber';
-import BackgroundStars from 'features/backgroundStars';
+import BackgroundStars from 'features/backgroundStars/BackgroundStars';
 import { Galaxy } from '../galaxy';
 import { EffectComposer, Bloom } from '@react-three/postprocessing';
 import { Leva, useControls } from 'leva';

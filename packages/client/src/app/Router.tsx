@@ -3,16 +3,17 @@ import {
 	createBrowserRouter,
 	createRoutesFromElements,
 } from 'react-router-dom';
-import Home from '../pages/Home';
-import Landing from '../pages/Landing';
-import { WritingModal } from 'features/writingModal';
-import LoginModal from 'widgets/loginModal';
+import Home from '../pages/Home/Home';
+import Landing from '../pages/Landing/Landing';
+import { WritingModal } from 'features/writingModal/WritingModal';
+import LoginModal from 'widgets/loginModal/LoginModal';
 import SignUpModal from 'widgets/signupModal/SignUpModal';
 import NickNameSetModal from 'widgets/nickNameSetModal/NickNameSetModal';
-import LogoAndStart from 'widgets/logoAndStart';
+import LogoAndStart from 'widgets/logoAndStart/LogoAndStart';
 import { PostModal } from 'features/postModal';
 import GalaxyCustomModal from 'widgets/galaxyCustomModal/GalaxyCustomModal';
 import StarCustomModal from 'widgets/starCustomModal/StarCustomModal';
+import ShareModal from 'widgets/shareModal/ShareModal';
 
 export const router = createBrowserRouter(
 	createRoutesFromElements(
@@ -33,6 +34,7 @@ export const router = createBrowserRouter(
 				<Route path="writing" element={<WritingModal />} />
 				<Route path="galaxy-custom" element={<GalaxyCustomModal />} />
 				<Route path="star-custom" element={<StarCustomModal />} />
+				<Route path="share" element={<ShareModal />} />
 			</Route>
 		</>,
 	),

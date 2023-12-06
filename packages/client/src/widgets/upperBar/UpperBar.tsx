@@ -9,6 +9,7 @@ import { useOwnerStore } from 'shared/store/useOwnerStore';
 import Cookies from 'js-cookie';
 
 export default function UpperBar() {
+	// TODO: ui 분리하기
 	const [searchValue, setSearchValue] = useState('');
 	const [debouncedSearchValue, setDebouncedSearchValue] = useState('');
 	const [searchResults, setSearchResults] = useState([]);

@@ -1,6 +1,6 @@
 import { Canvas } from '@react-three/fiber';
-import BackgroundStars from 'features/backgroundStars';
-import { Galaxy } from '../galaxy';
+import BackgroundStars from 'features/backgroundStars/BackgroundStars.tsx';
+import { Galaxy } from '../galaxy/index.ts';
 import { EffectComposer, Bloom } from '@react-three/postprocessing';
 import { CAMERA_POSITION, CAMERA_UP, CAMERA_FAR } from './lib/camera.ts';
 

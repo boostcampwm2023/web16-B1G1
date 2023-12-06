@@ -15,7 +15,9 @@ export default function LinkContainer() {
 
 		(async () => {
 			const shareLinkData = await getShareLink(nickName);
-			setShareLink(shareLinkData.link);
+			setShareLink(
+				'https://www.xn--bj0b03z.site/' + 'guest/' + shareLinkData.link,
+			);
 		})();
 	}, []);
 

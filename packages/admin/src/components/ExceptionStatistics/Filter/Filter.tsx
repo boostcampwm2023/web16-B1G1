@@ -8,24 +8,13 @@ interface PropsType {
 }
 
 export default function Filter({ exceptionData, setCondition }: PropsType) {
-	const currentDate = new Date();
-	const year = currentDate.getFullYear();
-	const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-	const day = String(currentDate.getDate()).padStart(2, '0');
-	const defaultStartDate = `${year}-${month}-01`;
-	const defaultEndDate = `${year}-${month}-${day}`;
+	const [defaultStartDate, defaultEndDate] = getDates();
+	const [pathSet, errorSet] = getSets(exceptionData);
 
 	const [path, setPath] = useState('');
 	const [error, setError] = useState('');
 	const [startDate, setStartDate] = useState(defaultStartDate);
 	const [endDate, setEndDate] = useState(defaultEndDate);
-
-	const pathSet = new Set(
-		exceptionData.map((exception: any) => exception.path),
-	);
-	const errorSet = new Set(
-		exceptionData.map((exception: any) => exception.error),
-	);
 
 	const selectPath = (e: any) => {
 		setPath(e.target.value);
@@ -82,4 +71,24 @@ export default function Filter({ exceptionData, setCondition }: PropsType) {
 			<Button onClick={changeCondition}>검색</Button>
 		</div>
 	);
+}
+
+function getDates() {
+	const currentDate = new Date();
+	const year = currentDate.getFullYear();
+	const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+	const day = String(currentDate.getDate()).padStart(2, '0');
+	const defaultStartDate = `${year}-${month}-01`;
+	const defaultEndDate = `${year}-${month}-${day}`;
+	return [defaultStartDate, defaultEndDate];
+}
+
+function getSets(exceptionData: Exception[]) {
+	const pathSet = new Set(
+		exceptionData.map((exception: any) => exception.path),
+	);
+	const errorSet = new Set(
+		exceptionData.map((exception: any) => exception.error),
+	);
+	return [pathSet, errorSet];
 }

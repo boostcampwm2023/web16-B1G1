@@ -1,37 +1,37 @@
 import styled from '@emotion/styled';
 import { Body02ME, Body03ME } from 'shared/ui/styles';
 import checkIcon from '@icons/icon-check-purple.svg';
-import { useEffect } from 'react';
-import { getSignInInfo } from 'shared/apis';
+import { SearchStatusType } from '../lib/types';
 
 interface PropsTypes {
-	isSearchable: boolean;
-	setIsSearchable: React.Dispatch<React.SetStateAction<boolean>>;
+	searchStatus: SearchStatusType;
+	setSearchStatus: React.Dispatch<React.SetStateAction<SearchStatusType>>;
 }
 
 export default function SearchSetContainer({
-	isSearchable,
-	setIsSearchable,
+	searchStatus,
+	setSearchStatus,
 }: PropsTypes) {
-	const handleCheckBox = () => setIsSearchable(!isSearchable);
+	const handleCheckBox = () => {
+		if (searchStatus === 'private') return setSearchStatus('public');
+		return setSearchStatus('private');
+	};
 
-	useEffect(() => {
-		(async () => {
-			const res = await getSignInInfo();
-			console.log(res);
-		})();
-	}, []);
+	const getIsSearchable = () => {
+		if (searchStatus === 'private') return false;
+		return true;
+	};
 
 	return (
 		<Layout>
 			<SearchSetLabel>검색 허용</SearchSetLabel>
 			<SearchSetCheckBox
 				type="checkbox"
-				checked={isSearchable}
+				checked={getIsSearchable()}
 				onChange={handleCheckBox}
 			/>
 			<SearchSetDescription>
-				{isSearchable
+				{getIsSearchable()
 					? '다른 사람이 내 은하를 검색할 수 있습니다.'
 					: '다른 사람이 내 은하를 검색할 수 없습니다.'}
 			</SearchSetDescription>

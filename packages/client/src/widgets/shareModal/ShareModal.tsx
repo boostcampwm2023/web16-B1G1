@@ -1,13 +1,49 @@
 import { Button, Modal } from 'shared/ui';
 import LinkContainer from './ui/LinkContainer';
 import SearchSetContainer from './ui/SearchSetContainer';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { getSignInInfo } from 'shared/apis';
+import { SearchStatusType } from './lib/types';
+import { useToastStore, useViewStore } from 'shared/store';
+import { useNavigate } from 'react-router-dom';
+import { patchShareStatus } from 'shared/apis/share';
 
 export default function ShareModal() {
-	const [isSearchable, setIsSearchable] = useState(false);
+	const [originalSearchStatus, setOriginalSearchStatus] =
+		useState<SearchStatusType>('default');
+	const [newSearchStatus, setNewSearchStatus] =
+		useState<SearchStatusType>('default');
 
-	const handleSaveButton = () => {
-		// TODO: 공개 상태가 바뀌었다면 API 호출
+	const { setText } = useToastStore();
+	const { setView } = useViewStore();
+
+	const navigate = useNavigate();
+
+	useEffect(() => {
+		(async () => {
+			const userData = await getSignInInfo();
+
+			setOriginalSearchStatus(userData.status);
+			setNewSearchStatus(userData.status);
+		})();
+	}, []);
+
+	const handleSaveButton = async () => {
+		if (newSearchStatus === 'default') return;
+
+		if (originalSearchStatus !== newSearchStatus) {
+			await patchShareStatus(newSearchStatus);
+		}
+
+		setText('공유 설정이 변경되었습니다.');
+		setView('MAIN');
+		navigate('/home');
+	};
+
+	const handleGoBackButton = () => {
+		setNewSearchStatus(originalSearchStatus);
+		setView('MAIN');
+		navigate('/home');
 	};
 
 	const rightButton = (
@@ -21,8 +57,6 @@ export default function ShareModal() {
 		</Button>
 	);
 
-	const handleGoBackButton = () => {};
-
 	return (
 		<Modal
 			title="공유하기"
@@ -31,8 +65,8 @@ export default function ShareModal() {
 			onClickGoBack={handleGoBackButton}
 		>
 			<SearchSetContainer
-				isSearchable={isSearchable}
-				setIsSearchable={setIsSearchable}
+				searchStatus={newSearchStatus}
+				setSearchStatus={setNewSearchStatus}
 			/>
 			<LinkContainer />
 		</Modal>

@@ -15,7 +15,7 @@ export default function LinkContainer() {
 
 		(async () => {
 			const shareLinkData = await getShareLink(nickName);
-			setShareLink(shareLinkData);
+			setShareLink(shareLinkData.link);
 		})();
 	}, []);
 

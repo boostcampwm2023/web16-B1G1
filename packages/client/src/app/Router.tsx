@@ -13,6 +13,7 @@ import LogoAndStart from 'widgets/logoAndStart/LogoAndStart';
 import { PostModal } from 'features/postModal';
 import GalaxyCustomModal from 'widgets/galaxyCustomModal/GalaxyCustomModal';
 import StarCustomModal from 'widgets/starCustomModal/StarCustomModal';
+import ShareModal from 'widgets/shareModal/ShareModal';
 
 export const router = createBrowserRouter(
 	createRoutesFromElements(

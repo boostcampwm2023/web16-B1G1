@@ -54,35 +54,113 @@ export default function Filter({ exceptionData, setCondition }: PropsType) {
 	};
 
 	return (
-		<div>
-			<select name="path" onChange={selectPath}>
-				<option value="">모두 보기</option>
+		<div
+			style={{
+				display: 'flex',
+				alignItems: 'center',
+				justifyContent: 'space-between',
+				gap: '1rem',
+				height: '100%',
+			}}
+		>
+			<div
+				style={{
+					backgroundColor: '#bd9494',
+					width: '300px',
+				}}
+			>
+				<p
+					style={{
+						fontSize: '1.5rem',
+						borderBottom: '1px solid white',
+					}}
+				>
+					경로 필터
+				</p>
 				{[...pathSet].map((path: any) => (
-					<option key={path} value={path}>
-						{path}
-					</option>
+					<div key={path}>
+						<input
+							type="checkbox"
+							id={path} // 식별자로 사용될 값
+							defaultChecked={true}
+							value={path} // 실제 값
+							onChange={selectPath}
+						/>
+						<label htmlFor={path}>{path}</label>
+					</div>
 				))}
-			</select>
-			<select name="error" onChange={selectError}>
-				<option value="">모두 보기</option>
+			</div>
+			<div
+				style={{
+					backgroundColor: '#9cbd94',
+					width: '300px',
+				}}
+			>
+				<p
+					style={{
+						fontSize: '1.5rem',
+						borderBottom: '1px solid white',
+					}}
+				>
+					에러 필터
+				</p>
 				{[...errorSet].map((error: any) => (
-					<option key={error} value={error}>
-						{error}
-					</option>
+					<div key={error}>
+						<input
+							type="checkbox"
+							id={error} // 식별자로 사용될 값
+							defaultChecked={true}
+							value={error} // 실제 값
+							onChange={selectError}
+						/>
+						<label htmlFor={error}>{error}</label>
+					</div>
 				))}
-			</select>
-			<input
-				type="date"
-				onChange={selectStartDate}
-				defaultValue={defaultStartDate}
-				max={endDateCondition}
-			/>
-			<input
-				type="date"
-				onChange={selectEndDate}
-				defaultValue={defaultEndDate}
-				min={startDateCondition}
-			/>
+			</div>
+			<div
+				style={{
+					backgroundColor: '#b794bd',
+					width: '150px',
+				}}
+			>
+				<p
+					style={{
+						fontSize: '1.5rem',
+						borderBottom: '1px solid white',
+					}}
+				>
+					시작 날짜
+				</p>
+				<input
+					type="date"
+					onChange={selectStartDate}
+					defaultValue={defaultStartDate}
+					max={endDateCondition}
+					style={{ width: '128.75px' }}
+				/>
+			</div>
+			<div
+				style={{
+					backgroundColor: '#94b5bd',
+					width: '150px',
+				}}
+			>
+				<p
+					style={{
+						fontSize: '1.5rem',
+						borderBottom: '1px solid white',
+					}}
+				>
+					종료 날짜
+				</p>
+				<input
+					type="date"
+					onChange={selectEndDate}
+					defaultValue={defaultEndDate}
+					min={startDateCondition}
+					style={{ width: '128.75px' }}
+				/>
+			</div>
 			<Button onClick={changeCondition}>검색</Button>
 		</div>
 	);

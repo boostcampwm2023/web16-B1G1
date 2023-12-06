@@ -13,13 +13,13 @@ export default function SearchSetContainer({
 	setSearchStatus,
 }: PropsTypes) {
 	const handleCheckBox = () => {
-		if (searchStatus === 'private') return setSearchStatus('public');
-		return setSearchStatus('private');
+		if (searchStatus === 'public') return setSearchStatus('private');
+		return setSearchStatus('public');
 	};
 
 	const getIsSearchable = () => {
-		if (searchStatus === 'private') return false;
-		return true;
+		if (searchStatus === 'public') return true;
+		return false;
 	};
 
 	return (

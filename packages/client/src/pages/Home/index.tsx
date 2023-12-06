@@ -4,7 +4,7 @@ import { Outlet, useNavigate } from 'react-router-dom';
 import UnderBar from 'shared/ui/underBar/UnderBar';
 import UpperBar from './ui/UpperBar';
 import WarpScreen from 'widgets/warpScreen/WarpScreen';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import instance from 'shared/apis/AxiosInterceptor';
 import { useScreenSwitchStore } from 'shared/store/useScreenSwitchStore';
 import Cookies from 'js-cookie';
@@ -25,7 +25,8 @@ export default function Home() {
 	const { view } = useViewStore();
 	const { isSwitching } = useScreenSwitchStore();
 	const { text } = useToastStore();
-	const { pageOwnerNickName, setPageOwnerNickName } = useOwnerStore();
+	const { pageOwnerNickName } = useOwnerStore();
+	const [nickname, setNickname] = useState('');
 
 	const navigate = useNavigate();
 	const {
@@ -57,7 +58,7 @@ export default function Home() {
 		checkLogin();
 		getSignInInfo().then((res) => {
 			Cookies.set('nickname', res.nickname);
-			setPageOwnerNickName(res.nickname);
+			setNickname(res.nickname);
 		});
 	}, []);
 
@@ -89,7 +90,7 @@ export default function Home() {
 			{view === 'MAIN' && (
 				<>
 					<UpperBar />
-					<UnderBar />
+					<UnderBar nickname={nickname} />
 				</>
 			)}
 

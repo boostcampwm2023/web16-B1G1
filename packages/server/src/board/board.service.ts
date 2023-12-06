@@ -48,18 +48,20 @@ export class BoardService {
 		});
 
 		const images: Image[] = [];
-		for (const file of files) {
-			// Object Storage에 업로드
-			const imageInfo = await this.uploadFile(file);
+		if (files && files.length > 0) {
+			for (const file of files) {
+				// Object Storage에 업로드
+				const imageInfo = await this.uploadFile(file);
 
-			// 이미지 리포지토리에 저장
-			const image = queryRunner.manager.create(Image, {
-				...imageInfo,
-			});
+				// 이미지 리포지토리에 저장
+				const image = queryRunner.manager.create(Image, {
+					...imageInfo,
+				});
 
-			const createdImage = await queryRunner.manager.save(image);
+				const createdImage = await queryRunner.manager.save(image);
 
-			images.push(createdImage);
+				images.push(createdImage);
+			}
 		}
 
 		// 별 스타일이 존재하면 MongoDB에 저장

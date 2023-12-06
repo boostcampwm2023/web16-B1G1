@@ -1,14 +1,13 @@
 import { Injectable, UseFilters, UseInterceptors } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'src/auth/entities/user.entity';
-import { Board } from 'src/board/entities/board.entity';
+import { User } from '../auth/entities/user.entity';
+import { Board } from '../board/entities/board.entity';
 import { Repository } from 'typeorm';
 import { LogInterceptor } from '../interceptor/log.interceptor';
 import { HttpExceptionFilter } from '../exception-filter/http.exception-filter';
 import * as osUtils from 'os-utils';
 import { exec } from 'child_process';
-import { decryptAes } from 'src/util/aes.util';
-import { awsConfig, bucketName } from 'src/config/aws.config';
+import { awsConfig, bucketName } from '../config/aws.config';
 
 @Injectable()
 @UseInterceptors(LogInterceptor)

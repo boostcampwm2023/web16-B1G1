@@ -5,6 +5,7 @@ import Cookies from 'js-cookie';
 import { useState } from 'react';
 import { postLogin } from 'shared/apis';
 import { useCheckLogin } from 'shared/hooks';
+import { useScreenSwitchStore } from 'shared/store/useScreenSwitchStore';
 
 export default function LoginModal() {
 	const [id, setId] = useState(Cookies.get('userId') ?? '');
@@ -12,6 +13,7 @@ export default function LoginModal() {
 	const [password, setPassword] = useState('');
 	const [passwordState, setPasswordState] = useState(true);
 	const navigate = useNavigate();
+	const { setIsSwitching } = useScreenSwitchStore();
 
 	const isValid = () => {
 		return id.length && password.length && idState && passwordState;
@@ -24,7 +26,13 @@ export default function LoginModal() {
 			password: password,
 		};
 		setPassword('');
-		await postLogin(data, setIdState, setPasswordState, navigate);
+		await postLogin(
+			data,
+			setIdState,
+			setPasswordState,
+			navigate,
+			setIsSwitching,
+		);
 	};
 
 	useCheckLogin();

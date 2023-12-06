@@ -1,5 +1,5 @@
 import { Canvas } from '@react-three/fiber';
-import BackgroundStars from 'features/backgroundStars';
+import BackgroundStars from 'features/backgroundStars/BackgroundStars';
 import { Galaxy } from '../galaxy';
 import { EffectComposer, Bloom } from '@react-three/postprocessing';
 import { Leva, useControls } from 'leva';
@@ -9,6 +9,7 @@ import { useCameraStore } from 'shared/store/useCameraStore.ts';
 import { Posts } from 'entities/posts';
 import styled from '@emotion/styled';
 import { useViewStore } from 'shared/store';
+import { CameraLight } from './ui';
 
 export default function Screen() {
 	const { view } = useViewStore();
@@ -24,7 +25,7 @@ export default function Screen() {
 		mipmapBlur: { value: false },
 	});
 	const { wheelSpeed } = useControls('Controls', {
-		wheelSpeed: { value: 3, min: 0.1, max: 5, step: 0.01 },
+		wheelSpeed: { value: 3, min: 0.1, max: 30, step: 0.1 },
 	});
 
 	return (
@@ -45,11 +46,12 @@ export default function Screen() {
 				</EffectComposer>
 
 				<color attach="background" args={['#070614']} />
-				<ambientLight color="#fff" intensity={5} />
+				<ambientLight color="#fff" intensity={2} />
 				<Controls />
 				<BackgroundStars />
 				<Galaxy />
 				<Posts />
+				<CameraLight />
 			</Canvas>
 			<LevaWrapper>
 				<Leva fill collapsed hidden={view !== 'MAIN'} />

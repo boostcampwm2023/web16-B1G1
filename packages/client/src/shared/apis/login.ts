@@ -1,7 +1,6 @@
 import axios, { AxiosError } from 'axios';
 import Cookies from 'js-cookie';
 import { NavigateFunction } from 'react-router-dom';
-import { useScreenSwitchStore } from 'shared/store/useScreenSwitchStore';
 import instance from './AxiosInterceptor';
 
 axios.defaults.withCredentials = true;
@@ -14,6 +13,7 @@ export const postLogin = async (
 	setIdState: React.Dispatch<React.SetStateAction<boolean>>,
 	setPasswordState: React.Dispatch<React.SetStateAction<boolean>>,
 	navigate: NavigateFunction,
+	setIsSwitching: (value: boolean) => void,
 ) => {
 	try {
 		await instance({
@@ -23,7 +23,6 @@ export const postLogin = async (
 		});
 		Cookies.set('userId', data.username, { path: '/', expires: 7 });
 		navigate('/home');
-		const { setIsSwitching } = useScreenSwitchStore();
 		setIsSwitching(true);
 	} catch (err) {
 		if (err instanceof AxiosError) {

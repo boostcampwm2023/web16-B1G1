@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { Button } from 'shared/ui';
-import { Title01 } from '../styles';
+import { Title01 } from '../../shared/ui/styles';
 import PlanetEditIcon from '@icons/icon-planetedit-24-white.svg';
 import PlanetEditIconGray from '@icons/icon-planetedit-24-gray.svg';
 import AddIcon from '@icons/icon-add-24-white.svg';
@@ -34,6 +34,21 @@ export default function UnderBar({ nickname }: PropsType) {
 		navigate('/');
 	};
 
+	const handleShareButton = () => {
+		setView('SHARE');
+		navigate('/home/share');
+	};
+
+	const handleWritingButton = () => {
+		setView('WRITING');
+		navigate('/home/writing');
+	};
+
+	const handleGalaxyCustomButton = () => {
+		setView('CUSTOM');
+		navigate('/home/galaxy-custom');
+	};
+
 	return (
 		<Layout>
 			<Name>{isMyPage ? nickname : pageOwnerNickName}님의 은하</Name>
@@ -44,7 +59,12 @@ export default function UnderBar({ nickname }: PropsType) {
 						로그아웃
 					</Button>
 
-					<Button size="m" buttonType="Button" disabled={!isMyPage}>
+					<Button
+						size="m"
+						buttonType="Button"
+						disabled={!isMyPage}
+						onClick={handleShareButton}
+					>
 						공유하기
 					</Button>
 				</SmallButtonsContainer>
@@ -55,15 +75,12 @@ export default function UnderBar({ nickname }: PropsType) {
 					<BigButton
 						size="l"
 						buttonType="Button"
-						onClick={() => {
-							setView('CUSTOM');
-							navigate('/home/galaxy-custom');
-						}}
+						onClick={handleGalaxyCustomButton}
 						disabled={!isMyPage}
 					>
 						<img
 							src={isMyPage ? PlanetEditIcon : PlanetEditIconGray}
-							alt="우주 수정하기"
+							alt="은하 수정하기"
 						/>
 						은하 수정하기
 					</BigButton>
@@ -77,10 +94,7 @@ export default function UnderBar({ nickname }: PropsType) {
 						size="l"
 						buttonType="CTA-icon"
 						disabled={!isMyPage}
-						onClick={() => {
-							setView('WRITING');
-							navigate('/home/writing');
-						}}
+						onClick={handleWritingButton}
 					>
 						<img src={isMyPage ? WriteIcon : WriteIconGray} alt="글쓰기" />
 						글쓰기

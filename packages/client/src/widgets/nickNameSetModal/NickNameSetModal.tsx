@@ -11,18 +11,15 @@ export default function NickNameSetModal() {
 	const [validNickName, setValidNickName] = useState('');
 	const navigate = useNavigate();
 	const { platform } = useParams();
+	const { setText } = useToastStore();
+	const { id, pw } = useSignUpStore();
 
 	useCheckLogin();
 
 	const handleSaveButton = async () => {
-		// TODO: 소셜로그인 시 로직 따로 추가해야 함
-
-		const { setText } = useToastStore();
-
 		try {
 			let response;
 			if (!platform) {
-				const { id, pw } = useSignUpStore();
 				response = await postSignUp({
 					username: id,
 					password: pw,
@@ -44,6 +41,11 @@ export default function NickNameSetModal() {
 		}
 	};
 
+	const handleGoBackButton = () => {
+		if (!platform) return navigate('/signup');
+		return navigate('/login');
+	};
+
 	const saveButton = (
 		<Button
 			onClick={handleSaveButton}
@@ -61,6 +63,7 @@ export default function NickNameSetModal() {
 			title="닉네임 설정"
 			rightButton={saveButton}
 			description="서비스 이용에 사용할 닉네임을 정해주세요"
+			onClickGoBack={handleGoBackButton}
 		>
 			<NickNameInputContainer setValidNickName={setValidNickName} />
 		</Modal>

@@ -13,8 +13,11 @@ import instance from 'shared/apis/AxiosInterceptor';
 import { useViewStore } from 'shared/store';
 import { useOwnerStore } from 'shared/store/useOwnerStore';
 
-export default function UnderBar() {
-	const nickName = Cookies.get('nickname');
+interface PropsType {
+	nickName: string;
+}
+
+export default function UnderBar({ nickName }: PropsType) {
 	const navigate = useNavigate();
 
 	const { setView } = useViewStore();
@@ -25,7 +28,6 @@ export default function UnderBar() {
 
 		Cookies.remove('accessToken');
 		Cookies.remove('refreshToken');
-		Cookies.remove('userId');
 		Cookies.remove('nickname');
 
 		navigate('/');
@@ -54,7 +56,7 @@ export default function UnderBar() {
 						buttonType="Button"
 						onClick={() => {
 							setView('CUSTOM');
-							navigate('/home/custom');
+							navigate('/home/galaxy-custom');
 						}}
 					>
 						<img src={PlanetEditIcon} alt="우주 수정하기" />

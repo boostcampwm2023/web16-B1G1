@@ -1,9 +1,9 @@
 import { useViewStore } from 'shared/store/useViewStore';
-import { Button, Modal, ModalPortal } from 'shared/ui';
+import { Button, Modal, ModalPortal, TextArea } from 'shared/ui';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import styled from '@emotion/styled';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import AlertDialog from 'shared/ui/alertDialog/AlertDialog';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useFetch } from 'shared/hooks';
@@ -11,13 +11,43 @@ import { PostData } from 'shared/lib/types/post';
 import { deletePost } from '../api/deletePost';
 import ImageSlider from './ImageSlider';
 import Like from 'entities/like/Like';
+import InputBar from 'shared/ui/inputBar/InputBar';
+import instance from 'shared/apis/AxiosInterceptor';
+import { useToastStore } from 'shared/store';
 
 export default function PostModal() {
 	const { setView } = useViewStore();
 	const [deleteModal, setDeleteModal] = useState(false);
 	const { postId } = useParams();
 	const navigate = useNavigate();
-	const { data } = useFetch<PostData>(`post/${postId}`);
+	const { data, refetch } = useFetch<PostData>(`post/${postId}`);
+	const [isEdit, setIsEdit] = useState(false);
+	const [content, setContent] = useState('');
+	const [title, setTitle] = useState('');
+	const { setText } = useToastStore();
+
+	useEffect(() => {
+		setContent(data?.content ?? '');
+		setTitle(data?.title ?? '');
+	}, [data]);
+
+	const handleEditSave = async () => {
+		const formData = new FormData();
+		formData.append('title', title);
+		formData.append('content', content);
+		const res = await instance({
+			url: `/post/${postId}`,
+			method: 'PATCH',
+			data: formData,
+		});
+		if (res.status === 200) {
+			setIsEdit(false);
+			setText('글이 수정되었습니다.');
+			refetch();
+		} else {
+			setText('글 수정에 실패했습니다.');
+		}
+	};
 
 	const rightButton = (
 		<Button
@@ -32,15 +62,56 @@ export default function PostModal() {
 		</Button>
 	);
 
+	const EditButton = (
+		<Button
+			size="m"
+			buttonType="CTA-icon"
+			type="button"
+			onClick={() => {
+				setIsEdit(true);
+			}}
+		>
+			수정
+		</Button>
+	);
+
+	const EditCancelButton = (
+		<Button
+			size="m"
+			buttonType="Button"
+			type="button"
+			onClick={() => {
+				setIsEdit(false);
+			}}
+		>
+			취소
+		</Button>
+	);
+
+	const EditSaveButton = (
+		<Button
+			size="m"
+			buttonType="CTA-icon"
+			type="button"
+			onClick={() => {
+				setIsEdit(false);
+				handleEditSave();
+			}}
+		>
+			저장
+		</Button>
+	);
+
 	const handleDelete = async () => {
 		const res = await deletePost(postId!);
 		setDeleteModal(false);
 		if (res.status === 200) {
+			setText('글을 삭제했습니다.');
 			setView('MAIN');
 			navigate('/home');
-			window.location.reload();
+			// window.location.reload();
 		} else {
-			alert('글 삭제 실패');
+			setText('글 삭제에 실패했습니다.');
 		}
 	};
 
@@ -48,25 +119,48 @@ export default function PostModal() {
 		data && (
 			<ModalPortal>
 				<PostModalLayout
-					title={data.title}
-					rightButton={rightButton}
+					title={isEdit ? '글 수정하기' : data.title}
+					rightButton={isEdit ? EditSaveButton : rightButton}
+					topButton={isEdit ? EditCancelButton : EditButton}
+					leftButton={
+						isEdit ? null : <Like postId={postId!} count={data.like_cnt ?? 0} />
+					}
 					onClickGoBack={() => {
 						setView('MAIN');
 						navigate(`/home/${postId}`);
 					}}
-					leftButton={<Like postId={postId!} count={data.like_cnt ?? 0} />}
 				>
 					<Container>
-						{data.images.length > 0 && (
+						{data.images.length > 0 && !isEdit && (
 							<ImageContainer>
 								<ImageSlider imageUrls={data.images} />
 							</ImageContainer>
 						)}
-						<TextContainer>
-							<ReactMarkdown remarkPlugins={[remarkGfm]}>
-								{data.content}
-							</ReactMarkdown>
-						</TextContainer>
+						{isEdit ? (
+							<TextContainer>
+								<InputBar
+									id={'postTitle'}
+									placeholder="제목"
+									style={{ marginBottom: '30px', height: '25%' }}
+									value={title}
+									onChange={(e) => setTitle(e.target.value)}
+								/>
+								<TextArea
+									value={content}
+									onChange={(content) => {
+										setContent(content);
+									}}
+									width="100%"
+									height="75%"
+								/>
+							</TextContainer>
+						) : (
+							<TextContainer>
+								<ReactMarkdown remarkPlugins={[remarkGfm]}>
+									{data.content}
+								</ReactMarkdown>
+							</TextContainer>
+						)}
 					</Container>
 				</PostModalLayout>
 				{deleteModal && (
@@ -111,6 +205,7 @@ const Container = styled.div`
 
 const TextContainer = styled.div`
 	width: 40vw;
+	height: 100%;
 	${({ theme: { colors } }) => ({
 		color: colors.text.secondary,
 	})}
@@ -118,8 +213,7 @@ const TextContainer = styled.div`
 
 const ImageContainer = styled.div`
 	display: flex;
+	align-items: center;
 	justify-content: center;
 	margin-bottom: 26px;
-	width: 100%;
-	height: 100%;
 `;

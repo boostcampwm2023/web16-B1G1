@@ -4,8 +4,7 @@ import TextArea from 'shared/ui/textArea/TextArea';
 import { ModalPortal } from 'shared/ui';
 import Images from './Images';
 import { useNavigate } from 'react-router-dom';
-import { sendPost } from '../api/sendPost';
-import { useViewStore } from 'shared/store';
+import { useViewStore, usePostStore } from 'shared/store';
 import InputBar from 'shared/ui/inputBar/InputBar';
 
 export default function WritingModal() {
@@ -14,15 +13,13 @@ export default function WritingModal() {
 	const [files, setFiles] = useState<FileList | null>(null);
 	const navigate = useNavigate();
 	const { setView } = useViewStore();
+	const { setStoreTitle, setStoreContent, setStoreFiles } = usePostStore();
 
 	const handleSendPost = async () => {
-		const response = await sendPost(title, content, files);
-		if (response!.status === 201) {
-			navigate('/home');
-			window.location.reload();
-		} else {
-			alert('글쓰기 실패');
-		}
+		setStoreTitle(title);
+		setStoreContent(content);
+		setStoreFiles(files);
+		navigate('/home/star-custom');
 	};
 
 	return (

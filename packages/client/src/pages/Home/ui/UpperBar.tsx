@@ -62,6 +62,7 @@ export default function UpperBar() {
 	const handleGoBackButton = () => {
 		setIsMyPage(true);
 		setIsSwitching(true);
+		setPageOwnerNickName(userNickName!);
 	};
 
 	return (

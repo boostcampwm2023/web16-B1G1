@@ -19,27 +19,18 @@ export default function GalaxyCustomModal() {
 	const { spiral, start, thickness, zDist } = useCustomStore();
 
 	const handleSubmit = () => {
-		const galaxyStyle: { [key: string]: number } = {};
+		const galaxyStyle = {
+			spiral: galaxy.spiral !== spiral ? spiral : undefined,
+			start: galaxy.start !== start ? start : undefined,
+			thickness: galaxy.thickness !== thickness ? thickness : undefined,
+			zDist: galaxy.zDist !== zDist ? zDist : undefined,
+		};
 
-		if (galaxy.spiral !== spiral) {
-			galaxy.setSpiral(spiral);
-			galaxyStyle.spiral = spiral;
-		}
-		if (galaxy.start !== start) {
-			galaxy.setStart(start);
-			galaxyStyle.start = start;
-		}
-		if (galaxy.thickness !== thickness) {
-			galaxy.setThickness(thickness);
-			galaxyStyle.thickness = thickness;
-		}
-		if (galaxy.zDist !== zDist) {
-			galaxy.setZDist(zDist);
-			galaxyStyle.zDist = zDist;
-		}
-		if (Object.keys(galaxyStyle).length !== 0) {
-			postGalaxy(galaxyStyle);
-		}
+		galaxy.setSpiral(spiral);
+		galaxy.setStart(start);
+		galaxy.setThickness(thickness);
+		galaxy.setZDist(zDist);
+		postGalaxy(galaxyStyle);
 	};
 
 	return (

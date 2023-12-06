@@ -17,13 +17,21 @@ interface GalaxyState {
 	setZDist: (value: number) => void;
 }
 
-export const useGalaxyStore = create<GalaxyState>((set) => ({
+export const useGalaxyStore = create<GalaxyState>((set, get) => ({
 	spiral: SPIRAL,
-	setSpiral: (value: number) => set({ spiral: value }),
+	setSpiral: (value: number) => {
+		if (value !== get().spiral) set({ spiral: value });
+	},
 	start: SPIRAL_START,
-	setStart: (value: number) => set({ start: value }),
+	setStart: (value: number) => {
+		if (value !== get().start) set({ start: value });
+	},
 	thickness: GALAXY_THICKNESS,
-	setThickness: (value: number) => set({ thickness: value }),
+	setThickness: (value: number) => {
+		if (value !== get().thickness) set({ thickness: value });
+	},
 	zDist: ARMS_Z_DIST,
-	setZDist: (value: number) => set({ zDist: value }),
+	setZDist: (value: number) => {
+		if (value !== get().zDist) set({ zDist: value });
+	},
 }));

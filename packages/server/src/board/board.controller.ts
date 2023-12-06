@@ -41,6 +41,7 @@ import { HttpExceptionFilter } from '../exception-filter/http.exception-filter';
 
 @Controller('post')
 @UseInterceptors(LogInterceptor)
+@UseFilters(HttpExceptionFilter)
 @ApiTags('게시글 API')
 export class BoardController {
 	constructor(private readonly boardService: BoardService) {}
@@ -49,7 +50,6 @@ export class BoardController {
 	@UseGuards(CookieAuthGuard)
 	@UseInterceptors(FilesInterceptor('file', 3))
 	@UseInterceptors(TransactionInterceptor)
-	@UseFilters(HttpExceptionFilter)
 	@UsePipes(ValidationPipe)
 	@CreateBoardSwaggerDecorator()
 	createBoard(

@@ -76,6 +76,7 @@ export default function IdInputContainer({ setValidId }: PropsTypes) {
 					size="m"
 					buttonType="Button"
 					disabled={idState === 'VALID'}
+					type="button"
 				>
 					중복확인
 				</DuplicateCheckButton>

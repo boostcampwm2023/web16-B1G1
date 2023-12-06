@@ -8,8 +8,6 @@ export default function Sliders() {
 		setSpiral,
 		start,
 		setStart,
-		density,
-		setDensity,
 		zDist,
 		setZDist,
 		thickness,
@@ -40,14 +38,6 @@ export default function Sliders() {
 				step={100}
 				value={start}
 				setValue={setStart}
-			/>
-			<Slider
-				id="별 응집도"
-				min={0.05}
-				max={0.95}
-				step={0.05}
-				value={density}
-				setValue={setDensity}
 			/>
 			<Slider
 				id="은하 높이"

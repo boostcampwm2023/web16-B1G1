@@ -14,16 +14,14 @@ import { useGalaxyStore, useCustomStore } from 'shared/store';
 export default function GalaxyCustom() {
 	const navigate = useNavigate();
 	const { setView } = useViewStore();
-	const { setSpiral, setDensity, setStart, setThickness, setZDist } =
-		useGalaxyStore();
-	const { spiral, density, start, thickness, zDist } = useCustomStore();
+	const galaxy = useGalaxyStore();
+	const { spiral, start, thickness, zDist } = useCustomStore();
 
 	const handleSubmit = () => {
-		setSpiral(spiral);
-		setDensity(density);
-		setStart(start);
-		setThickness(thickness);
-		setZDist(zDist);
+		if (galaxy.spiral !== spiral) galaxy.setSpiral(spiral);
+		if (galaxy.start !== start) galaxy.setStart(start);
+		if (galaxy.thickness !== thickness) galaxy.setThickness(thickness);
+		if (galaxy.zDist !== zDist) galaxy.setZDist(zDist);
 	};
 
 	return (

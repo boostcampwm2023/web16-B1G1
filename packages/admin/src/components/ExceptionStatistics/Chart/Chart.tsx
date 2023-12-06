@@ -1,25 +1,11 @@
 import { Exception, ExceptionConditions } from '../exception.interface.ts';
-import { useEffect, useState } from 'react';
-
-const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
 interface PropsType {
+	exceptionData: Exception[];
 	condition: ExceptionConditions;
 }
 
-export default function Chart({ condition }: PropsType) {
-	const [exceptionData, setExceptionData] = useState([]);
-
-	const getAllExceptions = async () => {
-		const response = await fetch(baseUrl + '/admin/exception');
-		const exceptions = await response.json();
-		setExceptionData(exceptions);
-	};
-
-	useEffect(() => {
-		getAllExceptions();
-	}, []);
-
+export default function Chart({ exceptionData, condition }: PropsType) {
 	const totalExceptionCount = exceptionData.length;
 	const filteredExceptionData = filter(exceptionData, condition);
 	const filteredExceptionCount = filteredExceptionData.length;

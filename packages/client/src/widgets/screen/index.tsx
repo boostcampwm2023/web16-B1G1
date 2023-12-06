@@ -19,13 +19,10 @@ export default function Screen() {
 
 	const { cameraToCurrentView, setCameraToCurrentView } = useCameraStore();
 
-	const { intensity, mipmapBlur, luminanceThreshold, luminanceSmoothing } =
-		useControls('Bloom', {
-			intensity: { value: 0.4, min: 0, max: 1.5, step: 0.01 },
-			mipmapBlur: { value: false },
-			luminanceThreshold: { value: 0.9, min: 0, max: 1, step: 0.01 },
-			luminanceSmoothing: { value: 0.025, min: 0, max: 2, step: 0.01 },
-		});
+	const { intensity, mipmapBlur } = useControls('Bloom', {
+		intensity: { value: 0.4, min: 0, max: 1.5, step: 0.01 },
+		mipmapBlur: { value: false },
+	});
 	const { wheelSpeed } = useControls('Controls', {
 		wheelSpeed: { value: 3, min: 0.1, max: 5, step: 0.01 },
 	});
@@ -42,8 +39,8 @@ export default function Screen() {
 					<Bloom
 						intensity={intensity}
 						mipmapBlur={mipmapBlur}
-						luminanceThreshold={luminanceThreshold}
-						luminanceSmoothing={luminanceSmoothing}
+						luminanceThreshold={0.9}
+						luminanceSmoothing={0.025}
 					/>
 				</EffectComposer>
 

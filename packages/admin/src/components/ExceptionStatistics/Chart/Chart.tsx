@@ -36,11 +36,11 @@ function filter(
 	const filterdData = exceptionData
 		.filter((exception: any) => {
 			if (!condition.path) return true;
-			return exception.path === condition.path;
+			return condition.path.includes(exception.path);
 		})
 		.filter((exception: any) => {
 			if (!condition.error) return true;
-			return exception.error === condition.error;
+			return condition.error.includes(exception.error);
 		})
 		.filter((exception: any) => {
 			const { startDate, endDate } = condition;

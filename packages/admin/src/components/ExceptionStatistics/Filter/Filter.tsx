@@ -11,30 +11,45 @@ export default function Filter({ exceptionData, setCondition }: PropsType) {
 	const [defaultStartDate, defaultEndDate] = getDates();
 	const [pathSet, errorSet] = getSets(exceptionData);
 
-	const [path, setPath] = useState('');
-	const [error, setError] = useState('');
-	const [startDate, setStartDate] = useState(defaultStartDate);
-	const [endDate, setEndDate] = useState(defaultEndDate);
+	const [pathCondition, setPathCondition] = useState([...pathSet]);
+	const [errorCondition, setErrorCondition] = useState([...errorSet]);
+	const [startDateCondition, setStartDateCondition] =
+		useState(defaultStartDate);
+	const [endDateCondition, setEndDateCondition] = useState(defaultEndDate);
 
 	const selectPath = (e: any) => {
-		setPath(e.target.value);
+		if (e.target.checked === true) {
+			setPathCondition([...pathCondition, e.target.value]);
+			return;
+		}
+		setPathCondition(
+			pathCondition.filter((path: any) => path !== e.target.value),
+		);
 	};
 	const selectError = (e: any) => {
-		setError(e.target.value);
+		if (e.target.checked === true) {
+			setErrorCondition([...errorCondition, e.target.value]);
+			return;
+		}
+		setErrorCondition(
+			errorCondition.filter((error: any) => error !== e.target.value),
+		);
 	};
 	const selectStartDate = (e: any) => {
-		setStartDate(e.target.value);
+		setStartDateCondition(e.target.value);
 	};
 	const selectEndDate = (e: any) => {
-		setEndDate(e.target.value);
+		setEndDateCondition(e.target.value);
 	};
 
 	const changeCondition = () => {
 		setCondition({
-			path,
-			error,
-			startDate: new Date(startDate),
-			endDate: new Date(new Date(endDate).getTime() + 60 * 60 * 24 * 1000),
+			path: pathCondition,
+			error: errorCondition,
+			startDate: new Date(startDateCondition),
+			endDate: new Date(
+				new Date(endDateCondition).getTime() + 60 * 60 * 24 * 1000,
+			),
 		});
 	};
 
@@ -60,13 +75,13 @@ export default function Filter({ exceptionData, setCondition }: PropsType) {
 				type="date"
 				onChange={selectStartDate}
 				defaultValue={defaultStartDate}
-				max={endDate}
+				max={endDateCondition}
 			/>
 			<input
 				type="date"
 				onChange={selectEndDate}
 				defaultValue={defaultEndDate}
-				min={startDate}
+				min={startDateCondition}
 			/>
 			<Button onClick={changeCondition}>검색</Button>
 		</div>

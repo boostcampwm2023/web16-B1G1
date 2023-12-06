@@ -10,6 +10,7 @@ import {
 import { useViewStore } from 'shared/store';
 import styled from '@emotion/styled';
 import { useGalaxyStore, useCustomStore } from 'shared/store';
+import { postGalaxy } from 'shared/apis';
 
 export default function GalaxyCustom() {
 	const navigate = useNavigate();
@@ -18,10 +19,27 @@ export default function GalaxyCustom() {
 	const { spiral, start, thickness, zDist } = useCustomStore();
 
 	const handleSubmit = () => {
-		if (galaxy.spiral !== spiral) galaxy.setSpiral(spiral);
-		if (galaxy.start !== start) galaxy.setStart(start);
-		if (galaxy.thickness !== thickness) galaxy.setThickness(thickness);
-		if (galaxy.zDist !== zDist) galaxy.setZDist(zDist);
+		const galaxyStyle: { [key: string]: number } = {};
+
+		if (galaxy.spiral !== spiral) {
+			galaxy.setSpiral(spiral);
+			galaxyStyle.spiral = spiral;
+		}
+		if (galaxy.start !== start) {
+			galaxy.setStart(start);
+			galaxyStyle.start = start;
+		}
+		if (galaxy.thickness !== thickness) {
+			galaxy.setThickness(thickness);
+			galaxyStyle.thickness = thickness;
+		}
+		if (galaxy.zDist !== zDist) {
+			galaxy.setZDist(zDist);
+			galaxyStyle.zDist = zDist;
+		}
+		if (Object.keys(galaxyStyle).length !== 0) {
+			postGalaxy(galaxyStyle);
+		}
 	};
 
 	return (

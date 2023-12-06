@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import { Button } from 'shared/ui';
 import { Title01 } from '../styles';
 import PlanetEditIcon from '@icons/icon-planetedit-24-white.svg';
+import PlanetEditIconGray from '@icons/icon-planetedit-24-gray.svg';
 import AddIcon from '@icons/icon-add-24-white.svg';
 import AddIconGray from '@icons/icon-add-24-gray.svg';
 import WriteIcon from '@icons/icon-writte-24-white.svg';
@@ -54,9 +55,13 @@ export default function UnderBar() {
 							setView('CUSTOM');
 							navigate('/home/galaxy-custom');
 						}}
+						disabled={!isMyPage}
 					>
-						<img src={PlanetEditIcon} alt="우주 수정하기" />
-						우주 수정하기
+						<img
+							src={isMyPage ? PlanetEditIcon : PlanetEditIconGray}
+							alt="우주 수정하기"
+						/>
+						은하 수정하기
 					</BigButton>
 
 					<BigButton size="l" buttonType="Button" disabled={!isMyPage}>

@@ -77,7 +77,7 @@ export default function Home() {
 			{!isSwitching && <WhiteScreen />}
 			{text && <Toast>{text}</Toast>}
 
-			{view === 'MAIN' && (
+			{(view === 'MAIN' || view === 'DETAIL') && (
 				<>
 					<UpperBar />
 					<UnderBar nickname={nickname} />

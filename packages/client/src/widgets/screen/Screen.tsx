@@ -54,7 +54,7 @@ export default function Screen() {
 				<CameraLight />
 			</Canvas>
 			<LevaWrapper>
-				<Leva fill collapsed hidden={view !== 'MAIN'} />
+				<Leva fill collapsed hidden={view !== 'MAIN' && view !== 'DETAIL'} />
 			</LevaWrapper>
 		</div>
 	);

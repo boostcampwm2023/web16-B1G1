@@ -5,7 +5,6 @@ import { postSignUp } from 'shared/apis';
 import { useSignUpStore } from 'shared/store/useSignUpStore';
 import { useToastStore } from 'shared/store/useToastStore';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useCheckLogin } from 'shared/hooks';
 
 export default function NickNameSetModal() {
 	const [validNickName, setValidNickName] = useState('');
@@ -13,8 +12,6 @@ export default function NickNameSetModal() {
 	const { platform } = useParams();
 	const { setText } = useToastStore();
 	const { id, pw } = useSignUpStore();
-
-	useCheckLogin();
 
 	const handleSaveButton = async () => {
 		try {

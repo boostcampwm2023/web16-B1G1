@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { useState } from 'react';
 import { postLogin } from 'shared/apis';
-import { useCheckLogin } from 'shared/hooks';
 import { useScreenSwitchStore } from 'shared/store/useScreenSwitchStore';
 
 export default function LoginModal() {
@@ -34,8 +33,6 @@ export default function LoginModal() {
 			setIsSwitching,
 		);
 	};
-
-	useCheckLogin();
 
 	return (
 		<form

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import Filter from './Filter/Filter.tsx';
-import Chart from './Chart/Chart.tsx';
+import ExceptionChart from './ExceptionChart/ExceptionChart.tsx';
 import { Exception } from './exception.interface.ts';
 
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
@@ -26,8 +26,8 @@ export default function ExceptionStatistics() {
 
 	return (
 		<div>
-			<Filter exceptionData={exceptionData} setCondition={setCondition} />
-			<Chart exceptionData={exceptionData} condition={condition} />
+			<Filter setCondition={setCondition} />
+			<ExceptionChart exceptionData={exceptionData} condition={condition} />
 		</div>
 	);
 }

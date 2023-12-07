@@ -8,8 +8,6 @@ export interface Exception {
 }
 
 export interface ExceptionConditions {
-	path?: string[];
-	error?: string[];
 	startDate?: Date;
 	endDate?: Date;
 }

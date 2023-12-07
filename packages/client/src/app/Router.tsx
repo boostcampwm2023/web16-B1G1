@@ -36,6 +36,14 @@ export const router = createBrowserRouter(
 				<Route path="star-custom" element={<StarCustomModal />} />
 				<Route path="share" element={<ShareModal />} />
 			</Route>
+
+			<Route path="/guest" element={<Home />}>
+				<Route path=":hostId">
+					<Route path=":postId">
+						<Route path="detail" element={<PostModal />} />
+					</Route>
+				</Route>
+			</Route>
 		</>,
 	),
 );

@@ -6263,6 +6263,7 @@ const RAW_RUNTIME_STATE =
           ["react", "npm:18.2.0"],\
           ["react-color", "virtual:658502eb4296e93abedc18b6aa9b26978f434f08d98e21ebb0e725354b8bb54b62db9c4a1893e460c694ff7500ff5cbafa4457b0dfd26b5838868666c861e990#npm:2.19.3"],\
           ["react-dom", "virtual:658502eb4296e93abedc18b6aa9b26978f434f08d98e21ebb0e725354b8bb54b62db9c4a1893e460c694ff7500ff5cbafa4457b0dfd26b5838868666c861e990#npm:18.2.0"],\
+          ["react-full-screen", "virtual:658502eb4296e93abedc18b6aa9b26978f434f08d98e21ebb0e725354b8bb54b62db9c4a1893e460c694ff7500ff5cbafa4457b0dfd26b5838868666c861e990#npm:1.1.1"],\
           ["react-markdown", "virtual:658502eb4296e93abedc18b6aa9b26978f434f08d98e21ebb0e725354b8bb54b62db9c4a1893e460c694ff7500ff5cbafa4457b0dfd26b5838868666c861e990#npm:9.0.1"],\
           ["react-router-dom", "virtual:658502eb4296e93abedc18b6aa9b26978f434f08d98e21ebb0e725354b8bb54b62db9c4a1893e460c694ff7500ff5cbafa4457b0dfd26b5838868666c861e990#npm:6.18.0"],\
           ["remark-gfm", "npm:4.0.0"],\
@@ -8176,6 +8177,15 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/fs.realpath-npm-1.0.0-c8f05d8126-444cf1291d.zip/node_modules/fs.realpath/",\
         "packageDependencies": [\
           ["fs.realpath", "npm:1.0.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["fscreen", [\
+      ["npm:1.2.0", {\
+        "packageLocation": "./.yarn/cache/fscreen-npm-1.2.0-cbeb194fbc-1a5cb44446.zip/node_modules/fscreen/",\
+        "packageDependencies": [\
+          ["fscreen", "npm:1.2.0"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -12717,6 +12727,29 @@ const RAW_RUNTIME_STATE =
           ["attr-accept", "npm:2.2.2"],\
           ["file-selector", "npm:0.5.0"],\
           ["prop-types", "npm:15.8.1"],\
+          ["react", "npm:18.2.0"]\
+        ],\
+        "packagePeers": [\
+          "@types/react",\
+          "react"\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["react-full-screen", [\
+      ["npm:1.1.1", {\
+        "packageLocation": "./.yarn/cache/react-full-screen-npm-1.1.1-4d2e312e1b-02c6034c6a.zip/node_modules/react-full-screen/",\
+        "packageDependencies": [\
+          ["react-full-screen", "npm:1.1.1"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:658502eb4296e93abedc18b6aa9b26978f434f08d98e21ebb0e725354b8bb54b62db9c4a1893e460c694ff7500ff5cbafa4457b0dfd26b5838868666c861e990#npm:1.1.1", {\
+        "packageLocation": "./.yarn/__virtual__/react-full-screen-virtual-9bbf69d77c/0/cache/react-full-screen-npm-1.1.1-4d2e312e1b-02c6034c6a.zip/node_modules/react-full-screen/",\
+        "packageDependencies": [\
+          ["react-full-screen", "virtual:658502eb4296e93abedc18b6aa9b26978f434f08d98e21ebb0e725354b8bb54b62db9c4a1893e460c694ff7500ff5cbafa4457b0dfd26b5838868666c861e990#npm:1.1.1"],\
+          ["@types/react", "npm:18.2.37"],\
+          ["fscreen", "npm:1.2.0"],\
           ["react", "npm:18.2.0"]\
         ],\
         "packagePeers": [\

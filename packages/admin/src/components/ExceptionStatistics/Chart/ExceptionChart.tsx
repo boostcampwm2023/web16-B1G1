@@ -14,9 +14,7 @@ export default function ExceptionChart({
 	exceptionData,
 	condition,
 }: PropsType) {
-	const totalExceptionCount = exceptionData.length;
 	const filteredExceptionData = filter(exceptionData, condition);
-	const filteredExceptionCount = filteredExceptionData.length;
 	const uniqueDate = getUniqueDate(filteredExceptionData);
 
 	const [option, setOption] = useState('path');
@@ -26,11 +24,14 @@ export default function ExceptionChart({
 	};
 
 	return (
-		<div>
-			<p>Total Exception Count: {totalExceptionCount}</p>
-			<p>Filtered Exception Count: {filteredExceptionCount}</p>
+		<div
+			style={{
+				width: '1024px',
+			}}
+		>
 			<select
 				style={{
+					marginTop: '20px',
 					marginBottom: '20px',
 					padding: '5px',
 				}}
@@ -53,24 +54,15 @@ function filter(
 	exceptionData: Exception[],
 	condition: ExceptionConditions,
 ): Exception[] {
-	const filterdData = exceptionData
-		.filter((exception: any) => {
-			if (!condition.path) return true;
-			return condition.path.includes(exception.path);
-		})
-		.filter((exception: any) => {
-			if (!condition.error) return true;
-			return condition.error.includes(exception.error);
-		})
-		.filter((exception: any) => {
-			const { startDate, endDate } = condition;
-			const timestamp = new Date(exception.timestamp);
-			if (!startDate && !endDate) return true;
-			if (startDate && !endDate) return timestamp >= startDate;
-			if (!startDate && endDate) return timestamp <= endDate;
-			if (startDate && endDate)
-				return timestamp >= startDate && timestamp <= endDate;
-		});
+	const filterdData = exceptionData.filter((exception: Exception) => {
+		const { startDate, endDate } = condition;
+		const timestamp = new Date(exception.timestamp);
+		if (!startDate && !endDate) return true;
+		if (startDate && !endDate) return timestamp >= startDate;
+		if (!startDate && endDate) return timestamp <= endDate;
+		if (startDate && endDate)
+			return timestamp >= startDate && timestamp <= endDate;
+	});
 	return filterdData;
 }
 

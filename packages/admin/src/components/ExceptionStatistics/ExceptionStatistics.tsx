@@ -26,7 +26,7 @@ export default function ExceptionStatistics() {
 
 	return (
 		<div>
-			<Filter exceptionData={exceptionData} setCondition={setCondition} />
+			<Filter setCondition={setCondition} />
 			<ExceptionChart exceptionData={exceptionData} condition={condition} />
 		</div>
 	);

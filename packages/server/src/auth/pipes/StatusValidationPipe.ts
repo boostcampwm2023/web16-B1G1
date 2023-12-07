@@ -7,7 +7,7 @@ export class StatusValidationPipe implements PipeTransform {
 	transform(value: any) {
 		value = value.toLowerCase();
 		if (!this.statusOptions.includes(value)) {
-			throw new BadRequestException(`${value}는 올바르지 않은 status값입니다.`);
+			throw new BadRequestException(`"${value}" is not a valid status value.`);
 		}
 		return value;
 	}

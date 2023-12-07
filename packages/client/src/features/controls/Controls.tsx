@@ -7,6 +7,7 @@ import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
 import { useViewStore } from 'shared/store/useViewStore';
 import { useEffect } from 'react';
 import { CAMERA_POST_VIEW } from '@constants';
+import { useOwnerStore } from 'shared/store/useOwnerStore';
 
 const setCameraPosition = (
 	camera: Camera,
@@ -47,13 +48,19 @@ export default function Controls() {
 		currentView,
 		setCurrentView,
 		targetView,
+		setTargetView,
 	} = useCameraStore();
 	const { view } = useViewStore();
 	const state = useThree();
+	const { pageOwnerNickName } = useOwnerStore();
 
 	useEffect(() => {
 		setCameraToCurrentView(currentView.distanceTo(state.camera.position));
 	}, []);
+
+	useEffect(() => {
+		setTargetView(null);
+	}, [pageOwnerNickName]);
 
 	useFrame((state, delta) => {
 		const targetPosition = new THREE.Vector3(0, 0, 0);

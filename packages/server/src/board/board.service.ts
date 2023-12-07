@@ -108,7 +108,7 @@ export class BoardService {
 			.getOne();
 
 		if (!found) {
-			throw new NotFoundException(`Not found board with id: ${id}`);
+			throw new NotFoundException('board not found');
 		}
 		return found;
 	}
@@ -124,19 +124,17 @@ export class BoardService {
 
 		const board: Board = await queryRunner.manager.findOneBy(Board, { id });
 		if (!board) {
-			throw new NotFoundException(`Not found board with id: ${id}`);
+			throw new NotFoundException('board not found');
 		}
 
 		// 게시글 작성자와 수정 요청자가 다른 경우
 		if (board.user.id !== userData.userId) {
-			throw new BadRequestException('You are not the author of this post');
+			throw new BadRequestException('not your post');
 		}
 
 		// star에 대한 수정은 별도 API(PATCH /star/:id)로 처리하므로 400 에러 리턴
 		if (updateBoardDto.star) {
-			throw new BadRequestException(
-				'You cannot update star with this API. use PATCH /star/:id',
-			);
+			throw new BadRequestException('cannot update star');
 		}
 
 		if (files && files.length > 0) {
@@ -181,7 +179,7 @@ export class BoardService {
 	async getIsLiked(id: number, userData: UserDataDto): Promise<boolean> {
 		const board: Board = await this.boardRepository.findOneBy({ id });
 		if (!board) {
-			throw new NotFoundException(`Not found board with id: ${id}`);
+			throw new NotFoundException('board not found');
 		}
 
 		// 이미 좋아요를 누른 경우
@@ -195,17 +193,17 @@ export class BoardService {
 	async patchLike(id: number, userData: UserDataDto): Promise<Partial<Board>> {
 		const board = await this.boardRepository.findOneBy({ id });
 		if (!board) {
-			throw new NotFoundException(`Not found board with id: ${id}`);
+			throw new NotFoundException('board not found');
 		}
 
 		// 이미 좋아요를 누른 경우
 		if (board.likes.find((user) => user.id === userData.userId)) {
-			throw new BadRequestException('You already liked this post');
+			throw new BadRequestException('already liked');
 		}
 
 		const user = await this.userRepository.findOneBy({ id: userData.userId });
 		if (!user) {
-			throw new NotFoundException(`Not found user with id: ${userData.userId}`);
+			throw new NotFoundException('user not found');
 		}
 
 		board.likes.push(user);
@@ -222,17 +220,17 @@ export class BoardService {
 	): Promise<Partial<Board>> {
 		const board = await this.boardRepository.findOneBy({ id });
 		if (!board) {
-			throw new NotFoundException(`Not found board with id: ${id}`);
+			throw new NotFoundException('board not found');
 		}
 
 		// 좋아요를 누르지 않은 경우
 		if (!board.likes.find((user) => user.id === userData.userId)) {
-			throw new BadRequestException('You have not liked this post');
+			throw new BadRequestException('not liked');
 		}
 
 		const user = await this.userRepository.findOneBy({ id: userData.userId });
 		if (!user) {
-			throw new NotFoundException(`Not found user with id: ${userData.userId}`);
+			throw new NotFoundException('user not found');
 		}
 
 		board.likes = board.likes.filter((user) => user.id !== userData.userId);
@@ -252,12 +250,12 @@ export class BoardService {
 		const board: Board = await queryRunner.manager.findOneBy(Board, { id });
 
 		if (!board) {
-			throw new NotFoundException(`Not found board with id: ${id}`);
+			throw new NotFoundException('board not found');
 		}
 
 		// 게시글 작성자와 삭제 요청자가 다른 경우
 		if (board.user.id !== userData.userId) {
-			throw new BadRequestException('You are not the author of this post');
+			throw new BadRequestException('not your post');
 		}
 
 		// 연관된 이미지 삭제
@@ -284,7 +282,7 @@ export class BoardService {
 
 	async uploadFile(file: Express.Multer.File): Promise<any> {
 		if (!file.mimetype.includes('image')) {
-			throw new BadRequestException('Only image files are allowed');
+			throw new BadRequestException('not an image file');
 		}
 
 		const { buffer } = file;
@@ -308,7 +306,7 @@ export class BoardService {
 			.promise();
 		// eTag 없으면 에러 리턴
 		if (!result.ETag) {
-			throw new InternalServerErrorException('Failed to upload file');
+			throw new InternalServerErrorException('file upload failed');
 		}
 		Logger.log(`uploadFile result: ${result.ETag}`);
 

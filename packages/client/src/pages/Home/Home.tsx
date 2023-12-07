@@ -20,6 +20,8 @@ import {
 	SPIRAL_START,
 	ARMS_Z_DIST,
 } from 'widgets/galaxy/lib/constants';
+import styled from '@emotion/styled';
+import { keyframes } from '@emotion/react';
 
 export default function Home() {
 	const { view } = useViewStore();
@@ -72,6 +74,7 @@ export default function Home() {
 			<Outlet />
 
 			{isSwitching && <WarpScreen />}
+			{!isSwitching && <WhiteScreen />}
 			{text && <Toast>{text}</Toast>}
 
 			{view === 'MAIN' && (
@@ -85,3 +88,24 @@ export default function Home() {
 		</>
 	);
 }
+
+const fadeout = keyframes`
+	0% {
+		opacity: 1;
+	}
+	100% {
+		opacity: 0;
+		display: none;
+	}
+`;
+
+const WhiteScreen = styled.div`
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 101;
+	background-color: white;
+	animation: ${fadeout} 0.5s linear forwards;
+`;

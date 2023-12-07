@@ -48,7 +48,7 @@ export default function UpperBar() {
 	}, [debouncedSearchValue]);
 
 	const handleSearchButton = async () => {
-		setPageOwnerNickName(debouncedSearchValue);
+		setPageOwnerNickName(searchValue);
 
 		setSearchValue('');
 		setDebouncedSearchValue('');
@@ -76,7 +76,7 @@ export default function UpperBar() {
 			</IconButton>
 
 			<SearchBar
-				onClick={handleSearchButton}
+				onSubmit={handleSearchButton}
 				inputState={searchValue}
 				setInputState={setSearchValue}
 				placeholder="닉네임을 입력하세요"

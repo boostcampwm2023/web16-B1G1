@@ -116,7 +116,7 @@ export class BoardService {
 	): Promise<Board> {
 		let updatedBoard: Board;
 
-		this.dataSource.transaction(async (manager: EntityManager) => {
+		await this.dataSource.transaction(async (manager: EntityManager) => {
 			const board: Board = await manager.findOneBy(Board, { id });
 			if (!board) {
 				throw new NotFoundException('board not found');

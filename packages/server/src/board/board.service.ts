@@ -25,6 +25,7 @@ import { Model } from 'mongoose';
 @Injectable()
 export class BoardService {
 	constructor(
+		// private readonly dataSource: DataSource,
 		@InjectRepository(Board)
 		private readonly boardRepository: Repository<Board>,
 		@InjectRepository(Image)
@@ -41,6 +42,9 @@ export class BoardService {
 		files: Express.Multer.File[],
 		queryRunner: QueryRunner,
 	): Promise<Board> {
+		// const queryRunner = this.dataSource.createQueryRunner();
+		// await queryRunner.startTransaction();
+
 		const { title, content, star } = createBoardDto;
 
 		const user = await queryRunner.manager.findOneBy(User, {
@@ -84,6 +88,8 @@ export class BoardService {
 		const createdBoard: Board = await queryRunner.manager.save(board);
 
 		createdBoard.user.password = undefined; // password 제거하여 반환
+
+		// await queryRunner.commitTransaction();
 		return createdBoard;
 	}
 
@@ -114,6 +120,8 @@ export class BoardService {
 		files: Express.Multer.File[],
 		queryRunner: QueryRunner,
 	) {
+		await queryRunner.startTransaction();
+
 		const board: Board = await queryRunner.manager.findOneBy(Board, { id });
 		if (!board) {
 			throw new NotFoundException(`Not found board with id: ${id}`);
@@ -131,7 +139,7 @@ export class BoardService {
 			);
 		}
 
-		if (files.length > 0) {
+		if (files && files.length > 0) {
 			const images: Image[] = [];
 			for (const file of files) {
 				const imageInfo = await this.uploadFile(file);
@@ -165,6 +173,8 @@ export class BoardService {
 		});
 
 		delete updatedBoard.user.password; // password 제거하여 반환
+
+		await queryRunner.commitTransaction();
 		return updatedBoard;
 	}
 
@@ -237,6 +247,8 @@ export class BoardService {
 		userData: UserDataDto,
 		queryRunner: QueryRunner,
 	): Promise<DeleteResult> {
+		await queryRunner.startTransaction();
+
 		const board: Board = await queryRunner.manager.findOneBy(Board, { id });
 
 		if (!board) {
@@ -265,6 +277,8 @@ export class BoardService {
 
 		// 게시글 삭제
 		const result = await queryRunner.manager.delete(Board, { id });
+
+		await queryRunner.commitTransaction();
 		return result;
 	}
 

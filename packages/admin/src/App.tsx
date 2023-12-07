@@ -20,7 +20,7 @@ function App() {
 				<Route path="/admin/board" element={<Board />} />
 				<Route path="/admin/system-info" element={<SystemInfo />} />
 				<Route
-					path={'/admin/exception-statistics'}
+					path="/admin/exception-statistics"
 					element={<ExceptionStatistics />}
 				/>
 			</Routes>

@@ -1,8 +1,15 @@
 import React, { useState } from 'react';
 import Button from '../../shared/Button.tsx';
+import { ExceptionConditions } from '../exception.interface.ts';
+import {
+	DateInput,
+	DateInputContainer,
+	DateInputTitle,
+	FilterContainer,
+} from './Filter.styles.tsx';
 
 interface PropsType {
-	setCondition: React.Dispatch<React.SetStateAction<{}>>;
+	setCondition: React.Dispatch<React.SetStateAction<ExceptionConditions>>;
 }
 
 export default function Filter({ setCondition }: PropsType) {
@@ -29,61 +36,27 @@ export default function Filter({ setCondition }: PropsType) {
 	};
 
 	return (
-		<div
-			style={{
-				padding: '1rem',
-				display: 'flex',
-				alignItems: 'center',
-				justifyContent: 'center',
-				gap: '1rem',
-			}}
-		>
-			<div
-				style={{
-					backgroundColor: '#b794bd',
-					width: '150px',
-				}}
-			>
-				<p
-					style={{
-						fontSize: '1.5rem',
-						borderBottom: '1px solid white',
-					}}
-				>
-					시작 날짜
-				</p>
-				<input
+		<FilterContainer>
+			<DateInputContainer color="#b794bd">
+				<DateInputTitle>시작 날짜</DateInputTitle>
+				<DateInput
 					type="date"
 					onChange={selectStartDate}
 					defaultValue={defaultStartDate}
 					max={endDateCondition}
-					style={{ width: '128.75px' }}
 				/>
-			</div>
-			<div
-				style={{
-					backgroundColor: '#94b5bd',
-					width: '150px',
-				}}
-			>
-				<p
-					style={{
-						fontSize: '1.5rem',
-						borderBottom: '1px solid white',
-					}}
-				>
-					종료 날짜
-				</p>
-				<input
+			</DateInputContainer>
+			<DateInputContainer color="#94b5bd">
+				<DateInputTitle>종료 날짜</DateInputTitle>
+				<DateInput
 					type="date"
 					onChange={selectEndDate}
 					defaultValue={defaultEndDate}
 					min={startDateCondition}
-					style={{ width: '128.75px' }}
 				/>
-			</div>
+			</DateInputContainer>
 			<Button onClick={changeCondition}>검색</Button>
-		</div>
+		</FilterContainer>
 	);
 }
 

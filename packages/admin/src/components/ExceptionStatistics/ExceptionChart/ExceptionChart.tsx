@@ -3,6 +3,7 @@ import { Bar } from 'react-chartjs-2';
 import { CategoryScale } from 'chart.js';
 import Chart from 'chart.js/auto';
 import React, { useState } from 'react';
+import { Select } from './ExceptionChart.styles.tsx';
 Chart.register(CategoryScale);
 
 interface PropsType {
@@ -24,22 +25,11 @@ export default function ExceptionChart({
 	};
 
 	return (
-		<div
-			style={{
-				width: '1024px',
-			}}
-		>
-			<select
-				style={{
-					marginTop: '20px',
-					marginBottom: '20px',
-					padding: '5px',
-				}}
-				onChange={handleChangeOption}
-			>
+		<div style={{ width: '1024px' }}>
+			<Select onChange={handleChangeOption}>
 				<option value="path">경로 기준으로 보기</option>
 				<option value="error">에러 기준으로 보기</option>
-			</select>
+			</Select>
 			<Bar
 				data={{
 					labels: uniqueDate,

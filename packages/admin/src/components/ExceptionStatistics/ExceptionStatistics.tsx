@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import Filter from './Filter/Filter.tsx';
-import ExceptionChart from './Chart/ExceptionChart.tsx';
+import ExceptionChart from './ExceptionChart/ExceptionChart.tsx';
 import { Exception } from './exception.interface.ts';
 
 const baseUrl = import.meta.env.VITE_API_BASE_URL;

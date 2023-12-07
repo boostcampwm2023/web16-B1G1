@@ -21,6 +21,7 @@ import {
 	ARMS_Z_DIST,
 } from 'widgets/galaxy/lib/constants';
 import { FullScreen, useFullScreenHandle } from 'react-full-screen';
+import Audio from 'features/audio/Audio';
 
 export default function Home() {
 	const { view } = useViewStore();
@@ -90,6 +91,7 @@ export default function Home() {
 		<FullScreen handle={handleFullScreen}>
 			<Outlet />
 
+			<Audio />
 			{isSwitching && <WarpScreen />}
 			{text && <Toast>{text}</Toast>}
 

@@ -2571,6 +2571,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/howler@npm:*":
+  version: 2.2.11
+  resolution: "@types/howler@npm:2.2.11"
+  checksum: 0a6b6d35852f8807ff6513cc101cb4fd7a80a8d9ced8b26cf978ea976b5a7c39ca4b9db06bb76971739fe38695ff4ec91e315d7e99290718fa9fb51e9d826d0b
+  languageName: node
+  linkType: hard
+
 "@types/http-cache-semantics@npm:*":
   version: 4.0.4
   resolution: "@types/http-cache-semantics@npm:4.0.4"
@@ -2790,6 +2797,16 @@ __metadata:
   dependencies:
     "@types/react": "npm:*"
   checksum: 70e86f15f69f89b8f179139ab2e8a8aa9765e742789f5dd5a46fec40d4300ada8fe3349cceda42b9964a018982d7ccb7d791b47f781966c992bfd37da909fbd3
+  languageName: node
+  linkType: hard
+
+"@types/react-howler@npm:^5.2.3":
+  version: 5.2.3
+  resolution: "@types/react-howler@npm:5.2.3"
+  dependencies:
+    "@types/howler": "npm:*"
+    "@types/react": "npm:*"
+  checksum: 8c5ddded6784ff0d77e0d7286ff84b4f7f9a25fdbb857a47f58570f24654b34d8eb52492b0629d30e64cf0d7eb539cf1ac7030b9da231812fe630ec94dd874d7
   languageName: node
   linkType: hard
 
@@ -4419,6 +4436,7 @@ __metadata:
     "@types/react": "npm:^18.2.15"
     "@types/react-color": "npm:^3.0.10"
     "@types/react-dom": "npm:^18.2.7"
+    "@types/react-howler": "npm:^5.2.3"
     "@types/react-router-dom": "npm:^5.3.3"
     "@types/three": "npm:^0.158.2"
     "@typescript-eslint/eslint-plugin": "npm:^6.0.0"
@@ -4436,6 +4454,7 @@ __metadata:
     react-color: "npm:^2.19.3"
     react-dom: "npm:^18.2.0"
     react-full-screen: "npm:^1.1.1"
+    react-howler: "npm:^5.2.0"
     react-markdown: "npm:^9.0.1"
     react-router-dom: "npm:^6.18.0"
     remark-gfm: "npm:^4.0.0"
@@ -6447,6 +6466,13 @@ __metadata:
   dependencies:
     react-is: "npm:^16.7.0"
   checksum: fe0889169e845d738b59b64badf5e55fa3cf20454f9203d1eb088df322d49d4318df774828e789898dcb280e8a5521bb59b3203385662ca5e9218a6ca5820e74
+  languageName: node
+  linkType: hard
+
+"howler@npm:^2.2.0":
+  version: 2.2.4
+  resolution: "howler@npm:2.2.4"
+  checksum: 74a295f56fd9b2abce122b27ed12c33fa195fb8a76832803e92d8e462a1eca803b55f44c14db052211d0cfab85c7c5249664c68d95bbbc16c775fac73866c6ef
   languageName: node
   linkType: hard
 
@@ -9719,7 +9745,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prop-types@npm:^15.5.10, prop-types@npm:^15.6.0, prop-types@npm:^15.8.1":
+"prop-types@npm:^15.5.10, prop-types@npm:^15.5.6, prop-types@npm:^15.6.0, prop-types@npm:^15.8.1":
   version: 15.8.1
   resolution: "prop-types@npm:15.8.1"
   dependencies:
@@ -9956,6 +9982,16 @@ __metadata:
   peerDependencies:
     react: ">= 16.8.0"
   checksum: 02c6034c6aca5c68b4067d2cbfe0328b2461a0ef3b27735cf2711aca53308242cf0f31f888e6fc22e9ea34ae28c61a8d8acaddfd497f100c8e84f87b58530439
+  languageName: node
+  linkType: hard
+
+"react-howler@npm:^5.2.0":
+  version: 5.2.0
+  resolution: "react-howler@npm:5.2.0"
+  dependencies:
+    howler: "npm:^2.2.0"
+    prop-types: "npm:^15.5.6"
+  checksum: b4b4572851c9d375dcec88c3280fde62c1d8325505491832ef741e2311e2d58439bbc5130ed74ef84fdafadbb9d60aff865db14f6783bd3df5eb33b1fcf24eb4
   languageName: node
   linkType: hard
 

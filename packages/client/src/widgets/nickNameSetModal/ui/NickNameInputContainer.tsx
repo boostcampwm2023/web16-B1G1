@@ -31,12 +31,7 @@ export default function NickNameInputContainer({
 	const handleNickNameInput = ({
 		target,
 	}: React.ChangeEvent<HTMLInputElement>) => {
-		if (!NICKNAME_REGEX.test(target.value)) {
-			console.log('invalid');
-			console.log(target.value);
-			console.log(NICKNAME_REGEX.test(target.value));
-			return;
-		}
+		if (!NICKNAME_REGEX.test(target.value)) return;
 		if (target.value.length > MAX_ID_LENGTH) return;
 
 		setNickNameState('DEFAULT');

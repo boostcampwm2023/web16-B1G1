@@ -5,7 +5,7 @@ import { Caption } from 'shared/ui/styles';
 import { css } from '@emotion/react';
 import { useEffect } from 'react';
 import { getIsAvailableNickName } from 'shared/apis';
-import { engOrNumRegex } from '../lib/constants';
+import { NICKNAME_REGEX } from '../lib/constants';
 
 interface PropsTypes {
 	setValidNickName: React.Dispatch<React.SetStateAction<string>>;
@@ -31,7 +31,7 @@ export default function NickNameInputContainer({
 	const handleNickNameInput = ({
 		target,
 	}: React.ChangeEvent<HTMLInputElement>) => {
-		if (!engOrNumRegex.test(target.value)) return;
+		if (!NICKNAME_REGEX.test(target.value)) return;
 		if (target.value.length > MAX_ID_LENGTH) return;
 
 		setNickNameState('DEFAULT');
@@ -60,7 +60,7 @@ export default function NickNameInputContainer({
 	const getMessage = () => {
 		if (nickNameState === 'VALID') return '사용 가능한 닉네임입니다.';
 		if (nickNameState === 'DUPLICATED') return '이미 사용중인 닉네임입니다.';
-		return `${MIN_ID_LENGTH} - ${MAX_ID_LENGTH}자의 영어/숫자 닉네임을 입력해주세요.`;
+		return `${MIN_ID_LENGTH} - ${MAX_ID_LENGTH}자의 한글/영어/숫자 닉네임을 입력해주세요.`;
 	};
 
 	return (

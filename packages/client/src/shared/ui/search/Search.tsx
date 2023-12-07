@@ -4,7 +4,7 @@ import { Body03ME } from '../styles';
 import { Button } from 'shared/ui';
 
 interface PropsTypes {
-	onClick: () => void;
+	onSubmit: () => void;
 	placeholder?: string;
 	results?: string[];
 	inputState: string;
@@ -12,7 +12,7 @@ interface PropsTypes {
 }
 
 export default function Search({
-	onClick,
+	onSubmit,
 	inputState,
 	setInputState,
 	placeholder = '',
@@ -32,7 +32,13 @@ export default function Search({
 	));
 
 	return (
-		<Layout {...args}>
+		<Layout
+			{...args}
+			onSubmit={(e) => {
+				e.preventDefault();
+				onSubmit();
+			}}
+		>
 			<InputLayout>
 				<img src={searchIcon} alt="돋보기 아이콘" />
 
@@ -43,7 +49,6 @@ export default function Search({
 				/>
 
 				<Button
-					onClick={onClick}
 					size="m"
 					buttonType="CTA-icon"
 					type="submit"
@@ -58,7 +63,7 @@ export default function Search({
 	);
 }
 
-const Layout = styled.div`
+const Layout = styled.form`
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;

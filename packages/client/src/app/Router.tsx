@@ -45,7 +45,7 @@ export const router = createBrowserRouter(
 			</Route>
 
 			<Route path="/guest" element={<Home />}>
-				<Route path=":hostId">
+				<Route path=":hostNickname">
 					<Route path=":postId">
 						<Route path="detail" element={<PostModal />} />
 					</Route>
@@ -54,7 +54,7 @@ export const router = createBrowserRouter(
 
 			<Route path="/search" element={<PrivateRoute />}>
 				<Route path="/search" element={<Home />}>
-					<Route path=":hostId">
+					<Route path=":hostNickname">
 						<Route path=":postId">
 							<Route path="detail" element={<PostModal />} />
 						</Route>

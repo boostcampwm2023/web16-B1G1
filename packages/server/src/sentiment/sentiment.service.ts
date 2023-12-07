@@ -1,11 +1,16 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import {
+	BadRequestException,
+	Injectable,
+	InternalServerErrorException,
+} from '@nestjs/common';
 import { GetSentimentDto } from './dto/get-sentiment.dto';
-import { clovaConfig } from 'src/config/clova.config';
+import { clovaConfig } from '../config/clova.config';
 
 @Injectable()
 export class SentimentService {
 	async getSentiment(body: GetSentimentDto) {
 		const { content } = body;
+		if (!content) throw new BadRequestException('게시글 내용이 없습니다.');
 
 		const response = await fetch(clovaConfig.url, {
 			method: 'POST',

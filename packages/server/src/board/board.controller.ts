@@ -52,13 +52,13 @@ export class BoardController {
 	@UseInterceptors(TransactionInterceptor)
 	@UsePipes(ValidationPipe)
 	@CreateBoardSwaggerDecorator()
-	createBoard(
+	async createBoard(
 		@Body() createBoardDto: CreateBoardDto,
 		@GetUser() userData: UserDataDto,
 		@UploadedFiles() files: Express.Multer.File[],
 		@GetQueryRunner() queryRunner: QueryRunner,
 	): Promise<Board> {
-		return this.boardService.createBoard(
+		return await this.boardService.createBoard(
 			createBoardDto,
 			userData,
 			files,
@@ -97,7 +97,7 @@ export class BoardController {
 		@Param('id', ParseIntPipe) id: number,
 		@GetUser() userData: UserDataDto,
 	): Promise<boolean> {
-		return this.boardService.getIsLiked(id, userData);
+		return await this.boardService.getIsLiked(id, userData);
 	}
 
 	// 사진도 수정할 수 있도록 폼데이터 형태로 받기
@@ -107,14 +107,14 @@ export class BoardController {
 	@UseInterceptors(TransactionInterceptor)
 	@UsePipes(ValidationPipe)
 	@UpdateBoardSwaggerDecorator()
-	updateBoard(
+	async updateBoard(
 		@Param('id', ParseIntPipe) id: number,
 		@Body() updateBoardDto: UpdateBoardDto,
 		@GetUser() userData: UserDataDto,
 		@UploadedFiles() files: Express.Multer.File[],
 		@GetQueryRunner() queryRunner: QueryRunner,
 	) {
-		return this.boardService.updateBoard(
+		return await this.boardService.updateBoard(
 			id,
 			updateBoardDto,
 			userData,
@@ -127,22 +127,22 @@ export class BoardController {
 	@UseGuards(CookieAuthGuard)
 	@UsePipes(ValidationPipe)
 	@PatchLikeSwaggerDecorator()
-	patchLike(
+	async patchLike(
 		@Param('id', ParseIntPipe) id: number,
 		@GetUser() userData: UserDataDto,
 	): Promise<Partial<Board>> {
-		return this.boardService.patchLike(id, userData);
+		return await this.boardService.patchLike(id, userData);
 	}
 
 	@Patch(':id/unlike')
 	@UseGuards(CookieAuthGuard)
 	@UsePipes(ValidationPipe)
 	@PatchUnlikeSwaggerDecorator()
-	patchUnlike(
+	async patchUnlike(
 		@Param('id', ParseIntPipe) id: number,
 		@GetUser() userData: UserDataDto,
 	): Promise<Partial<Board>> {
-		return this.boardService.patchUnlike(id, userData);
+		return await this.boardService.patchUnlike(id, userData);
 	}
 
 	// 연관된 Image 및 Star, Like도 함께 삭제
@@ -151,11 +151,11 @@ export class BoardController {
 	@UseInterceptors(TransactionInterceptor)
 	@UsePipes(ValidationPipe)
 	@DeleteBoardSwaggerDecorator()
-	deleteBoard(
+	async deleteBoard(
 		@Param('id', ParseIntPipe) id: number,
 		@GetUser() userData: UserDataDto,
 		@GetQueryRunner() queryRunner: QueryRunner,
 	): Promise<DeleteResult> {
-		return this.boardService.deleteBoard(id, userData, queryRunner);
+		return await this.boardService.deleteBoard(id, userData, queryRunner);
 	}
 }

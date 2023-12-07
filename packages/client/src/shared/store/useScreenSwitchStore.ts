@@ -7,7 +7,5 @@ interface ScreenSwitchState {
 
 export const useScreenSwitchStore = create<ScreenSwitchState>((set) => ({
 	isSwitching: false,
-	setIsSwitching: (value) => {
-		set((state) => ({ ...state, isSwitching: value }));
-	},
+	setIsSwitching: (isSwitching) => set((state) => ({ ...state, isSwitching })),
 }));

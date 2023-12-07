@@ -14,7 +14,6 @@ import {
 	UploadedFiles,
 	UseFilters,
 } from '@nestjs/common';
-import { BoardService } from './board.service';
 import { CreateBoardDto } from './dto/create-board.dto';
 import { UpdateBoardDto } from './dto/update-board.dto';
 import { Board } from './entities/board.entity';
@@ -33,11 +32,10 @@ import { PatchLikeSwaggerDecorator } from './decorators/swagger/patch-like-swagg
 import { PatchUnlikeSwaggerDecorator } from './decorators/swagger/patch-unlike-swagger.decorator';
 import { DeleteBoardSwaggerDecorator } from './decorators/swagger/delete-board-by-id-swagger.decorator';
 import { LogInterceptor } from '../interceptor/log.interceptor';
-import { TransactionInterceptor } from '../interceptor/transaction.interceptor';
-import { GetQueryRunner } from '../interceptor/decorators/get-querry-runner.decorator';
-import { DeleteResult, QueryRunner } from 'typeorm';
+import { DeleteResult } from 'typeorm';
 import { GetIsLikedSwaggerDecorator } from './decorators/swagger/get-is-liked-swagged.decorator';
 import { HttpExceptionFilter } from '../exception-filter/http.exception-filter';
+import { BoardService } from './board.service';
 
 @Controller('post')
 @UseInterceptors(LogInterceptor)
@@ -49,21 +47,14 @@ export class BoardController {
 	@Post()
 	@UseGuards(CookieAuthGuard)
 	@UseInterceptors(FilesInterceptor('file', 3))
-	@UseInterceptors(TransactionInterceptor)
 	@UsePipes(ValidationPipe)
 	@CreateBoardSwaggerDecorator()
 	async createBoard(
 		@Body() createBoardDto: CreateBoardDto,
 		@GetUser() userData: UserDataDto,
 		@UploadedFiles() files: Express.Multer.File[],
-		@GetQueryRunner() queryRunner: QueryRunner,
 	): Promise<Board> {
-		return await this.boardService.createBoard(
-			createBoardDto,
-			userData,
-			files,
-			queryRunner,
-		);
+		return await this.boardService.createBoard(createBoardDto, userData, files);
 	}
 
 	// 게시글에 대한 User정보 얻기
@@ -104,7 +95,6 @@ export class BoardController {
 	@Patch(':id')
 	@UseGuards(CookieAuthGuard)
 	@UseInterceptors(FilesInterceptor('file', 3))
-	@UseInterceptors(TransactionInterceptor)
 	@UsePipes(ValidationPipe)
 	@UpdateBoardSwaggerDecorator()
 	async updateBoard(
@@ -112,14 +102,12 @@ export class BoardController {
 		@Body() updateBoardDto: UpdateBoardDto,
 		@GetUser() userData: UserDataDto,
 		@UploadedFiles() files: Express.Multer.File[],
-		@GetQueryRunner() queryRunner: QueryRunner,
 	) {
 		return await this.boardService.updateBoard(
 			id,
 			updateBoardDto,
 			userData,
 			files,
-			queryRunner,
 		);
 	}
 
@@ -148,14 +136,12 @@ export class BoardController {
 	// 연관된 Image 및 Star, Like도 함께 삭제
 	@Delete(':id')
 	@UseGuards(CookieAuthGuard)
-	@UseInterceptors(TransactionInterceptor)
 	@UsePipes(ValidationPipe)
 	@DeleteBoardSwaggerDecorator()
 	async deleteBoard(
 		@Param('id', ParseIntPipe) id: number,
 		@GetUser() userData: UserDataDto,
-		@GetQueryRunner() queryRunner: QueryRunner,
 	): Promise<DeleteResult> {
-		return await this.boardService.deleteBoard(id, userData, queryRunner);
+		return await this.boardService.deleteBoard(id, userData);
 	}
 }

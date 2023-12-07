@@ -13,6 +13,7 @@ import Cookies from 'js-cookie';
 import instance from 'shared/apis/AxiosInterceptor';
 import { useViewStore } from 'shared/store';
 import { useOwnerStore } from 'shared/store/useOwnerStore';
+import { usePlayingStore } from 'shared/store/useAudioStore';
 import { useGalaxyStore } from 'shared/store';
 
 interface PropsType {
@@ -24,6 +25,7 @@ export default function UnderBar({ nickname }: PropsType) {
 
 	const { setView } = useViewStore();
 	const { isMyPage, pageOwnerNickName } = useOwnerStore();
+	const { setPlaying } = usePlayingStore();
 	const { reset } = useGalaxyStore();
 
 	const handleLogoutButton = async () => {
@@ -88,7 +90,12 @@ export default function UnderBar({ nickname }: PropsType) {
 						은하 수정하기
 					</BigButton>
 
-					<BigButton size="l" buttonType="Button" disabled={!isMyPage}>
+					<BigButton
+						size="l"
+						buttonType="Button"
+						disabled={!isMyPage}
+						onClick={() => setPlaying()}
+					>
 						<img src={isMyPage ? AddIcon : AddIconGray} alt="별 스킨 만들기" />
 						별 스킨 만들기
 					</BigButton>

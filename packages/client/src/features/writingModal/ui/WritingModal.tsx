@@ -6,16 +6,25 @@ import Images from './Images';
 import { useNavigate } from 'react-router-dom';
 import { useViewStore, usePostStore } from 'shared/store';
 import InputBar from 'shared/ui/inputBar/InputBar';
+import styled from '@emotion/styled';
+import { css } from '@emotion/react';
+import { Caption } from 'shared/ui/styles';
+
+type TextStateTypes = 'DEFAULT' | 'INVALID';
 
 export default function WritingModal() {
 	const [title, setTitle] = useState('');
 	const [content, setContent] = useState('');
 	const [files, setFiles] = useState<FileList | null>(null);
+	const [titleState, setTitleState] = useState<TextStateTypes>('DEFAULT');
+	const [contentState, setContentState] = useState<TextStateTypes>('DEFAULT');
 	const navigate = useNavigate();
 	const { setView } = useViewStore();
 	const { setStoreTitle, setStoreContent, setStoreFiles } = usePostStore();
 
 	const handleSendPost = async () => {
+		if (title === '') return setTitleState('INVALID');
+		if (content === '') return setContentState('INVALID');
 		setStoreTitle(title);
 		setStoreContent(content);
 		setStoreFiles(files);
@@ -42,15 +51,76 @@ export default function WritingModal() {
 					navigate('/home');
 				}}
 			>
-				<InputBar
-					id={'postTitle'}
-					placeholder="제목"
-					style={{ marginBottom: '30px' }}
-					value={title}
-					onChange={(e) => setTitle(e.target.value)}
+				<TitleContainer>
+					<TitleInput
+						id={'postTitle'}
+						placeholder="제목"
+						value={title}
+						onChange={(e) => {
+							setTitleState('DEFAULT');
+							setTitle(e.target.value);
+						}}
+						state={titleState}
+					/>
+					{titleState === 'INVALID' && <Message>제목을 입력해주세요.</Message>}
+				</TitleContainer>
+				<ContentArea
+					onChange={(content) => {
+						setContentState('DEFAULT');
+						setContent(content);
+					}}
+					height="40vh"
+					state={contentState}
 				/>
-				<TextArea onChange={(content) => setContent(content)} height="40vh" />
+				{contentState === 'INVALID' && <Message>내용을 입력해주세요.</Message>}
 			</Modal>
 		</ModalPortal>
 	);
 }
+
+const TitleContainer = styled.div`
+	margin-bottom: 30px;
+`;
+
+const TitleInput = styled(InputBar)<{ state: TextStateTypes }>`
+	${({ state, theme: { colors } }) => {
+		if (state === 'DEFAULT') return;
+
+		return css`
+			border-color: ${colors.text.warning};
+
+			&:focus {
+				border-color: ${colors.text.warning};
+			}
+
+			&:hover {
+				border-color: ${colors.text.warning};
+			}
+		`;
+	}};
+`;
+
+const ContentArea = styled(TextArea)<{ state: TextStateTypes }>`
+	${({ state, theme: { colors } }) => {
+		if (state === 'DEFAULT') return;
+
+		return css`
+			border-color: ${colors.text.warning};
+
+			&:focus {
+				border-color: ${colors.text.warning};
+			}
+
+			&:hover {
+				border-color: ${colors.text.warning};
+			}
+		`;
+	}};
+`;
+
+const Message = styled.p`
+	margin: 4px 0 0 0;
+	color: ${({ theme: { colors } }) => colors.text.warning};
+
+	${Caption}
+`;

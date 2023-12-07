@@ -2,8 +2,8 @@ import { Module } from '@nestjs/common';
 import { GalaxyService } from './galaxy.service';
 import { GalaxyController } from './galaxy.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from 'src/auth/entities/user.entity';
-import { AuthModule } from 'src/auth/auth.module';
+import { User } from '../auth/entities/user.entity';
+import { AuthModule } from '../auth/auth.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Galaxy, GalaxySchema } from './schemas/galaxy.schema';
 import {

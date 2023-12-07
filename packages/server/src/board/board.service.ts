@@ -120,7 +120,7 @@ export class BoardService {
 		files: Express.Multer.File[],
 		queryRunner: QueryRunner,
 	) {
-		await queryRunner.startTransaction();
+		// await queryRunner.startTransaction();
 
 		const board: Board = await queryRunner.manager.findOneBy(Board, { id });
 		if (!board) {
@@ -174,7 +174,7 @@ export class BoardService {
 
 		delete updatedBoard.user.password; // password 제거하여 반환
 
-		await queryRunner.commitTransaction();
+		// await queryRunner.commitTransaction();
 		return updatedBoard;
 	}
 
@@ -247,7 +247,7 @@ export class BoardService {
 		userData: UserDataDto,
 		queryRunner: QueryRunner,
 	): Promise<DeleteResult> {
-		await queryRunner.startTransaction();
+		// await queryRunner.startTransaction();
 
 		const board: Board = await queryRunner.manager.findOneBy(Board, { id });
 
@@ -278,7 +278,7 @@ export class BoardService {
 		// 게시글 삭제
 		const result = await queryRunner.manager.delete(Board, { id });
 
-		await queryRunner.commitTransaction();
+		// await queryRunner.commitTransaction();
 		return result;
 	}
 

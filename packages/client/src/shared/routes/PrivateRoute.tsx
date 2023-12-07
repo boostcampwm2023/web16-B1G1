@@ -19,7 +19,7 @@ export default function PrivateRoute() {
 		})();
 	}, []);
 
-	if (isLoading) return <Outlet />;
+	if (isLoading) return null;
 
 	return isAuthenticated && !isLoading ? <Outlet /> : <Navigate to="/login" />;
 }

@@ -72,6 +72,8 @@ export default function Filter({ exceptionData, setCondition }: PropsType) {
 	return (
 		<div
 			style={{
+				backgroundColor: '#474747',
+				padding: '1rem',
 				display: 'flex',
 				alignItems: 'center',
 				justifyContent: 'space-between',

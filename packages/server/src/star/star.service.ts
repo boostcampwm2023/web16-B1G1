@@ -45,7 +45,6 @@ export class StarService {
 
 			// __v 필드 제거
 			star.__v = undefined;
-			console.log(star);
 
 			starDataList.push({
 				id: board.id,

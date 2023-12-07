@@ -10,7 +10,7 @@ import { RedisRepository } from './redis.repository';
 import { CookieAuthGuard } from './cookie-auth.guard';
 import { ShareLink } from './entities/share_link.entity';
 import { MongooseModule } from '@nestjs/mongoose';
-import { Galaxy, GalaxySchema } from 'src/galaxy/schemas/galaxy.schema';
+import { Galaxy, GalaxySchema } from '../galaxy/schemas/galaxy.schema';
 import {
 	Exception,
 	ExceptionSchema,

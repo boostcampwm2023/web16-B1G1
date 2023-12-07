@@ -10,7 +10,7 @@ import { Galaxy } from './schemas/galaxy.schema';
 import { Model } from 'mongoose';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { User } from 'src/auth/entities/user.entity';
+import { User } from '../auth/entities/user.entity';
 
 @Injectable()
 export class GalaxyService {

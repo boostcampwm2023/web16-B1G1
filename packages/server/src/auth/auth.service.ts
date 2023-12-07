@@ -26,7 +26,7 @@ import { v4 as uuid } from 'uuid';
 import { UserDataDto } from './dto/user-data.dto';
 import { ShareLink } from './entities/share_link.entity';
 import { InjectModel } from '@nestjs/mongoose';
-import { Galaxy } from 'src/galaxy/schemas/galaxy.schema';
+import { Galaxy } from '../galaxy/schemas/galaxy.schema';
 import { Model } from 'mongoose';
 
 @Injectable()

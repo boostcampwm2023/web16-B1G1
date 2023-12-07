@@ -2398,6 +2398,15 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["@kurkle/color", [\
+      ["npm:0.3.2", {\
+        "packageLocation": "./.yarn/cache/@kurkle-color-npm-0.3.2-98f2086013-a9e8e3e35d.zip/node_modules/@kurkle/color/",\
+        "packageDependencies": [\
+          ["@kurkle/color", "npm:0.3.2"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["@lukeed/csprng", [\
       ["npm:1.1.0", {\
         "packageLocation": "./.yarn/cache/@lukeed-csprng-npm-1.1.0-d28ed78cc2-5d6dcf478a.zip/node_modules/@lukeed/csprng/",\
@@ -4482,6 +4491,15 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["@types/howler", [\
+      ["npm:2.2.11", {\
+        "packageLocation": "./.yarn/cache/@types-howler-npm-2.2.11-dd9e5eb3f8-0a6b6d3585.zip/node_modules/@types/howler/",\
+        "packageDependencies": [\
+          ["@types/howler", "npm:2.2.11"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["@types/http-cache-semantics", [\
       ["npm:4.0.4", {\
         "packageLocation": "./.yarn/cache/@types-http-cache-semantics-npm-4.0.4-6d4f413ddd-51b72568b4.zip/node_modules/@types/http-cache-semantics/",\
@@ -4765,6 +4783,17 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/@types-react-dom-npm-18.2.17-d5475408ae-33b53078ed.zip/node_modules/@types/react-dom/",\
         "packageDependencies": [\
           ["@types/react-dom", "npm:18.2.17"],\
+          ["@types/react", "npm:18.2.37"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@types/react-howler", [\
+      ["npm:5.2.3", {\
+        "packageLocation": "./.yarn/cache/@types-react-howler-npm-5.2.3-e13418b6ae-8c5ddded67.zip/node_modules/@types/react-howler/",\
+        "packageDependencies": [\
+          ["@types/react-howler", "npm:5.2.3"],\
+          ["@types/howler", "npm:2.2.11"],\
           ["@types/react", "npm:18.2.37"]\
         ],\
         "linkType": "HARD"\
@@ -5934,10 +5963,12 @@ const RAW_RUNTIME_STATE =
           ["@typescript-eslint/eslint-plugin", "virtual:94de940a12aebd19f10e0a5b5702e435ff38d3f2a1b8621121e35f085410d4e466a0d0951ce6ee0822f9dc2cc191756fd20ef02eac83de5ee242939c7842ffa5#npm:6.13.1"],\
           ["@typescript-eslint/parser", "virtual:94de940a12aebd19f10e0a5b5702e435ff38d3f2a1b8621121e35f085410d4e466a0d0951ce6ee0822f9dc2cc191756fd20ef02eac83de5ee242939c7842ffa5#npm:6.13.1"],\
           ["@vitejs/plugin-react", "virtual:94de940a12aebd19f10e0a5b5702e435ff38d3f2a1b8621121e35f085410d4e466a0d0951ce6ee0822f9dc2cc191756fd20ef02eac83de5ee242939c7842ffa5#npm:4.2.0"],\
+          ["chart.js", "npm:4.4.1"],\
           ["eslint", "npm:8.55.0"],\
           ["eslint-plugin-react-hooks", "virtual:94de940a12aebd19f10e0a5b5702e435ff38d3f2a1b8621121e35f085410d4e466a0d0951ce6ee0822f9dc2cc191756fd20ef02eac83de5ee242939c7842ffa5#npm:4.6.0"],\
           ["eslint-plugin-react-refresh", "virtual:94de940a12aebd19f10e0a5b5702e435ff38d3f2a1b8621121e35f085410d4e466a0d0951ce6ee0822f9dc2cc191756fd20ef02eac83de5ee242939c7842ffa5#npm:0.4.5"],\
           ["react", "npm:18.2.0"],\
+          ["react-chartjs-2", "virtual:94de940a12aebd19f10e0a5b5702e435ff38d3f2a1b8621121e35f085410d4e466a0d0951ce6ee0822f9dc2cc191756fd20ef02eac83de5ee242939c7842ffa5#npm:5.2.0"],\
           ["react-dom", "virtual:94de940a12aebd19f10e0a5b5702e435ff38d3f2a1b8621121e35f085410d4e466a0d0951ce6ee0822f9dc2cc191756fd20ef02eac83de5ee242939c7842ffa5#npm:18.2.0"],\
           ["react-router-dom", "virtual:94de940a12aebd19f10e0a5b5702e435ff38d3f2a1b8621121e35f085410d4e466a0d0951ce6ee0822f9dc2cc191756fd20ef02eac83de5ee242939c7842ffa5#npm:6.20.1"],\
           ["typescript", "patch:typescript@npm%3A5.2.2#optional!builtin<compat/typescript>::version=5.2.2&hash=f3b441"],\
@@ -6881,6 +6912,16 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["chart.js", [\
+      ["npm:4.4.1", {\
+        "packageLocation": "./.yarn/cache/chart.js-npm-4.4.1-bea8f3ff67-ef0cd10118.zip/node_modules/chart.js/",\
+        "packageDependencies": [\
+          ["chart.js", "npm:4.4.1"],\
+          ["@kurkle/color", "npm:0.3.2"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["chokidar", [\
       ["npm:3.5.3", {\
         "packageLocation": "./.yarn/cache/chokidar-npm-3.5.3-c5f9b0a56a-1076953093.zip/node_modules/chokidar/",\
@@ -7040,6 +7081,7 @@ const RAW_RUNTIME_STATE =
           ["@types/react", "npm:18.2.37"],\
           ["@types/react-color", "npm:3.0.10"],\
           ["@types/react-dom", "npm:18.2.15"],\
+          ["@types/react-howler", "npm:5.2.3"],\
           ["@types/react-router-dom", "npm:5.3.3"],\
           ["@types/three", "npm:0.158.2"],\
           ["@typescript-eslint/eslint-plugin", "virtual:658502eb4296e93abedc18b6aa9b26978f434f08d98e21ebb0e725354b8bb54b62db9c4a1893e460c694ff7500ff5cbafa4457b0dfd26b5838868666c861e990#npm:6.10.0"],\
@@ -7056,6 +7098,8 @@ const RAW_RUNTIME_STATE =
           ["react", "npm:18.2.0"],\
           ["react-color", "virtual:658502eb4296e93abedc18b6aa9b26978f434f08d98e21ebb0e725354b8bb54b62db9c4a1893e460c694ff7500ff5cbafa4457b0dfd26b5838868666c861e990#npm:2.19.3"],\
           ["react-dom", "virtual:658502eb4296e93abedc18b6aa9b26978f434f08d98e21ebb0e725354b8bb54b62db9c4a1893e460c694ff7500ff5cbafa4457b0dfd26b5838868666c861e990#npm:18.2.0"],\
+          ["react-full-screen", "virtual:658502eb4296e93abedc18b6aa9b26978f434f08d98e21ebb0e725354b8bb54b62db9c4a1893e460c694ff7500ff5cbafa4457b0dfd26b5838868666c861e990#npm:1.1.1"],\
+          ["react-howler", "npm:5.2.0"],\
           ["react-markdown", "virtual:658502eb4296e93abedc18b6aa9b26978f434f08d98e21ebb0e725354b8bb54b62db9c4a1893e460c694ff7500ff5cbafa4457b0dfd26b5838868666c861e990#npm:9.0.1"],\
           ["react-router-dom", "virtual:658502eb4296e93abedc18b6aa9b26978f434f08d98e21ebb0e725354b8bb54b62db9c4a1893e460c694ff7500ff5cbafa4457b0dfd26b5838868666c861e990#npm:6.18.0"],\
           ["remark-gfm", "npm:4.0.0"],\
@@ -9080,6 +9124,15 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["fscreen", [\
+      ["npm:1.2.0", {\
+        "packageLocation": "./.yarn/cache/fscreen-npm-1.2.0-cbeb194fbc-1a5cb44446.zip/node_modules/fscreen/",\
+        "packageDependencies": [\
+          ["fscreen", "npm:1.2.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["fsevents", [\
       ["patch:fsevents@npm%3A2.3.3#optional!builtin<compat/fsevents>::version=2.3.3&hash=df0bf1", {\
         "packageLocation": "./.yarn/unplugged/fsevents-patch-6b67494872/node_modules/fsevents/",\
@@ -9493,6 +9546,15 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["hoist-non-react-statics", "npm:3.3.2"],\
           ["react-is", "npm:16.13.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["howler", [\
+      ["npm:2.2.4", {\
+        "packageLocation": "./.yarn/cache/howler-npm-2.2.4-689ccf19b1-74a295f56f.zip/node_modules/howler/",\
+        "packageDependencies": [\
+          ["howler", "npm:2.2.4"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -13518,6 +13580,32 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["react-chartjs-2", [\
+      ["npm:5.2.0", {\
+        "packageLocation": "./.yarn/cache/react-chartjs-2-npm-5.2.0-03632f5179-437e443a26.zip/node_modules/react-chartjs-2/",\
+        "packageDependencies": [\
+          ["react-chartjs-2", "npm:5.2.0"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:94de940a12aebd19f10e0a5b5702e435ff38d3f2a1b8621121e35f085410d4e466a0d0951ce6ee0822f9dc2cc191756fd20ef02eac83de5ee242939c7842ffa5#npm:5.2.0", {\
+        "packageLocation": "./.yarn/__virtual__/react-chartjs-2-virtual-2e5b9b33bb/0/cache/react-chartjs-2-npm-5.2.0-03632f5179-437e443a26.zip/node_modules/react-chartjs-2/",\
+        "packageDependencies": [\
+          ["react-chartjs-2", "virtual:94de940a12aebd19f10e0a5b5702e435ff38d3f2a1b8621121e35f085410d4e466a0d0951ce6ee0822f9dc2cc191756fd20ef02eac83de5ee242939c7842ffa5#npm:5.2.0"],\
+          ["@types/chart.js", null],\
+          ["@types/react", "npm:18.2.41"],\
+          ["chart.js", "npm:4.4.1"],\
+          ["react", "npm:18.2.0"]\
+        ],\
+        "packagePeers": [\
+          "@types/chart.js",\
+          "@types/react",\
+          "chart.js",\
+          "react"\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["react-color", [\
       ["npm:2.19.3", {\
         "packageLocation": "./.yarn/cache/react-color-npm-2.19.3-d63f96d772-6f9fce9ff3.zip/node_modules/react-color/",\
@@ -13656,6 +13744,40 @@ const RAW_RUNTIME_STATE =
         "packagePeers": [\
           "@types/react",\
           "react"\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["react-full-screen", [\
+      ["npm:1.1.1", {\
+        "packageLocation": "./.yarn/cache/react-full-screen-npm-1.1.1-4d2e312e1b-02c6034c6a.zip/node_modules/react-full-screen/",\
+        "packageDependencies": [\
+          ["react-full-screen", "npm:1.1.1"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:658502eb4296e93abedc18b6aa9b26978f434f08d98e21ebb0e725354b8bb54b62db9c4a1893e460c694ff7500ff5cbafa4457b0dfd26b5838868666c861e990#npm:1.1.1", {\
+        "packageLocation": "./.yarn/__virtual__/react-full-screen-virtual-9bbf69d77c/0/cache/react-full-screen-npm-1.1.1-4d2e312e1b-02c6034c6a.zip/node_modules/react-full-screen/",\
+        "packageDependencies": [\
+          ["react-full-screen", "virtual:658502eb4296e93abedc18b6aa9b26978f434f08d98e21ebb0e725354b8bb54b62db9c4a1893e460c694ff7500ff5cbafa4457b0dfd26b5838868666c861e990#npm:1.1.1"],\
+          ["@types/react", "npm:18.2.37"],\
+          ["fscreen", "npm:1.2.0"],\
+          ["react", "npm:18.2.0"]\
+        ],\
+        "packagePeers": [\
+          "@types/react",\
+          "react"\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["react-howler", [\
+      ["npm:5.2.0", {\
+        "packageLocation": "./.yarn/cache/react-howler-npm-5.2.0-211ee607c8-b4b4572851.zip/node_modules/react-howler/",\
+        "packageDependencies": [\
+          ["react-howler", "npm:5.2.0"],\
+          ["howler", "npm:2.2.4"],\
+          ["prop-types", "npm:15.8.1"]\
         ],\
         "linkType": "HARD"\
       }]\

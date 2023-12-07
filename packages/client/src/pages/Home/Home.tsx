@@ -20,6 +20,10 @@ import {
 	SPIRAL_START,
 	ARMS_Z_DIST,
 } from 'widgets/galaxy/lib/constants';
+import { FullScreen, useFullScreenHandle } from 'react-full-screen';
+import Audio from 'features/audio/Audio';
+import styled from '@emotion/styled';
+import { keyframes } from '@emotion/react';
 
 export default function Home() {
 	const { view } = useViewStore();
@@ -27,6 +31,7 @@ export default function Home() {
 	const { text } = useToastStore();
 	const { pageOwnerNickName } = useOwnerStore();
 	const [nickname, setNickname] = useState('');
+	const handleFullScreen = useFullScreenHandle();
 
 	const navigate = useNavigate();
 	const { setSpiral, setStart, setThickness, setZDist } = useGalaxyStore();
@@ -67,14 +72,33 @@ export default function Home() {
 		});
 	}, [pageOwnerNickName]);
 
+	const keyDown = (e: KeyboardEvent) => {
+		if (e.key === 'Escape') {
+			e.preventDefault();
+			handleFullScreen.exit();
+		} else if (e.key === 'F9') {
+			e.preventDefault();
+			handleFullScreen.enter();
+		}
+	};
+
+	useEffect(() => {
+		window.addEventListener('keydown', keyDown);
+		return () => {
+			window.removeEventListener('keydown', keyDown);
+		};
+	}, []);
+
 	return (
-		<>
+		<FullScreen handle={handleFullScreen}>
 			<Outlet />
 
+			<Audio />
 			{isSwitching && <WarpScreen />}
+			{!isSwitching && <WhiteScreen />}
 			{text && <Toast>{text}</Toast>}
 
-			{view === 'MAIN' && (
+			{(view === 'MAIN' || view === 'DETAIL') && (
 				<>
 					<UpperBar />
 					<UnderBar nickname={nickname} />
@@ -82,6 +106,27 @@ export default function Home() {
 			)}
 
 			<Screen />
-		</>
+		</FullScreen>
 	);
 }
+
+const fadeout = keyframes`
+	0% {
+		opacity: 1;
+	}
+	100% {
+		opacity: 0;
+		display: none;
+	}
+`;
+
+const WhiteScreen = styled.div`
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 101;
+	background-color: white;
+	animation: ${fadeout} 0.5s linear forwards;
+`;

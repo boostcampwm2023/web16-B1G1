@@ -3,11 +3,15 @@ import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from '../../src/app.module';
 import { Board } from '../../src/board/entities/board.entity';
-import { UpdateBoardDto } from 'src/board/dto/update-board.dto';
-import { CreateBoardDto } from 'src/board/dto/create-board.dto';
+import { UpdateBoardDto } from '../../src/board/dto/update-board.dto';
+import { CreateBoardDto } from '../../src/board/dto/create-board.dto';
+import * as cookieParser from 'cookie-parser';
+import { encryptAes } from '../../src/util/aes.util';
 
 describe('BoardController (/board, e2e)', () => {
 	let app: INestApplication;
+	let accessToken: string;
+	let post_id: number;
 
 	beforeEach(async () => {
 		const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -15,137 +19,121 @@ describe('BoardController (/board, e2e)', () => {
 		}).compile();
 
 		app = moduleFixture.createNestApplication();
+		app.use(cookieParser());
 		await app.init();
-	});
 
-	// #39 [06-02] 서버는 사용자의 글 데이터를 전송한다.
-	it('GET /board/:id', async () => {
-		const response = await request(app.getHttpServer())
-			.get('/board/1')
-			.expect(200);
+		// 유저 만들고 로그인 후 accessToken 받아오기
+		const randomeBytes = Math.random().toString(36).slice(2, 10);
 
-		expect(response).toHaveProperty('body');
-		expect((response as any).body).toHaveProperty('id');
-		expect(response.body.id).toBe(1);
-		expect((response as any).body).toHaveProperty('title');
-		expect((response as any).body).toHaveProperty('content');
-		expect((response as any).body).toHaveProperty('author');
-		expect((response as any).body).toHaveProperty('created_at');
-		expect((response as any).body).toHaveProperty('updated_at');
-	});
+		const newUser = {
+			username: randomeBytes,
+			nickname: randomeBytes,
+			password: randomeBytes,
+		};
 
-	// (추가 필요) 서버는 사용자의 글 목록을 전송한다.
-	it('GET /board', async () => {
-		const response = await request(app.getHttpServer())
-			.get('/board')
-			.expect(200);
+		await request(app.getHttpServer()).post('/auth/signup').send(newUser);
 
-		expect(response).toHaveProperty('body');
-		expect(response.body).toBeInstanceOf(Array);
+		newUser.nickname = undefined;
+		const signInResponse = await request(app.getHttpServer())
+			.post('/auth/signin')
+			.send(newUser);
 
-		const boards = response.body as Board[];
-		if (boards.length > 0) {
-			expect(boards[0]).toHaveProperty('id');
-			expect(boards[0]).toHaveProperty('title');
-		}
-	});
+		signInResponse.headers['set-cookie'].forEach((cookie: string) => {
+			if (cookie.includes('accessToken')) {
+				accessToken = cookie.split(';')[0].split('=')[1];
+			}
+		});
 
-	// #45 [06-08] 서버는 좋아요 / 좋아요 취소 요청을 받아 데이터베이스의 데이터를 수정한다.
-	it('PATCH /board/:id/like', async () => {
+		// 별글도 하나 생성 후 수행
 		const board = {
 			title: 'test',
 			content: 'test',
-			author: 'test',
+			star: '{}',
 		};
-		const createdBoard = (
-			await request(app.getHttpServer()).post('/board').send(board)
-		).body;
-		expect(createdBoard).toHaveProperty('like_cnt');
-		const cntBeforeLike = createdBoard.like_cnt;
+		const postedBoard = await request(app.getHttpServer())
+			.post('/post')
+			.set('Cookie', [`accessToken=${accessToken}`])
+			.send(board);
 
-		const resLike = await request(app.getHttpServer())
-			.patch(`/board/${createdBoard.id}/like`)
-			.expect(200);
-
-		expect(resLike).toHaveProperty('body');
-		expect(resLike.body).toHaveProperty('like_cnt');
-		const cntAfterLike = resLike.body.like_cnt;
-
-		expect(cntAfterLike).toBe(cntBeforeLike + 1);
-	});
-	it('PATCH /board/:id/unlike', async () => {
-		const board = {
-			title: 'test',
-			content: 'test',
-			author: 'test',
-		};
-		const createdBoard = (
-			await request(app.getHttpServer()).post('/board').send(board)
-		).body;
-		expect(createdBoard).toHaveProperty('like_cnt');
-		const cntBeforeUnlike = createdBoard.like_cnt;
-
-		const resUnlike = await request(app.getHttpServer())
-			.patch(`/board/${createdBoard.id}/unlike`)
-			.expect(200);
-
-		expect(resUnlike).toHaveProperty('body');
-		expect(resUnlike.body).toHaveProperty('like_cnt');
-		const cntAfterUnlike = resUnlike.body.like_cnt;
-
-		expect(cntAfterUnlike).toBe(cntBeforeUnlike - 1);
+		post_id = postedBoard.body.id;
 	});
 
 	// #60 [08-06] 서버는 전송 받은 데이터를 데이터베이스에 저장한다.
-	it('POST /board', async () => {
+	it('POST /post', async () => {
 		const board = {
 			title: 'test',
 			content: 'test',
-			author: 'test',
+			star: '{}',
 		};
 		const response = await request(app.getHttpServer())
-			.post('/board')
+			.post('/post')
+			.set('Cookie', [`accessToken=${accessToken}`])
 			.send(board)
 			.expect(201);
 
 		expect(response).toHaveProperty('body');
-		expect((response as any).body).toMatchObject(board);
-		expect((response as any).body).toHaveProperty('id');
-		expect(typeof response.body.id).toBe('number');
+		const { body } = response;
+		expect(body).toHaveProperty('id');
+		expect(typeof body.id).toBe('number');
+		expect(body).toHaveProperty('title');
+		expect(body.title).toBe(board.title);
+		expect(body).toHaveProperty('content');
+		expect(body.content).toBe(encryptAes(board.content)); // 암호화되었는지 확인
+		expect(body).toHaveProperty('star');
+		expect(typeof body.star).toBe('string');
 	});
 
-	// #65 [09-03] 서버는 검색된 사용자의 글 데이터를 전송한다.
-	it('GET /board/by-author', async () => {
-		const author = 'testuser';
-		const board = {
+	// #39 [06-02] 서버는 사용자의 글 데이터를 전송한다.
+	it('GET /post/:id', async () => {
+		const board: CreateBoardDto = {
 			title: 'test',
 			content: 'test',
-			author,
+			star: '{}',
 		};
-		await request(app.getHttpServer()).post('/board').send(board);
+		const newBoard = (
+			await request(app.getHttpServer())
+				.post('/post')
+				.set('Cookie', [`accessToken=${accessToken}`])
+				.send(board)
+		).body;
 
 		const response = await request(app.getHttpServer())
-			.get(`/board/by-author?author=${author}`)
+			.get(`/post/${newBoard.id}`)
 			.expect(200);
 
 		expect(response).toHaveProperty('body');
-		expect(response.body).toBeInstanceOf(Array);
+		const { body } = response;
+		expect(body).toHaveProperty('id');
+		expect(body.id).toBe(newBoard.id);
+		expect(body).toHaveProperty('title');
+		expect(body).toHaveProperty('content');
+		expect(body).toHaveProperty('like_cnt');
+		expect(body).toHaveProperty('images');
+	});
 
-		const boards = response.body as Board[];
-		expect(boards.length).toBeGreaterThan(0);
-		expect(boards[0]).toHaveProperty('id');
-		expect(boards[0]).toHaveProperty('title');
+	it('GET /post/:id/is-liked', async () => {
+		const response = await request(app.getHttpServer())
+			.get(`/post/${post_id}/is-liked`)
+			.set('Cookie', [`accessToken=${accessToken}`])
+			.expect(200);
+
+		expect(response).toHaveProperty('body');
+		const { text } = response;
+		expect(text === 'true' || text === 'false').toBe(true);
 	});
 
 	// (추가 필요) 서버는 사용자의 요청에 따라 글을 수정한다.
-	it('PATCH /board/:id', async () => {
+	it('PATCH /post/:id', async () => {
 		const board = {
 			title: 'test',
 			content: 'test',
-			author: 'test',
+			star: '{}',
 		};
 		const createdBoard = (
-			await request(app.getHttpServer()).post('/board').send(board)
+			await request(app.getHttpServer())
+				.post('/post')
+				.set('Cookie', [`accessToken=${accessToken}`])
+				.send(board)
 		).body;
 		expect(createdBoard).toHaveProperty('id');
 		const id = createdBoard.id;
@@ -156,8 +144,9 @@ describe('BoardController (/board, e2e)', () => {
 		};
 
 		const updated = await request(app.getHttpServer())
-			.patch(`/board/${id}`)
-			.send({ title: 'updated', content: 'updated' })
+			.patch(`/post/${id}`)
+			.set('Cookie', [`accessToken=${accessToken}`])
+			.send(toUpdate)
 			.expect(200);
 
 		expect(updated).toHaveProperty('body');
@@ -168,48 +157,95 @@ describe('BoardController (/board, e2e)', () => {
 		expect(updatedBoard).toHaveProperty('title');
 		expect(updatedBoard.title).toBe(toUpdate.title);
 		expect(updatedBoard).toHaveProperty('content');
-		expect(updatedBoard.content).toBe(toUpdate.content);
+		expect(updatedBoard.content).toBe(encryptAes(toUpdate.content));
+	});
+
+	// #45 [06-08] 서버는 좋아요 / 좋아요 취소 요청을 받아 데이터베이스의 데이터를 수정한다.
+	it('PATCH /post/:id/like', async () => {
+		const board = {
+			title: 'test',
+			content: 'test',
+			star: '{}',
+		};
+
+		const resCreate = await request(app.getHttpServer())
+			.post('/post')
+			.set('Cookie', [`accessToken=${accessToken}`])
+			.send(board);
+		const createdBoard = resCreate.body;
+		expect(createdBoard).toHaveProperty('like_cnt');
+		const cntBeforeLike = createdBoard.like_cnt;
+
+		const resLike = await request(app.getHttpServer())
+			.patch(`/post/${createdBoard.id}/like`)
+			.set('Cookie', [`accessToken=${accessToken}`])
+			.expect(200);
+
+		expect(resLike).toHaveProperty('body');
+		expect(resLike.body).toHaveProperty('like_cnt');
+		const cntAfterLike = resLike.body.like_cnt;
+
+		expect(cntAfterLike).toBe(cntBeforeLike + 1);
+	});
+	it('PATCH /post/:id/unlike', async () => {
+		const board = {
+			title: 'test',
+			content: 'test',
+			star: '{}',
+		};
+		const createdBoard = (
+			await request(app.getHttpServer())
+				.post('/post')
+				.set('Cookie', [`accessToken=${accessToken}`])
+				.send(board)
+		).body;
+		const likedBoard = (
+			await request(app.getHttpServer())
+				.patch(`/post/${createdBoard.id}/like`)
+				.set('Cookie', [`accessToken=${accessToken}`])
+		).body;
+
+		const cntBeforeUnlike = likedBoard.like_cnt;
+
+		const resUnlike = await request(app.getHttpServer())
+			.patch(`/post/${createdBoard.id}/unlike`)
+			.set('Cookie', [`accessToken=${accessToken}`])
+			.expect(200);
+
+		expect(resUnlike).toHaveProperty('body');
+		expect(resUnlike.body).toHaveProperty('like_cnt');
+		const cntAfterUnlike = resUnlike.body.like_cnt;
+
+		expect(cntAfterUnlike).toBe(cntBeforeUnlike - 1);
 	});
 
 	// (추가 필요) 서버는 사용자의 요청에 따라 글을 삭제한다.
-	it('DELETE /board/:id', async () => {
+	it('DELETE /post/:id', async () => {
 		const board: CreateBoardDto = {
 			title: 'test',
 			content: 'test',
 			star: '{}',
 		};
 		const newBoard = (
-			await request(app.getHttpServer()).post('/board').send(board)
+			await request(app.getHttpServer())
+				.post('/post')
+				.set('Cookie', [`accessToken=${accessToken}`])
+				.send(board)
 		).body;
 
 		await request(app.getHttpServer())
-			.delete(`/board/${newBoard.id}`)
+			.delete(`/post/${newBoard.id}`)
+			.set('Cookie', [`accessToken=${accessToken}`])
 			.expect(200);
 
-		await request(app.getHttpServer()).get(`/board/${newBoard.id}`).expect(404);
+		await request(app.getHttpServer()).get(`/post/${newBoard.id}`).expect(404);
 	});
 
-	// #61 [08-07] 사진 정보는 스토리지 서버에 저장한다.
-	it('POST /board/:id/image', async () => {
-		const board: CreateBoardDto = {
-			title: 'test',
-			content: 'test',
-			star: '{}',
-		};
-		const newBoard = (
-			await request(app.getHttpServer()).post('/board').send(board)
-		).body;
-
-		const image = Buffer.from('test');
-
-		const response = await request(app.getHttpServer())
-			.post(`/board/${newBoard.id}/image`)
-			.attach('file', image, 'test.png')
-			.expect(201);
-
-		expect(response).toHaveProperty('body');
-		expect((response as any).body).toHaveProperty('id');
-		expect(response.body.id).toBe(newBoard.id);
-		expect((response as any).body).toHaveProperty('filename');
+	afterEach(async () => {
+		// 로그아웃
+		await request(app.getHttpServer())
+			.post('/auth/signout')
+			.set('Cookie', [`accessToken=${accessToken}`]);
+		await app.close();
 	});
 });

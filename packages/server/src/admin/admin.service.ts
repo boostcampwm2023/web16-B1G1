@@ -1,14 +1,16 @@
 import { Injectable, UseFilters, UseInterceptors } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'src/auth/entities/user.entity';
-import { Board } from 'src/board/entities/board.entity';
+import { User } from '../auth/entities/user.entity';
+import { Board } from '../board/entities/board.entity';
 import { Repository } from 'typeorm';
 import { LogInterceptor } from '../interceptor/log.interceptor';
 import { HttpExceptionFilter } from '../exception-filter/http.exception-filter';
 import * as osUtils from 'os-utils';
 import { exec } from 'child_process';
-import { decryptAes } from 'src/util/aes.util';
-import { awsConfig, bucketName } from 'src/config/aws.config';
+import { decryptAes } from '../util/aes.util';
+import { InjectModel } from '@nestjs/mongoose';
+import { Exception } from '../exception-filter/exception.schema';
+import { awsConfig, bucketName } from '../config/aws.config';
 
 @Injectable()
 @UseInterceptors(LogInterceptor)
@@ -19,15 +21,17 @@ export class AdminService {
 		private readonly userRepository: Repository<User>,
 		@InjectRepository(Board)
 		private readonly boardRepository: Repository<Board>,
+		@InjectModel(Exception.name)
+		private readonly exceptionModel: Repository<Exception>,
 	) {}
 
 	async getAllPosts() {
 		const posts = await this.boardRepository.find();
 
-		// 컨텐츠 복호화
-		posts.forEach((post) => {
-			post.content = decryptAes(post.content);
-		});
+		// // 컨텐츠 복호화
+		// posts.forEach((post) => {
+		// 	post.content = decryptAes(post.content);
+		// });
 
 		// 이미지 있는 경우 이미지 경로 추가
 		posts.forEach((post: any) => {
@@ -98,5 +102,10 @@ export class AdminService {
 		};
 
 		return systemInfo;
+	}
+
+	async getAllExceptions() {
+		const exceptions = await this.exceptionModel.find();
+		return exceptions;
 	}
 }

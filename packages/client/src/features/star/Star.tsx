@@ -36,7 +36,7 @@ const Star = forwardRef<THREE.Mesh, PropsType>((props, ref) => {
 		const cameraDistance = innerRef.current.position.distanceTo(
 			state.camera.position,
 		);
-		const scale = cameraDistance / DISTANCE_LIMIT;
+		const scale = Math.log((cameraDistance / DISTANCE_LIMIT) * Math.E);
 
 		if (cameraDistance > DISTANCE_LIMIT) {
 			innerRef.current!.scale.x = scale;
@@ -57,18 +57,16 @@ const Star = forwardRef<THREE.Mesh, PropsType>((props, ref) => {
 			onPointerOut={onPointerOut}
 		>
 			<Geometry size={size} shape={shape} />
-			{/* <meshStandardMaterial
-				color={color}
-				emissive={color}
-				emissiveIntensity={2}
-				roughness={1}
-				metalness={0.5}
-			/> */}
-			<meshToonMaterial
+			<meshStandardMaterial
 				color={color}
 				emissive={color}
 				emissiveIntensity={brightness}
 			/>
+			{/* <meshToonMaterial
+				color={color}
+				emissive={color}
+				emissiveIntensity={brightness}
+			/> */}
 			{children}
 		</mesh>
 	);

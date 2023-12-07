@@ -14,4 +14,9 @@ export class AdminController {
 	getSystemInfo() {
 		return this.adminService.getSystemInfo();
 	}
+
+	@Get('exception')
+	getAllExceptions() {
+		return this.adminService.getAllExceptions();
+	}
 }

@@ -37,7 +37,7 @@ export default function Controls() {
 
 	useFrame((state, delta) => {
 		const targetPosition = new THREE.Vector3(0, 0, 0);
-		const LENGTH_LIMIT = (cameraToCurrentView * delta) / 2;
+		const LENGTH_LIMIT = ((cameraToCurrentView + 5000) * delta) / 2;
 
 		if (targetView) targetView.getWorldPosition(targetPosition);
 		if (view === 'POST') {

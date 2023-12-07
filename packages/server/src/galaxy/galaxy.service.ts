@@ -64,7 +64,7 @@ export class GalaxyService {
 		} else if (result.matchedCount === 0) {
 			throw new NotFoundException('galaxy not found');
 		} else if (result.modifiedCount === 0) {
-			throw new BadRequestException('Nothing to update');
+			throw new BadRequestException('nothing to update');
 		}
 
 		const updatedGalaxy = await this.galaxyModel.findOne({ _id: galaxy_id });

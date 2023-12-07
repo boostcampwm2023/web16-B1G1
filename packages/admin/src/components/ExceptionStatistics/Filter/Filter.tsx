@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Exception } from '../exception.interface.ts';
 import Button from '../../shared/Button.tsx';
 
@@ -9,37 +9,53 @@ interface PropsType {
 
 export default function Filter({ exceptionData, setCondition }: PropsType) {
 	const [defaultStartDate, defaultEndDate] = getDates();
-	const [pathSet, errorSet] = getSets(exceptionData);
 
-	const [pathCondition, setPathCondition] = useState([...pathSet]);
-	const [errorCondition, setErrorCondition] = useState([...errorSet]);
+	const [uniquePathList, setUniquePathList] = useState<Set<string>>(new Set());
+	const [uniqueErrorList, setUniqueErrorList] = useState<Set<string>>(
+		new Set(),
+	);
+	const [pathCondition, setPathCondition] = useState<string[]>([]);
+	const [errorCondition, setErrorCondition] = useState<string[]>([]);
 	const [startDateCondition, setStartDateCondition] =
 		useState(defaultStartDate);
 	const [endDateCondition, setEndDateCondition] = useState(defaultEndDate);
 
-	const selectPath = (e: any) => {
-		if (e.target.checked === true) {
-			setPathCondition([...pathCondition, e.target.value]);
+	useEffect(() => {
+		const [pathSet, errorSet] = getSets(exceptionData);
+		setUniquePathList(pathSet);
+		setUniqueErrorList(errorSet);
+	}, [exceptionData]);
+
+	useEffect(() => {
+		if (uniquePathList && uniqueErrorList) {
+			setPathCondition([...uniquePathList]);
+			setErrorCondition([...uniqueErrorList]);
+		}
+	}, [uniquePathList, uniqueErrorList]);
+
+	const selectPath = (event: React.ChangeEvent<HTMLInputElement>) => {
+		if (event.target.checked) {
+			setPathCondition([...pathCondition, event.target.value]);
 			return;
 		}
 		setPathCondition(
-			pathCondition.filter((path: any) => path !== e.target.value),
+			pathCondition.filter((path: string) => path !== event.target.value),
 		);
 	};
-	const selectError = (e: any) => {
-		if (e.target.checked === true) {
-			setErrorCondition([...errorCondition, e.target.value]);
+	const selectError = (event: React.ChangeEvent<HTMLInputElement>) => {
+		if (event.target.checked) {
+			setErrorCondition([...errorCondition, event.target.value]);
 			return;
 		}
 		setErrorCondition(
-			errorCondition.filter((error: any) => error !== e.target.value),
+			errorCondition.filter((error: string) => error !== event.target.value),
 		);
 	};
-	const selectStartDate = (e: any) => {
-		setStartDateCondition(e.target.value);
+	const selectStartDate = (event: React.ChangeEvent<HTMLInputElement>) => {
+		setStartDateCondition(event.target.value);
 	};
-	const selectEndDate = (e: any) => {
-		setEndDateCondition(e.target.value);
+	const selectEndDate = (event: React.ChangeEvent<HTMLInputElement>) => {
+		setEndDateCondition(event.target.value);
 	};
 
 	const changeCondition = () => {
@@ -77,18 +93,19 @@ export default function Filter({ exceptionData, setCondition }: PropsType) {
 				>
 					경로 필터
 				</p>
-				{[...pathSet].map((path: any) => (
-					<div key={path}>
-						<input
-							type="checkbox"
-							id={path} // 식별자로 사용될 값
-							defaultChecked={true}
-							value={path} // 실제 값
-							onChange={selectPath}
-						/>
-						<label htmlFor={path}>{path}</label>
-					</div>
-				))}
+				{uniquePathList &&
+					[...uniquePathList].map((path: string) => (
+						<div key={path}>
+							<input
+								type="checkbox"
+								id={path} // 식별자로 사용될 값
+								defaultChecked={true}
+								value={path} // 실제 값
+								onChange={selectPath}
+							/>
+							<label htmlFor={path}>{path}</label>
+						</div>
+					))}
 			</div>
 			<div
 				style={{
@@ -104,18 +121,19 @@ export default function Filter({ exceptionData, setCondition }: PropsType) {
 				>
 					에러 필터
 				</p>
-				{[...errorSet].map((error: any) => (
-					<div key={error}>
-						<input
-							type="checkbox"
-							id={error} // 식별자로 사용될 값
-							defaultChecked={true}
-							value={error} // 실제 값
-							onChange={selectError}
-						/>
-						<label htmlFor={error}>{error}</label>
-					</div>
-				))}
+				{uniqueErrorList &&
+					[...uniqueErrorList].map((error: string) => (
+						<div key={error}>
+							<input
+								type="checkbox"
+								id={error} // 식별자로 사용될 값
+								defaultChecked={true}
+								value={error} // 실제 값
+								onChange={selectError}
+							/>
+							<label htmlFor={error}>{error}</label>
+						</div>
+					))}
 			</div>
 			<div
 				style={{
@@ -178,10 +196,10 @@ function getDates() {
 
 function getSets(exceptionData: Exception[]) {
 	const pathSet = new Set(
-		exceptionData.map((exception: any) => exception.path),
+		exceptionData.map((exception: Exception) => exception.path),
 	);
 	const errorSet = new Set(
-		exceptionData.map((exception: any) => exception.error),
+		exceptionData.map((exception: Exception) => exception.error),
 	);
 	return [pathSet, errorSet];
 }

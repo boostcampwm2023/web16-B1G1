@@ -10,7 +10,7 @@ import { useScreenSwitchStore } from 'shared/store/useScreenSwitchStore';
 import Cookies from 'js-cookie';
 import { getSignInInfo } from 'shared/apis';
 import { getGalaxy } from 'shared/apis';
-import { useGalaxyStore } from 'shared/store';
+import { useGalaxyStore, useCustomStore } from 'shared/store';
 import { Toast } from 'shared/ui';
 import { useToastStore } from 'shared/store';
 import { useOwnerStore } from 'shared/store/useOwnerStore';
@@ -32,6 +32,7 @@ export default function Home() {
 
 	const navigate = useNavigate();
 	const { setSpiral, setStart, setThickness, setZDist } = useGalaxyStore();
+	const custom = useCustomStore();
 
 	useEffect(() => {
 		(async () => {
@@ -50,6 +51,27 @@ export default function Home() {
 		getSignInInfo().then((res) => {
 			Cookies.set('nickname', res.nickname);
 			setNickname(res.nickname);
+		});
+		getGalaxy('').then((res) => {
+			if (res.spiral) {
+				setSpiral(res.spiral);
+				custom.setSpiral(res.spiral);
+			}
+
+			if (res.start) {
+				setStart(res.start);
+				custom.setStart(res.start);
+			}
+
+			if (res.thickness) {
+				setThickness(res.thickness);
+				custom.setThickness(res.thickness);
+			}
+
+			if (res.zDist) {
+				setZDist(res.zDist);
+				custom.setZDist(res.zDist);
+			}
 		});
 	}, []);
 

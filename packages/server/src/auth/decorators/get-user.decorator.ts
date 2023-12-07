@@ -11,9 +11,7 @@ export const GetUser = createParamDecorator(
 
 		const user = req.user as UserDataDto;
 		if (!user) {
-			throw new InternalServerErrorException(
-				'CookieAuthGuard를 적용해야 @GetUser를 사용할 수 있습니다.',
-			);
+			throw new InternalServerErrorException('User not found in request');
 		}
 
 		return req.user;

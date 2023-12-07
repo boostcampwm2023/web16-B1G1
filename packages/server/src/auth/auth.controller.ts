@@ -134,7 +134,7 @@ export class AuthController {
 				redirectUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.OAUTH_GOOGLE_CLIENT_ID}&redirect_uri=${process.env.OAUTH_GOOGLE_REDIRECT_URI}&response_type=code&scope=email%20profile`;
 				break;
 			default:
-				throw new NotFoundException('존재하지 않는 서비스입니다.');
+				throw new NotFoundException('not supported service');
 		}
 		res.redirect(redirectUrl);
 	}
@@ -180,7 +180,7 @@ export class AuthController {
 		try {
 			resourceServerUsername = req.cookies[`${service}Username`];
 		} catch (e) {
-			throw new UnauthorizedException('잘못된 접근입니다.');
+			throw new UnauthorizedException('login is required');
 		}
 
 		await this.authService.signUpWithOAuth(
@@ -197,7 +197,7 @@ export class AuthController {
 	@SearchUserSwaggerDecorator()
 	searchUser(@Query('nickname') nickname: string) {
 		if (!nickname) {
-			throw new BadRequestException('검색할 닉네임을 입력해주세요.');
+			throw new BadRequestException('nickname is required');
 		}
 		return this.authService.searchUser(nickname);
 	}

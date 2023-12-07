@@ -133,7 +133,7 @@ export class AuthService {
 
 	async oauthCallback(service: string, authorizedCode: string, state?: string) {
 		if (!authorizedCode) {
-			throw new BadRequestException('Authorized Code가 존재하지 않습니다.');
+			throw new BadRequestException('authorized code is required');
 		}
 
 		const resourceServerAccessToken = await getOAuthAccessToken(
@@ -191,11 +191,11 @@ export class AuthService {
 				resourceServerAccessToken,
 			);
 		} catch (e) {
-			throw new UnauthorizedException('잘못된 접근입니다.');
+			throw new UnauthorizedException(`could not get username from ${service}`);
 		}
 
 		if (recivedResourceServerUsername !== resourceServerUsername) {
-			throw new UnauthorizedException('잘못된 접근입니다.');
+			throw new UnauthorizedException(`${service} username is uncorrect`);
 		}
 
 		this.redisRepository.del(resourceServerUsername);
@@ -234,11 +234,11 @@ export class AuthService {
 		const user = await this.userRepository.findOneBy({ id: userData.userId });
 
 		if (!user) {
-			throw new NotFoundException('해당 유저를 찾을 수 없습니다.');
+			throw new NotFoundException('user not found');
 		}
 
 		if (user.status === status) {
-			throw new BadRequestException('이미 해당 상태입니다.');
+			throw new BadRequestException('user status is already same');
 		}
 
 		user.status = status;
@@ -250,13 +250,13 @@ export class AuthService {
 
 	async getShareLinkByNickname(nickname: string) {
 		if (!nickname) {
-			throw new BadRequestException('nickname을 입력해주세요.');
+			throw new BadRequestException('nickname is required');
 		}
 
 		const user = await this.userRepository.findOneBy({ nickname });
 
 		if (!user) {
-			throw new NotFoundException('해당 유저를 찾을 수 없습니다.');
+			throw new NotFoundException('user not found');
 		}
 
 		const foundLink = await this.shareLinkRepository.findOneBy({
@@ -283,7 +283,7 @@ export class AuthService {
 		});
 
 		if (!foundLink) {
-			throw new NotFoundException('존재하지 않는 링크입니다.');
+			throw new NotFoundException('link not found');
 		}
 
 		const linkUser = await this.userRepository.findOneBy({
@@ -291,9 +291,7 @@ export class AuthService {
 		});
 
 		if (!linkUser) {
-			throw new InternalServerErrorException(
-				'링크에 대한 사용자가 존재하지 않습니다.',
-			);
+			throw new InternalServerErrorException('link user not found');
 		}
 
 		return linkUser.username;

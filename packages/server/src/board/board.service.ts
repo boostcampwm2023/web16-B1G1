@@ -7,9 +7,9 @@ import {
 } from '@nestjs/common';
 import { CreateBoardDto } from './dto/create-board.dto';
 import { UpdateBoardDto } from './dto/update-board.dto';
-import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 import { Board } from './entities/board.entity';
-import { DataSource, DeleteResult, QueryRunner, Repository } from 'typeorm';
+import { DeleteResult, QueryRunner, Repository } from 'typeorm';
 import { Image } from './entities/image.entity';
 import { encryptAes } from '../util/aes.util';
 import { User } from '../auth/entities/user.entity';
@@ -20,12 +20,12 @@ import { v1 as uuid } from 'uuid';
 import * as sharp from 'sharp';
 import { InjectModel } from '@nestjs/mongoose';
 import { Star } from '../star/schemas/star.schema';
-import { Model, Types } from 'mongoose';
-import { GetBoardByIdResDto } from './dto/get-board-by-id-res.dto';
+import { Model } from 'mongoose';
 
 @Injectable()
 export class BoardService {
 	constructor(
+		// private readonly dataSource: DataSource,
 		@InjectRepository(Board)
 		private readonly boardRepository: Repository<Board>,
 		@InjectRepository(Image)
@@ -42,26 +42,30 @@ export class BoardService {
 		files: Express.Multer.File[],
 		queryRunner: QueryRunner,
 	): Promise<Board> {
+		// const queryRunner = this.dataSource.createQueryRunner();
+		// await queryRunner.startTransaction();
+
 		const { title, content, star } = createBoardDto;
 
-		// const user = await this.userRepository.findOneBy({ id: userData.userId });
 		const user = await queryRunner.manager.findOneBy(User, {
 			id: userData.userId,
 		});
 
 		const images: Image[] = [];
-		for (const file of files) {
-			// Object Storage에 업로드
-			const imageInfo = await this.uploadFile(file);
+		if (files && files.length > 0) {
+			for (const file of files) {
+				// Object Storage에 업로드
+				const imageInfo = await this.uploadFile(file);
 
-			// 이미지 리포지토리에 저장
-			const image = queryRunner.manager.create(Image, {
-				...imageInfo,
-			});
+				// 이미지 리포지토리에 저장
+				const image = queryRunner.manager.create(Image, {
+					...imageInfo,
+				});
 
-			const createdImage = await queryRunner.manager.save(image);
+				const createdImage = await queryRunner.manager.save(image);
 
-			images.push(createdImage);
+				images.push(createdImage);
+			}
 		}
 
 		// 별 스타일이 존재하면 MongoDB에 저장
@@ -74,13 +78,6 @@ export class BoardService {
 			star_id = starDoc._id.toString();
 		}
 
-		// const board = this.boardRepository.create({
-		// 	title,
-		// 	content: encryptAes(content), // AES 암호화하여 저장
-		// 	user,
-		// 	images,
-		// 	star: star_id,
-		// });
 		const board = queryRunner.manager.create(Board, {
 			title,
 			content: encryptAes(content), // AES 암호화하여 저장
@@ -88,15 +85,15 @@ export class BoardService {
 			images,
 			star: star_id,
 		});
-		// const createdBoard: Board = await this.boardRepository.save(board);
 		const createdBoard: Board = await queryRunner.manager.save(board);
 
 		createdBoard.user.password = undefined; // password 제거하여 반환
+
+		// await queryRunner.commitTransaction();
 		return createdBoard;
 	}
 
 	async findBoardById(id: number): Promise<Board> {
-		// const found: Board = await this.boardRepository.findOneBy({ id });
 		const found: Board = await this.boardRepository
 			.createQueryBuilder()
 			.select(['board.id', 'board.title', 'board.content', 'board.like_cnt'])
@@ -123,7 +120,8 @@ export class BoardService {
 		files: Express.Multer.File[],
 		queryRunner: QueryRunner,
 	) {
-		// const board: Board = await this.boardRepository.findOneBy({ id });
+		// await queryRunner.startTransaction();
+
 		const board: Board = await queryRunner.manager.findOneBy(Board, { id });
 		if (!board) {
 			throw new NotFoundException(`Not found board with id: ${id}`);
@@ -141,7 +139,7 @@ export class BoardService {
 			);
 		}
 
-		if (files.length > 0) {
+		if (files && files.length > 0) {
 			const images: Image[] = [];
 			for (const file of files) {
 				const imageInfo = await this.uploadFile(file);
@@ -156,7 +154,6 @@ export class BoardService {
 			// 기존 이미지 삭제
 			for (const image of board.images) {
 				// 이미지 리포지토리에서 삭제
-				// await this.imageRepository.delete({ id: image.id });
 				await queryRunner.manager.delete(Image, { id: image.id });
 				// NCP Object Storage에서 삭제
 				await this.deleteFile(image.filename);
@@ -170,16 +167,14 @@ export class BoardService {
 			updateBoardDto.content = encryptAes(updateBoardDto.content);
 		}
 
-		// const updatedBoard: Board = await this.boardRepository.save({
-		// 	...board,
-		// 	...updateBoardDto,
-		// });
 		const updatedBoard: Board = await queryRunner.manager.save(Board, {
 			...board,
 			...updateBoardDto,
 		});
 
 		delete updatedBoard.user.password; // password 제거하여 반환
+
+		// await queryRunner.commitTransaction();
 		return updatedBoard;
 	}
 
@@ -252,7 +247,8 @@ export class BoardService {
 		userData: UserDataDto,
 		queryRunner: QueryRunner,
 	): Promise<DeleteResult> {
-		// const board: Board = await this.boardRepository.findOneBy({ id });
+		// await queryRunner.startTransaction();
+
 		const board: Board = await queryRunner.manager.findOneBy(Board, { id });
 
 		if (!board) {
@@ -267,7 +263,6 @@ export class BoardService {
 		// 연관된 이미지 삭제
 		for (const image of board.images) {
 			// 이미지 리포지토리에서 삭제
-			// await this.imageRepository.delete({ id: image.id });
 			await queryRunner.manager.delete(Image, { id: image.id });
 			// NCP Object Storage에서 삭제
 			await this.deleteFile(image.filename);
@@ -281,8 +276,9 @@ export class BoardService {
 		// like 조인테이블 레코드들은 자동으로 삭제됨 (외래키 제약조건 ON DELETE CASCADE)
 
 		// 게시글 삭제
-		// await this.boardRepository.delete({ id });
 		const result = await queryRunner.manager.delete(Board, { id });
+
+		// await queryRunner.commitTransaction();
 		return result;
 	}
 

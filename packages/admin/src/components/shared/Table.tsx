@@ -18,7 +18,7 @@ const CustomTable = styled.table<PropsType>`
 export const TH = styled.th`
 	border: 1px solid #ddd;
 	padding: 10px;
-	background-color: #3e3e3e;
+	background-color: #d8d8d8;
 `;
 
 export const TD = styled.td`

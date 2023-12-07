@@ -42,7 +42,7 @@ export default function SpaceWarp() {
 		if (state.camera.position.y <= 0) {
 			state.scene.background = new THREE.Color(0xffffff);
 			setIsSwitching(false);
-		} else state.camera.position.y -= 150000 * delta;
+		} else state.camera.position.y -= 75000 * delta;
 	});
 
 	return (

@@ -48,7 +48,7 @@ export default function UpperBar() {
 	}, [debouncedSearchValue]);
 
 	const handleSearchButton = async () => {
-		setPageOwnerNickName(debouncedSearchValue);
+		setPageOwnerNickName(searchValue);
 
 		setSearchValue('');
 		setDebouncedSearchValue('');

@@ -8,6 +8,7 @@ import { mongooseConfig } from './config/mongoose.config';
 import { StarModule } from './star/star.module';
 import { GalaxyModule } from './galaxy/galaxy.module';
 import { AdminModule } from './admin/admin.module';
+import { SentimentModule } from './sentiment/sentiment.module';
 
 @Module({
 	imports: [
@@ -18,6 +19,7 @@ import { AdminModule } from './admin/admin.module';
 		StarModule,
 		GalaxyModule,
 		AdminModule,
+		SentimentModule,
 	],
 })
 export class AppModule {}

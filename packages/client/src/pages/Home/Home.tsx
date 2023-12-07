@@ -22,6 +22,8 @@ import {
 } from 'widgets/galaxy/lib/constants';
 import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 import Audio from 'features/audio/Audio';
+import styled from '@emotion/styled';
+import { keyframes } from '@emotion/react';
 
 export default function Home() {
 	const { view } = useViewStore();
@@ -93,9 +95,10 @@ export default function Home() {
 
 			<Audio />
 			{isSwitching && <WarpScreen />}
+			{!isSwitching && <WhiteScreen />}
 			{text && <Toast>{text}</Toast>}
 
-			{view === 'MAIN' && (
+			{(view === 'MAIN' || view === 'DETAIL') && (
 				<>
 					<UpperBar />
 					<UnderBar nickname={nickname} />
@@ -106,3 +109,24 @@ export default function Home() {
 		</FullScreen>
 	);
 }
+
+const fadeout = keyframes`
+	0% {
+		opacity: 1;
+	}
+	100% {
+		opacity: 0;
+		display: none;
+	}
+`;
+
+const WhiteScreen = styled.div`
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 101;
+	background-color: white;
+	animation: ${fadeout} 0.5s linear forwards;
+`;

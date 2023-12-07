@@ -14,6 +14,7 @@ import instance from 'shared/apis/AxiosInterceptor';
 import { useViewStore } from 'shared/store';
 import { useOwnerStore } from 'shared/store/useOwnerStore';
 import { usePlayingStore } from 'shared/store/useAudioStore';
+import { useGalaxyStore } from 'shared/store';
 
 interface PropsType {
 	nickname: string;
@@ -25,6 +26,7 @@ export default function UnderBar({ nickname }: PropsType) {
 	const { setView } = useViewStore();
 	const { isMyPage, pageOwnerNickName } = useOwnerStore();
 	const { setPlaying } = usePlayingStore();
+	const { reset } = useGalaxyStore();
 
 	const handleLogoutButton = async () => {
 		await instance.get(`${BASE_URL}auth/signout`);
@@ -32,6 +34,7 @@ export default function UnderBar({ nickname }: PropsType) {
 		Cookies.remove('accessToken');
 		Cookies.remove('refreshToken');
 		Cookies.remove('nickname');
+		reset();
 
 		navigate('/');
 	};

@@ -188,4 +188,12 @@ describe('AuthController (/auth, e2e)', () => {
 			'accessToken=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT; HttpOnly; Secure; SameSite=None',
 		);
 	});
+
+	it.todo('GET /auth/search');
+
+	it.todo('PATCH /auth/status');
+
+	it.todo('GET /auth/sharelink');
+
+	it.todo('GET /auth/sharelink/:sharelink');
 });

@@ -238,7 +238,45 @@ describe('AuthController (/auth, e2e)', () => {
 		});
 	});
 
-	it.todo('PATCH /auth/status');
+	it('PATCH /auth/status', async () => {
+		const randomeBytes = Math.random().toString(36).slice(2, 10);
+
+		const newUser = {
+			username: randomeBytes,
+			nickname: randomeBytes,
+			password: randomeBytes,
+		};
+
+		await request(app.getHttpServer()).post('/auth/signup').send(newUser);
+
+		const signInResponse = await request(app.getHttpServer())
+			.post('/auth/signin')
+			.send(newUser);
+
+		let accessToken: string;
+		signInResponse.headers['set-cookie'].forEach((cookie: string) => {
+			if (cookie.includes('accessToken')) {
+				accessToken = cookie.split(';')[0].split('=')[1];
+			}
+		});
+
+		const successResponse = await request(app.getHttpServer())
+			.patch('/auth/status')
+			.set('Cookie', [`accessToken=${accessToken}`])
+			.send({ status: 'private' })
+			.expect(200);
+
+		expect(successResponse).toHaveProperty('body');
+		const user = successResponse.body;
+		expect(user).toHaveProperty('status');
+		expect(user.status).toBe('private');
+
+		await request(app.getHttpServer())
+			.patch('/auth/status')
+			.set('Cookie', [`accessToken=${accessToken}`])
+			.send({ status: 'invalid status' })
+			.expect(400);
+	});
 
 	it.todo('GET /auth/sharelink');
 

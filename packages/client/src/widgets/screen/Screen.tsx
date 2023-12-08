@@ -49,8 +49,9 @@ export default function Screen() {
 				<ambientLight color="#fff" intensity={1} />
 				<Controls />
 				<BackgroundStars />
-				<Galaxy />
-				<Posts />
+				<Galaxy>
+					<Posts />
+				</Galaxy>
 				<CameraLight />
 			</Canvas>
 			<LevaWrapper>

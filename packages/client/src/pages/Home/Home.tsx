@@ -10,7 +10,7 @@ import { useScreenSwitchStore } from 'shared/store/useScreenSwitchStore';
 import Cookies from 'js-cookie';
 import { getSignInInfo } from 'shared/apis';
 import { getGalaxy } from 'shared/apis';
-import { useGalaxyStore } from 'shared/store';
+import { useGalaxyStore, useCustomStore } from 'shared/store';
 import { Toast } from 'shared/ui';
 import { useToastStore } from 'shared/store';
 import { useOwnerStore } from 'shared/store/useOwnerStore';
@@ -26,15 +26,16 @@ import styled from '@emotion/styled';
 import { keyframes } from '@emotion/react';
 
 export default function Home() {
-	const { view } = useViewStore();
+	const { view, setView } = useViewStore();
 	const { isSwitching } = useScreenSwitchStore();
 	const { text } = useToastStore();
-	const { pageOwnerNickName } = useOwnerStore();
+	const { pageOwnerNickName, setPageOwnerNickName } = useOwnerStore();
 	const [nickname, setNickname] = useState('');
 	const handleFullScreen = useFullScreenHandle();
 
 	const navigate = useNavigate();
 	const { setSpiral, setStart, setThickness, setZDist } = useGalaxyStore();
+	const custom = useCustomStore();
 
 	useEffect(() => {
 		(async () => {
@@ -53,6 +54,17 @@ export default function Home() {
 		getSignInInfo().then((res) => {
 			Cookies.set('nickname', res.nickname);
 			setNickname(res.nickname);
+			setPageOwnerNickName(nickname);
+		});
+		getGalaxy('').then((res) => {
+			const { setSpiral, setStart, setThickness, setZDist } = custom;
+			if (res.spiral) setSpiral(res.spiral);
+
+			if (res.start) setStart(res.start);
+
+			if (res.thickness) setThickness(res.thickness);
+
+			if (res.zDist) setZDist(res.zDist);
 		});
 	}, []);
 
@@ -70,6 +82,7 @@ export default function Home() {
 			if (!res.zDist) setZDist(ARMS_Z_DIST);
 			else setZDist(res.zDist);
 		});
+		setView('MAIN');
 	}, [pageOwnerNickName]);
 
 	const keyDown = (e: KeyboardEvent) => {

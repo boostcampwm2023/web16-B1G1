@@ -1,9 +1,8 @@
 import Post from './Post';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { StarData } from 'shared/lib/types/star';
 import { useOwnerStore } from 'shared/store/useOwnerStore';
 import { getPostListByNickName } from 'shared/apis/star';
-import { useEffect } from 'react';
 import { useViewStore } from 'shared/store';
 import { getMyPost } from '../apis/getMyPost';
 
@@ -28,10 +27,10 @@ export default function Posts() {
 			const otherPostData = await getPostListByNickName(pageOwnerNickName);
 			setPostData(otherPostData);
 		})();
-	}, [isMyPage, view]);
+	}, [view, pageOwnerNickName]);
 
 	return (
-		<>
+		<group>
 			{postData &&
 				postData.map((data, index) => (
 					<Post
@@ -41,6 +40,6 @@ export default function Posts() {
 						title={data.title}
 					/>
 				))}
-		</>
+		</group>
 	);
 }

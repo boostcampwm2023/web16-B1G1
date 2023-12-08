@@ -14,6 +14,8 @@ import instance from 'shared/apis/AxiosInterceptor';
 import { useViewStore } from 'shared/store';
 import { useEffect, useState } from 'react';
 import useCheckNickName from 'shared/hooks/useCheckNickName';
+import { usePlayingStore } from 'shared/store/useAudioStore';
+import { useGalaxyStore } from 'shared/store';
 
 export default function UnderBar() {
 	const navigate = useNavigate();
@@ -21,6 +23,9 @@ export default function UnderBar() {
 
 	const { setView } = useViewStore();
 	const { page, nickName } = useCheckNickName();
+
+	const { setPlaying } = usePlayingStore();
+	const { reset } = useGalaxyStore();
 
 	useEffect(() => {
 		if (!page) return;
@@ -34,6 +39,7 @@ export default function UnderBar() {
 		Cookies.remove('accessToken');
 		Cookies.remove('refreshToken');
 		Cookies.remove('nickname');
+		reset();
 
 		navigate('/');
 	};
@@ -89,7 +95,12 @@ export default function UnderBar() {
 						은하 수정하기
 					</BigButton>
 
-					<BigButton size="l" buttonType="Button" disabled={!isMyPage}>
+					<BigButton
+						size="l"
+						buttonType="Button"
+						disabled={!isMyPage}
+						onClick={() => setPlaying()}
+					>
 						<img src={isMyPage ? AddIcon : AddIconGray} alt="별 스킨 만들기" />
 						별 스킨 만들기
 					</BigButton>

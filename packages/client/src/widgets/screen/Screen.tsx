@@ -46,15 +46,16 @@ export default function Screen() {
 				</EffectComposer>
 
 				<color attach="background" args={['#070614']} />
-				<ambientLight color="#fff" intensity={2} />
+				<ambientLight color="#fff" intensity={1} />
 				<Controls />
 				<BackgroundStars />
-				<Galaxy />
-				<Posts />
+				<Galaxy>
+					<Posts />
+				</Galaxy>
 				<CameraLight />
 			</Canvas>
 			<LevaWrapper>
-				<Leva fill collapsed hidden={view !== 'MAIN'} />
+				<Leva fill collapsed hidden={view !== 'MAIN' && view !== 'DETAIL'} />
 			</LevaWrapper>
 		</div>
 	);

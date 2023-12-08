@@ -1,8 +1,7 @@
 import Post from './Post';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { StarData } from 'shared/lib/types/star';
 import { getPostListByNickName } from 'shared/apis/star';
-import { useEffect } from 'react';
 import { getMyPost } from '../apis/getMyPost';
 import useCheckNickName from 'shared/hooks/useCheckNickName';
 
@@ -27,7 +26,7 @@ export default function Posts() {
 	}, [page, nickName]);
 
 	return (
-		<>
+		<group>
 			{postData &&
 				postData.map((data, index) => (
 					<Post
@@ -37,6 +36,6 @@ export default function Posts() {
 						title={data.title}
 					/>
 				))}
-		</>
+		</group>
 	);
 }

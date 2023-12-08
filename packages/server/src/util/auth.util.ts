@@ -37,7 +37,7 @@ export async function getOAuthAccessToken(
 
 	if (!accessTokenResponse.ok) {
 		throw new InternalServerErrorException(
-			`${service}으로부터 accessToken을 받아오지 못했습니다.`,
+			`Could not get access token from ${service}`,
 		);
 	}
 
@@ -53,9 +53,7 @@ export async function getOAuthUserData(service: string, accessToken: string) {
 	const userResponse = await fetch(urlForUserData, requestData);
 
 	if (!userResponse.ok) {
-		throw new InternalServerErrorException(
-			`${service}으로부터 유저 정보를 받아오지 못했습니다.`,
-		);
+		throw new InternalServerErrorException(`c`);
 	}
 
 	const userData = await userResponse.json();
@@ -67,7 +65,7 @@ export async function getOAuthUserData(service: string, accessToken: string) {
 		case 'google':
 			return userData.email;
 		default:
-			throw new NotFoundException('존재하지 않는 서비스입니다.');
+			throw new NotFoundException('not supported service');
 	}
 }
 
@@ -129,7 +127,7 @@ function getOAuthAccessTokenRequestData(
 			};
 			break;
 		default:
-			throw new NotFoundException('존재하지 않는 서비스입니다.');
+			throw new NotFoundException('not supported service');
 	}
 	return [urlForAccessToken, requestData];
 }
@@ -166,7 +164,7 @@ function getOAuthUserDataRequestData(service: string, accessToken: string) {
 			};
 			break;
 		default:
-			throw new NotFoundException('존재하지 않는 서비스입니다.');
+			throw new NotFoundException('not supported service');
 	}
 	return [urlForUserData, requestData];
 }

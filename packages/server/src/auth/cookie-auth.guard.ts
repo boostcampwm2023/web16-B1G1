@@ -24,7 +24,7 @@ export class CookieAuthGuard extends AuthGuard('jwt') {
 		const response = context.switchToHttp().getResponse();
 
 		if (!request.cookies) {
-			throw new UnauthorizedException('로그인이 필요합니다.');
+			throw new UnauthorizedException('login is required');
 		}
 
 		const accessToken = request.cookies['accessToken'];
@@ -50,7 +50,7 @@ export class CookieAuthGuard extends AuthGuard('jwt') {
 				JwtEnum.REFRESH_TOKEN_COOKIE_NAME,
 				cookieOptionsConfig,
 			);
-			throw new UnauthorizedException('로그인이 필요합니다.');
+			throw new UnauthorizedException('login is required');
 		}
 
 		if (
@@ -67,7 +67,7 @@ export class CookieAuthGuard extends AuthGuard('jwt') {
 				JwtEnum.REFRESH_TOKEN_COOKIE_NAME,
 				cookieOptionsConfig,
 			);
-			throw new UnauthorizedException('로그인이 필요합니다.');
+			throw new UnauthorizedException('login is required');
 		}
 
 		const newAccessToken = await createJwt(

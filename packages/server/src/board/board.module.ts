@@ -12,6 +12,7 @@ import {
 	Exception,
 	ExceptionSchema,
 } from '../exception-filter/exception.schema';
+import { FileService } from './file.service';
 
 @Module({
 	imports: [
@@ -23,6 +24,6 @@ import {
 		]),
 	],
 	controllers: [BoardController],
-	providers: [BoardService],
+	providers: [BoardService, FileService],
 })
 export class BoardModule {}

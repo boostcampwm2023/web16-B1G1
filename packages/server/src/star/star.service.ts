@@ -2,6 +2,7 @@ import {
 	BadRequestException,
 	Injectable,
 	InternalServerErrorException,
+	NotFoundException,
 } from '@nestjs/common';
 import { UpdateStarDto } from './dto/update-star.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -63,20 +64,18 @@ export class StarService {
 	): Promise<Star> {
 		const board: Board = await this.boardRepository.findOneBy({ id: post_id });
 		if (!board) {
-			throw new BadRequestException(`Not found board with id: ${post_id}`);
+			throw new NotFoundException('post not found');
 		}
 
 		// 게시글 작성자와 수정 요청자가 다른 경우
 		if (board.user.id !== userData.userId) {
-			throw new BadRequestException('You are not the author of this star');
+			throw new BadRequestException('not your star');
 		}
 
 		// 별 id를 조회하여 없으면 에러 리턴
 		const star_id = board.star;
 		if (!star_id) {
-			throw new BadRequestException(
-				`Not found star_id with this post_id: ${post_id}`,
-			);
+			throw new BadRequestException('star not found');
 		}
 
 		// 별 스타일이 존재하면 MongoDB에 저장
@@ -85,15 +84,11 @@ export class StarService {
 			{ ...updateStarDto },
 		);
 		if (!result) {
-			throw new InternalServerErrorException(
-				`Failed to update star with this post_id: ${post_id}, star_id: ${star_id}`,
-			);
+			throw new InternalServerErrorException('update star failed');
 		} else if (result.matchedCount === 0) {
-			throw new BadRequestException(
-				`Not found star with this post_id: ${post_id}, star_id: ${star_id}`,
-			);
+			throw new NotFoundException('star not found');
 		} else if (result.modifiedCount === 0) {
-			throw new BadRequestException(`Nothing to update`);
+			throw new BadRequestException('nothing to update');
 		}
 
 		const updatedStar = await this.starModel.findOne({

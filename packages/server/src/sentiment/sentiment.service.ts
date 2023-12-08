@@ -10,7 +10,7 @@ import { clovaConfig } from '../config/clova.config';
 export class SentimentService {
 	async getSentiment(body: GetSentimentDto) {
 		const { content } = body;
-		if (!content) throw new BadRequestException('게시글 내용이 없습니다.');
+		if (!content) throw new BadRequestException('content is required');
 
 		const response = await fetch(clovaConfig.url, {
 			method: 'POST',
@@ -27,7 +27,7 @@ export class SentimentService {
 		const result = await response.json();
 		// 에러 발생한 경우 internal server error
 		if (result.error || !result.document) {
-			throw new InternalServerErrorException('네이버 감성분석 API 오류');
+			throw new InternalServerErrorException('sentiment api failed');
 		}
 
 		// 감성분석 결과(result.document)가 있는 경우
@@ -41,7 +41,7 @@ export class SentimentService {
 			isNaN(negative) ||
 			isNaN(neutral)
 		) {
-			throw new InternalServerErrorException('네이버 감성분석 API 오류');
+			throw new InternalServerErrorException('sentiment api failed');
 		}
 
 		// 0~100 사이의 positive, negative, neutral을 각각 0x00~0xFF 사이의 R, G, B 값으로 변환

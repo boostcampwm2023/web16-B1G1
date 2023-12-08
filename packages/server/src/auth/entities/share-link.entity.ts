@@ -15,10 +15,10 @@ export class ShareLink {
 	@Column({ type: 'varchar', length: 200, nullable: false, unique: true })
 	link: string;
 
-	@OneToOne(() => User, (user) => user.id, {
+	@OneToOne(() => User, (user) => user.shareLink, {
 		eager: false,
 		onDelete: 'CASCADE',
 	})
 	@JoinColumn()
-	user: number;
+	user: User;
 }

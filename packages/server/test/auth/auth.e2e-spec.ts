@@ -146,6 +146,39 @@ describe('AuthController (/auth, e2e)', () => {
 			.expect(401);
 	});
 
+	it('GET /auth/check-signin', async () => {
+		const randomeBytes = Math.random().toString(36).slice(2, 10);
+
+		const newUser = {
+			username: randomeBytes,
+			nickname: randomeBytes,
+			password: randomeBytes,
+		};
+
+		await request(app.getHttpServer()).post('/auth/signup').send(newUser);
+
+		const signInResponse = await request(app.getHttpServer())
+			.post('/auth/signin')
+			.send(newUser);
+
+		const accessToken = signInResponse.headers['set-cookie'][0]
+			.split(';')[0]
+			.split('=')[1];
+
+		const response = await request(app.getHttpServer())
+			.get('/auth/check-signin')
+			.set('Cookie', [`accessToken=${accessToken}`])
+			.expect(200);
+
+		expect(response).toHaveProperty('body');
+		const user = response.body;
+		console.log(user);
+		expect(user).toHaveProperty('username');
+		expect(user.username).toBe(newUser.username);
+		expect(user).toHaveProperty('nickname');
+		expect(user.nickname).toBe(newUser.nickname);
+	});
+
 	// #33 [05-02] 로그아웃 요청을 받으면 토큰을 읽어 해당 회원의 로그인 여부를 확인한다.
 	// #34 [05-03] 로그인을 하지 않은 사용자의 요청이라면 BadRequest 에러를 반환한다.
 	// #35 [05-04] 로그인을 한 사용자라면 Redis의 Refresh Token 정보를 삭제한다.

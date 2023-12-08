@@ -294,6 +294,6 @@ export class AuthService {
 			throw new InternalServerErrorException('link user not found');
 		}
 
-		return linkUser.username;
+		return linkUser.nickname;
 	}
 }

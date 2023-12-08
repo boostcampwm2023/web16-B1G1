@@ -189,7 +189,54 @@ describe('AuthController (/auth, e2e)', () => {
 		);
 	});
 
-	it.todo('GET /auth/search');
+	it('GET /auth/search', async () => {
+		const randomeBytes = Math.random().toString(36).slice(2, 10);
+
+		const newUser = {
+			username: randomeBytes,
+			nickname: randomeBytes,
+			password: randomeBytes,
+		};
+
+		await request(app.getHttpServer()).post('/auth/signup').send(newUser);
+
+		const includeResponse1 = request(app.getHttpServer()).get(
+			`/auth/search?nickname=${randomeBytes.slice(0, 3)}`,
+		);
+		const includeResponse2 = request(app.getHttpServer()).get(
+			`/auth/search?nickname=${randomeBytes.slice(0, 4)}`,
+		);
+		const includeResponse3 = request(app.getHttpServer()).get(
+			`/auth/search?nickname=${randomeBytes}`,
+		);
+		const includeResult = await Promise.all([
+			includeResponse1,
+			includeResponse2,
+			includeResponse3,
+		]);
+		includeResult.forEach((response) => {
+			expect(response).toHaveProperty('body');
+			const users = response.body;
+			expect(users.length).toBe(1);
+			expect(users[0]['nickname']).toBe(randomeBytes);
+		});
+
+		const excludeResponse1 = request(app.getHttpServer()).get(
+			`/auth/search?nickname=${randomeBytes}123124`,
+		);
+		const excludeResponse2 = request(app.getHttpServer()).get(
+			`/auth/search?nickname=123124${randomeBytes}`,
+		);
+		const excludeResult = await Promise.all([
+			excludeResponse1,
+			excludeResponse2,
+		]);
+		excludeResult.forEach((response) => {
+			expect(response).toHaveProperty('body');
+			const users = response.body;
+			expect(users.length).toBe(0);
+		});
+	});
 
 	it.todo('PATCH /auth/status');
 

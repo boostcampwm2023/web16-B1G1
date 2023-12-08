@@ -1,10 +1,4 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { UserEnum } from '../enums/user.enum';
-import { IsNotEmpty, IsString } from 'class-validator';
-import {
-	IsPassword,
-	IsUsername,
-} from '../decorators/user-constraints.decorator';
 
 export class SignInUserDto {
 	@ApiProperty({

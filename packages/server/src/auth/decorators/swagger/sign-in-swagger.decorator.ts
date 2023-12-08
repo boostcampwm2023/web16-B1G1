@@ -1,5 +1,6 @@
 import { applyDecorators } from '@nestjs/common';
 import {
+	ApiNotFoundResponse,
 	ApiOkResponse,
 	ApiOperation,
 	ApiUnauthorizedResponse,
@@ -20,10 +21,16 @@ const apiUnauthorizedResponse = {
 	description: '잘못된 유저 정보로 로그인 실패',
 };
 
+const apiNotFoundResponse = {
+	status: 404,
+	description: '유저 정보를 찾을 수 없음',
+};
+
 export const SignInSwaggerDecorator = () => {
 	return applyDecorators(
 		ApiOperation(apiOperation),
 		ApiOkResponse(apiOkResponse),
 		ApiUnauthorizedResponse(apiUnauthorizedResponse),
+		ApiNotFoundResponse(apiNotFoundResponse),
 	);
 };

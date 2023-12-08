@@ -15,6 +15,7 @@ import { useViewStore } from 'shared/store';
 import { useOwnerStore } from 'shared/store/useOwnerStore';
 import { usePlayingStore } from 'shared/store/useAudioStore';
 import { useGalaxyStore } from 'shared/store';
+import { Share2, Volume2, VolumeX } from 'lucide-react';
 
 interface PropsType {
 	nickname: string;
@@ -25,7 +26,7 @@ export default function UnderBar({ nickname }: PropsType) {
 
 	const { setView } = useViewStore();
 	const { isMyPage, pageOwnerNickName } = useOwnerStore();
-	const { setPlaying } = usePlayingStore();
+	const { playing, setPlaying } = usePlayingStore();
 	const { reset } = useGalaxyStore();
 
 	const handleLogoutButton = async () => {
@@ -68,9 +69,10 @@ export default function UnderBar({ nickname }: PropsType) {
 						size="m"
 						buttonType="Button"
 						disabled={!isMyPage}
-						onClick={handleShareButton}
+						onClick={() => setPlaying()}
+						style={{ width: '74.5px' }}
 					>
-						공유하기
+						{playing ? <VolumeX /> : <Volume2 />}
 					</Button>
 				</SmallButtonsContainer>
 
@@ -94,10 +96,10 @@ export default function UnderBar({ nickname }: PropsType) {
 						size="l"
 						buttonType="Button"
 						disabled={!isMyPage}
-						onClick={() => setPlaying()}
+						onClick={handleShareButton}
 					>
-						<img src={isMyPage ? AddIcon : AddIconGray} alt="별 스킨 만들기" />
-						별 스킨 만들기
+						<Share2 style={{ marginRight: '5px' }} />
+						공유하기
 					</BigButton>
 
 					<BigButton

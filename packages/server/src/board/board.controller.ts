@@ -124,7 +124,7 @@ export class BoardController {
 		const files = [];
 		for (let image of found.images) {
 			const file: Buffer = await this.boardService.downloadFile(image.filename);
-			console.log(file);
+
 			formData.append('file', file, {
 				filename: image.filename,
 				contentType: image.mimetype,

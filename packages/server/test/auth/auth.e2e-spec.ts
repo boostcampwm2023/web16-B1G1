@@ -278,7 +278,29 @@ describe('AuthController (/auth, e2e)', () => {
 			.expect(400);
 	});
 
-	it.todo('GET /auth/sharelink');
+	it('GET /auth/sharelink', async () => {
+		const randomeBytes = Math.random().toString(36).slice(2, 10);
 
-	it.todo('GET /auth/sharelink/:sharelink');
+		const newUser = {
+			username: randomeBytes,
+			nickname: randomeBytes,
+			password: randomeBytes,
+		};
+
+		await request(app.getHttpServer()).post('/auth/signup').send(newUser);
+
+		const response = await request(app.getHttpServer())
+			.get(`/auth/sharelink?nickname=${randomeBytes}`)
+			.expect(200);
+
+		expect(response).toHaveProperty('text');
+		const sharelink = response.text;
+
+		const sharelinkResponse = await request(app.getHttpServer())
+			.get(`/auth/sharelink/${sharelink}`)
+			.expect(200);
+
+		const nickname = sharelinkResponse.text;
+		expect(nickname).toBe(randomeBytes);
+	});
 });

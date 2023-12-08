@@ -2,7 +2,6 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from '../../src/app.module';
-import { Board } from '../../src/board/entities/board.entity';
 import { UpdateBoardDto } from '../../src/board/dto/update-board.dto';
 import { CreateBoardDto } from '../../src/board/dto/create-board.dto';
 import * as cookieParser from 'cookie-parser';

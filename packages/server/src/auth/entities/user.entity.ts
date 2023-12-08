@@ -8,7 +8,7 @@ import {
 	OneToOne,
 	PrimaryGeneratedColumn,
 } from 'typeorm';
-import { ShareLink } from './share_link.entity';
+import { ShareLink } from './share-link.entity';
 import { UserShareStatus } from '../enums/user.enum';
 
 @Entity()

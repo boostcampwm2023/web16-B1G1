@@ -39,7 +39,7 @@ export default function LoginContent({
 					id="userPassword"
 					label="비밀번호"
 					type="password"
-					placeholder="비밀먼호를 입력해주세요."
+					placeholder="비밀번호를 입력해주세요."
 					onChange={(e) => {
 						if (passwordState === false) setPasswordState(true);
 						setPassword(e.target.value);

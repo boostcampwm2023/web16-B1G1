@@ -2,11 +2,7 @@ import styled from '@emotion/styled';
 import { Button } from 'shared/ui';
 import { Title01 } from '../../shared/ui/styles';
 import PlanetEditIcon from '@icons/icon-planetedit-24-white.svg';
-import PlanetEditIconGray from '@icons/icon-planetedit-24-gray.svg';
-import AddIcon from '@icons/icon-add-24-white.svg';
-import AddIconGray from '@icons/icon-add-24-gray.svg';
 import WriteIcon from '@icons/icon-writte-24-white.svg';
-import WriteIconGray from '@icons/icon-writte-24-gray.svg';
 import { BASE_URL, MAX_WIDTH1, MAX_WIDTH2 } from 'shared/lib/constants';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
@@ -72,30 +68,27 @@ export default function UnderBar() {
 					<Button
 						size="m"
 						buttonType="Button"
-						disabled={!isMyPage}
 						onClick={handleShareButton}
+						style={{ display: isMyPage ? 'flex' : 'none' }}
 					>
 						공유하기
 					</Button>
 				</SmallButtonsContainer>
 
-				<Line />
+				<Line style={{ display: isMyPage ? 'flex' : 'none' }} />
 
 				<BigButtonsContainer>
 					<BigButton
 						size="l"
 						buttonType="Button"
 						onClick={handleGalaxyCustomButton}
-						disabled={!isMyPage}
+						style={{ display: isMyPage ? 'flex' : 'none' }}
 					>
-						<img
-							src={isMyPage ? PlanetEditIcon : PlanetEditIconGray}
-							alt="은하 수정하기"
-						/>
+						<img src={PlanetEditIcon} alt="은하 수정하기" />
 						은하 수정하기
 					</BigButton>
 
-					<BigButton
+					{/* <BigButton
 						size="l"
 						buttonType="Button"
 						disabled={!isMyPage}
@@ -103,15 +96,15 @@ export default function UnderBar() {
 					>
 						<img src={isMyPage ? AddIcon : AddIconGray} alt="별 스킨 만들기" />
 						별 스킨 만들기
-					</BigButton>
+					</BigButton> */}
 
 					<BigButton
 						size="l"
 						buttonType="CTA-icon"
-						disabled={!isMyPage}
 						onClick={handleWritingButton}
+						style={{ display: isMyPage ? 'flex' : 'none' }}
 					>
-						<img src={isMyPage ? WriteIcon : WriteIconGray} alt="글쓰기" />
+						<img src={WriteIcon} alt="글쓰기" />
 						글쓰기
 					</BigButton>
 				</BigButtonsContainer>
@@ -153,7 +146,9 @@ const ButtonsContainer = styled.div`
 const SmallButtonsContainer = styled.div`
 	display: flex;
 	flex-direction: column;
+	justify-content: center;
 	gap: 4px;
+	height: 76px;
 `;
 
 const BigButtonsContainer = styled.div`

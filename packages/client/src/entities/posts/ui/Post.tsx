@@ -33,7 +33,7 @@ export default function Post({ data, postId, title }: PropsType) {
 		const splitedPath = location.pathname.split('/');
 		const page = splitedPath[1];
 		const nickName = splitedPath[2];
-		const path = '/' + page + '/' + nickName + '/';
+		const path = `/${page}/${page !== 'home' ? nickName + '/' : ''}`;
 
 		if (meshRef.current !== targetView) {
 			setView('DETAIL');

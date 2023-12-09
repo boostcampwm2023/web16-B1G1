@@ -14,6 +14,7 @@ import Like from 'entities/like/Like';
 import InputBar from 'shared/ui/inputBar/InputBar';
 import instance from 'shared/apis/AxiosInterceptor';
 import { useToastStore } from 'shared/store';
+import useCheckNickName from 'shared/hooks/useCheckNickName';
 
 export default function PostModal() {
 	const [deleteModal, setDeleteModal] = useState(false);
@@ -25,6 +26,8 @@ export default function PostModal() {
 	const { setView } = useViewStore();
 	const { postId } = useParams();
 	const { data, refetch } = useFetch<PostData>(`post/${postId}`);
+
+	const { page } = useCheckNickName();
 
 	const navigate = useNavigate();
 	const location = useLocation();
@@ -60,6 +63,7 @@ export default function PostModal() {
 			onClick={() => {
 				setDeleteModal(true);
 			}}
+			disabled={page !== 'home'}
 		>
 			삭제
 		</Button>
@@ -73,6 +77,7 @@ export default function PostModal() {
 			onClick={() => {
 				setIsEdit(true);
 			}}
+			disabled={page !== 'home'}
 		>
 			수정
 		</Button>
@@ -121,7 +126,7 @@ export default function PostModal() {
 		const splitedPath = location.pathname.split('/');
 		const page = splitedPath[1];
 		const nickName = splitedPath[2];
-		const path = '/' + page + '/' + nickName + '/';
+		const path = `/${page}/${page !== 'home' ? nickName + '/' : ''}`;
 
 		setView('MAIN');
 		navigate(path + postId);

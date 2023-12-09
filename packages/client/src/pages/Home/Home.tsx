@@ -27,6 +27,7 @@ import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 import Audio from 'features/audio/Audio';
 import styled from '@emotion/styled';
 import { keyframes } from '@emotion/react';
+import AudioButton from 'shared/ui/audioButton/AudioButton';
 
 export default function Home() {
 	const { view, setView } = useViewStore();
@@ -92,6 +93,7 @@ export default function Home() {
 		<FullScreen handle={handleFullScreen}>
 			<Outlet />
 			<Audio />
+			<AudioButton />
 
 			{message && <Alert title={message} />}
 			{isSwitching && <WarpScreen />}

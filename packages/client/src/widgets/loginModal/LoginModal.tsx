@@ -14,14 +14,15 @@ export default function LoginModal() {
 	const [passwordState, setPasswordState] = useState(true);
 	const navigate = useNavigate();
 	const { setIsSwitching } = useScreenSwitchStore();
+	const [isSubmitButtonDisabled, setIsSubmitButtonDisabled] = useState(false);
 
 	const isValid = () => {
 		return id.length && password.length && idState && passwordState;
 	};
 
 	const handleLoginSubmit = async () => {
-		if (!isValid()) return;
-
+		if (!isValid() || isSubmitButtonDisabled) return;
+		setIsSubmitButtonDisabled(true);
 		setPassword('');
 
 		try {
@@ -36,6 +37,8 @@ export default function LoginModal() {
 				else if (err.response?.status === 401) setPasswordState(false);
 				else alert(err);
 			} else alert(err);
+		} finally {
+			setIsSubmitButtonDisabled(false);
 		}
 	};
 
@@ -49,7 +52,9 @@ export default function LoginModal() {
 			<Modal
 				title="로그인"
 				topButton={<TopButton onClick={() => navigate('/')} />}
-				rightButton={<RightButton disabled={!isValid()} />}
+				rightButton={
+					<RightButton disabled={!isValid() || isSubmitButtonDisabled} />
+				}
 				leftButton={<LeftButton onClick={() => navigate('/signup')} />}
 				onClickGoBack={() => navigate('/')}
 				style={{ width: '516px' }}

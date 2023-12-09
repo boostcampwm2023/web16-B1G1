@@ -12,16 +12,25 @@ interface PropsType {
 
 export default function SentimentButton({ content, setColor }: PropsType) {
 	const [isHover, setIsHover] = useState(false);
+	const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
 	const handleRecommendColor = async () => {
+		if (isButtonDisabled) return;
+		setIsButtonDisabled(true);
 		const res = await getSentimentColor(content);
 		if (res?.status === 200) setColor(res.data.color);
+		setIsButtonDisabled(false);
 	};
 
 	return (
 		<Container>
 			<InnerContainer>
-				<Button size="m" buttonType="CTA-icon" onClick={handleRecommendColor}>
+				<Button
+					size="m"
+					buttonType="CTA-icon"
+					onClick={handleRecommendColor}
+					disabled={isButtonDisabled}
+				>
 					색상 추천
 				</Button>
 				<HelpCircleIcon

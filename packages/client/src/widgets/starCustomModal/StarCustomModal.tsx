@@ -20,6 +20,8 @@ import { getRandomFloat } from '@utils/random';
 import { ARMS_X_DIST } from 'widgets/galaxy/lib/constants';
 import { shapeTypes } from '@constants';
 import SentimentButton from './ui/SentimentButton';
+import { generateStarPosition } from './lib/generateStarPosition';
+import { getMyPost } from 'entities/posts/apis/getMyPost';
 
 export default function StarCustomModal() {
 	const { setView } = useViewStore();
@@ -39,16 +41,13 @@ export default function StarCustomModal() {
 	};
 
 	const handleSubmit = async () => {
+		const existingStars = await getMyPost();
 		const starData = {
 			shape: shapeTypes[shape],
 			color,
 			size,
 			brightness,
-			position: {
-				x: getRandomFloat(-ARMS_X_DIST, ARMS_X_DIST),
-				y: 0,
-				z: getRandomFloat(-ARMS_X_DIST, ARMS_X_DIST),
-			},
+			position: await generateStarPosition(existingStars, size),
 		};
 		const formData = new FormData();
 

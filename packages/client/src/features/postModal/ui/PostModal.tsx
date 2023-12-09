@@ -21,6 +21,8 @@ export default function PostModal() {
 	const [isEdit, setIsEdit] = useState(false);
 	const [content, setContent] = useState('');
 	const [title, setTitle] = useState('');
+	const [isDeleteButtonDisabled, setIsDeleteButtonDisabled] = useState(false);
+	const [isSaveButtonDisabled, setIsSaveButtonDisabled] = useState(false);
 
 	const { setText } = useToastStore();
 	const { setView } = useViewStore();
@@ -38,6 +40,8 @@ export default function PostModal() {
 	}, [data]);
 
 	const handleEditSave = async () => {
+		if (isSaveButtonDisabled) return;
+		setIsSaveButtonDisabled(true);
 		const formData = new FormData();
 		formData.append('title', title);
 		formData.append('content', content);
@@ -53,6 +57,7 @@ export default function PostModal() {
 		} else {
 			setText('글 수정에 실패했습니다.');
 		}
+		setIsSaveButtonDisabled(false);
 	};
 
 	const rightButton = (
@@ -103,21 +108,26 @@ export default function PostModal() {
 				setIsEdit(false);
 				handleEditSave();
 			}}
+			disabled={isSaveButtonDisabled}
 		>
 			저장
 		</Button>
 	);
 
 	const handleDelete = async () => {
+		if (isDeleteButtonDisabled) return;
+		setIsDeleteButtonDisabled(true);
 		const res = await deletePost(postId!);
 		setDeleteModal(false);
 		if (res.status === 200) {
 			setText('글을 삭제했습니다.');
 			setView('MAIN');
+			setIsDeleteButtonDisabled(false);
 			navigate('/home');
 		} else {
 			setText('글 삭제에 실패했습니다.');
 		}
+		setIsDeleteButtonDisabled(false);
 	};
 
 	const handleGoBackButton = () => {

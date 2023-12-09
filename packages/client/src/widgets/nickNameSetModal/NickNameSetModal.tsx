@@ -12,8 +12,11 @@ export default function NickNameSetModal() {
 	const { platform } = useParams();
 	const { setText } = useToastStore();
 	const { id, pw } = useSignUpStore();
+	const [isSaveButtonDisabled, setIsSaveButtonDisabled] = useState(false);
 
 	const handleSaveButton = async () => {
+		if (isSaveButtonDisabled) return;
+		setIsSaveButtonDisabled(true);
 		try {
 			let response;
 			if (!platform) {
@@ -35,6 +38,8 @@ export default function NickNameSetModal() {
 			}
 		} catch (error) {
 			setText('회원가입에 실패했습니다.');
+		} finally {
+			setIsSaveButtonDisabled(false);
 		}
 	};
 
@@ -49,7 +54,7 @@ export default function NickNameSetModal() {
 			buttonType="CTA-icon"
 			size="m"
 			type="submit"
-			disabled={!validNickName}
+			disabled={!validNickName || isSaveButtonDisabled}
 		>
 			저장
 		</Button>

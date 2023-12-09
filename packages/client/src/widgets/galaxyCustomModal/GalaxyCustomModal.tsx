@@ -12,16 +12,20 @@ import styled from '@emotion/styled';
 import { useGalaxyStore, useCustomStore } from 'shared/store';
 import { postGalaxy } from 'shared/apis';
 import { useRefresh } from 'shared/hooks/useRefresh';
+import { useState } from 'react';
 
 export default function GalaxyCustomModal() {
 	const navigate = useNavigate();
 	const { setView } = useViewStore();
 	const galaxy = useGalaxyStore();
 	const { spiral, start, thickness, zDist } = useCustomStore();
+	const [isSubmitButtonDisabled, setIsSubmitButtonDisabled] = useState(false);
 
 	useRefresh('CUSTOM');
 
-	const handleSubmit = () => {
+	const handleSubmit = async () => {
+		if (isSubmitButtonDisabled) return;
+		setIsSubmitButtonDisabled(true);
 		const galaxyStyle = {
 			spiral: galaxy.spiral !== spiral ? spiral : undefined,
 			start: galaxy.start !== start ? start : undefined,
@@ -33,14 +37,15 @@ export default function GalaxyCustomModal() {
 		galaxy.setStart(start);
 		galaxy.setThickness(thickness);
 		galaxy.setZDist(zDist);
-		postGalaxy(galaxyStyle);
+		await postGalaxy(galaxyStyle);
 	};
 
 	return (
 		<form
-			onSubmit={(e) => {
+			onSubmit={async (e) => {
 				e.preventDefault();
-				handleSubmit();
+				await handleSubmit();
+				setIsSubmitButtonDisabled(false);
 				navigate('/home');
 				setView('MAIN');
 			}}
@@ -51,7 +56,7 @@ export default function GalaxyCustomModal() {
 					navigate('/home');
 					setView('MAIN');
 				}}
-				rightButton={<RightButton />}
+				rightButton={<RightButton disabled={isSubmitButtonDisabled} />}
 				leftButton={<LeftButton />}
 				topButton={<TopButton />}
 			>

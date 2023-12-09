@@ -2,7 +2,8 @@ import styled from '@emotion/styled';
 import { Body02ME, Title01 } from '../styles';
 import { css } from '@emotion/react';
 import { Button } from '..';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useErrorStore } from 'shared/store';
 
 interface PropsTypes extends React.HTMLAttributes<HTMLDivElement> {
 	title: string;
@@ -11,10 +12,24 @@ interface PropsTypes extends React.HTMLAttributes<HTMLDivElement> {
 
 export default function Alert({ title, description, ...args }: PropsTypes) {
 	const [isOpen, setIsOpen] = useState(true);
+	const { setMessage } = useErrorStore();
 
-	const handleConfirmButton = () => setIsOpen(false);
+	const handleConfirmButton = () => {
+		setIsOpen(false);
+		setMessage('');
+	};
 
 	if (!isOpen) return null;
+
+	const handleKeyPress = (e: KeyboardEvent) => {
+		if (e.key === 'Escape') handleConfirmButton();
+	};
+
+	useEffect(() => {
+		window.addEventListener('keydown', handleKeyPress);
+
+		return () => window.removeEventListener('keydown', handleKeyPress);
+	}, []);
 
 	return (
 		<Overlay>

@@ -24,7 +24,6 @@ import {
 import Alert from 'shared/ui/alert/Alert';
 import useCheckNickName from 'shared/hooks/useCheckNickName';
 import { FullScreen, useFullScreenHandle } from 'react-full-screen';
-import Audio from 'features/audio/Audio';
 import styled from '@emotion/styled';
 import { keyframes } from '@emotion/react';
 
@@ -91,7 +90,6 @@ export default function Home() {
 	return (
 		<FullScreen handle={handleFullScreen}>
 			<Outlet />
-			<Audio />
 
 			{message && <Alert title={message} />}
 			{isSwitching && <WarpScreen />}

@@ -16,9 +16,11 @@ import { usePostStore } from 'shared/store';
 import { sendPost } from './apis/sendPost';
 import SizeSlider from './ui/SizeSlider';
 import BrightnessSlider from './ui/BrightnessSlider';
-import { getRandomFloat } from '@utils/random';
-import { ARMS_X_DIST } from 'widgets/galaxy/lib/constants';
 import { shapeTypes } from '@constants';
+import SentimentButton from './ui/SentimentButton';
+import { generateStarPosition } from './lib/generateStarPosition';
+import { getMyPost } from 'entities/posts/apis/getMyPost';
+import { useRefresh } from 'shared/hooks/useRefresh';
 
 export default function StarCustomModal() {
 	const { setView } = useViewStore();
@@ -28,9 +30,12 @@ export default function StarCustomModal() {
 	const [color, setColor] = useState(STAR_DEFAULT_COLOR);
 	const [size, setSize] = useState(STAR_DEFAULT_SIZE);
 	const [brightness, setBrightness] = useState(STAR_DEFAULT_BRIGHTNESS);
+	const [isSubmitButtonDisabled, setIsSubmitButtonDisabled] = useState(false);
 
 	const navigate = useNavigate();
 	const { setText } = useToastStore();
+
+	useRefresh('WRITING');
 
 	const handleGoBack = () => {
 		navigate('/home');
@@ -38,16 +43,15 @@ export default function StarCustomModal() {
 	};
 
 	const handleSubmit = async () => {
+		if (isSubmitButtonDisabled) return;
+		setIsSubmitButtonDisabled(true);
+		const existingStars = await getMyPost();
 		const starData = {
 			shape: shapeTypes[shape],
 			color,
 			size,
 			brightness,
-			position: {
-				x: getRandomFloat(-ARMS_X_DIST, ARMS_X_DIST),
-				y: 0,
-				z: getRandomFloat(-ARMS_X_DIST, ARMS_X_DIST),
-			},
+			position: await generateStarPosition(existingStars, size),
 		};
 		const formData = new FormData();
 
@@ -65,10 +69,16 @@ export default function StarCustomModal() {
 			setView('MAIN');
 			navigate('/home');
 		}
+		setIsSubmitButtonDisabled(false);
 	};
 
 	const rightButton = (
-		<Button size="m" buttonType="CTA-icon" onClick={handleSubmit}>
+		<Button
+			size="m"
+			buttonType="CTA-icon"
+			onClick={handleSubmit}
+			disabled={isSubmitButtonDisabled}
+		>
 			저장
 		</Button>
 	);
@@ -91,6 +101,7 @@ export default function StarCustomModal() {
 
 					<CustomLayout>
 						<ColorPickerContainer color={color} setColor={setColor} />
+						<SentimentButton content={content} setColor={setColor} />
 						<SizeSlider size={size} setSize={setSize} />
 						<BrightnessSlider
 							brightness={brightness}

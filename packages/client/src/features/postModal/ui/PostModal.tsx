@@ -14,12 +14,15 @@ import Like from 'entities/like/Like';
 import InputBar from 'shared/ui/inputBar/InputBar';
 import instance from 'shared/apis/AxiosInterceptor';
 import { useToastStore } from 'shared/store';
+import { useRefresh } from 'shared/hooks/useRefresh';
 
 export default function PostModal() {
 	const [deleteModal, setDeleteModal] = useState(false);
 	const [isEdit, setIsEdit] = useState(false);
 	const [content, setContent] = useState('');
 	const [title, setTitle] = useState('');
+	const [isDeleteButtonDisabled, setIsDeleteButtonDisabled] = useState(false);
+	const [isSaveButtonDisabled, setIsSaveButtonDisabled] = useState(false);
 
 	const { setText } = useToastStore();
 	const { setView } = useViewStore();
@@ -29,12 +32,16 @@ export default function PostModal() {
 	const navigate = useNavigate();
 	const location = useLocation();
 
+	useRefresh('POST');
+
 	useEffect(() => {
 		setContent(data?.content ?? '');
 		setTitle(data?.title ?? '');
 	}, [data]);
 
 	const handleEditSave = async () => {
+		if (isSaveButtonDisabled) return;
+		setIsSaveButtonDisabled(true);
 		const formData = new FormData();
 		formData.append('title', title);
 		formData.append('content', content);
@@ -50,6 +57,7 @@ export default function PostModal() {
 		} else {
 			setText('글 수정에 실패했습니다.');
 		}
+		setIsSaveButtonDisabled(false);
 	};
 
 	const rightButton = (
@@ -100,31 +108,38 @@ export default function PostModal() {
 				setIsEdit(false);
 				handleEditSave();
 			}}
+			disabled={isSaveButtonDisabled}
 		>
 			저장
 		</Button>
 	);
 
 	const handleDelete = async () => {
+		if (isDeleteButtonDisabled) return;
+		setIsDeleteButtonDisabled(true);
 		const res = await deletePost(postId!);
 		setDeleteModal(false);
 		if (res.status === 200) {
 			setText('글을 삭제했습니다.');
 			setView('MAIN');
+			setIsDeleteButtonDisabled(false);
 			navigate('/home');
 		} else {
 			setText('글 삭제에 실패했습니다.');
 		}
+		setIsDeleteButtonDisabled(false);
 	};
 
 	const handleGoBackButton = () => {
 		const splitedPath = location.pathname.split('/');
 		const page = splitedPath[1];
 		const nickName = splitedPath[2];
-		const path = '/' + page + '/' + nickName + '/';
+		let path = '/';
+		if (page === 'home') path += page + '/';
+		else path += page + '/' + nickName + '/';
 
 		setView('MAIN');
-		navigate(path + postId);
+		navigate(path);
 	};
 
 	return (

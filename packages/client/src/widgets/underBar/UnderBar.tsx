@@ -135,7 +135,7 @@ const Layout = styled.div`
 	}
 
 	@media (max-width: ${MAX_WIDTH2}px) {
-		width: 900px;
+		width: ${MAX_WIDTH2 - 30}px;
 	}
 `;
 

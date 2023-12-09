@@ -14,6 +14,7 @@ export default function Images({ onModify }: PropsType) {
 	const handleAddImages = (event: ChangeEvent<HTMLInputElement>) => {
 		const files = event.target.files;
 		if (!files) return;
+		if (files.length > 5) return;
 		const images = Array.from(files).map((file) => URL.createObjectURL(file));
 		setShowImages(images);
 		setFiles(files);
@@ -60,10 +61,13 @@ export default function Images({ onModify }: PropsType) {
 }
 
 const ImagePreview = styled.img`
-	width: 80px;
-	height: 80px;
+	width: 100px;
+	height: 100px;
 	border-radius: 4px;
 	cursor: pointer;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 `;
 
 const Container = styled.div`
@@ -77,8 +81,8 @@ const IconWrapper = styled.div`
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	width: 80px;
-	height: 80px;
+	width: 100px;
+	height: 100px;
 	border: 1px solid ${({ theme }) => theme.colors.stroke.default};
 	border-radius: 4px;
 	background-color: ${({ theme }) => theme.colors.background.bdp01_80};

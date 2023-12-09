@@ -14,17 +14,10 @@ export default function Posts() {
 
 	useEffect(() => {
 		if (page === 'home') {
-			(async () => {
-				const myPostData = await getMyPost();
-				setPostData(myPostData);
-			})();
-			return;
+			getMyPost().then((res) => setPostData(res));
+		} else if (nickName !== '') {
+			getPostListByNickName(nickName).then((res) => setPostData(res));
 		}
-
-		(async () => {
-			const otherPostData = await getPostListByNickName(nickName);
-			setPostData(otherPostData);
-		})();
 	}, [view, nickName]);
 
 	return (

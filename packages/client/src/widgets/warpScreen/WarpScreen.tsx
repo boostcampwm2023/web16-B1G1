@@ -13,7 +13,11 @@ import { EffectComposer, Bloom } from '@react-three/postprocessing';
 import SpaceWarp from './ui/SpaceWarp';
 import BrightSphere from './ui/BrightSphere';
 
-export default function WarpScreen() {
+interface PropsType {
+	setIsSwitching: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export default function WarpScreen({ setIsSwitching }: PropsType) {
 	const camera = {
 		position: SPACE_WARP_CAMERA_POSITION,
 		up: SPACE_WARP_CAMERA_UP,
@@ -42,7 +46,7 @@ export default function WarpScreen() {
 			<ambientLight intensity={AMBIENT_LIGHT_INTENSITY} />
 
 			<BrightSphere />
-			<SpaceWarp />
+			<SpaceWarp setIsSwitching={setIsSwitching} />
 		</Canvas>
 	);
 }

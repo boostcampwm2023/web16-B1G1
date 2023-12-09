@@ -2,10 +2,9 @@ import Screen from 'widgets/screen/Screen';
 import { useViewStore } from 'shared/store/useViewStore';
 import { Outlet } from 'react-router-dom';
 import UnderBar from 'widgets/underBar/UnderBar';
-import UpperBar from '../../widgets/upperBar/UpperBar';
+import UpperBar from 'widgets/upperBar/UpperBar';
 import WarpScreen from 'widgets/warpScreen/WarpScreen';
-import { useEffect } from 'react';
-import { useScreenSwitchStore } from 'shared/store/useScreenSwitchStore';
+import { useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
 import { getGalaxy } from 'shared/apis';
 import {
@@ -29,11 +28,11 @@ import styled from '@emotion/styled';
 import { keyframes } from '@emotion/react';
 
 export default function Home() {
-	const { view, setView } = useViewStore();
-	const { isSwitching } = useScreenSwitchStore();
+	const { view } = useViewStore();
+	const [isSwitching, setIsSwitching] = useState(true);
 	const { text } = useToastStore();
 	const { message } = useErrorStore();
-	const { nickName } = useCheckNickName();
+	const { page, nickName } = useCheckNickName();
 
 	const handleFullScreen = useFullScreenHandle();
 
@@ -54,7 +53,7 @@ export default function Home() {
 	}, []);
 
 	useEffect(() => {
-		Cookies.set('nickname', nickName);
+		setIsSwitching(true);
 
 		getGalaxy(nickName).then((res) => {
 			if (!res.spiral) setSpiral(SPIRAL);
@@ -94,8 +93,8 @@ export default function Home() {
 			<Audio />
 
 			{message && <Alert title={message} />}
-			{isSwitching && <WarpScreen />}
-			{!isSwitching && <WhiteScreen />}
+			{isSwitching && <WarpScreen setIsSwitching={setIsSwitching} />}
+			{!isSwitching && <FadeoutScreen />}
 			{text && <Toast>{text}</Toast>}
 
 			{(view === 'MAIN' || view === 'DETAIL') && (
@@ -120,7 +119,7 @@ const fadeout = keyframes`
 	}
 `;
 
-const WhiteScreen = styled.div`
+const FadeoutScreen = styled.div`
 	position: absolute;
 	top: 0;
 	left: 0;

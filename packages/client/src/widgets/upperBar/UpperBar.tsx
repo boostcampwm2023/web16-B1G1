@@ -17,7 +17,6 @@ export default function UpperBar() {
 	const [debouncedSearchValue, setDebouncedSearchValue] = useState('');
 	const [searchResults, setSearchResults] = useState([]);
 
-	const { setIsSwitching } = useScreenSwitchStore();
 	const { setMessage } = useErrorStore();
 	const { page, nickName } = useCheckNickName();
 
@@ -56,19 +55,18 @@ export default function UpperBar() {
 
 	const handleSearchButton = async () => {
 		try {
-			await getIsAvailableNickName(debouncedSearchValue);
+			await getIsAvailableNickName(searchValue);
 
 			return setMessage('존재하지 않는 닉네임입니다.');
 		} catch (error) {
-			if (debouncedSearchValue === userNickName)
+			if (searchValue === userNickName)
 				return setMessage('내 은하로는 이동할 수 없습니다.');
 
-			navigate(`/search/${debouncedSearchValue}`);
+			navigate(`/search/${searchValue}`);
 
 			setSearchValue('');
 			setDebouncedSearchValue('');
 			setSearchResults([]);
-			setIsSwitching(true);
 		}
 	};
 
@@ -77,12 +75,10 @@ export default function UpperBar() {
 	const handleGoBackButton = () => {
 		if (page === 'guest') {
 			navigate('/');
-			setIsSwitching(true);
 			return;
 		}
 
 		navigate('/home');
-		setIsSwitching(true);
 	};
 
 	return (

@@ -16,3 +16,43 @@ li {
 a {
 	text-decoration: none;
 }
+
+body {
+	font-family:
+		Pretendard,
+		-apple-system,
+		BlinkMacSystemFont,
+		system-ui,
+		Roboto,
+		'Helvetica Neue',
+		'Segoe UI',
+		'Apple SD Gothic Neo',
+		'Noto Sans KR',
+		'Malgun Gothic',
+		'Apple Color Emoji',
+		'Segoe UI Emoji',
+		'Segoe UI Symbol',
+		sans-serif;
+}
+
+@font-face {
+	font-family: 'pretendard_medium';
+	src:
+		url('/assets/fonts/Pretendard-Medium.woff2') format('woff2'),
+		url('/assets/fonts/Pretendard-Medium.woff') format('woff'),
+		url('/assets/fonts/Pretendard-Medium.otf') format('otf');
+	font-display: swap;
+	font-weight: 500;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'pretendard_bold';
+	src:
+		url('/assets/fonts/Pretendard-Bold.woff2') format('woff2'),
+		url('/assets/fonts/Pretendard-Bold.woff') format('woff'),
+		url('/assets/fonts/Pretendard-Bold.otf') format('otf');
+	font-display: swap;
+	font-weight: 700;
+	font-style: normal;
+}

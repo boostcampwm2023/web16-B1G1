@@ -11,6 +11,8 @@ export default function Posts() {
 	const { page, nickName } = useCheckNickName();
 
 	useEffect(() => {
+		if (!page) return;
+
 		if (page === 'home') {
 			(async () => {
 				const myPostData = await getMyPost();

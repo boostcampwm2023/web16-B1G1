@@ -11,9 +11,9 @@ export default function PublicRoute() {
 			try {
 				await getSignInInfo();
 				setIsAuthenticated(true);
-				setIsLoading(false);
 			} catch (error) {
 				setIsAuthenticated(false);
+			} finally {
 				setIsLoading(false);
 			}
 		})();

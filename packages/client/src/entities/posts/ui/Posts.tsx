@@ -19,10 +19,12 @@ export default function Posts() {
 			return;
 		}
 
-		(async () => {
-			const otherPostData = await getPostListByNickName(nickName);
-			setPostData(otherPostData);
-		})();
+		if (page === 'search' || page === 'share') {
+			(async () => {
+				const otherPostData = await getPostListByNickName(nickName);
+				setPostData(otherPostData);
+			})();
+		}
 	}, [page, nickName]);
 
 	return (

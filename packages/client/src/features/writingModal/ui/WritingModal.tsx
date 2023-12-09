@@ -48,7 +48,6 @@ export default function WritingModal() {
 						다음
 					</Button>
 				}
-				leftButton={<Images onModify={setFiles} />}
 				onClickGoBack={() => {
 					setView('MAIN');
 					navigate('/home');
@@ -76,6 +75,9 @@ export default function WritingModal() {
 					state={contentState}
 				/>
 				{contentState === 'INVALID' && <Message>내용을 입력해주세요.</Message>}
+				<ImagesWrapper>
+					<Images onModify={setFiles} />
+				</ImagesWrapper>
 			</Modal>
 		</ModalPortal>
 	);
@@ -126,4 +128,11 @@ const Message = styled.p`
 	color: ${({ theme: { colors } }) => colors.text.warning};
 
 	${Caption}
+`;
+
+const ImagesWrapper = styled.div`
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+	margin-top: 30px;
 `;

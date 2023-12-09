@@ -121,10 +121,12 @@ export default function PostModal() {
 		const splitedPath = location.pathname.split('/');
 		const page = splitedPath[1];
 		const nickName = splitedPath[2];
-		const path = '/' + page + '/' + nickName + '/';
+		let path = '/';
+		if (page === 'home') path += page + '/';
+		else path += page + '/' + nickName + '/';
 
 		setView('MAIN');
-		navigate(path + postId);
+		navigate(path);
 	};
 
 	return (

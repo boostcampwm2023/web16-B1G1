@@ -1,5 +1,4 @@
 import { Volume2, VolumeX } from 'lucide-react';
-import { Button } from '..';
 import { usePlayingStore } from 'shared/store/useAudioStore';
 import styled from '@emotion/styled';
 
@@ -7,17 +6,18 @@ export default function AudioButton() {
 	const { playing, setPlaying } = usePlayingStore();
 
 	return (
-		<BGMButton size="m" buttonType="Button" onClick={() => setPlaying()}>
+		<Wrapper onClick={setPlaying}>
 			{playing ? <MuteIcon /> : <UnMuteIcon />}
-		</BGMButton>
+		</Wrapper>
 	);
 }
 
-const BGMButton = styled(Button)`
+const Wrapper = styled.div`
 	position: absolute;
 	top: 20px;
 	left: 20px;
 	z-index: 100;
+	cursor: pointer;
 `;
 
 const MuteIcon = styled(VolumeX)`

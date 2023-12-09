@@ -81,7 +81,7 @@ export default function Home() {
 
 			{isSwitching && <WarpScreen setIsSwitching={setIsSwitching} />}
 			{!isSwitching && <FadeoutScreen />}
-			{text && <Toast>{text}</Toast>}
+			{text && <Toast type={type}>{text}</Toast>}
 
 			<UpperBar />
 			<UnderBar />

@@ -68,7 +68,6 @@ export default function UpperBar() {
 			setSearchValue('');
 			setDebouncedSearchValue('');
 			setSearchResults([]);
-			setIsSwitching(true);
 		} finally {
 			setIsSearchButtonDisabled(false);
 		}

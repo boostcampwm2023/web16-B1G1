@@ -61,18 +61,22 @@ export default function WritingModal() {
 							setTitle(e.target.value);
 						}}
 						state={titleState}
+						autoComplete="off"
 					/>
 					{titleState === 'INVALID' && <Message>제목을 입력해주세요.</Message>}
 				</TitleContainer>
-				<ContentArea
-					onChange={(content) => {
-						setContentState('DEFAULT');
-						setContent(content);
-					}}
-					height="40vh"
-					state={contentState}
-				/>
-				{contentState === 'INVALID' && <Message>내용을 입력해주세요.</Message>}
+				<ContentContainer state={contentState}>
+					<TextArea
+						onChange={(content) => {
+							setContentState('DEFAULT');
+							setContent(content);
+						}}
+						height="40vh"
+					/>
+					{contentState === 'INVALID' && (
+						<Message>내용을 입력해주세요.</Message>
+					)}
+				</ContentContainer>
 			</Modal>
 		</ModalPortal>
 	);
@@ -80,6 +84,26 @@ export default function WritingModal() {
 
 const TitleContainer = styled.div`
 	margin-bottom: 30px;
+`;
+
+const ContentContainer = styled.div<{ state: TextStateTypes }>`
+	border: 1px solid;
+	border-radius: 4px;
+	${({ state, theme: { colors } }) => {
+		if (state === 'DEFAULT') return;
+
+		return css`
+			border-color: ${colors.text.warning};
+
+			&:focus {
+				border-color: ${colors.text.warning};
+			}
+
+			&:hover {
+				border-color: ${colors.text.warning};
+			}
+		`;
+	}};
 `;
 
 const TitleInput = styled(InputBar)<{ state: TextStateTypes }>`
@@ -100,25 +124,8 @@ const TitleInput = styled(InputBar)<{ state: TextStateTypes }>`
 	}};
 `;
 
-const ContentArea = styled(TextArea)<{ state: TextStateTypes }>`
-	${({ state, theme: { colors } }) => {
-		if (state === 'DEFAULT') return;
-
-		return css`
-			border-color: ${colors.text.warning};
-
-			&:focus {
-				border-color: ${colors.text.warning};
-			}
-
-			&:hover {
-				border-color: ${colors.text.warning};
-			}
-		`;
-	}};
-`;
-
 const Message = styled.p`
+	position: absolute;
 	margin: 4px 0 0 0;
 	color: ${({ theme: { colors } }) => colors.text.warning};
 

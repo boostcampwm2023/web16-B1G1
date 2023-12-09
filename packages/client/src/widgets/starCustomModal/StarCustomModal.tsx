@@ -33,8 +33,7 @@ export default function StarCustomModal() {
 	const { setText } = useToastStore();
 
 	const handleGoBack = () => {
-		navigate('/home');
-		setView('MAIN');
+		navigate('/home/writing');
 	};
 
 	const handleSubmit = async () => {

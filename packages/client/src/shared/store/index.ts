@@ -6,5 +6,4 @@ export * from './useCustomStore';
 export * from './useGalaxyStore';
 export * from './usePostStore';
 export * from './useErrorStore';
-export * from './useOwnerStore';
 export * from './useScreenSwitchStore';

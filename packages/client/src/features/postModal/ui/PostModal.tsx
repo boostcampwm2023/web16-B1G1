@@ -45,18 +45,19 @@ export default function PostModal() {
 		const formData = new FormData();
 		formData.append('title', title);
 		formData.append('content', content);
-  
-    try {
-      await instance({
-        url: `/post/${postId}`,
-        method: 'PATCH',
-        data: formData,
-      });
-      setIsEdit(false);
-      setToast({ text: '글이 수정되었습니다.', type: 'success' });
-      refetch();  
-    }
-  	setIsSaveButtonDisabled(false);      
+
+		try {
+			await instance({
+				url: `/post/${postId}`,
+				method: 'PATCH',
+				data: formData,
+			});
+			setIsEdit(false);
+			setToast({ text: '글이 수정되었습니다.', type: 'success' });
+			refetch();
+		} finally {
+			setIsSaveButtonDisabled(false);
+		}
 	};
 
 	const rightButton = (
@@ -114,14 +115,15 @@ export default function PostModal() {
 	);
 
 	const handleDelete = async () => {
-    try {
-      await deletePost(postId!);
-      setDeleteModal(false);
-      setToast({ text: '글이 삭제되었습니다.', type: 'success' });
-      setView('MAIN');
-      navigate('/home');
-    }
-		setIsDeleteButtonDisabled(false);
+		try {
+			await deletePost(postId!);
+			setDeleteModal(false);
+			setToast({ text: '글이 삭제되었습니다.', type: 'success' });
+			setView('MAIN');
+			navigate('/home');
+		} finally {
+			setIsDeleteButtonDisabled(false);
+		}
 	};
 
 	const handleGoBackButton = () => {
@@ -191,6 +193,7 @@ export default function PostModal() {
 							setDeleteModal(false);
 						}}
 						onClickActionButton={handleDelete}
+						disabled={isDeleteButtonDisabled}
 					/>
 				)}
 			</ModalPortal>

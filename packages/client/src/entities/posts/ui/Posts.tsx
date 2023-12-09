@@ -4,9 +4,11 @@ import { StarData } from 'shared/lib/types/star';
 import { getPostListByNickName } from 'shared/apis/star';
 import { getMyPost } from '../apis/getMyPost';
 import useCheckNickName from 'shared/hooks/useCheckNickName';
+import { useViewStore } from 'shared/store';
 
 export default function Posts() {
 	const [postData, setPostData] = useState<StarData[]>();
+	const { view } = useViewStore();
 
 	const { page, nickName } = useCheckNickName();
 
@@ -25,7 +27,7 @@ export default function Posts() {
 			const otherPostData = await getPostListByNickName(nickName);
 			setPostData(otherPostData);
 		})();
-	}, [page, nickName]);
+	}, [view, page, nickName]);
 
 	return (
 		<group>

@@ -6,6 +6,6 @@ interface PlayingState {
 }
 
 export const usePlayingStore = create<PlayingState>((set, get) => ({
-	playing: true,
+	playing: false,
 	setPlaying: () => set({ playing: !get().playing }),
 }));

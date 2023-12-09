@@ -12,8 +12,11 @@ export default function NickNameSetModal() {
 	const { platform } = useParams();
 	const { setToast } = useToastStore();
 	const { id, pw } = useSignUpStore();
+	const [isSaveButtonDisabled, setIsSaveButtonDisabled] = useState(false);
 
 	const handleSaveButton = async () => {
+    if (isSaveButtonDisabled) return;
+		setIsSaveButtonDisabled(true);
 		let response;
 
 		if (!platform) {
@@ -33,6 +36,7 @@ export default function NickNameSetModal() {
 			navigate('/login');
 			setToast({ text: '회원가입이 완료되었습니다.', type: 'success' });
 		}
+    setIsSaveButtonDisabled(false);
 	};
 
 	const handleGoBackButton = () => {
@@ -46,7 +50,7 @@ export default function NickNameSetModal() {
 			buttonType="CTA-icon"
 			size="m"
 			type="submit"
-			disabled={!validNickName}
+			disabled={!validNickName || isSaveButtonDisabled}
 		>
 			저장
 		</Button>

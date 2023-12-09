@@ -14,12 +14,15 @@ import Like from 'entities/like/Like';
 import InputBar from 'shared/ui/inputBar/InputBar';
 import instance from 'shared/apis/core/AxiosInterceptor';
 import { useToastStore } from 'shared/store';
+import { useRefresh } from 'shared/hooks/useRefresh';
 
 export default function PostModal() {
 	const [deleteModal, setDeleteModal] = useState(false);
 	const [isEdit, setIsEdit] = useState(false);
 	const [content, setContent] = useState('');
 	const [title, setTitle] = useState('');
+	const [isDeleteButtonDisabled, setIsDeleteButtonDisabled] = useState(false);
+	const [isSaveButtonDisabled, setIsSaveButtonDisabled] = useState(false);
 
 	const { setToast } = useToastStore();
 	const { setView } = useViewStore();
@@ -29,25 +32,31 @@ export default function PostModal() {
 	const navigate = useNavigate();
 	const location = useLocation();
 
+	useRefresh('POST');
+
 	useEffect(() => {
 		setContent(data?.content ?? '');
 		setTitle(data?.title ?? '');
 	}, [data]);
 
 	const handleEditSave = async () => {
+		if (isSaveButtonDisabled) return;
+		setIsSaveButtonDisabled(true);
 		const formData = new FormData();
 		formData.append('title', title);
 		formData.append('content', content);
-
-		await instance({
-			url: `/post/${postId}`,
-			method: 'PATCH',
-			data: formData,
-		});
-
-		setIsEdit(false);
-		setToast({ text: '글이 수정되었습니다.', type: 'success' });
-		refetch();
+  
+    try {
+      await instance({
+        url: `/post/${postId}`,
+        method: 'PATCH',
+        data: formData,
+      });
+      setIsEdit(false);
+      setToast({ text: '글이 수정되었습니다.', type: 'success' });
+      refetch();  
+    }
+  	setIsSaveButtonDisabled(false);      
 	};
 
 	const rightButton = (
@@ -98,28 +107,33 @@ export default function PostModal() {
 				setIsEdit(false);
 				handleEditSave();
 			}}
+			disabled={isSaveButtonDisabled}
 		>
 			저장
 		</Button>
 	);
 
 	const handleDelete = async () => {
-		await deletePost(postId!);
-
-		setDeleteModal(false);
-		setToast({ text: '글이 삭제되었습니다.', type: 'success' });
-		setView('MAIN');
-		navigate('/home');
+    try {
+      await deletePost(postId!);
+      setDeleteModal(false);
+      setToast({ text: '글이 삭제되었습니다.', type: 'success' });
+      setView('MAIN');
+      navigate('/home');
+    }
+		setIsDeleteButtonDisabled(false);
 	};
 
 	const handleGoBackButton = () => {
 		const splitedPath = location.pathname.split('/');
 		const page = splitedPath[1];
 		const nickName = splitedPath[2];
-		const path = '/' + page + '/' + nickName + '/';
+		let path = '/';
+		if (page === 'home') path += page + '/';
+		else path += page + '/' + nickName + '/';
 
 		setView('MAIN');
-		navigate(path + postId);
+		navigate(path);
 	};
 
 	return (

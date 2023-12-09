@@ -15,7 +15,6 @@ import {
 } from 'widgets/galaxy/lib/constants';
 import useCheckNickName from 'shared/hooks/useCheckNickName';
 import { FullScreen, useFullScreenHandle } from 'react-full-screen';
-import Audio from 'features/audio/Audio';
 import styled from '@emotion/styled';
 import { keyframes } from '@emotion/react';
 import UnderBar from 'widgets/underBar/UnderBar';
@@ -82,7 +81,6 @@ export default function Home() {
 	return (
 		<FullScreen handle={handleFullScreen}>
 			<Outlet />
-			<Audio />
 
 			{isSwitching && <WarpScreen />}
 			{!isSwitching && <WhiteScreen />}

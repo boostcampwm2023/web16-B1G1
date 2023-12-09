@@ -16,6 +16,7 @@ export default function UpperBar() {
 	const [searchValue, setSearchValue] = useState('');
 	const [debouncedSearchValue, setDebouncedSearchValue] = useState('');
 	const [searchResults, setSearchResults] = useState([]);
+	const [isSearchButtonDisabled, setIsSearchButtonDisabled] = useState(false);
 
 	const { setIsSwitching } = useScreenSwitchStore();
 	const { setToast } = useToastStore();
@@ -56,6 +57,8 @@ export default function UpperBar() {
 	}, [debouncedSearchValue]);
 
 	const handleSearchButton = async () => {
+		if (isSearchButtonDisabled) return;
+		setIsSearchButtonDisabled(true);
 		try {
 			await getIsAvailableNickName(searchValue);
 			setToast({ text: '존재하지 않는 닉네임입니다.', type: 'error' });
@@ -71,6 +74,8 @@ export default function UpperBar() {
 			setDebouncedSearchValue('');
 			setSearchResults([]);
 			setIsSwitching(true);
+		} finally {
+			setIsSearchButtonDisabled(false);
 		}
 	};
 
@@ -102,6 +107,7 @@ export default function UpperBar() {
 				setInputState={setSearchValue}
 				placeholder="닉네임을 입력하세요"
 				results={searchResults}
+				disabled={isSearchButtonDisabled}
 			/>
 		</Layout>
 	);

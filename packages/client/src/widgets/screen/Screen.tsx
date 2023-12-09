@@ -54,7 +54,7 @@ export default function Screen() {
 				</Galaxy>
 				<CameraLight />
 			</Canvas>
-			<LevaWrapper>
+			<LevaWrapper className="leva">
 				<Leva fill collapsed hidden={view !== 'MAIN' && view !== 'DETAIL'} />
 			</LevaWrapper>
 		</div>

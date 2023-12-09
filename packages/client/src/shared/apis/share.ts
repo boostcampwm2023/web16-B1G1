@@ -20,3 +20,12 @@ export const patchShareStatus = async (status: 'private' | 'public') => {
 
 	return data;
 };
+
+export const getShareLinkHostNickName = async (shareLink: string) => {
+	const { data } = await instance({
+		method: 'GET',
+		url: `/auth/shareLink/${shareLink}`,
+	});
+
+	return data;
+};

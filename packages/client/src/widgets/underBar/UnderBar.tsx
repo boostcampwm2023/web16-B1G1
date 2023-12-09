@@ -2,30 +2,29 @@ import styled from '@emotion/styled';
 import { Button } from 'shared/ui';
 import { Title01 } from '../../shared/ui/styles';
 import PlanetEditIcon from '@icons/icon-planetedit-24-white.svg';
-import PlanetEditIconGray from '@icons/icon-planetedit-24-gray.svg';
 import WriteIcon from '@icons/icon-writte-24-white.svg';
-import WriteIconGray from '@icons/icon-writte-24-gray.svg';
 import { BASE_URL, MAX_WIDTH1, MAX_WIDTH2 } from 'shared/lib/constants';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import instance from 'shared/apis/AxiosInterceptor';
 import { useViewStore } from 'shared/store';
-import { useOwnerStore } from 'shared/store/useOwnerStore';
-import { usePlayingStore } from 'shared/store/useAudioStore';
+import { useEffect, useState } from 'react';
+import useCheckNickName from 'shared/hooks/useCheckNickName';
 import { useGalaxyStore } from 'shared/store';
-import { Share2, Volume2, VolumeX } from 'lucide-react';
 
-interface PropsType {
-	nickname: string;
-}
-
-export default function UnderBar({ nickname }: PropsType) {
+export default function UnderBar() {
 	const navigate = useNavigate();
+	const [isMyPage, setIsMyPage] = useState(true);
 
 	const { setView } = useViewStore();
-	const { isMyPage, pageOwnerNickName } = useOwnerStore();
-	const { playing, setPlaying } = usePlayingStore();
+	const { page, nickName } = useCheckNickName();
 	const { reset } = useGalaxyStore();
+
+	useEffect(() => {
+		if (!page) return;
+		if (page === 'home') return setIsMyPage(true);
+		setIsMyPage(false);
+	}, [page]);
 
 	const handleLogoutButton = async () => {
 		await instance.get(`${BASE_URL}auth/signout`);
@@ -55,7 +54,7 @@ export default function UnderBar({ nickname }: PropsType) {
 
 	return (
 		<Layout>
-			<Name>{isMyPage ? nickname : pageOwnerNickName}님의 은하</Name>
+			<Name>{nickName}님의 은하</Name>
 
 			<ButtonsContainer>
 				<SmallButtonsContainer>
@@ -66,47 +65,32 @@ export default function UnderBar({ nickname }: PropsType) {
 					<Button
 						size="m"
 						buttonType="Button"
-						disabled={!isMyPage}
-						onClick={() => setPlaying()}
-						style={{ width: '74.5px' }}
+						onClick={handleShareButton}
+						style={{ display: isMyPage ? 'flex' : 'none' }}
 					>
-						{playing ? <VolumeX /> : <Volume2 />}
+						공유하기
 					</Button>
 				</SmallButtonsContainer>
 
-				<Line />
+				<Line style={{ display: isMyPage ? 'flex' : 'none' }} />
 
 				<BigButtonsContainer>
 					<BigButton
 						size="l"
 						buttonType="Button"
 						onClick={handleGalaxyCustomButton}
-						disabled={!isMyPage}
+						style={{ display: isMyPage ? 'flex' : 'none' }}
 					>
-						<img
-							src={isMyPage ? PlanetEditIcon : PlanetEditIconGray}
-							alt="은하 수정하기"
-						/>
+						<img src={PlanetEditIcon} alt="은하 수정하기" />
 						은하 수정하기
 					</BigButton>
-
-					<BigButton
-						size="l"
-						buttonType="Button"
-						disabled={!isMyPage}
-						onClick={handleShareButton}
-					>
-						<Share2 style={{ marginRight: '5px' }} />
-						공유하기
-					</BigButton>
-
 					<BigButton
 						size="l"
 						buttonType="CTA-icon"
-						disabled={!isMyPage}
 						onClick={handleWritingButton}
+						style={{ display: isMyPage ? 'flex' : 'none' }}
 					>
-						<img src={isMyPage ? WriteIcon : WriteIconGray} alt="글쓰기" />
+						<img src={WriteIcon} alt="글쓰기" />
 						글쓰기
 					</BigButton>
 				</BigButtonsContainer>
@@ -137,7 +121,7 @@ const Layout = styled.div`
 	}
 
 	@media (max-width: ${MAX_WIDTH2}px) {
-		width: 900px;
+		width: ${MAX_WIDTH2 - 30}px;
 	}
 `;
 
@@ -148,7 +132,9 @@ const ButtonsContainer = styled.div`
 const SmallButtonsContainer = styled.div`
 	display: flex;
 	flex-direction: column;
+	justify-content: center;
 	gap: 4px;
+	height: 76px;
 `;
 
 const BigButtonsContainer = styled.div`

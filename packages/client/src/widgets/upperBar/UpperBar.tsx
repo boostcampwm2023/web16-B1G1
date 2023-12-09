@@ -5,8 +5,11 @@ import { MAX_WIDTH1, MAX_WIDTH2 } from '@constants';
 import { useState, useEffect } from 'react';
 import { getNickNames } from 'shared/apis/search';
 import { useScreenSwitchStore } from 'shared/store/useScreenSwitchStore';
-import { useOwnerStore } from 'shared/store/useOwnerStore';
 import Cookies from 'js-cookie';
+import { getIsAvailableNickName } from 'shared/apis';
+import { useErrorStore } from 'shared/store';
+import { useNavigate } from 'react-router-dom';
+import useCheckNickName from 'shared/hooks/useCheckNickName';
 
 export default function UpperBar() {
 	// TODO: ui 분리하기
@@ -14,13 +17,17 @@ export default function UpperBar() {
 	const [debouncedSearchValue, setDebouncedSearchValue] = useState('');
 	const [searchResults, setSearchResults] = useState([]);
 
-	const { isMyPage, setIsMyPage } = useOwnerStore();
 	const { setIsSwitching } = useScreenSwitchStore();
-	const { setPageOwnerNickName } = useOwnerStore();
+	const { setMessage } = useErrorStore();
+	const { page, nickName } = useCheckNickName();
 
 	const userNickName = Cookies.get('nickname');
 
+	const navigate = useNavigate();
+
 	const DEBOUNCE_TIME = 200;
+
+	useEffect(() => {}, [page, nickName]);
 
 	useEffect(() => {
 		const debounce = setTimeout(() => {
@@ -48,22 +55,34 @@ export default function UpperBar() {
 	}, [debouncedSearchValue]);
 
 	const handleSearchButton = async () => {
-		setPageOwnerNickName(searchValue);
+		try {
+			await getIsAvailableNickName(debouncedSearchValue);
 
-		setSearchValue('');
-		setDebouncedSearchValue('');
-		setSearchResults([]);
+			return setMessage('존재하지 않는 닉네임입니다.');
+		} catch (error) {
+			if (debouncedSearchValue === userNickName)
+				return setMessage('내 은하로는 이동할 수 없습니다.');
 
-		setIsMyPage(false);
-		setIsSwitching(true);
+			navigate(`/search/${debouncedSearchValue}`);
+
+			setSearchValue('');
+			setDebouncedSearchValue('');
+			setSearchResults([]);
+			setIsSwitching(true);
+		}
 	};
 
-	const iconButtonVisibility = isMyPage ? 'hidden' : 'visible';
+	const iconButtonVisibility = page === 'home' ? 'hidden' : 'visible';
 
 	const handleGoBackButton = () => {
-		setIsMyPage(true);
+		if (page === 'guest') {
+			navigate('/');
+			setIsSwitching(true);
+			return;
+		}
+
+		navigate('/home');
 		setIsSwitching(true);
-		setPageOwnerNickName(userNickName!);
 	};
 
 	return (

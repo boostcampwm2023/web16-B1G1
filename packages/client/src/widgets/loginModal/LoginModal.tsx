@@ -4,8 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { useState } from 'react';
 import { postLogin } from 'shared/apis';
-import { useCheckLogin } from 'shared/hooks';
 import { useScreenSwitchStore } from 'shared/store/useScreenSwitchStore';
+import { AxiosError } from 'axios';
 
 export default function LoginModal() {
 	const [id, setId] = useState(Cookies.get('userId') ?? '');
@@ -21,21 +21,23 @@ export default function LoginModal() {
 
 	const handleLoginSubmit = async () => {
 		if (!isValid()) return;
-		const data = {
-			username: id,
-			password: password,
-		};
-		setPassword('');
-		await postLogin(
-			data,
-			setIdState,
-			setPasswordState,
-			navigate,
-			setIsSwitching,
-		);
-	};
 
-	useCheckLogin();
+		setPassword('');
+
+		try {
+			await postLogin({ username: id, password });
+
+			Cookies.set('userId', id, { path: '/', expires: 7 });
+			navigate('/home');
+			setIsSwitching(true);
+		} catch (err) {
+			if (err instanceof AxiosError) {
+				if (err.response?.status === 404) setIdState(false);
+				else if (err.response?.status === 401) setPasswordState(false);
+				else alert(err);
+			} else alert(err);
+		}
+	};
 
 	return (
 		<form

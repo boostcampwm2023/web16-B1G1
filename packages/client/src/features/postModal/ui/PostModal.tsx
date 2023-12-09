@@ -5,7 +5,7 @@ import remarkGfm from 'remark-gfm';
 import styled from '@emotion/styled';
 import { useEffect, useState } from 'react';
 import AlertDialog from 'shared/ui/alertDialog/AlertDialog';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useFetch } from 'shared/hooks';
 import { PostData } from 'shared/lib/types/post';
 import { deletePost } from '../api/deletePost';
@@ -16,15 +16,18 @@ import instance from 'shared/apis/AxiosInterceptor';
 import { useToastStore } from 'shared/store';
 
 export default function PostModal() {
-	const { setView } = useViewStore();
 	const [deleteModal, setDeleteModal] = useState(false);
-	const { postId } = useParams();
-	const navigate = useNavigate();
-	const { data, refetch } = useFetch<PostData>(`post/${postId}`);
 	const [isEdit, setIsEdit] = useState(false);
 	const [content, setContent] = useState('');
 	const [title, setTitle] = useState('');
+
 	const { setText } = useToastStore();
+	const { setView } = useViewStore();
+	const { postId } = useParams();
+	const { data, refetch } = useFetch<PostData>(`post/${postId}`);
+
+	const navigate = useNavigate();
+	const location = useLocation();
 
 	useEffect(() => {
 		setContent(data?.content ?? '');
@@ -109,10 +112,19 @@ export default function PostModal() {
 			setText('글을 삭제했습니다.');
 			setView('MAIN');
 			navigate('/home');
-			// window.location.reload();
 		} else {
 			setText('글 삭제에 실패했습니다.');
 		}
+	};
+
+	const handleGoBackButton = () => {
+		const splitedPath = location.pathname.split('/');
+		const page = splitedPath[1];
+		const nickName = splitedPath[2];
+		const path = '/' + page + '/' + nickName + '/';
+
+		setView('MAIN');
+		navigate(path + postId);
 	};
 
 	return (
@@ -125,10 +137,7 @@ export default function PostModal() {
 					leftButton={
 						isEdit ? null : <Like postId={postId!} count={data.like_cnt ?? 0} />
 					}
-					onClickGoBack={() => {
-						setView('MAIN');
-						navigate(`/home/${postId}`);
-					}}
+					onClickGoBack={handleGoBackButton}
 				>
 					<Container>
 						{data.images.length > 0 && !isEdit && (

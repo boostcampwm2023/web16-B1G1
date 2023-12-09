@@ -7,7 +7,7 @@ interface ErrorMessageTypes {
 
 export const errorMessage: ErrorMessageTypes = {
 	get: {
-		'/auth/check-signin': '',
+		'/auth/check-signin': '로그인이 필요합니다.',
 		'/auth/signout': '로그아웃에 실패했습니다.',
 		'/auth/is-available-username': '이미 존재하는 아이디입니다.',
 		'/auth/is-available-nickname': '이미 존재하는 닉네임입니다.',

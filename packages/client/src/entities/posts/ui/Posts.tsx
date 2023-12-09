@@ -13,7 +13,7 @@ export default function Posts() {
 	const { page, nickName } = useCheckNickName();
 
 	useEffect(() => {
-		if (!page || view !== 'MAIN') return;
+		if (!page) return;
 
 		if (page === 'home') {
 			(async () => {

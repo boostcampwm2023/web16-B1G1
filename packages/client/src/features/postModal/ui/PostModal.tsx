@@ -14,6 +14,7 @@ import Like from 'entities/like/Like';
 import InputBar from 'shared/ui/inputBar/InputBar';
 import instance from 'shared/apis/AxiosInterceptor';
 import { useToastStore } from 'shared/store';
+import { useRefresh } from 'shared/hooks/useRefresh';
 
 export default function PostModal() {
 	const [deleteModal, setDeleteModal] = useState(false);
@@ -28,6 +29,8 @@ export default function PostModal() {
 
 	const navigate = useNavigate();
 	const location = useLocation();
+
+	useRefresh('POST');
 
 	useEffect(() => {
 		setContent(data?.content ?? '');

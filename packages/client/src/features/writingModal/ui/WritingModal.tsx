@@ -9,6 +9,7 @@ import InputBar from 'shared/ui/inputBar/InputBar';
 import styled from '@emotion/styled';
 import { css } from '@emotion/react';
 import { Caption } from 'shared/ui/styles';
+import { useRefresh } from 'shared/hooks/useRefresh';
 
 type TextStateTypes = 'DEFAULT' | 'INVALID';
 
@@ -21,6 +22,8 @@ export default function WritingModal() {
 	const navigate = useNavigate();
 	const { setView } = useViewStore();
 	const { setStoreTitle, setStoreContent, setStoreFiles } = usePostStore();
+
+	useRefresh('WRITING');
 
 	const handleSendPost = async () => {
 		if (title === '') return setTitleState('INVALID');

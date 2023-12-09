@@ -7,6 +7,7 @@ import { SearchStatusType } from './lib/types';
 import { useToastStore, useViewStore } from 'shared/store';
 import { useNavigate } from 'react-router-dom';
 import { patchShareStatus } from 'shared/apis/share';
+import { useRefresh } from 'shared/hooks/useRefresh';
 
 export default function ShareModal() {
 	const [originalSearchStatus, setOriginalSearchStatus] =
@@ -18,6 +19,8 @@ export default function ShareModal() {
 	const { setView } = useViewStore();
 
 	const navigate = useNavigate();
+
+	useRefresh('SHARE');
 
 	useEffect(() => {
 		(async () => {

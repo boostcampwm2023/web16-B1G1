@@ -11,12 +11,15 @@ import { useViewStore } from 'shared/store';
 import styled from '@emotion/styled';
 import { useGalaxyStore, useCustomStore } from 'shared/store';
 import { postGalaxy } from 'shared/apis';
+import { useRefresh } from 'shared/hooks/useRefresh';
 
 export default function GalaxyCustomModal() {
 	const navigate = useNavigate();
 	const { setView } = useViewStore();
 	const galaxy = useGalaxyStore();
 	const { spiral, start, thickness, zDist } = useCustomStore();
+
+	useRefresh('CUSTOM');
 
 	const handleSubmit = () => {
 		const galaxyStyle = {

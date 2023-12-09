@@ -22,6 +22,7 @@ import { shapeTypes } from '@constants';
 import SentimentButton from './ui/SentimentButton';
 import { generateStarPosition } from './lib/generateStarPosition';
 import { getMyPost } from 'entities/posts/apis/getMyPost';
+import { useRefresh } from 'shared/hooks/useRefresh';
 
 export default function StarCustomModal() {
 	const { setView } = useViewStore();
@@ -34,6 +35,8 @@ export default function StarCustomModal() {
 
 	const navigate = useNavigate();
 	const { setText } = useToastStore();
+
+	useRefresh('WRITING');
 
 	const handleGoBack = () => {
 		navigate('/home');

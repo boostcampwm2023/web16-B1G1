@@ -9,6 +9,7 @@ import InputBar from 'shared/ui/inputBar/InputBar';
 import styled from '@emotion/styled';
 import { css } from '@emotion/react';
 import { Caption } from 'shared/ui/styles';
+import { useRefresh } from 'shared/hooks/useRefresh';
 
 type TextStateTypes = 'DEFAULT' | 'INVALID';
 
@@ -21,6 +22,8 @@ export default function WritingModal() {
 	const navigate = useNavigate();
 	const { setView } = useViewStore();
 	const { setStoreTitle, setStoreContent, setStoreFiles } = usePostStore();
+
+	useRefresh('WRITING');
 
 	const handleSendPost = async () => {
 		if (title === '') return setTitleState('INVALID');
@@ -45,7 +48,6 @@ export default function WritingModal() {
 						다음
 					</Button>
 				}
-				leftButton={<Images onModify={setFiles} />}
 				onClickGoBack={() => {
 					setView('MAIN');
 					navigate('/home');
@@ -77,6 +79,9 @@ export default function WritingModal() {
 						<Message>내용을 입력해주세요.</Message>
 					)}
 				</ContentContainer>
+				<ImagesWrapper>
+					<Images onModify={setFiles} />
+				</ImagesWrapper>
 			</Modal>
 		</ModalPortal>
 	);
@@ -130,4 +135,11 @@ const Message = styled.p`
 	color: ${({ theme: { colors } }) => colors.text.warning};
 
 	${Caption}
+`;
+
+const ImagesWrapper = styled.div`
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+	margin-top: 30px;
 `;

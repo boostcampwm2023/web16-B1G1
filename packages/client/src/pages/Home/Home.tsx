@@ -1,17 +1,9 @@
 import Screen from 'widgets/screen/Screen';
-import { useViewStore } from 'shared/store/useViewStore';
 import { Outlet } from 'react-router-dom';
-import UnderBar from 'widgets/underBar/UnderBar';
-import UpperBar from 'widgets/upperBar/UpperBar';
 import WarpScreen from 'widgets/warpScreen/WarpScreen';
 import { useEffect, useState } from 'react';
 import { getGalaxy } from 'shared/apis';
-import {
-	useErrorStore,
-	useGalaxyStore,
-	useToastStore,
-	useCustomStore,
-} from 'shared/store';
+import { useGalaxyStore, useToastStore, useCustomStore } from 'shared/store';
 import { Toast } from 'shared/ui';
 import {
 	SPIRAL,
@@ -19,18 +11,16 @@ import {
 	SPIRAL_START,
 	ARMS_Z_DIST,
 } from 'widgets/galaxy/lib/constants';
-import Alert from 'shared/ui/alert/Alert';
 import useCheckNickName from 'shared/hooks/useCheckNickName';
 import { FullScreen, useFullScreenHandle } from 'react-full-screen';
-import Audio from 'features/audio/Audio';
 import styled from '@emotion/styled';
 import { keyframes } from '@emotion/react';
+import UnderBar from 'widgets/underBar/UnderBar';
+import UpperBar from 'widgets/upperBar/UpperBar';
 
 export default function Home() {
-	const { view } = useViewStore();
 	const [isSwitching, setIsSwitching] = useState(false);
-	const { text } = useToastStore();
-	const { message } = useErrorStore();
+	const { text, type } = useToastStore();
 	const { nickName } = useCheckNickName();
 
 	const handleFullScreen = useFullScreenHandle();
@@ -88,19 +78,13 @@ export default function Home() {
 	return (
 		<FullScreen handle={handleFullScreen}>
 			<Outlet />
-			<Audio />
 
-			{message && <Alert title={message} />}
 			{isSwitching && <WarpScreen setIsSwitching={setIsSwitching} />}
 			{!isSwitching && <FadeoutScreen />}
 			{text && <Toast>{text}</Toast>}
 
-			{(view === 'MAIN' || view === 'DETAIL') && (
-				<>
-					<UpperBar />
-					<UnderBar />
-				</>
-			)}
+			<UpperBar />
+			<UnderBar />
 
 			<Screen />
 		</FullScreen>

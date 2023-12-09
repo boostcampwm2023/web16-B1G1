@@ -6,21 +6,19 @@ import WriteIcon from '@icons/icon-writte-24-white.svg';
 import { BASE_URL, MAX_WIDTH1, MAX_WIDTH2 } from 'shared/lib/constants';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
-import instance from 'shared/apis/AxiosInterceptor';
+import instance from 'shared/apis/core/AxiosInterceptor';
 import { useViewStore } from 'shared/store';
 import { useEffect, useState } from 'react';
 import useCheckNickName from 'shared/hooks/useCheckNickName';
-import { usePlayingStore } from 'shared/store/useAudioStore';
 import { useGalaxyStore } from 'shared/store';
 
 export default function UnderBar() {
 	const navigate = useNavigate();
 	const [isMyPage, setIsMyPage] = useState(true);
+	const [isLogoutButtonDisabled, setIsLogoutButtonDisabled] = useState(false);
 
-	const { setView } = useViewStore();
+	const { setView, view } = useViewStore();
 	const { page, nickName } = useCheckNickName();
-
-	const { setPlaying } = usePlayingStore();
 	const { reset } = useGalaxyStore();
 
 	useEffect(() => {
@@ -30,12 +28,15 @@ export default function UnderBar() {
 	}, [page]);
 
 	const handleLogoutButton = async () => {
+		if (isLogoutButtonDisabled) return;
+		setIsLogoutButtonDisabled(true);
 		await instance.get(`${BASE_URL}auth/signout`);
 
 		Cookies.remove('accessToken');
 		Cookies.remove('refreshToken');
 		reset();
 
+		setIsLogoutButtonDisabled(false);
 		navigate('/');
 	};
 
@@ -55,12 +56,17 @@ export default function UnderBar() {
 	};
 
 	return (
-		<Layout>
+		<Layout view={view}>
 			<Name>{nickName}님의 은하</Name>
 
 			<ButtonsContainer>
 				<SmallButtonsContainer>
-					<Button size="m" buttonType="Button" onClick={handleLogoutButton}>
+					<Button
+						size="m"
+						buttonType="Button"
+						onClick={handleLogoutButton}
+						disabled={isLogoutButtonDisabled}
+					>
 						로그아웃
 					</Button>
 
@@ -86,17 +92,6 @@ export default function UnderBar() {
 						<img src={PlanetEditIcon} alt="은하 수정하기" />
 						은하 수정하기
 					</BigButton>
-
-					{/* <BigButton
-						size="l"
-						buttonType="Button"
-						disabled={!isMyPage}
-						onClick={() => setPlaying()}
-					>
-						<img src={isMyPage ? AddIcon : AddIconGray} alt="별 스킨 만들기" />
-						별 스킨 만들기
-					</BigButton> */}
-
 					<BigButton
 						size="l"
 						buttonType="CTA-icon"
@@ -112,14 +107,15 @@ export default function UnderBar() {
 	);
 }
 
-const Layout = styled.div`
+const Layout = styled.div<{ view: string }>`
 	position: absolute;
 	left: 50%;
 	bottom: 30px;
 	z-index: 50;
 	transform: translateX(-50%);
 
-	display: flex;
+	display: ${({ view }) =>
+		view === 'MAIN' || view === 'DETAIL' ? 'flex' : 'none'};
 	padding: 24px;
 	justify-content: space-between;
 	align-items: center;

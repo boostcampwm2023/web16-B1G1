@@ -5,7 +5,7 @@ import { MAX_WIDTH1, MAX_WIDTH2 } from '@constants';
 import { useState, useEffect } from 'react';
 import { getNickNames } from 'shared/apis/search';
 import { getIsAvailableNickName } from 'shared/apis';
-import { useErrorStore } from 'shared/store';
+import { useToastStore, useViewStore } from 'shared/store';
 import { useNavigate } from 'react-router-dom';
 import useCheckNickName from 'shared/hooks/useCheckNickName';
 
@@ -14,9 +14,11 @@ export default function UpperBar() {
 	const [searchValue, setSearchValue] = useState('');
 	const [debouncedSearchValue, setDebouncedSearchValue] = useState('');
 	const [searchResults, setSearchResults] = useState([]);
+	const [isSearchButtonDisabled, setIsSearchButtonDisabled] = useState(false);
 
-	const { setMessage } = useErrorStore();
+	const { setToast } = useToastStore();
 	const { page, nickName, owner } = useCheckNickName();
+	const { view } = useViewStore();
 
 	const navigate = useNavigate();
 
@@ -50,19 +52,25 @@ export default function UpperBar() {
 	}, [debouncedSearchValue]);
 
 	const handleSearchButton = async () => {
+		if (isSearchButtonDisabled) return;
+		setIsSearchButtonDisabled(true);
 		try {
 			await getIsAvailableNickName(searchValue);
-
-			return setMessage('존재하지 않는 닉네임입니다.');
+			setToast({ text: '존재하지 않는 닉네임입니다.', type: 'error' });
 		} catch (error) {
 			if (searchValue === owner)
-				return setMessage('내 은하로는 이동할 수 없습니다.');
+				return setToast({
+					text: '내 은하로는 이동할 수 없습니다.',
+					type: 'error',
+				});
 
 			navigate(`/search/${searchValue}`);
-
 			setSearchValue('');
 			setDebouncedSearchValue('');
 			setSearchResults([]);
+			setIsSwitching(true);
+		} finally {
+			setIsSearchButtonDisabled(false);
 		}
 	};
 
@@ -78,7 +86,7 @@ export default function UpperBar() {
 	};
 
 	return (
-		<Layout>
+		<Layout view={view}>
 			<IconButton
 				onClick={handleGoBackButton}
 				style={{ visibility: iconButtonVisibility }}
@@ -92,19 +100,21 @@ export default function UpperBar() {
 				setInputState={setSearchValue}
 				placeholder="닉네임을 입력하세요"
 				results={searchResults}
+				disabled={isSearchButtonDisabled}
 			/>
 		</Layout>
 	);
 }
 
-const Layout = styled.div`
+const Layout = styled.div<{ view: string }>`
 	position: absolute;
 	left: 50%;
 	top: 30px;
 	z-index: 50;
 	transform: translateX(-50%);
 
-	display: flex;
+	display: ${({ view }) =>
+		view === 'MAIN' || view === 'DETAIL' ? 'flex' : 'none'};
 	justify-content: space-between;
 	width: 1180px;
 

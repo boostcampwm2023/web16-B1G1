@@ -5,7 +5,7 @@ import {
 } from 'react-router-dom';
 import Home from '../pages/Home/Home';
 import Landing from '../pages/Landing/Landing';
-import { WritingModal } from 'features/writingModal/WritingModal';
+import { WritingModal } from 'features/writingModal';
 import LoginModal from 'widgets/loginModal/LoginModal';
 import SignUpModal from 'widgets/signupModal/SignUpModal';
 import NickNameSetModal from 'widgets/nickNameSetModal/NickNameSetModal';

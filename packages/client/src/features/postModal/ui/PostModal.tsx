@@ -12,17 +12,20 @@ import { deletePost } from '../api/deletePost';
 import ImageSlider from './ImageSlider';
 import Like from 'entities/like/Like';
 import InputBar from 'shared/ui/inputBar/InputBar';
-import instance from 'shared/apis/AxiosInterceptor';
+import instance from 'shared/apis/core/AxiosInterceptor';
 import { useToastStore } from 'shared/store';
 import useCheckNickName from 'shared/hooks/useCheckNickName';
+import { useRefresh } from 'shared/hooks/useRefresh';
 
 export default function PostModal() {
 	const [deleteModal, setDeleteModal] = useState(false);
 	const [isEdit, setIsEdit] = useState(false);
 	const [content, setContent] = useState('');
 	const [title, setTitle] = useState('');
+	const [isDeleteButtonDisabled, setIsDeleteButtonDisabled] = useState(false);
+	const [isSaveButtonDisabled, setIsSaveButtonDisabled] = useState(false);
 
-	const { setText } = useToastStore();
+	const { setToast } = useToastStore();
 	const { setView } = useViewStore();
 	const { postId } = useParams();
 	const { data, refetch } = useFetch<PostData>(`post/${postId}`);
@@ -32,26 +35,31 @@ export default function PostModal() {
 	const navigate = useNavigate();
 	const location = useLocation();
 
+	useRefresh('POST');
+
 	useEffect(() => {
 		setContent(data?.content ?? '');
 		setTitle(data?.title ?? '');
 	}, [data]);
 
 	const handleEditSave = async () => {
+		if (isSaveButtonDisabled) return;
+		setIsSaveButtonDisabled(true);
 		const formData = new FormData();
 		formData.append('title', title);
 		formData.append('content', content);
-		const res = await instance({
-			url: `/post/${postId}`,
-			method: 'PATCH',
-			data: formData,
-		});
-		if (res.status === 200) {
+
+		try {
+			await instance({
+				url: `/post/${postId}`,
+				method: 'PATCH',
+				data: formData,
+			});
 			setIsEdit(false);
-			setText('글이 수정되었습니다.');
+			setToast({ text: '글이 수정되었습니다.', type: 'success' });
 			refetch();
-		} else {
-			setText('글 수정에 실패했습니다.');
+		} finally {
+			setIsSaveButtonDisabled(false);
 		}
 	};
 
@@ -105,20 +113,21 @@ export default function PostModal() {
 				setIsEdit(false);
 				handleEditSave();
 			}}
+			disabled={isSaveButtonDisabled}
 		>
 			저장
 		</Button>
 	);
 
 	const handleDelete = async () => {
-		const res = await deletePost(postId!);
-		setDeleteModal(false);
-		if (res.status === 200) {
-			setText('글을 삭제했습니다.');
+		try {
+			await deletePost(postId!);
+			setDeleteModal(false);
+			setToast({ text: '글이 삭제되었습니다.', type: 'success' });
 			setView('MAIN');
 			navigate('/home');
-		} else {
-			setText('글 삭제에 실패했습니다.');
+		} finally {
+			setIsDeleteButtonDisabled(false);
 		}
 	};
 
@@ -126,10 +135,12 @@ export default function PostModal() {
 		const splitedPath = location.pathname.split('/');
 		const page = splitedPath[1];
 		const nickName = splitedPath[2];
-		const path = `/${page}/${page !== 'home' ? nickName + '/' : ''}`;
+		let path = '/';
+		if (page === 'home') path += page + '/';
+		else path += page + '/' + nickName + '/';
 
 		setView('MAIN');
-		navigate(path + postId);
+		navigate(path);
 	};
 
 	return (
@@ -187,6 +198,7 @@ export default function PostModal() {
 							setDeleteModal(false);
 						}}
 						onClickActionButton={handleDelete}
+						disabled={isDeleteButtonDisabled}
 					/>
 				)}
 			</ModalPortal>

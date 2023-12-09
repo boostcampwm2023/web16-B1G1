@@ -7,7 +7,7 @@ import { getNickNames } from 'shared/apis/search';
 import { useScreenSwitchStore } from 'shared/store/useScreenSwitchStore';
 import Cookies from 'js-cookie';
 import { getIsAvailableNickName } from 'shared/apis';
-import { useErrorStore } from 'shared/store';
+import { useToastStore, useViewStore } from 'shared/store';
 import { useNavigate } from 'react-router-dom';
 import useCheckNickName from 'shared/hooks/useCheckNickName';
 
@@ -18,8 +18,9 @@ export default function UpperBar() {
 	const [searchResults, setSearchResults] = useState([]);
 
 	const { setIsSwitching } = useScreenSwitchStore();
-	const { setMessage } = useErrorStore();
+	const { setToast } = useToastStore();
 	const { page, nickName } = useCheckNickName();
+	const { view } = useViewStore();
 
 	const userNickName = Cookies.get('nickname');
 
@@ -56,15 +57,16 @@ export default function UpperBar() {
 
 	const handleSearchButton = async () => {
 		try {
-			await getIsAvailableNickName(debouncedSearchValue);
-
-			return setMessage('존재하지 않는 닉네임입니다.');
+			await getIsAvailableNickName(searchValue);
+			setToast({ text: '존재하지 않는 닉네임입니다.', type: 'error' });
 		} catch (error) {
-			if (debouncedSearchValue === userNickName)
-				return setMessage('내 은하로는 이동할 수 없습니다.');
+			if (searchValue === userNickName)
+				return setToast({
+					text: '내 은하로는 이동할 수 없습니다.',
+					type: 'error',
+				});
 
-			navigate(`/search/${debouncedSearchValue}`);
-
+			navigate(`/search/${searchValue}`);
 			setSearchValue('');
 			setDebouncedSearchValue('');
 			setSearchResults([]);
@@ -86,7 +88,7 @@ export default function UpperBar() {
 	};
 
 	return (
-		<Layout>
+		<Layout view={view}>
 			<IconButton
 				onClick={handleGoBackButton}
 				style={{ visibility: iconButtonVisibility }}
@@ -105,14 +107,15 @@ export default function UpperBar() {
 	);
 }
 
-const Layout = styled.div`
+const Layout = styled.div<{ view: string }>`
 	position: absolute;
 	left: 50%;
 	top: 30px;
 	z-index: 50;
 	transform: translateX(-50%);
 
-	display: flex;
+	display: ${({ view }) =>
+		view === 'MAIN' || view === 'DETAIL' ? 'flex' : 'none'};
 	justify-content: space-between;
 	width: 1180px;
 

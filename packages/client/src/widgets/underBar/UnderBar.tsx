@@ -17,7 +17,7 @@ export default function UnderBar() {
 	const navigate = useNavigate();
 	const [isMyPage, setIsMyPage] = useState(true);
 
-	const { setView } = useViewStore();
+	const { setView, view } = useViewStore();
 	const { page, nickName } = useCheckNickName();
 
 	const { setPlaying } = usePlayingStore();
@@ -56,7 +56,7 @@ export default function UnderBar() {
 	};
 
 	return (
-		<Layout>
+		<Layout view={view}>
 			<Name>{nickName}님의 은하</Name>
 
 			<ButtonsContainer>
@@ -113,14 +113,15 @@ export default function UnderBar() {
 	);
 }
 
-const Layout = styled.div`
+const Layout = styled.div<{ view: string }>`
 	position: absolute;
 	left: 50%;
 	bottom: 30px;
 	z-index: 50;
 	transform: translateX(-50%);
 
-	display: flex;
+	display: ${({ view }) =>
+		view === 'MAIN' || view === 'DETAIL' ? 'flex' : 'none'};
 	padding: 24px;
 	justify-content: space-between;
 	align-items: center;

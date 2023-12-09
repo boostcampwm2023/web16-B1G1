@@ -21,7 +21,7 @@ export default function PostModal() {
 	const [content, setContent] = useState('');
 	const [title, setTitle] = useState('');
 
-	const { setText } = useToastStore();
+	const { setToast } = useToastStore();
 	const { setView } = useViewStore();
 	const { postId } = useParams();
 	const { data, refetch } = useFetch<PostData>(`post/${postId}`);
@@ -38,18 +38,16 @@ export default function PostModal() {
 		const formData = new FormData();
 		formData.append('title', title);
 		formData.append('content', content);
-		const res = await instance({
+
+		await instance({
 			url: `/post/${postId}`,
 			method: 'PATCH',
 			data: formData,
 		});
-		if (res.status === 200) {
-			setIsEdit(false);
-			setText('글이 수정되었습니다.');
-			refetch();
-		} else {
-			setText('글 수정에 실패했습니다.');
-		}
+
+		setIsEdit(false);
+		setToast({ text: '글이 수정되었습니다.', type: 'success' });
+		refetch();
 	};
 
 	const rightButton = (
@@ -106,15 +104,12 @@ export default function PostModal() {
 	);
 
 	const handleDelete = async () => {
-		const res = await deletePost(postId!);
+		await deletePost(postId!);
+
 		setDeleteModal(false);
-		if (res.status === 200) {
-			setText('글을 삭제했습니다.');
-			setView('MAIN');
-			navigate('/home');
-		} else {
-			setText('글 삭제에 실패했습니다.');
-		}
+		setToast({ text: '글이 삭제되었습니다.', type: 'success' });
+		setView('MAIN');
+		navigate('/home');
 	};
 
 	const handleGoBackButton = () => {

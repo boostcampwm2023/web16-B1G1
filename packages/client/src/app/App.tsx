@@ -6,7 +6,7 @@ import { RouterProvider } from 'react-router-dom';
 import { ThemeProvider } from '@emotion/react';
 import theme from 'shared/ui/styles/theme';
 import './global.css';
-import { AxiosInterceptor } from 'shared/apis/AxiosInterceptor';
+import { AxiosInterceptor } from 'shared/apis/core/AxiosInterceptor';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
 	<React.StrictMode>

@@ -32,8 +32,9 @@ export default function SentimentButton({ content, setColor }: PropsType) {
 			</InnerContainer>
 			{isHover && (
 				<Description>
-					작성한 글의 감정을 분석하여 색상을 <br />
-					추천해드려요!
+					AI가 글의 감정을
+					<br /> 분석하여 색상을 <br />
+					추천합니다.
 				</Description>
 			)}
 		</Container>

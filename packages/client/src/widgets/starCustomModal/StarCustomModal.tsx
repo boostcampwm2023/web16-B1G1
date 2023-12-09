@@ -19,6 +19,7 @@ import BrightnessSlider from './ui/BrightnessSlider';
 import { getRandomFloat } from '@utils/random';
 import { ARMS_X_DIST } from 'widgets/galaxy/lib/constants';
 import { shapeTypes } from '@constants';
+import SentimentButton from './ui/SentimentButton';
 
 export default function StarCustomModal() {
 	const { setView } = useViewStore();
@@ -91,6 +92,7 @@ export default function StarCustomModal() {
 
 					<CustomLayout>
 						<ColorPickerContainer color={color} setColor={setColor} />
+						<SentimentButton content={content} setColor={setColor} />
 						<SizeSlider size={size} setSize={setSize} />
 						<BrightnessSlider
 							brightness={brightness}

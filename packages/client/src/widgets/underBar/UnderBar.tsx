@@ -3,8 +3,6 @@ import { Button } from 'shared/ui';
 import { Title01 } from '../../shared/ui/styles';
 import PlanetEditIcon from '@icons/icon-planetedit-24-white.svg';
 import PlanetEditIconGray from '@icons/icon-planetedit-24-gray.svg';
-import AddIcon from '@icons/icon-add-24-white.svg';
-import AddIconGray from '@icons/icon-add-24-gray.svg';
 import WriteIcon from '@icons/icon-writte-24-white.svg';
 import WriteIconGray from '@icons/icon-writte-24-gray.svg';
 import { BASE_URL, MAX_WIDTH1, MAX_WIDTH2 } from 'shared/lib/constants';

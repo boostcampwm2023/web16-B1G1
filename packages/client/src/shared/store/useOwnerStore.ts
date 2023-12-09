@@ -14,7 +14,7 @@ export const useOwnerStore = create<OwnerState>((set) => ({
 		if (value === true) set((state) => ({ ...state, pageOwnerNickName: '' }));
 		set((state) => ({ ...state, isMyPage: value }));
 	},
-	setPageOwnerNickName: (value) => {
-		set((state) => ({ ...state, pageOwnerNickName: value }));
+	setPageOwnerNickName: (pageOwnerNickName) => {
+		set((state) => ({ ...state, pageOwnerNickName }));
 	},
 }));

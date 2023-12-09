@@ -64,7 +64,7 @@ export default function Post({ data, postId, title }: PropsType) {
 			brightness={data.brightness}
 			shape={data.shape}
 		>
-			{view !== 'POST' && isHovered && (
+			{isHovered && (
 				<Html>
 					<Label>{title}</Label>
 				</Html>

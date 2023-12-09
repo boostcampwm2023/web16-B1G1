@@ -1,25 +1,28 @@
 import Screen from 'widgets/screen/Screen';
 import { useViewStore } from 'shared/store/useViewStore';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import UnderBar from 'widgets/underBar/UnderBar';
 import UpperBar from '../../widgets/upperBar/UpperBar';
 import WarpScreen from 'widgets/warpScreen/WarpScreen';
-import { useEffect, useState } from 'react';
-import instance from 'shared/apis/AxiosInterceptor';
+import { useEffect } from 'react';
 import { useScreenSwitchStore } from 'shared/store/useScreenSwitchStore';
 import Cookies from 'js-cookie';
-import { getSignInInfo } from 'shared/apis';
 import { getGalaxy } from 'shared/apis';
-import { useGalaxyStore, useCustomStore } from 'shared/store';
+import {
+	useErrorStore,
+	useGalaxyStore,
+	useToastStore,
+	useCustomStore,
+} from 'shared/store';
 import { Toast } from 'shared/ui';
-import { useToastStore } from 'shared/store';
-import { useOwnerStore } from 'shared/store/useOwnerStore';
 import {
 	SPIRAL,
 	GALAXY_THICKNESS,
 	SPIRAL_START,
 	ARMS_Z_DIST,
 } from 'widgets/galaxy/lib/constants';
+import Alert from 'shared/ui/alert/Alert';
+import useCheckNickName from 'shared/hooks/useCheckNickName';
 import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 import Audio from 'features/audio/Audio';
 import styled from '@emotion/styled';
@@ -29,33 +32,15 @@ export default function Home() {
 	const { view, setView } = useViewStore();
 	const { isSwitching } = useScreenSwitchStore();
 	const { text } = useToastStore();
-	const { pageOwnerNickName, setPageOwnerNickName } = useOwnerStore();
-	const [nickname, setNickname] = useState('');
+	const { message } = useErrorStore();
+	const { nickName } = useCheckNickName();
+
 	const handleFullScreen = useFullScreenHandle();
 
-	const navigate = useNavigate();
 	const { setSpiral, setStart, setThickness, setZDist } = useGalaxyStore();
 	const custom = useCustomStore();
 
 	useEffect(() => {
-		(async () => {
-			try {
-				const res = await instance({
-					method: 'GET',
-					url: `/auth/check-signin`,
-				});
-
-				if (res.status !== 200) navigate('/login');
-			} catch (error) {
-				navigate('/login');
-			}
-		})();
-
-		getSignInInfo().then((res) => {
-			Cookies.set('nickname', res.nickname);
-			setNickname(res.nickname);
-			setPageOwnerNickName(nickname);
-		});
 		getGalaxy('').then((res) => {
 			const { setSpiral, setStart, setThickness, setZDist } = custom;
 			if (res.spiral) setSpiral(res.spiral);
@@ -69,7 +54,9 @@ export default function Home() {
 	}, []);
 
 	useEffect(() => {
-		getGalaxy(pageOwnerNickName).then((res) => {
+		Cookies.set('nickname', nickName);
+
+		getGalaxy(nickName).then((res) => {
 			if (!res.spiral) setSpiral(SPIRAL);
 			else setSpiral(res.spiral);
 
@@ -82,8 +69,7 @@ export default function Home() {
 			if (!res.zDist) setZDist(ARMS_Z_DIST);
 			else setZDist(res.zDist);
 		});
-		setView('MAIN');
-	}, [pageOwnerNickName]);
+	}, [nickName]);
 
 	const keyDown = (e: KeyboardEvent) => {
 		if (e.key === 'Escape') {
@@ -105,8 +91,9 @@ export default function Home() {
 	return (
 		<FullScreen handle={handleFullScreen}>
 			<Outlet />
-
 			<Audio />
+
+			{message && <Alert title={message} />}
 			{isSwitching && <WarpScreen />}
 			{!isSwitching && <WhiteScreen />}
 			{text && <Toast>{text}</Toast>}
@@ -114,7 +101,7 @@ export default function Home() {
 			{(view === 'MAIN' || view === 'DETAIL') && (
 				<>
 					<UpperBar />
-					<UnderBar nickname={nickname} />
+					<UnderBar />
 				</>
 			)}
 

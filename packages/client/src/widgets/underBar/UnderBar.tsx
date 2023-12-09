@@ -12,21 +12,26 @@ import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import instance from 'shared/apis/AxiosInterceptor';
 import { useViewStore } from 'shared/store';
-import { useOwnerStore } from 'shared/store/useOwnerStore';
+import { useEffect, useState } from 'react';
+import useCheckNickName from 'shared/hooks/useCheckNickName';
 import { usePlayingStore } from 'shared/store/useAudioStore';
 import { useGalaxyStore } from 'shared/store';
 
-interface PropsType {
-	nickname: string;
-}
-
-export default function UnderBar({ nickname }: PropsType) {
+export default function UnderBar() {
 	const navigate = useNavigate();
+	const [isMyPage, setIsMyPage] = useState(true);
 
 	const { setView } = useViewStore();
-	const { isMyPage, pageOwnerNickName } = useOwnerStore();
+	const { page, nickName } = useCheckNickName();
+
 	const { setPlaying } = usePlayingStore();
 	const { reset } = useGalaxyStore();
+
+	useEffect(() => {
+		if (!page) return;
+		if (page === 'home') return setIsMyPage(true);
+		setIsMyPage(false);
+	}, [page]);
 
 	const handleLogoutButton = async () => {
 		await instance.get(`${BASE_URL}auth/signout`);
@@ -56,7 +61,7 @@ export default function UnderBar({ nickname }: PropsType) {
 
 	return (
 		<Layout>
-			<Name>{isMyPage ? nickname : pageOwnerNickName}님의 은하</Name>
+			<Name>{nickName}님의 은하</Name>
 
 			<ButtonsContainer>
 				<SmallButtonsContainer>

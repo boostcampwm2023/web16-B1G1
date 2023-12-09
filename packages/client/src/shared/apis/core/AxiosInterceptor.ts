@@ -1,7 +1,5 @@
 import axios from 'axios';
 import { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
-import useCheckNickName from 'shared/hooks/useCheckNickName';
 import { errorMessage } from 'shared/lib/constants/error';
 import { useToastStore } from 'shared/store';
 

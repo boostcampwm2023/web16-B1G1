@@ -1,4 +1,4 @@
-import instance from 'shared/apis/AxiosInterceptor';
+import instance from 'shared/apis/core/AxiosInterceptor';
 
 export const getSentimentColor = async (content: string) => {
 	const response = await instance({

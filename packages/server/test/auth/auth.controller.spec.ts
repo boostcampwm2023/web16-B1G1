@@ -126,6 +126,19 @@ describe('AuthController', () => {
 		expect(result.nickname).toBe('test');
 	});
 
+	it('checkNickname', async () => {
+		expect(controller.checkNickname).toBeDefined();
+		jest
+			.spyOn(service, 'checkNickname')
+			.mockImplementation(async (nickname: string) => {
+				return true;
+			});
+
+		const result = await controller.checkNickname('test');
+		expect(result).toBeDefined();
+		expect(result).toBe(true);
+	});
+
 	it('signOut', async () => {
 		expect(controller.signOut).toBeDefined();
 		const userData = {

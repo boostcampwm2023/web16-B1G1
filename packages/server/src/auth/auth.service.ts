@@ -297,12 +297,12 @@ export class AuthService {
 		return linkUser.nickname;
 	}
 
-	checkNickname(nickname: string) {
+	async checkNickname(nickname: string) {
 		if (!nickname) {
 			throw new BadRequestException('nickname is required');
 		}
 
-		const user = this.userRepository.findOneBy({ nickname });
+		const user = await this.userRepository.findOneBy({ nickname });
 
 		if (!user) {
 			throw new NotFoundException('user not found');

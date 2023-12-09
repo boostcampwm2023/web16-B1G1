@@ -15,7 +15,7 @@ export default function ShareModal() {
 	const [newSearchStatus, setNewSearchStatus] =
 		useState<SearchStatusType>('default');
 
-	const { setText } = useToastStore();
+	const { setToast } = useToastStore();
 	const { setView } = useViewStore();
 
 	const navigate = useNavigate();
@@ -38,7 +38,7 @@ export default function ShareModal() {
 			await patchShareStatus(newSearchStatus);
 		}
 
-		setText('공유 설정이 변경되었습니다.');
+		setToast({ text: '공유 설정이 변경되었습니다.', type: 'success' });
 		setView('MAIN');
 		navigate('/home');
 	};

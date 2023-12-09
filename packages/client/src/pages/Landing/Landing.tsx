@@ -6,7 +6,7 @@ import { Outlet } from 'react-router-dom';
 
 export default function Landing() {
 	const [mouse, setMouse] = useState([0.5, 0.5]);
-	const { text } = useToastStore();
+	const { text, type } = useToastStore();
 
 	return (
 		<div
@@ -17,7 +17,7 @@ export default function Landing() {
 				]);
 			}}
 		>
-			{text && <Toast>{text}</Toast>}
+			{text && <Toast type={type}>{text}</Toast>}
 			<Outlet />
 			<LandingScreen mousePosition={mouse} />
 		</div>

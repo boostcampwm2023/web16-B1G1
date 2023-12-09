@@ -6,7 +6,7 @@ import WriteIcon from '@icons/icon-writte-24-white.svg';
 import { BASE_URL, MAX_WIDTH1, MAX_WIDTH2 } from 'shared/lib/constants';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
-import instance from 'shared/apis/AxiosInterceptor';
+import instance from 'shared/apis/core/AxiosInterceptor';
 import { useViewStore } from 'shared/store';
 import { useEffect, useState } from 'react';
 import useCheckNickName from 'shared/hooks/useCheckNickName';
@@ -17,7 +17,7 @@ export default function UnderBar() {
 	const [isMyPage, setIsMyPage] = useState(true);
 	const [isLogoutButtonDisabled, setIsLogoutButtonDisabled] = useState(false);
 
-	const { setView } = useViewStore();
+	const { setView, view } = useViewStore();
 	const { page, nickName } = useCheckNickName();
 	const { reset } = useGalaxyStore();
 
@@ -57,7 +57,7 @@ export default function UnderBar() {
 	};
 
 	return (
-		<Layout>
+		<Layout view={view}>
 			<Name>{nickName}님의 은하</Name>
 
 			<ButtonsContainer>
@@ -108,14 +108,15 @@ export default function UnderBar() {
 	);
 }
 
-const Layout = styled.div`
+const Layout = styled.div<{ view: string }>`
 	position: absolute;
 	left: 50%;
 	bottom: 30px;
 	z-index: 50;
 	transform: translateX(-50%);
 
-	display: flex;
+	display: ${({ view }) =>
+		view === 'MAIN' || view === 'DETAIL' ? 'flex' : 'none'};
 	padding: 24px;
 	justify-content: space-between;
 	align-items: center;

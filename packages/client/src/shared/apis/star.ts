@@ -1,4 +1,4 @@
-import instance from './AxiosInterceptor';
+import instance from './core/AxiosInterceptor';
 
 export const getPostListByNickName = async (nickName: string) => {
 	const { data } = await instance({

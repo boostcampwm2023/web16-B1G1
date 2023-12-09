@@ -1,4 +1,4 @@
-import instance from 'shared/apis/AxiosInterceptor';
+import instance from 'shared/apis/core/AxiosInterceptor';
 import { StarData } from 'shared/lib/types/star';
 
 export const getMyPost = async (): Promise<StarData[]> => {

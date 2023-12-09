@@ -33,7 +33,7 @@ export default function StarCustomModal() {
 	const [isSubmitButtonDisabled, setIsSubmitButtonDisabled] = useState(false);
 
 	const navigate = useNavigate();
-	const { setText } = useToastStore();
+	const { setToast } = useToastStore();
 
 	useRefresh('WRITING');
 
@@ -65,7 +65,7 @@ export default function StarCustomModal() {
 
 		const res = await sendPost(formData);
 		if (res?.status === 201) {
-			setText('별을 생성했습니다.');
+			setToast({ text: '별을 생성했습니다.', type: 'success' });
 			setView('MAIN');
 			navigate('/home');
 		}

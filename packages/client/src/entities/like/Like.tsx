@@ -2,7 +2,7 @@ import { useEffect, useReducer, useState } from 'react';
 import { Heart } from 'lucide-react';
 import { Button } from 'shared/ui';
 import theme from 'shared/ui/styles/theme';
-import instance from 'shared/apis/AxiosInterceptor';
+import instance from 'shared/apis/core/AxiosInterceptor';
 
 interface PropsType {
 	postId: string;

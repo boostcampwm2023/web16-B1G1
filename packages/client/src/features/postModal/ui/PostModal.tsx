@@ -12,7 +12,7 @@ import { deletePost } from '../api/deletePost';
 import ImageSlider from './ImageSlider';
 import Like from 'entities/like/Like';
 import InputBar from 'shared/ui/inputBar/InputBar';
-import instance from 'shared/apis/AxiosInterceptor';
+import instance from 'shared/apis/core/AxiosInterceptor';
 import { useToastStore } from 'shared/store';
 import { useRefresh } from 'shared/hooks/useRefresh';
 
@@ -24,7 +24,7 @@ export default function PostModal() {
 	const [isDeleteButtonDisabled, setIsDeleteButtonDisabled] = useState(false);
 	const [isSaveButtonDisabled, setIsSaveButtonDisabled] = useState(false);
 
-	const { setText } = useToastStore();
+	const { setToast } = useToastStore();
 	const { setView } = useViewStore();
 	const { postId } = useParams();
 	const { data, refetch } = useFetch<PostData>(`post/${postId}`);
@@ -45,19 +45,18 @@ export default function PostModal() {
 		const formData = new FormData();
 		formData.append('title', title);
 		formData.append('content', content);
-		const res = await instance({
-			url: `/post/${postId}`,
-			method: 'PATCH',
-			data: formData,
-		});
-		if (res.status === 200) {
-			setIsEdit(false);
-			setText('글이 수정되었습니다.');
-			refetch();
-		} else {
-			setText('글 수정에 실패했습니다.');
-		}
-		setIsSaveButtonDisabled(false);
+  
+    try {
+      await instance({
+        url: `/post/${postId}`,
+        method: 'PATCH',
+        data: formData,
+      });
+      setIsEdit(false);
+      setToast({ text: '글이 수정되었습니다.', type: 'success' });
+      refetch();  
+    }
+  	setIsSaveButtonDisabled(false);      
 	};
 
 	const rightButton = (
@@ -115,18 +114,13 @@ export default function PostModal() {
 	);
 
 	const handleDelete = async () => {
-		if (isDeleteButtonDisabled) return;
-		setIsDeleteButtonDisabled(true);
-		const res = await deletePost(postId!);
-		setDeleteModal(false);
-		if (res.status === 200) {
-			setText('글을 삭제했습니다.');
-			setView('MAIN');
-			setIsDeleteButtonDisabled(false);
-			navigate('/home');
-		} else {
-			setText('글 삭제에 실패했습니다.');
-		}
+    try {
+      await deletePost(postId!);
+      setDeleteModal(false);
+      setToast({ text: '글이 삭제되었습니다.', type: 'success' });
+      setView('MAIN');
+      navigate('/home');
+    }
 		setIsDeleteButtonDisabled(false);
 	};
 

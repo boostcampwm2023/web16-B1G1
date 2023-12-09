@@ -8,7 +8,7 @@ import Cookies from 'js-cookie';
 export default function LinkContainer() {
 	const [shareLink, setShareLink] = useState('');
 
-	const { setText } = useToastStore();
+	const { setToast } = useToastStore();
 
 	useEffect(() => {
 		const nickName = Cookies.get('nickname') as string;
@@ -23,7 +23,7 @@ export default function LinkContainer() {
 
 	const copyToClipboard = () => {
 		navigator.clipboard.writeText(shareLink);
-		setText('링크가 복사되었습니다.');
+		setToast({ text: '링크가 복사되었습니다.', type: 'success' });
 	};
 
 	return (

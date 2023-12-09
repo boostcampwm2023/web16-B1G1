@@ -11,6 +11,12 @@ import { Model } from 'mongoose';
 import { getModelToken } from '@nestjs/mongoose';
 import { RedisRepository } from '../../src/auth/redis.repository';
 import { UserDataDto } from '../../src/auth/dto/user-data.dto';
+import {
+	BadRequestException,
+	NotFoundException,
+	UnauthorizedException,
+} from '@nestjs/common';
+import { UserShareStatus } from '../../src/auth/enums/user.enum';
 
 describe('AuthController', () => {
 	let controller: AuthController;
@@ -187,22 +193,29 @@ describe('AuthController', () => {
 		expect(controller.signInWithOAuth).toBeDefined();
 
 		const gitHubSignInResponse = { redirect: jest.fn() } as any;
-		await controller.signInWithOAuth('github', gitHubSignInResponse);
+		controller.signInWithOAuth('github', gitHubSignInResponse);
 		expect(gitHubSignInResponse.redirect.mock.calls[0][0]).toBe(
 			`https://github.com/login/oauth/authorize?client_id=${process.env.OAUTH_GITHUB_CLIENT_ID}&scope=read:user%20user:email`,
 		);
 
 		const naverSignInResponse = { redirect: jest.fn() } as any;
-		await controller.signInWithOAuth('naver', naverSignInResponse);
+		controller.signInWithOAuth('naver', naverSignInResponse);
 		expect(naverSignInResponse.redirect.mock.calls[0][0]).toBe(
 			`https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${process.env.OAUTH_NAVER_CLIENT_ID}&redirect_uri=${process.env.OAUTH_NAVER_REDIRECT_URI}&state=STATE_STRING`,
 		);
 
 		const googleSignInResponse = { redirect: jest.fn() } as any;
-		await controller.signInWithOAuth('google', googleSignInResponse);
+		controller.signInWithOAuth('google', googleSignInResponse);
 		expect(googleSignInResponse.redirect.mock.calls[0][0]).toBe(
 			`https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.OAUTH_GOOGLE_CLIENT_ID}&redirect_uri=${process.env.OAUTH_GOOGLE_REDIRECT_URI}&response_type=code&scope=email%20profile`,
 		);
+
+		const notSupportedSignInResponse = {} as any;
+		try {
+			controller.signInWithOAuth('notSupported', notSupportedSignInResponse);
+		} catch (e) {
+			expect(e).toBeInstanceOf(NotFoundException);
+		}
 	});
 
 	it('oauthCallback - FirstSignIN', async () => {
@@ -271,6 +284,12 @@ describe('AuthController', () => {
 				},
 			);
 
+		try {
+			await controller.signUpWithOAuth('testService', 'test', {}, {} as any);
+		} catch (e) {
+			expect(e).toBeInstanceOf(UnauthorizedException);
+		}
+
 		const response = { clearCookie: jest.fn(), redirect: jest.fn() } as any;
 		await controller.signUpWithOAuth(
 			'testService',
@@ -285,6 +304,12 @@ describe('AuthController', () => {
 
 	it('searchUser', async () => {
 		expect(controller.searchUser).toBeDefined();
+
+		try {
+			await controller.searchUser(undefined);
+		} catch (e) {
+			expect(e).toBeInstanceOf(BadRequestException);
+		}
 
 		jest
 			.spyOn(service, 'searchUser')
@@ -303,6 +328,37 @@ describe('AuthController', () => {
 		expect(result[1]).toHaveProperty('id');
 		expect(result[1]).toHaveProperty('nickname');
 		expect(result[1].nickname).toBe('test2');
+	});
+
+	it('changeStatus', async () => {
+		expect(controller.changeStatus).toBeDefined();
+
+		const userData = {
+			userId: 1,
+			username: 'test',
+			nickname: 'test',
+		} as UserDataDto;
+
+		jest
+			.spyOn(service, 'changeStatus')
+			.mockImplementation(
+				async (userData: UserDataDto, status: UserShareStatus) => {
+					return {
+						id: 1,
+						username: 'test',
+						nickname: 'test',
+						status: status,
+					} as User;
+				},
+			);
+
+		const result = await controller.changeStatus(
+			userData,
+			UserShareStatus.PUBLIC,
+		);
+		expect(result).toBeDefined();
+		expect(result).toHaveProperty('status');
+		expect(result.status).toBe(UserShareStatus.PUBLIC);
 	});
 
 	it('getShareLinkByNickname', async () => {

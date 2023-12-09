@@ -5,7 +5,6 @@ import UnderBar from 'widgets/underBar/UnderBar';
 import UpperBar from 'widgets/upperBar/UpperBar';
 import WarpScreen from 'widgets/warpScreen/WarpScreen';
 import { useEffect, useState } from 'react';
-import Cookies from 'js-cookie';
 import { getGalaxy } from 'shared/apis';
 import {
 	useErrorStore,
@@ -29,10 +28,10 @@ import { keyframes } from '@emotion/react';
 
 export default function Home() {
 	const { view } = useViewStore();
-	const [isSwitching, setIsSwitching] = useState(true);
+	const [isSwitching, setIsSwitching] = useState(false);
 	const { text } = useToastStore();
 	const { message } = useErrorStore();
-	const { page, nickName } = useCheckNickName();
+	const { nickName } = useCheckNickName();
 
 	const handleFullScreen = useFullScreenHandle();
 
@@ -40,33 +39,32 @@ export default function Home() {
 	const custom = useCustomStore();
 
 	useEffect(() => {
-		getGalaxy('').then((res) => {
-			const { setSpiral, setStart, setThickness, setZDist } = custom;
-			if (res.spiral) setSpiral(res.spiral);
-
-			if (res.start) setStart(res.start);
-
-			if (res.thickness) setThickness(res.thickness);
-
-			if (res.zDist) setZDist(res.zDist);
-		});
-	}, []);
-
-	useEffect(() => {
 		setIsSwitching(true);
 
 		getGalaxy(nickName).then((res) => {
 			if (!res.spiral) setSpiral(SPIRAL);
-			else setSpiral(res.spiral);
+			else {
+				setSpiral(res.spiral);
+				custom.setSpiral(res.spiral);
+			}
 
 			if (!res.start) setStart(SPIRAL_START);
-			else setStart(res.start);
+			else {
+				setStart(res.start);
+				custom.setStart(res.start);
+			}
 
 			if (!res.thickness) setThickness(GALAXY_THICKNESS);
-			else setThickness(res.thickness);
+			else {
+				setThickness(res.thickness);
+				custom.setThickness(res.thickness);
+			}
 
 			if (!res.zDist) setZDist(ARMS_Z_DIST);
-			else setZDist(res.zDist);
+			else {
+				setZDist(res.zDist);
+				custom.setZDist(res.zDist);
+			}
 		});
 	}, [nickName]);
 

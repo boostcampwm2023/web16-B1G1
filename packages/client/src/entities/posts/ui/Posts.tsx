@@ -11,8 +11,6 @@ export default function Posts() {
 	const { page, nickName } = useCheckNickName();
 
 	useEffect(() => {
-		if (!page) return;
-
 		if (page === 'home') {
 			(async () => {
 				const myPostData = await getMyPost();
@@ -25,7 +23,7 @@ export default function Posts() {
 			const otherPostData = await getPostListByNickName(nickName);
 			setPostData(otherPostData);
 		})();
-	}, [page, nickName]);
+	}, [nickName]);
 
 	return (
 		<group>

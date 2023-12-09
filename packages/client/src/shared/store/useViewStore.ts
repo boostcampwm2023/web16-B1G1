@@ -1,6 +1,5 @@
 import { create } from 'zustand';
-
-export type view = 'MAIN' | 'DETAIL' | 'POST' | 'WRITING' | 'CUSTOM' | 'SHARE';
+import { view } from 'shared/lib/types/view';
 
 interface ViewState {
 	view: view;

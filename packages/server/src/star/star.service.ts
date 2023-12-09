@@ -39,10 +39,14 @@ export class StarService {
 
 		const starDataList: GetStarResDto[] = [];
 		for (let board of boards) {
-			if (!board.star) continue;
+			if (!board.star) {
+				throw new NotFoundException('no star id');
+			}
 
 			const star = await this.starModel.findOne({ _id: board.star });
-			if (!star) continue;
+			if (!star) {
+				throw new NotFoundException('star not found');
+			}
 
 			// __v 필드 제거
 			star.__v = undefined;

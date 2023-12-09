@@ -6,6 +6,7 @@ import { UpdateBoardDto } from '../../src/board/dto/update-board.dto';
 import { CreateBoardDto } from '../../src/board/dto/create-board.dto';
 import * as cookieParser from 'cookie-parser';
 import { encryptAes } from '../../src/util/aes.util';
+import { sampleImageBase64 } from './sample-image';
 
 describe('BoardController (/board, e2e)', () => {
 	let app: INestApplication;
@@ -52,7 +53,14 @@ describe('BoardController (/board, e2e)', () => {
 		const postedBoard = await request(app.getHttpServer())
 			.post('/post')
 			.set('Cookie', [`accessToken=${accessToken}`])
-			.send(board);
+			.set('Content-Type', 'multipart/form-data')
+			.field('title', board.title)
+			.field('content', board.content)
+			.field('star', board.star)
+			.attach('file', Buffer.from(sampleImageBase64, 'base64'), {
+				filename: 'test_image.jpg',
+				contentType: 'image/jpg',
+			});
 
 		post_id = postedBoard.body.id;
 	});
@@ -80,6 +88,40 @@ describe('BoardController (/board, e2e)', () => {
 		expect(body.content).toBe(encryptAes(board.content)); // 암호화되었는지 확인
 		expect(body).toHaveProperty('star');
 		expect(typeof body.star).toBe('string');
+	});
+
+	it('POST /post with images', async () => {
+		const board = {
+			title: 'test',
+			content: 'test',
+			star: '{}',
+		};
+
+		const response = await request(app.getHttpServer())
+			.post('/post')
+			.set('Cookie', [`accessToken=${accessToken}`])
+			.set('Content-Type', 'multipart/form-data')
+			.field('title', board.title)
+			.field('content', board.content)
+			.field('star', board.star)
+			.attach('file', Buffer.from(sampleImageBase64, 'base64'), {
+				filename: 'test_image.jpg',
+				contentType: 'image/jpg',
+			})
+			.expect(201);
+
+		expect(response).toHaveProperty('body');
+		const { body } = response;
+		expect(body).toHaveProperty('id');
+		expect(typeof body.id).toBe('number');
+		expect(body).toHaveProperty('title');
+		expect(body.title).toBe(board.title);
+		expect(body).toHaveProperty('content');
+		expect(body.content).toBe(encryptAes(board.content)); // 암호화되었는지 확인
+		expect(body).toHaveProperty('star');
+		expect(typeof body.star).toBe('string');
+		expect(body).toHaveProperty('images');
+		expect(Array.isArray(body.images)).toBe(true);
 	});
 
 	// #39 [06-02] 서버는 사용자의 글 데이터를 전송한다.
@@ -159,6 +201,54 @@ describe('BoardController (/board, e2e)', () => {
 		expect(updatedBoard.content).toBe(encryptAes(toUpdate.content));
 	});
 
+	it('PATCH /post/:id with images', async () => {
+		const board = {
+			title: 'test',
+			content: 'test',
+			star: '{}',
+		};
+		const createdBoard = (
+			await request(app.getHttpServer())
+				.post('/post')
+				.set('Cookie', [`accessToken=${accessToken}`])
+				.send(board)
+		).body;
+		expect(createdBoard).toHaveProperty('id');
+		const id = createdBoard.id;
+
+		const toUpdate: UpdateBoardDto = {
+			title: 'updated',
+			content: 'updated',
+		};
+
+		const updated = await request(app.getHttpServer())
+			.patch(`/post/${id}`)
+			.set('Cookie', [`accessToken=${accessToken}`])
+			.set('Content-Type', 'multipart/form-data')
+			.field('title', toUpdate.title)
+			.field('content', toUpdate.content)
+			.attach('file', Buffer.from(sampleImageBase64, 'base64'), {
+				filename: 'test_image_updated1.jpg',
+				contentType: 'image/jpg',
+			})
+			.attach('file', Buffer.from(sampleImageBase64, 'base64'), {
+				filename: 'test_image_updated2.jpg',
+				contentType: 'image/jpg',
+			})
+			.expect(200);
+
+		expect(updated).toHaveProperty('body');
+		const updatedBoard = updated.body;
+		expect(updatedBoard).toHaveProperty('id');
+		expect(updatedBoard.id).toBe(id);
+		expect(updatedBoard).toHaveProperty('title');
+		expect(updatedBoard.title).toBe(toUpdate.title);
+		expect(updatedBoard).toHaveProperty('content');
+		expect(updatedBoard.content).toBe(encryptAes(toUpdate.content));
+		expect(updatedBoard).toHaveProperty('images');
+		expect(Array.isArray(updatedBoard.images)).toBe(true);
+	});
+
 	// #45 [06-08] 서버는 좋아요 / 좋아요 취소 요청을 받아 데이터베이스의 데이터를 수정한다.
 	it('PATCH /post/:id/like', async () => {
 		const board = {
@@ -186,6 +276,7 @@ describe('BoardController (/board, e2e)', () => {
 
 		expect(cntAfterLike).toBe(cntBeforeLike + 1);
 	});
+
 	it('PATCH /post/:id/unlike', async () => {
 		const board = {
 			title: 'test',
@@ -238,6 +329,15 @@ describe('BoardController (/board, e2e)', () => {
 			.expect(200);
 
 		await request(app.getHttpServer()).get(`/post/${newBoard.id}`).expect(404);
+	});
+
+	it('GET /post/:id', async () => {
+		const { body } = await request(app.getHttpServer())
+			.get(`/post/${post_id}`)
+			.expect(200);
+
+		expect(body).toHaveProperty('id');
+		expect(body.id).toBe(post_id);
 	});
 
 	afterEach(async () => {

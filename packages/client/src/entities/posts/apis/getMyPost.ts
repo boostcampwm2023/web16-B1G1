@@ -1,4 +1,4 @@
-import instance from 'shared/apis/AxiosInterceptor';
+import instance from 'shared/apis/core/AxiosInterceptor';
 
 export const getMyPost = async () => {
 	const { data } = await instance({

@@ -6,7 +6,7 @@ import WriteIcon from '@icons/icon-writte-24-white.svg';
 import { BASE_URL, MAX_WIDTH1, MAX_WIDTH2 } from 'shared/lib/constants';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
-import instance from 'shared/apis/AxiosInterceptor';
+import instance from 'shared/apis/core/AxiosInterceptor';
 import { useViewStore } from 'shared/store';
 import { useEffect, useState } from 'react';
 import useCheckNickName from 'shared/hooks/useCheckNickName';

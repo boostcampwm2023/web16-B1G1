@@ -12,7 +12,7 @@ import { deletePost } from '../api/deletePost';
 import ImageSlider from './ImageSlider';
 import Like from 'entities/like/Like';
 import InputBar from 'shared/ui/inputBar/InputBar';
-import instance from 'shared/apis/AxiosInterceptor';
+import instance from 'shared/apis/core/AxiosInterceptor';
 import { useToastStore } from 'shared/store';
 
 export default function PostModal() {

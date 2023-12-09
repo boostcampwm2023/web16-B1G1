@@ -1,4 +1,4 @@
-import instance from './AxiosInterceptor';
+import instance from './core/AxiosInterceptor';
 
 export const getNickNames = async (nickName: string) => {
 	const { data } = await instance({

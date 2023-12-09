@@ -13,7 +13,7 @@ import ImageSlider from './ImageSlider';
 import Like from 'entities/like/Like';
 import InputBar from 'shared/ui/inputBar/InputBar';
 import instance from 'shared/apis/core/AxiosInterceptor';
-import { useToastStore } from 'shared/store';
+import { useToastStore, useCameraStore } from 'shared/store';
 import useCheckNickName from 'shared/hooks/useCheckNickName';
 import { useRefresh } from 'shared/hooks/useRefresh';
 
@@ -27,6 +27,7 @@ export default function PostModal() {
 
 	const { setToast } = useToastStore();
 	const { setView } = useViewStore();
+	const { setTargetView } = useCameraStore();
 	const { postId } = useParams();
 	const { data, refetch } = useFetch<PostData>(`post/${postId}`);
 
@@ -141,6 +142,7 @@ export default function PostModal() {
 
 		setView('MAIN');
 		navigate(path);
+		setTargetView(null);
 	};
 
 	return (

@@ -24,7 +24,7 @@ import CoachMarker from 'features/coachMarker/CoachMarker';
 export default function Home() {
 	const { isSwitching } = useScreenSwitchStore();
 	const { text, type } = useToastStore();
-	const { nickName } = useCheckNickName();
+	const { nickName, status } = useCheckNickName();
 
 	const handleFullScreen = useFullScreenHandle();
 
@@ -82,7 +82,7 @@ export default function Home() {
 	return (
 		<FullScreen handle={handleFullScreen}>
 			<Outlet />
-			<CoachMarker />
+			{status === 'new' && <CoachMarker isFirst={true} />}
 
 			{isSwitching && <WarpScreen />}
 			{!isSwitching && <WhiteScreen />}

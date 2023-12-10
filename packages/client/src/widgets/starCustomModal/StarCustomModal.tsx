@@ -75,13 +75,14 @@ export default function StarCustomModal() {
 			for (let i = 0; i < files.length; i++) formData.append('file', files[i]);
 		}
 
-		const res = await sendPost(formData);
-		if (res?.status === 201) {
+		try {
+			await sendPost(formData);
 			setToast({ text: '별을 생성했습니다.', type: 'success' });
 			setView('MAIN');
 			navigate('/home');
+		} finally {
+			setIsSubmitButtonDisabled(false);
 		}
-		setIsSubmitButtonDisabled(false);
 	};
 
 	const rightButton = (

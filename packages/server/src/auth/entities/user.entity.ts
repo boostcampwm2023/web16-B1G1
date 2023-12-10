@@ -30,7 +30,7 @@ export class User {
 		type: 'varchar',
 		length: 50,
 		nullable: true,
-		default: UserShareStatus.PUBLIC,
+		default: UserShareStatus.NEW,
 	})
 	status: UserShareStatus;
 

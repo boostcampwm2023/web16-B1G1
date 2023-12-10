@@ -46,6 +46,7 @@ import { CheckSignInSwaggerDecorator } from './decorators/swagger/check-sign-in-
 import { cookieOptionsConfig } from '../config/cookie.config';
 import { GetUsernameByShareLinkSwaggerDecorator } from './decorators/swagger/get-username-by-sharelink.decorator';
 import { HttpExceptionFilter } from '../exception-filter/http.exception-filter';
+import { CheckNicknameSwaggerDecorator } from './decorators/swagger/check-nickname-swagger.decorator';
 
 @Controller('auth')
 @UseInterceptors(LogInterceptor)
@@ -89,6 +90,12 @@ export class AuthController {
 	async checkSignIn(@GetUser() userData: UserDataDto) {
 		const user = await this.authService.findUserById(userData.userId);
 		return user;
+	}
+
+	@Get('check-nickname')
+	@CheckNicknameSwaggerDecorator()
+	async checkNickname(@Query('nickname') nickname: string) {
+		return this.authService.checkNickname(nickname);
 	}
 
 	@Get('signout')

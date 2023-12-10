@@ -26,6 +26,7 @@ jobs:
 
       - name: Test and Build with yarn
         run: |
+          yarn cache clean --all
           yarn install
           yarn workspace client build
           yarn workspace admin build

@@ -18,6 +18,7 @@ a {
 }
 
 body {
+	overflow: hidden;
 	font-family:
 		Pretendard,
 		-apple-system,

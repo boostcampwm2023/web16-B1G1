@@ -19,6 +19,7 @@ import styled from '@emotion/styled';
 import { keyframes } from '@emotion/react';
 import UnderBar from 'widgets/underBar/UnderBar';
 import UpperBar from 'widgets/upperBar/UpperBar';
+import CoachMarker from 'features/coachMarker/CoachMarker';
 
 export default function Home() {
 	const { isSwitching } = useScreenSwitchStore();
@@ -81,6 +82,7 @@ export default function Home() {
 	return (
 		<FullScreen handle={handleFullScreen}>
 			<Outlet />
+			<CoachMarker />
 
 			{isSwitching && <WarpScreen />}
 			{!isSwitching && <WhiteScreen />}

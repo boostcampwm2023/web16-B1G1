@@ -76,6 +76,7 @@ export default function UnderBar() {
 						buttonType="Button"
 						onClick={handleShareButton}
 						style={{ display: isMyPage ? 'flex' : 'none' }}
+						className="share-button"
 					>
 						공유하기
 					</Button>
@@ -89,6 +90,7 @@ export default function UnderBar() {
 						buttonType="Button"
 						onClick={handleGalaxyCustomButton}
 						style={{ display: isMyPage ? 'flex' : 'none' }}
+						className="galaxy-custom-button"
 					>
 						<img src={PlanetEditIcon} alt="은하 수정하기" />
 						은하 수정하기
@@ -98,6 +100,7 @@ export default function UnderBar() {
 						buttonType="CTA-icon"
 						onClick={handleWritingButton}
 						style={{ display: isMyPage ? 'flex' : 'none' }}
+						className="writing-button"
 					>
 						<img src={WriteIcon} alt="글쓰기" />
 						글쓰기

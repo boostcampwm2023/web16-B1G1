@@ -7,7 +7,7 @@ export default function FallBackComponent() {
 	const navigate = useNavigate();
 	return (
 		<Layout>
-			<LogoImage src={Logo} alt="404" />
+			<LogoImage src={Logo} alt="404 error" />
 			<Title>404</Title>
 			<Title>페이지를 찾을 수 없습니다.</Title>
 			<Button

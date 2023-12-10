@@ -13,11 +13,10 @@ export default function LinkContainer() {
 	const { owner } = useCheckNickName();
 
 	useEffect(() => {
+		if (!owner) return;
 		(async () => {
 			const shareLinkData = await getShareLink(owner);
-			setShareLink(
-				'https://www.xn--bj0b03z.site/' + 'guest/' + shareLinkData.link,
-			);
+			setShareLink('https://www.xn--bj0b03z.site/' + 'guest/' + shareLinkData);
 		})();
 	}, [owner]);
 

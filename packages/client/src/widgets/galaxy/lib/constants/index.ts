@@ -3,9 +3,14 @@ export const STARS_NUM = 4000;
 export const DISTANCE_LIMIT = 3000;
 
 export const starTypes = {
-	percentage: [0.7645, 0.121, 0.076, 0.03, 0.006, 0.0013],
-	color: [0xffcc6f, 0xffd2a1, 0xfff4ea, 0xf8f7ff, 0xcad7ff, 0xaabfff],
-	size: [0.7, 0.7, 1.15, 1.48, 2.0, 2.5, 3.5],
+	percentage: [
+		0.07, 0.1, 0.02, 0.14, 0.14, 0.07, 0.07, 0.02, 0.2, 0.2, 0.2, 0.2,
+	],
+	color: [
+		0xffcece, 0xffe8ce, 0xceffe6, 0xcef9ff, 0xd2ceff, 0xff9d9d, 0xfffa9d,
+		0xb9ff9d, 0x9db9ff, 0xca9dff, 0x6445ff, 0x4570ff,
+	],
+	size: [0.5, 0.5, 0.3, 0.8, 0.3, 0.5, 0.5, 0.3, 1.3, 1.3, 1.1, 1.1],
 };
 
 export const ARMS_X_DIST = 5000;

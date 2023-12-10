@@ -13,9 +13,12 @@ export default function Posts() {
 	const { page, nickName } = useCheckNickName();
 
 	useEffect(() => {
+		if (!page) return;
+		if (!nickName) return;
+
 		if (page === 'home') {
 			getMyPost().then((res) => setPostData(res));
-		} else if (nickName !== '') {
+		} else {
 			getPostListByNickName(nickName).then((res) => setPostData(res));
 		}
 	}, [view, nickName]);

@@ -110,7 +110,7 @@ export default function WritingModal() {
 }
 
 const TitleContainer = styled.div`
-	margin-bottom: 30px;
+	margin-bottom: 16px;
 `;
 
 const ContentContainer = styled.div<{ state: TextStateTypes }>`
@@ -163,5 +163,5 @@ const ImagesWrapper = styled.div`
 	display: flex;
 	justify-content: flex-start;
 	align-items: center;
-	margin-top: 30px;
+	margin-top: 16px;
 `;

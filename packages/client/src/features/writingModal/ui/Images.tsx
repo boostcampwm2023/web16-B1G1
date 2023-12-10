@@ -61,8 +61,8 @@ export default function Images({ onModify }: PropsType) {
 }
 
 const ImagePreview = styled.img`
-	width: 100px;
-	height: 100px;
+	width: 80px;
+	height: 80px;
 	border-radius: 4px;
 	cursor: pointer;
 	display: flex;
@@ -81,8 +81,8 @@ const IconWrapper = styled.div`
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	width: 100px;
-	height: 100px;
+	width: 80px;
+	height: 80px;
 	border: 1px solid ${({ theme }) => theme.colors.stroke.default};
 	border-radius: 4px;
 	background-color: ${({ theme }) => theme.colors.background.bdp01_80};

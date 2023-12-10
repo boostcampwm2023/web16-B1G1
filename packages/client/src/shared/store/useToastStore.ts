@@ -2,13 +2,21 @@ import { create } from 'zustand';
 
 interface ToastState {
 	text: string;
-	setText: (text: string) => void;
+	type: 'success' | 'error';
+	setToast: ({
+		text,
+		type,
+	}: {
+		text: string;
+		type: 'success' | 'error';
+	}) => void;
 }
 
 export const useToastStore = create<ToastState>((set) => ({
 	text: '',
-	setText: (text) => {
-		set((state) => ({ ...state, text }));
+	type: 'success',
+	setToast: ({ text, type }) => {
+		set((state) => ({ ...state, text, type }));
 
 		setTimeout(() => {
 			set((state) => ({ ...state, text: '' }));

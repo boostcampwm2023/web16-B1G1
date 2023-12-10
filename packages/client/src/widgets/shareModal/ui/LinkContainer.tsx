@@ -3,27 +3,26 @@ import { useToastStore } from 'shared/store';
 import { Button, Input } from 'shared/ui';
 import { useState, useEffect } from 'react';
 import { getShareLink } from 'shared/apis/share';
-import Cookies from 'js-cookie';
+import useCheckNickName from 'shared/hooks/useCheckNickName';
 
 export default function LinkContainer() {
 	const [shareLink, setShareLink] = useState('');
 
-	const { setText } = useToastStore();
+	const { setToast } = useToastStore();
+
+	const { owner } = useCheckNickName();
 
 	useEffect(() => {
-		const nickName = Cookies.get('nickname') as string;
-
+		if (!owner) return;
 		(async () => {
-			const shareLinkData = await getShareLink(nickName);
-			setShareLink(
-				'https://www.xn--bj0b03z.site/' + 'guest/' + shareLinkData.link,
-			);
+			const shareLinkData = await getShareLink(owner);
+			setShareLink('https://www.xn--bj0b03z.site/' + 'guest/' + shareLinkData);
 		})();
-	}, []);
+	}, [owner]);
 
 	const copyToClipboard = () => {
 		navigator.clipboard.writeText(shareLink);
-		setText('링크가 복사되었습니다.');
+		setToast({ text: '링크가 복사되었습니다.', type: 'success' });
 	};
 
 	return (

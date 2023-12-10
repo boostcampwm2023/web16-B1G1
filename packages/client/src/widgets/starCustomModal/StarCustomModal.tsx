@@ -1,5 +1,5 @@
 import { Modal } from 'shared/ui';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useToastStore, useViewStore } from 'shared/store';
 import styled from '@emotion/styled';
 import { SampleScreen } from './ui';
@@ -16,38 +16,54 @@ import { usePostStore } from 'shared/store';
 import { sendPost } from './apis/sendPost';
 import SizeSlider from './ui/SizeSlider';
 import BrightnessSlider from './ui/BrightnessSlider';
-import { getRandomFloat } from '@utils/random';
-import { ARMS_X_DIST } from 'widgets/galaxy/lib/constants';
 import { shapeTypes } from '@constants';
+import SentimentButton from './ui/SentimentButton';
+import { generateStarPosition } from './lib/generateStarPosition';
+import { getMyPost } from 'entities/posts/apis/getMyPost';
+import { useRefresh } from 'shared/hooks/useRefresh';
 
 export default function StarCustomModal() {
 	const { setView } = useViewStore();
 	const { title, content, files } = usePostStore();
+	const star = useLocation().state?.star;
 
-	const [shape, setShape] = useState(STAR_DEFAULT_SHAPE_INDEX);
-	const [color, setColor] = useState(STAR_DEFAULT_COLOR);
-	const [size, setSize] = useState(STAR_DEFAULT_SIZE);
-	const [brightness, setBrightness] = useState(STAR_DEFAULT_BRIGHTNESS);
+	const [shape, setShape] = useState(star?.shape ?? STAR_DEFAULT_SHAPE_INDEX);
+	const [color, setColor] = useState(star?.color ?? STAR_DEFAULT_COLOR);
+	const [size, setSize] = useState(star?.size ?? STAR_DEFAULT_SIZE);
+	const [brightness, setBrightness] = useState(
+		star?.brightness ?? STAR_DEFAULT_BRIGHTNESS,
+	);
+	const [isSubmitButtonDisabled, setIsSubmitButtonDisabled] = useState(false);
 
 	const navigate = useNavigate();
-	const { setText } = useToastStore();
+
+	const { setToast } = useToastStore();
+
+	useRefresh('WRITING');
 
 	const handleGoBack = () => {
-		navigate('/home');
-		setView('MAIN');
+		navigate('/home/writing', {
+			state: {
+				star: {
+					shape,
+					color,
+					size,
+					brightness,
+				},
+			},
+		});
 	};
 
 	const handleSubmit = async () => {
+		if (isSubmitButtonDisabled) return;
+		setIsSubmitButtonDisabled(true);
+		const existingStars = await getMyPost();
 		const starData = {
 			shape: shapeTypes[shape],
 			color,
 			size,
 			brightness,
-			position: {
-				x: getRandomFloat(-ARMS_X_DIST, ARMS_X_DIST),
-				y: 0,
-				z: getRandomFloat(-ARMS_X_DIST, ARMS_X_DIST),
-			},
+			position: await generateStarPosition(existingStars, size),
 		};
 		const formData = new FormData();
 
@@ -59,16 +75,23 @@ export default function StarCustomModal() {
 			for (let i = 0; i < files.length; i++) formData.append('file', files[i]);
 		}
 
-		const res = await sendPost(formData);
-		if (res?.status === 201) {
-			setText('별을 생성했습니다.');
+		try {
+			await sendPost(formData);
+			setToast({ text: '별을 생성했습니다.', type: 'success' });
 			setView('MAIN');
 			navigate('/home');
+		} finally {
+			setIsSubmitButtonDisabled(false);
 		}
 	};
 
 	const rightButton = (
-		<Button size="m" buttonType="CTA-icon" onClick={handleSubmit}>
+		<Button
+			size="m"
+			buttonType="CTA-icon"
+			onClick={handleSubmit}
+			disabled={isSubmitButtonDisabled}
+		>
 			저장
 		</Button>
 	);
@@ -91,6 +114,7 @@ export default function StarCustomModal() {
 
 					<CustomLayout>
 						<ColorPickerContainer color={color} setColor={setColor} />
+						<SentimentButton content={content} setColor={setColor} />
 						<SizeSlider size={size} setSize={setSize} />
 						<BrightnessSlider
 							brightness={brightness}

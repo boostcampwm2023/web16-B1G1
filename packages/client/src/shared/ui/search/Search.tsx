@@ -9,6 +9,7 @@ interface PropsTypes {
 	results?: string[];
 	inputState: string;
 	setInputState: React.Dispatch<React.SetStateAction<string>>;
+	disabled: boolean;
 }
 
 export default function Search({
@@ -17,6 +18,7 @@ export default function Search({
 	setInputState,
 	placeholder = '',
 	results = [],
+	disabled,
 	...args
 }: PropsTypes) {
 	const onChangeSearchInput = ({
@@ -52,7 +54,7 @@ export default function Search({
 					size="m"
 					buttonType="CTA-icon"
 					type="submit"
-					disabled={!inputState}
+					disabled={!inputState || disabled}
 				>
 					검색
 				</Button>

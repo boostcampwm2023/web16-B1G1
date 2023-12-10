@@ -6,7 +6,7 @@ import styled from '@emotion/styled';
 import { useViewStore } from 'shared/store/useViewStore';
 import * as THREE from 'three';
 import { StarType } from 'shared/lib/types/star';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import theme from 'shared/ui/styles/theme';
 import Star from 'features/star/Star';
@@ -19,25 +19,32 @@ interface PropsType {
 
 export default function Post({ data, postId, title }: PropsType) {
 	const { targetView, setTargetView } = useCameraStore();
-	const { view, setView } = useViewStore();
+	const { setView } = useViewStore();
 
 	const meshRef = useRef<THREE.Mesh>(null!);
 	const [isHovered, setIsHovered] = useState(false);
 
 	const navigate = useNavigate();
+	const location = useLocation();
 
 	const handleMeshClick = (e: ThreeEvent<MouseEvent>) => {
 		e.stopPropagation();
 
+		const splitedPath = location.pathname.split('/');
+		const page = splitedPath[1];
+		const nickName = splitedPath[2];
+		let path = '/';
+		if (page === 'home') path += page + '/';
+		else path += page + '/' + nickName + '/';
+
 		if (meshRef.current !== targetView) {
 			setView('DETAIL');
 			setTargetView(meshRef.current);
-			navigate(`/home/${postId}`);
-			return;
+			return navigate(path + postId);
 		}
 
 		setView('POST');
-		navigate(`/home/${postId}/detail`);
+		navigate(path + postId + '/detail');
 	};
 
 	const handlePointerOver = (e: ThreeEvent<MouseEvent>) => {
@@ -64,7 +71,7 @@ export default function Post({ data, postId, title }: PropsType) {
 			brightness={data.brightness}
 			shape={data.shape}
 		>
-			{view !== 'POST' && isHovered && (
+			{isHovered && (
 				<Html>
 					<Label>{title}</Label>
 				</Html>

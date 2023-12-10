@@ -10,6 +10,8 @@ import { Posts } from 'entities/posts';
 import styled from '@emotion/styled';
 import { useViewStore } from 'shared/store';
 import { CameraLight } from './ui';
+import { useState } from 'react';
+import { PerformanceMonitor } from '@react-three/drei';
 
 export default function Screen() {
 	const { view } = useViewStore();
@@ -28,14 +30,23 @@ export default function Screen() {
 		wheelSpeed: { value: 3, min: 0.1, max: 30, step: 0.1 },
 	});
 
+	const [dpr, setDpr] = useState(1);
+
 	return (
 		<div style={{ height: '100vh', width: '100vw' }}>
 			<Canvas
+				dpr={dpr}
 				camera={camera}
 				onWheel={(e) =>
 					setCameraToCurrentView(cameraToCurrentView + e.deltaY * wheelSpeed)
 				}
+				frameloop="demand"
 			>
+				<PerformanceMonitor
+					onChange={({ factor }) => {
+						setDpr(0.5 + factor);
+					}}
+				/>
 				<EffectComposer>
 					<Bloom
 						intensity={intensity}
@@ -54,7 +65,7 @@ export default function Screen() {
 				</Galaxy>
 				<CameraLight />
 			</Canvas>
-			<LevaWrapper>
+			<LevaWrapper className="leva">
 				<Leva fill collapsed hidden={view !== 'MAIN' && view !== 'DETAIL'} />
 			</LevaWrapper>
 		</div>

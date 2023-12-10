@@ -7,6 +7,7 @@ import { SearchStatusType } from './lib/types';
 import { useToastStore, useViewStore } from 'shared/store';
 import { useNavigate } from 'react-router-dom';
 import { patchShareStatus } from 'shared/apis/share';
+import { useRefresh } from 'shared/hooks/useRefresh';
 
 export default function ShareModal() {
 	const [originalSearchStatus, setOriginalSearchStatus] =
@@ -14,10 +15,12 @@ export default function ShareModal() {
 	const [newSearchStatus, setNewSearchStatus] =
 		useState<SearchStatusType>('default');
 
-	const { setText } = useToastStore();
+	const { setToast } = useToastStore();
 	const { setView } = useViewStore();
 
 	const navigate = useNavigate();
+
+	useRefresh('SHARE');
 
 	useEffect(() => {
 		(async () => {
@@ -35,7 +38,7 @@ export default function ShareModal() {
 			await patchShareStatus(newSearchStatus);
 		}
 
-		setText('공유 설정이 변경되었습니다.');
+		setToast({ text: '공유 설정이 변경되었습니다.', type: 'success' });
 		setView('MAIN');
 		navigate('/home');
 	};

@@ -13,6 +13,7 @@ import { useGalaxyStore, useCustomStore } from 'shared/store';
 import { postGalaxy } from 'shared/apis';
 import { useRefresh } from 'shared/hooks/useRefresh';
 import { useState } from 'react';
+import AlertDialog from 'shared/ui/alertDialog/AlertDialog';
 
 export default function GalaxyCustomModal() {
 	const navigate = useNavigate();
@@ -21,6 +22,7 @@ export default function GalaxyCustomModal() {
 	const { spiral, start, thickness, zDist } = useCustomStore();
 	const [isSubmitButtonDisabled, setIsSubmitButtonDisabled] = useState(false);
 	const { setToast } = useToastStore();
+	const [dialog, setDialog] = useState(false);
 
 	useRefresh('CUSTOM');
 
@@ -56,8 +58,7 @@ export default function GalaxyCustomModal() {
 			<Modal
 				title="은하 수정하기"
 				onClickGoBack={() => {
-					navigate('/home');
-					setView('MAIN');
+					setDialog(true);
 				}}
 				rightButton={<RightButton disabled={isSubmitButtonDisabled} />}
 				leftButton={<LeftButton />}
@@ -67,6 +68,20 @@ export default function GalaxyCustomModal() {
 					<SampleScreen />
 					<Sliders />
 				</Container>
+				{dialog && (
+					<AlertDialog
+						title="메인화면으로 돌아가시겠습니까?"
+						description="수정 내용은 임시저장됩니다."
+						cancelButtonText="머무르기"
+						actionButtonText="돌아가기"
+						onClickCancelButton={() => setDialog(false)}
+						onClickActionButton={() => {
+							navigate('/home');
+							setView('MAIN');
+						}}
+						disabled={false}
+					/>
+				)}
 			</Modal>
 		</form>
 	);

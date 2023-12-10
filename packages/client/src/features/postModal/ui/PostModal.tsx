@@ -237,6 +237,24 @@ const TextContainer = styled.div`
 	${({ theme: { colors } }) => ({
 		color: colors.text.secondary,
 	})}
+
+	& ol {
+		padding-left: 40px;
+		margin: 18px 0;
+	}
+
+	& ul {
+		padding-left: 40px;
+		margin: 18px 0;
+	}
+
+	& ol li {
+		list-style: decimal;
+	}
+
+	& ul li {
+		list-style: disc;
+	}
 `;
 
 const ImageContainer = styled.div`

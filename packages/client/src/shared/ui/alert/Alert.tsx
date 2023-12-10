@@ -3,7 +3,6 @@ import { Body02ME, Title01 } from '../styles';
 import { css } from '@emotion/react';
 import { Button } from '..';
 import { useState, useEffect } from 'react';
-import { useErrorStore } from 'shared/store';
 
 interface PropsTypes extends React.HTMLAttributes<HTMLDivElement> {
 	title: string;
@@ -12,11 +11,9 @@ interface PropsTypes extends React.HTMLAttributes<HTMLDivElement> {
 
 export default function Alert({ title, description, ...args }: PropsTypes) {
 	const [isOpen, setIsOpen] = useState(true);
-	const { setMessage } = useErrorStore();
 
 	const handleConfirmButton = () => {
 		setIsOpen(false);
-		setMessage('');
 	};
 
 	if (!isOpen) return null;

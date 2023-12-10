@@ -35,7 +35,7 @@ export default function Screen() {
 	return (
 		<div style={{ height: '100vh', width: '100vw' }}>
 			<Canvas
-				dpr={1}
+				dpr={dpr}
 				camera={camera}
 				onWheel={(e) =>
 					setCameraToCurrentView(cameraToCurrentView + e.deltaY * wheelSpeed)

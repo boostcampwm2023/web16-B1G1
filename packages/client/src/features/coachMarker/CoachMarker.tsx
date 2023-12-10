@@ -1,6 +1,11 @@
 import Joyride, { Step } from 'react-joyride';
+import { patchShareStatus } from 'shared/apis/share';
 
-export default function CoachMarker() {
+interface PropsType {
+	isFirst: boolean;
+}
+
+export default function CoachMarker({ isFirst }: PropsType) {
 	const steps: Step[] = [
 		{
 			target: 'body',
@@ -100,6 +105,9 @@ export default function CoachMarker() {
 					primaryColor: '#8874FFCC',
 					textColor: '#FFFFFF',
 				},
+			}}
+			callback={(data) => {
+				if (data.type === 'tour:end' && isFirst) patchShareStatus('public');
 			}}
 		/>
 	);

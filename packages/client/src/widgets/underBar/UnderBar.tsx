@@ -11,6 +11,7 @@ import { useViewStore } from 'shared/store';
 import { useEffect, useState } from 'react';
 import useCheckNickName from 'shared/hooks/useCheckNickName';
 import { useGalaxyStore } from 'shared/store';
+import CoachButton from 'features/coachMarker/CoachButton';
 
 export default function UnderBar() {
 	const navigate = useNavigate();
@@ -57,7 +58,10 @@ export default function UnderBar() {
 
 	return (
 		<Layout view={view}>
-			<Name>{nickName}님의 은하</Name>
+			<NameContainer>
+				<Name>{nickName}님의 은하</Name>
+				<CoachButton />
+			</NameContainer>
 
 			<ButtonsContainer>
 				<SmallButtonsContainer>
@@ -135,6 +139,12 @@ const Layout = styled.div<{ view: string }>`
 	@media (max-width: ${MAX_WIDTH2}px) {
 		width: ${MAX_WIDTH2 - 30}px;
 	}
+`;
+
+const NameContainer = styled.div`
+	display: flex;
+	align-items: center;
+	gap: 24px;
 `;
 
 const ButtonsContainer = styled.div`

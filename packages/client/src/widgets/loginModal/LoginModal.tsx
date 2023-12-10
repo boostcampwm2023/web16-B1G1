@@ -51,7 +51,7 @@ export default function LoginModal() {
 		>
 			<Modal
 				title="로그인"
-				topButton={<TopButton onClick={() => navigate('/')} />}
+				topButton={<TopButton />}
 				rightButton={
 					<RightButton disabled={!isValid() || isSubmitButtonDisabled} />
 				}

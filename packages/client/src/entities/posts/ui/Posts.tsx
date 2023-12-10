@@ -14,6 +14,7 @@ export default function Posts() {
 
 	useEffect(() => {
 		if (!page) return;
+		if (!nickName) return;
 
 		if (page === 'home') {
 			(async () => {

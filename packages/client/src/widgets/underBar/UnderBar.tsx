@@ -34,7 +34,6 @@ export default function UnderBar() {
 
 		Cookies.remove('accessToken');
 		Cookies.remove('refreshToken');
-		Cookies.remove('nickname');
 		reset();
 
 		setIsLogoutButtonDisabled(false);

@@ -11,7 +11,7 @@ import {
 	SPACE_WARP_Y_MIN,
 } from '../lib/constants';
 import { BACKGROUND_STAR_COLORS } from 'features/backgroundStars/lib/constants';
-import { useScreenSwitchStore } from 'shared/store/useScreenSwitchStore';
+import React from 'react';
 
 const geSpaceWarpLinesInfo = () => {
 	const positions = Array.from({ length: SPACE_WARP_LINES_NUM }, () => {
@@ -33,10 +33,12 @@ const geSpaceWarpLinesInfo = () => {
 	return [new Float32Array(positions), new Float32Array(colors)];
 };
 
-export default function SpaceWarp() {
-	const [positions, colors] = useMemo(() => geSpaceWarpLinesInfo(), []);
+interface PropsType {
+	setIsSwitching: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
-	const { setIsSwitching } = useScreenSwitchStore();
+export default function SpaceWarp({ setIsSwitching }: PropsType) {
+	const [positions, colors] = useMemo(() => geSpaceWarpLinesInfo(), []);
 
 	useFrame((state, delta) => {
 		if (state.camera.position.y <= 0) {

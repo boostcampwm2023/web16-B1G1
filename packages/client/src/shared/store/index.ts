@@ -5,5 +5,3 @@ export * from './useViewStore';
 export * from './useCustomStore';
 export * from './useGalaxyStore';
 export * from './usePostStore';
-export * from './useOwnerStore';
-export * from './useScreenSwitchStore';

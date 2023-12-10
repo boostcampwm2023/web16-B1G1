@@ -45,6 +45,7 @@ const Layout = styled.div`
 	padding: 16px 24px;
 	border-radius: 40px;
 	background-color: ${({ theme }) => theme.colors.primary.filled};
+	align-items: center;
 
 	animation: ${fadeOutAnimation} 1s ease forwards;
 	animation-delay: 2s;

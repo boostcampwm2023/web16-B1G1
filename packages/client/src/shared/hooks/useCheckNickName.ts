@@ -7,6 +7,7 @@ export default function useCheckNickName() {
 	const location = useLocation();
 	const [page, setPage] = useState('');
 	const [nickName, setNickName] = useState('');
+	const [owner, setOwner] = useState('');
 
 	useEffect(() => {
 		const path = location.pathname.split('/')[1];
@@ -18,6 +19,7 @@ export default function useCheckNickName() {
 				(async () => {
 					const res = await getSignInInfo();
 					setNickName(res.nickname);
+					setOwner(res.nickname);
 				})();
 				break;
 
@@ -38,5 +40,5 @@ export default function useCheckNickName() {
 		}
 	}, [location]);
 
-	return { page, nickName };
+	return { page, nickName, owner };
 }

@@ -1,5 +1,5 @@
 import { Modal } from 'shared/ui';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useToastStore, useViewStore } from 'shared/store';
 import styled from '@emotion/styled';
 import { SampleScreen } from './ui';
@@ -25,21 +25,33 @@ import { useRefresh } from 'shared/hooks/useRefresh';
 export default function StarCustomModal() {
 	const { setView } = useViewStore();
 	const { title, content, files } = usePostStore();
+	const star = useLocation().state?.star;
 
-	const [shape, setShape] = useState(STAR_DEFAULT_SHAPE_INDEX);
-	const [color, setColor] = useState(STAR_DEFAULT_COLOR);
-	const [size, setSize] = useState(STAR_DEFAULT_SIZE);
-	const [brightness, setBrightness] = useState(STAR_DEFAULT_BRIGHTNESS);
+	const [shape, setShape] = useState(star?.shape ?? STAR_DEFAULT_SHAPE_INDEX);
+	const [color, setColor] = useState(star?.color ?? STAR_DEFAULT_COLOR);
+	const [size, setSize] = useState(star?.size ?? STAR_DEFAULT_SIZE);
+	const [brightness, setBrightness] = useState(
+		star?.brightness ?? STAR_DEFAULT_BRIGHTNESS,
+	);
 	const [isSubmitButtonDisabled, setIsSubmitButtonDisabled] = useState(false);
 
 	const navigate = useNavigate();
+
 	const { setToast } = useToastStore();
 
 	useRefresh('WRITING');
 
 	const handleGoBack = () => {
-		navigate('/home');
-		setView('MAIN');
+		navigate('/home/writing', {
+			state: {
+				star: {
+					shape,
+					color,
+					size,
+					brightness,
+				},
+			},
+		});
 	};
 
 	const handleSubmit = async () => {

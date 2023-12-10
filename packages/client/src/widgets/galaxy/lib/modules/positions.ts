@@ -11,7 +11,7 @@ interface GalaxyInfo {
 }
 
 export const getSpiralPositions = () => {
-	const x = getGaussianRandomFloat(0, ARMS_X_DIST);
+	const x = getGaussianRandomFloat(0, ARMS_X_DIST * 1.5);
 	const y = getGaussianRandomFloat(0, 1);
 	const z = getGaussianRandomFloat(0, 1);
 	return new THREE.Vector3(x, y, z);

@@ -4,8 +4,6 @@ import goBackIcon from '@icons/icon-back-32-white.svg';
 import { MAX_WIDTH1, MAX_WIDTH2 } from '@constants';
 import { useState, useEffect } from 'react';
 import { getNickNames } from 'shared/apis/search';
-import { useScreenSwitchStore } from 'shared/store/useScreenSwitchStore';
-import Cookies from 'js-cookie';
 import { getIsAvailableNickName } from 'shared/apis';
 import { useToastStore, useViewStore } from 'shared/store';
 import { useNavigate } from 'react-router-dom';
@@ -18,12 +16,9 @@ export default function UpperBar() {
 	const [searchResults, setSearchResults] = useState([]);
 	const [isSearchButtonDisabled, setIsSearchButtonDisabled] = useState(false);
 
-	const { setIsSwitching } = useScreenSwitchStore();
 	const { setToast } = useToastStore();
-	const { page, nickName } = useCheckNickName();
+	const { page, nickName, owner } = useCheckNickName();
 	const { view } = useViewStore();
-
-	const userNickName = Cookies.get('nickname');
 
 	const navigate = useNavigate();
 
@@ -49,7 +44,7 @@ export default function UpperBar() {
 			const nickNameDatas = await getNickNames(debouncedSearchValue);
 			const nickNames = nickNameDatas
 				.map((data: { nickname: string; id: number }) => data.nickname)
-				.filter((nickName: string) => nickName !== userNickName)
+				.filter((nickName: string) => nickName !== owner)
 				.slice(0, 5);
 
 			setSearchResults(nickNames);
@@ -63,7 +58,7 @@ export default function UpperBar() {
 			await getIsAvailableNickName(searchValue);
 			setToast({ text: '존재하지 않는 닉네임입니다.', type: 'error' });
 		} catch (error) {
-			if (searchValue === userNickName)
+			if (searchValue === owner)
 				return setToast({
 					text: '내 은하로는 이동할 수 없습니다.',
 					type: 'error',
@@ -73,7 +68,6 @@ export default function UpperBar() {
 			setSearchValue('');
 			setDebouncedSearchValue('');
 			setSearchResults([]);
-			setIsSwitching(true);
 		} finally {
 			setIsSearchButtonDisabled(false);
 		}
@@ -84,12 +78,10 @@ export default function UpperBar() {
 	const handleGoBackButton = () => {
 		if (page === 'guest') {
 			navigate('/');
-			setIsSwitching(true);
 			return;
 		}
 
 		navigate('/home');
-		setIsSwitching(true);
 	};
 
 	return (

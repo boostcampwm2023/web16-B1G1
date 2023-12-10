@@ -1,5 +1,7 @@
 import { useState } from 'react';
-import { ArrowBigLeft, ArrowBigRight, CircleDot, Circle } from 'lucide-react';
+import { CircleDot, Circle } from 'lucide-react';
+import ArrowBigLeft from '@icons/icon-arrow-left-32-white.svg?react';
+import ArrowBigRight from '@icons/icon-arrow-right-32-white.svg?react';
 import styled from '@emotion/styled';
 
 interface PropsType {
@@ -88,7 +90,7 @@ const Button = styled.button`
 	position: absolute;
 	top: 0;
 	bottom: 0;
-	padding: 16px;
+	padding: 8px;
 	cursor: pointer;
 	transition: background-color 100ms ease-in-out;
 

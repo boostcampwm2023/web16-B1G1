@@ -13,21 +13,12 @@ export default function Posts() {
 	const { page, nickName } = useCheckNickName();
 
 	useEffect(() => {
-		if (!page) return;
-
 		if (page === 'home') {
-			(async () => {
-				const myPostData = await getMyPost();
-				setPostData(myPostData);
-			})();
-			return;
+			getMyPost().then((res) => setPostData(res));
+		} else if (nickName !== '') {
+			getPostListByNickName(nickName).then((res) => setPostData(res));
 		}
-
-		(async () => {
-			const otherPostData = await getPostListByNickName(nickName);
-			setPostData(otherPostData);
-		})();
-	}, [view, page, nickName]);
+	}, [view, nickName]);
 
 	return (
 		<group>

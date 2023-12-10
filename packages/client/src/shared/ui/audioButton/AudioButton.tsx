@@ -7,7 +7,7 @@ export default function AudioButton() {
 
 	return (
 		<Wrapper onClick={setPlaying}>
-			{playing ? <MuteIcon /> : <UnMuteIcon />}
+			{playing ? <UnMuteIcon /> : <MuteIcon />}
 		</Wrapper>
 	);
 }

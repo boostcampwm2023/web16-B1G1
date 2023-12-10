@@ -17,18 +17,11 @@ export default function Posts() {
 		if (!nickName) return;
 
 		if (page === 'home') {
-			(async () => {
-				const myPostData = await getMyPost();
-				setPostData(myPostData);
-			})();
-			return;
+			getMyPost().then((res) => setPostData(res));
+		} else {
+			getPostListByNickName(nickName).then((res) => setPostData(res));
 		}
-
-		(async () => {
-			const otherPostData = await getPostListByNickName(nickName);
-			setPostData(otherPostData);
-		})();
-	}, [view, page, nickName]);
+	}, [view, nickName]);
 
 	return (
 		<group>

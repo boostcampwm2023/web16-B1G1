@@ -1,9 +1,7 @@
 import Screen from 'widgets/screen/Screen';
 import { Outlet } from 'react-router-dom';
 import WarpScreen from 'widgets/warpScreen/WarpScreen';
-import { useEffect } from 'react';
-import { useScreenSwitchStore } from 'shared/store/useScreenSwitchStore';
-import Cookies from 'js-cookie';
+import { useEffect, useState } from 'react';
 import { getGalaxy } from 'shared/apis';
 import { useGalaxyStore, useToastStore, useCustomStore } from 'shared/store';
 import { Toast } from 'shared/ui';
@@ -22,7 +20,7 @@ import UpperBar from 'widgets/upperBar/UpperBar';
 import CoachMarker from 'features/coachMarker/CoachMarker';
 
 export default function Home() {
-	const { isSwitching } = useScreenSwitchStore();
+	const [isSwitching, setIsSwitching] = useState(false);
 	const { text, type } = useToastStore();
 	const { nickName } = useCheckNickName();
 
@@ -32,33 +30,33 @@ export default function Home() {
 	const custom = useCustomStore();
 
 	useEffect(() => {
-		getGalaxy('').then((res) => {
-			const { setSpiral, setStart, setThickness, setZDist } = custom;
-			if (res.spiral) setSpiral(res.spiral);
+		setIsSwitching(true);
 
-			if (res.start) setStart(res.start);
-
-			if (res.thickness) setThickness(res.thickness);
-
-			if (res.zDist) setZDist(res.zDist);
-		});
-	}, []);
-
-	useEffect(() => {
-		Cookies.set('nickname', nickName);
-
+		if (nickName === '') return;
 		getGalaxy(nickName).then((res) => {
 			if (!res.spiral) setSpiral(SPIRAL);
-			else setSpiral(res.spiral);
+			else {
+				setSpiral(res.spiral);
+				custom.setSpiral(res.spiral);
+			}
 
 			if (!res.start) setStart(SPIRAL_START);
-			else setStart(res.start);
+			else {
+				setStart(res.start);
+				custom.setStart(res.start);
+			}
 
 			if (!res.thickness) setThickness(GALAXY_THICKNESS);
-			else setThickness(res.thickness);
+			else {
+				setThickness(res.thickness);
+				custom.setThickness(res.thickness);
+			}
 
 			if (!res.zDist) setZDist(ARMS_Z_DIST);
-			else setZDist(res.zDist);
+			else {
+				setZDist(res.zDist);
+				custom.setZDist(res.zDist);
+			}
 		});
 	}, [nickName]);
 
@@ -84,8 +82,8 @@ export default function Home() {
 			<Outlet />
 			<CoachMarker />
 
-			{isSwitching && <WarpScreen />}
-			{!isSwitching && <WhiteScreen />}
+			{isSwitching && <WarpScreen setIsSwitching={setIsSwitching} />}
+			{!isSwitching && <FadeoutScreen />}
 			{text && <Toast type={type}>{text}</Toast>}
 
 			<UpperBar />
@@ -106,7 +104,7 @@ const fadeout = keyframes`
 	}
 `;
 
-const WhiteScreen = styled.div`
+const FadeoutScreen = styled.div`
 	position: absolute;
 	top: 0;
 	left: 0;

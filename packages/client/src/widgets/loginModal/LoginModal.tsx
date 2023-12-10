@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { useState } from 'react';
 import { postLogin } from 'shared/apis';
-import { useScreenSwitchStore } from 'shared/store/useScreenSwitchStore';
 import { AxiosError } from 'axios';
 
 export default function LoginModal() {
@@ -13,7 +12,6 @@ export default function LoginModal() {
 	const [password, setPassword] = useState('');
 	const [passwordState, setPasswordState] = useState(true);
 	const navigate = useNavigate();
-	const { setIsSwitching } = useScreenSwitchStore();
 	const [isSubmitButtonDisabled, setIsSubmitButtonDisabled] = useState(false);
 
 	const isValid = () => {
@@ -30,7 +28,6 @@ export default function LoginModal() {
 
 			Cookies.set('userId', id, { path: '/', expires: 7 });
 			navigate('/home');
-			setIsSwitching(true);
 		} catch (err) {
 			if (err instanceof AxiosError) {
 				if (err.response?.status === 404) setIdState(false);

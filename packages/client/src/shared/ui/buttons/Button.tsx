@@ -64,6 +64,7 @@ const CustomButton = styled.button<PropsType>`
 						border-color: transparent;
 						background: ${colors.primary.disabled};
 						color: ${colors.text.disabled};
+						box-shadow: none;
 					}
 				`;
 			case 'warning':
@@ -76,6 +77,12 @@ const CustomButton = styled.button<PropsType>`
 					&:hover {
 						background: ${colors.warning.filled};
 					}
+					&:disabled {
+						border-color: transparent;
+						background: ${colors.primary.disabled};
+						color: ${colors.text.disabled};
+						box-shadow: none;
+					}
 				`;
 			case 'warning-border':
 				return css`
@@ -86,6 +93,12 @@ const CustomButton = styled.button<PropsType>`
 
 					&:hover {
 						background: ${colors.warning.filled_10};
+					}
+					&:disabled {
+						border-color: transparent;
+						background: ${colors.warning.filled_10};
+						color: ${colors.text.disabled};
+						box-shadow: none;
 					}
 				`;
 		}

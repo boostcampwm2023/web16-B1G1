@@ -1,4 +1,9 @@
-import { Injectable, UseFilters, UseInterceptors } from '@nestjs/common';
+import {
+	Injectable,
+	UnauthorizedException,
+	UseFilters,
+	UseInterceptors,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../auth/entities/user.entity';
 import { Board } from '../board/entities/board.entity';
@@ -11,6 +16,7 @@ import { decryptAes } from '../util/aes.util';
 import { InjectModel } from '@nestjs/mongoose';
 import { Exception } from '../exception-filter/exception.schema';
 import { awsConfig, bucketName } from '../config/aws.config';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 @UseInterceptors(LogInterceptor)
@@ -23,6 +29,7 @@ export class AdminService {
 		private readonly boardRepository: Repository<Board>,
 		@InjectModel(Exception.name)
 		private readonly exceptionModel: Repository<Exception>,
+		private readonly jwtService: JwtService,
 	) {}
 
 	async getAllPosts() {
@@ -100,5 +107,15 @@ export class AdminService {
 	async getAllExceptions() {
 		const exceptions = await this.exceptionModel.find();
 		return exceptions;
+	}
+
+	async signIn(password: string) {
+		if (password !== process.env.ADMIN_PASSWORD) {
+			throw new UnauthorizedException('wrong password');
+		}
+		const payload = { admin: true };
+		const adminAccessToken = await this.jwtService.sign(payload);
+
+		return { adminAccessToken };
 	}
 }

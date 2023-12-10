@@ -7,7 +7,7 @@ import {
 	LeftButton,
 	TopButton,
 } from './ui';
-import { useViewStore } from 'shared/store';
+import { useToastStore, useViewStore } from 'shared/store';
 import styled from '@emotion/styled';
 import { useGalaxyStore, useCustomStore } from 'shared/store';
 import { postGalaxy } from 'shared/apis';
@@ -20,6 +20,7 @@ export default function GalaxyCustomModal() {
 	const galaxy = useGalaxyStore();
 	const { spiral, start, thickness, zDist } = useCustomStore();
 	const [isSubmitButtonDisabled, setIsSubmitButtonDisabled] = useState(false);
+	const { setToast } = useToastStore();
 
 	useRefresh('CUSTOM');
 
@@ -45,6 +46,8 @@ export default function GalaxyCustomModal() {
 			onSubmit={async (e) => {
 				e.preventDefault();
 				await handleSubmit();
+				setToast({ text: '은하가 수정되었습니다.', type: 'success' });
+
 				setIsSubmitButtonDisabled(false);
 				navigate('/home');
 				setView('MAIN');

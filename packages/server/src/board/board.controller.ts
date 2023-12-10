@@ -46,7 +46,7 @@ export class BoardController {
 
 	@Post()
 	@UseGuards(CookieAuthGuard)
-	@UseInterceptors(FilesInterceptor('file', 3))
+	@UseInterceptors(FilesInterceptor('file', 5))
 	@UsePipes(ValidationPipe)
 	@CreateBoardSwaggerDecorator()
 	async createBoard(
@@ -94,7 +94,7 @@ export class BoardController {
 	// 사진도 수정할 수 있도록 폼데이터 형태로 받기
 	@Patch(':id')
 	@UseGuards(CookieAuthGuard)
-	@UseInterceptors(FilesInterceptor('file', 3))
+	@UseInterceptors(FilesInterceptor('file', 5))
 	@UsePipes(ValidationPipe)
 	@UpdateBoardSwaggerDecorator()
 	async updateBoard(

@@ -16,6 +16,7 @@ import StarCustomModal from 'widgets/starCustomModal/StarCustomModal';
 import ShareModal from 'widgets/shareModal/ShareModal';
 import PrivateRoute from '../shared/routes/PrivateRoute';
 import PublicRoute from 'shared/routes/PublicRoute';
+import FallBackComponent from 'widgets/error/FallBackComponent';
 
 export const router = createBrowserRouter(
 	createRoutesFromElements(
@@ -61,6 +62,8 @@ export const router = createBrowserRouter(
 					</Route>
 				</Route>
 			</Route>
+
+			<Route path="*" element={<FallBackComponent />} />
 		</>,
 	),
 );

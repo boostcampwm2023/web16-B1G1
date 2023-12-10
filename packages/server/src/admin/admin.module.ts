@@ -9,15 +9,21 @@ import {
 	Exception,
 	ExceptionSchema,
 } from '../exception-filter/exception.schema';
+import { PassportModule } from '@nestjs/passport';
+import { JwtModule } from '@nestjs/jwt';
+import { jwtConfig } from 'src/config/jwt.config';
+import { JwtStrategy } from './jwt.strategy';
 
 @Module({
 	imports: [
+		PassportModule.register({ defaultStrategy: 'jwt' }),
+		JwtModule.register(jwtConfig),
 		TypeOrmModule.forFeature([User, Board]),
 		MongooseModule.forFeature([
 			{ name: Exception.name, schema: ExceptionSchema },
 		]),
 	],
 	controllers: [AdminController],
-	providers: [AdminService],
+	providers: [AdminService, JwtStrategy],
 })
 export class AdminModule {}

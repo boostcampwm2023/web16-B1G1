@@ -9,6 +9,10 @@ export default function SystemInfo() {
 
 	const getSystemInfo = async () => {
 		const response = await fetch(baseUrl + '/admin/system-info');
+		if (response.status === 401) {
+			// 로그인 페이지로 리다이렉트
+			window.location.href = '/admin/login';
+		}
 		const data = await response.json();
 		setSystemInfo(data);
 	};
@@ -38,24 +42,22 @@ export default function SystemInfo() {
 				<thead>
 					<tr>
 						{systemInfo.diskUsageHead &&
-							systemInfo.diskUsageHead?.map(
-								(head: string, index: number) => <TH key={index}>{head}</TH>,
-							)}
+							systemInfo.diskUsageHead?.map((head: string, index: number) => (
+								<TH key={index}>{head}</TH>
+							))}
 					</tr>
 				</thead>
 				<tbody>
 					{systemInfo.diskUsage &&
-						systemInfo.diskUsage?.map(
-							(line: string[], index: number) => {
-								return (
-									<tr key={index}>
-										{line.map((item: string, index: number) => (
-											<TD key={index}>{item}</TD>
-										))}
-									</tr>
-								);
-							},
-						)}
+						systemInfo.diskUsage?.map((line: string[], index: number) => {
+							return (
+								<tr key={index}>
+									{line.map((item: string, index: number) => (
+										<TD key={index}>{item}</TD>
+									))}
+								</tr>
+							);
+						})}
 				</tbody>
 			</Table>
 		</div>

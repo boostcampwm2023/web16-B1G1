@@ -24,8 +24,6 @@ export class BoardService {
 		private readonly dataSource: DataSource,
 		@InjectRepository(Board)
 		private readonly boardRepository: Repository<Board>,
-		@InjectRepository(Image)
-		private readonly imageRepository: Repository<Image>,
 		@InjectRepository(User)
 		private readonly userRepository: Repository<User>,
 		@InjectModel(Star.name)

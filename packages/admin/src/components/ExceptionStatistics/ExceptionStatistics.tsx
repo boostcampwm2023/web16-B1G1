@@ -11,6 +11,10 @@ export default function ExceptionStatistics() {
 
 	const getAllExceptions = async () => {
 		const response = await fetch(baseUrl + '/admin/exception');
+		if (response.status === 401) {
+			// 로그인 페이지로 리다이렉트
+			window.location.href = '/admin/login';
+		}
 		const exceptions = await response.json();
 		exceptions.map((exception: Exception) => {
 			if (exception.path.includes('?')) {

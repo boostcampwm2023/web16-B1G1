@@ -146,6 +146,39 @@ describe('AuthController (/auth, e2e)', () => {
 			.expect(401);
 	});
 
+	it('GET /auth/check-signin', async () => {
+		const randomeBytes = Math.random().toString(36).slice(2, 10);
+
+		const newUser = {
+			username: randomeBytes,
+			nickname: randomeBytes,
+			password: randomeBytes,
+		};
+
+		await request(app.getHttpServer()).post('/auth/signup').send(newUser);
+
+		const signInResponse = await request(app.getHttpServer())
+			.post('/auth/signin')
+			.send(newUser);
+
+		const accessToken = signInResponse.headers['set-cookie'][0]
+			.split(';')[0]
+			.split('=')[1];
+
+		const response = await request(app.getHttpServer())
+			.get('/auth/check-signin')
+			.set('Cookie', [`accessToken=${accessToken}`])
+			.expect(200);
+
+		expect(response).toHaveProperty('body');
+		const user = response.body;
+		console.log(user);
+		expect(user).toHaveProperty('username');
+		expect(user.username).toBe(newUser.username);
+		expect(user).toHaveProperty('nickname');
+		expect(user.nickname).toBe(newUser.nickname);
+	});
+
 	// #33 [05-02] 로그아웃 요청을 받으면 토큰을 읽어 해당 회원의 로그인 여부를 확인한다.
 	// #34 [05-03] 로그인을 하지 않은 사용자의 요청이라면 BadRequest 에러를 반환한다.
 	// #35 [05-04] 로그인을 한 사용자라면 Redis의 Refresh Token 정보를 삭제한다.
@@ -187,5 +220,120 @@ describe('AuthController (/auth, e2e)', () => {
 		expect(cookies[0]).toBe(
 			'accessToken=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT; HttpOnly; Secure; SameSite=None',
 		);
+	});
+
+	it('GET /auth/search', async () => {
+		const randomeBytes = Math.random().toString(36).slice(2, 10);
+
+		const newUser = {
+			username: randomeBytes,
+			nickname: randomeBytes,
+			password: randomeBytes,
+		};
+
+		await request(app.getHttpServer()).post('/auth/signup').send(newUser);
+
+		const includeResponse1 = request(app.getHttpServer()).get(
+			`/auth/search?nickname=${randomeBytes.slice(0, 3)}`,
+		);
+		const includeResponse2 = request(app.getHttpServer()).get(
+			`/auth/search?nickname=${randomeBytes.slice(0, 4)}`,
+		);
+		const includeResponse3 = request(app.getHttpServer()).get(
+			`/auth/search?nickname=${randomeBytes}`,
+		);
+		const includeResult = await Promise.all([
+			includeResponse1,
+			includeResponse2,
+			includeResponse3,
+		]);
+		includeResult.forEach((response) => {
+			expect(response).toHaveProperty('body');
+			const users = response.body;
+			expect(users.length).toBe(1);
+			expect(users[0]['nickname']).toBe(randomeBytes);
+		});
+
+		const excludeResponse1 = request(app.getHttpServer()).get(
+			`/auth/search?nickname=${randomeBytes}123124`,
+		);
+		const excludeResponse2 = request(app.getHttpServer()).get(
+			`/auth/search?nickname=123124${randomeBytes}`,
+		);
+		const excludeResult = await Promise.all([
+			excludeResponse1,
+			excludeResponse2,
+		]);
+		excludeResult.forEach((response) => {
+			expect(response).toHaveProperty('body');
+			const users = response.body;
+			expect(users.length).toBe(0);
+		});
+	});
+
+	it('PATCH /auth/status', async () => {
+		const randomeBytes = Math.random().toString(36).slice(2, 10);
+
+		const newUser = {
+			username: randomeBytes,
+			nickname: randomeBytes,
+			password: randomeBytes,
+		};
+
+		await request(app.getHttpServer()).post('/auth/signup').send(newUser);
+
+		const signInResponse = await request(app.getHttpServer())
+			.post('/auth/signin')
+			.send(newUser);
+
+		let accessToken: string;
+		signInResponse.headers['set-cookie'].forEach((cookie: string) => {
+			if (cookie.includes('accessToken')) {
+				accessToken = cookie.split(';')[0].split('=')[1];
+			}
+		});
+
+		const successResponse = await request(app.getHttpServer())
+			.patch('/auth/status')
+			.set('Cookie', [`accessToken=${accessToken}`])
+			.send({ status: 'private' })
+			.expect(200);
+
+		expect(successResponse).toHaveProperty('body');
+		const user = successResponse.body;
+		expect(user).toHaveProperty('status');
+		expect(user.status).toBe('private');
+
+		await request(app.getHttpServer())
+			.patch('/auth/status')
+			.set('Cookie', [`accessToken=${accessToken}`])
+			.send({ status: 'invalid status' })
+			.expect(400);
+	});
+
+	it('GET /auth/sharelink', async () => {
+		const randomeBytes = Math.random().toString(36).slice(2, 10);
+
+		const newUser = {
+			username: randomeBytes,
+			nickname: randomeBytes,
+			password: randomeBytes,
+		};
+
+		await request(app.getHttpServer()).post('/auth/signup').send(newUser);
+
+		const response = await request(app.getHttpServer())
+			.get(`/auth/sharelink?nickname=${randomeBytes}`)
+			.expect(200);
+
+		expect(response).toHaveProperty('text');
+		const sharelink = response.text;
+
+		const sharelinkResponse = await request(app.getHttpServer())
+			.get(`/auth/sharelink/${sharelink}`)
+			.expect(200);
+
+		const nickname = sharelinkResponse.text;
+		expect(nickname).toBe(randomeBytes);
 	});
 });

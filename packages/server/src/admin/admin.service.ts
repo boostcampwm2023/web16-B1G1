@@ -1,4 +1,9 @@
-import { Injectable, UseFilters, UseInterceptors } from '@nestjs/common';
+import {
+	Injectable,
+	UnauthorizedException,
+	UseFilters,
+	UseInterceptors,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../auth/entities/user.entity';
 import { Board } from '../board/entities/board.entity';
@@ -11,6 +16,7 @@ import { decryptAes } from '../util/aes.util';
 import { InjectModel } from '@nestjs/mongoose';
 import { Exception } from '../exception-filter/exception.schema';
 import { awsConfig, bucketName } from '../config/aws.config';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 @UseInterceptors(LogInterceptor)
@@ -23,15 +29,11 @@ export class AdminService {
 		private readonly boardRepository: Repository<Board>,
 		@InjectModel(Exception.name)
 		private readonly exceptionModel: Repository<Exception>,
+		private readonly jwtService: JwtService,
 	) {}
 
 	async getAllPosts() {
 		const posts = await this.boardRepository.find();
-
-		// // 컨텐츠 복호화
-		// posts.forEach((post) => {
-		// 	post.content = decryptAes(post.content);
-		// });
 
 		// 이미지 있는 경우 이미지 경로 추가
 		posts.forEach((post: any) => {
@@ -40,8 +42,6 @@ export class AdminService {
 				(image) => `${awsConfig.endpoint.href}${bucketName}/${image.filename}`,
 			);
 		});
-
-		// console.log(posts);
 
 		return posts;
 	}
@@ -107,5 +107,15 @@ export class AdminService {
 	async getAllExceptions() {
 		const exceptions = await this.exceptionModel.find();
 		return exceptions;
+	}
+
+	async signIn(password: string) {
+		if (password !== process.env.ADMIN_PASSWORD) {
+			throw new UnauthorizedException('wrong password');
+		}
+		const payload = { admin: true };
+		const adminAccessToken = await this.jwtService.sign(payload);
+
+		return { adminAccessToken };
 	}
 }

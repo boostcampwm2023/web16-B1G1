@@ -27,4 +27,5 @@ export enum UserEnum {
 export enum UserShareStatus {
 	PUBLIC = 'public',
 	PRIVATE = 'private',
+	NEW = 'new',
 }

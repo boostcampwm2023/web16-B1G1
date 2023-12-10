@@ -48,10 +48,10 @@ export default function WritingModal() {
 		<ModalPortal>
 			{isClose && (
 				<AlertDialog
-					title="글쓰기 취소"
-					description="작성한 내용이 저장되지 않습니다. 나가시겠습니까?"
-					actionButtonText="예"
-					cancelButtonText="아니오"
+					title="메인화면으로 돌아가시겠습니까?"
+					description="작성된 내용은 저장되지 않습니다."
+					actionButtonText="돌아가기"
+					cancelButtonText="머무르기"
 					onClickActionButton={() => {
 						setView('MAIN');
 						navigate('/home');

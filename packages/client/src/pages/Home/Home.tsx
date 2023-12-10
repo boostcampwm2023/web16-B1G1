@@ -31,6 +31,7 @@ export default function Home() {
 	useEffect(() => {
 		setIsSwitching(true);
 
+		if (nickName === '') return;
 		getGalaxy(nickName).then((res) => {
 			if (!res.spiral) setSpiral(SPIRAL);
 			else {

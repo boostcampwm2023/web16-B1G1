@@ -1,4 +1,4 @@
-export const STARS_NUM = 6000;
+export const STARS_NUM = 4000;
 
 export const DISTANCE_LIMIT = 3000;
 
@@ -13,4 +13,4 @@ export const ARMS_Z_DIST = 1000;
 export const GALAXY_THICKNESS = 300;
 export const SPIRAL = 1.2;
 export const SPIRAL_START = 1000;
-export const STARS_DENSITY = 0.5;
+export const STARS_DENSITY = 0.4;

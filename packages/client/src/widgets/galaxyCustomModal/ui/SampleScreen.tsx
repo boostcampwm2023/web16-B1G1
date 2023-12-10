@@ -21,7 +21,7 @@ export default function SampleScreen() {
 				</EffectComposer>
 				<color attach="background" args={['#070614']} />
 				<ambientLight color="#fff" intensity={5} />
-				<Galaxy number={2000} isCustom={true} />
+				<Galaxy number={1500} isCustom={true} />
 			</Canvas>
 		</div>
 	);

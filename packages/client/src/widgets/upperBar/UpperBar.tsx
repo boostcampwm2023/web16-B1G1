@@ -4,23 +4,27 @@ import goBackIcon from '@icons/icon-back-32-white.svg';
 import { MAX_WIDTH1, MAX_WIDTH2 } from '@constants';
 import { useState, useEffect } from 'react';
 import { getNickNames } from 'shared/apis/search';
-import { useScreenSwitchStore } from 'shared/store/useScreenSwitchStore';
-import { useOwnerStore } from 'shared/store/useOwnerStore';
-import Cookies from 'js-cookie';
+import { getIsAvailableNickName } from 'shared/apis';
+import { useToastStore, useViewStore } from 'shared/store';
+import { useNavigate } from 'react-router-dom';
+import useCheckNickName from 'shared/hooks/useCheckNickName';
 
 export default function UpperBar() {
 	// TODO: ui 분리하기
 	const [searchValue, setSearchValue] = useState('');
 	const [debouncedSearchValue, setDebouncedSearchValue] = useState('');
 	const [searchResults, setSearchResults] = useState([]);
+	const [isSearchButtonDisabled, setIsSearchButtonDisabled] = useState(false);
 
-	const { isMyPage, setIsMyPage } = useOwnerStore();
-	const { setIsSwitching } = useScreenSwitchStore();
-	const { setPageOwnerNickName } = useOwnerStore();
+	const { setToast } = useToastStore();
+	const { page, nickName, owner } = useCheckNickName();
+	const { view } = useViewStore();
 
-	const userNickName = Cookies.get('nickname');
+	const navigate = useNavigate();
 
 	const DEBOUNCE_TIME = 200;
+
+	useEffect(() => {}, [page, nickName]);
 
 	useEffect(() => {
 		const debounce = setTimeout(() => {
@@ -40,7 +44,7 @@ export default function UpperBar() {
 			const nickNameDatas = await getNickNames(debouncedSearchValue);
 			const nickNames = nickNameDatas
 				.map((data: { nickname: string; id: number }) => data.nickname)
-				.filter((nickName: string) => nickName !== userNickName)
+				.filter((nickName: string) => nickName !== owner)
 				.slice(0, 5);
 
 			setSearchResults(nickNames);
@@ -48,26 +52,40 @@ export default function UpperBar() {
 	}, [debouncedSearchValue]);
 
 	const handleSearchButton = async () => {
-		setPageOwnerNickName(searchValue);
+		if (isSearchButtonDisabled) return;
+		setIsSearchButtonDisabled(true);
+		try {
+			await getIsAvailableNickName(searchValue);
+			setToast({ text: '존재하지 않는 닉네임입니다.', type: 'error' });
+		} catch (error) {
+			if (searchValue === owner)
+				return setToast({
+					text: '내 은하로는 이동할 수 없습니다.',
+					type: 'error',
+				});
 
-		setSearchValue('');
-		setDebouncedSearchValue('');
-		setSearchResults([]);
-
-		setIsMyPage(false);
-		setIsSwitching(true);
+			navigate(`/search/${searchValue}`);
+			setSearchValue('');
+			setDebouncedSearchValue('');
+			setSearchResults([]);
+		} finally {
+			setIsSearchButtonDisabled(false);
+		}
 	};
 
-	const iconButtonVisibility = isMyPage ? 'hidden' : 'visible';
+	const iconButtonVisibility = page === 'home' ? 'hidden' : 'visible';
 
 	const handleGoBackButton = () => {
-		setIsMyPage(true);
-		setIsSwitching(true);
-		setPageOwnerNickName(userNickName!);
+		if (page === 'guest') {
+			navigate('/');
+			return;
+		}
+
+		navigate('/home');
 	};
 
 	return (
-		<Layout>
+		<Layout view={view}>
 			<IconButton
 				onClick={handleGoBackButton}
 				style={{ visibility: iconButtonVisibility }}
@@ -75,25 +93,29 @@ export default function UpperBar() {
 				<img src={goBackIcon} alt="뒤로가기" />
 			</IconButton>
 
-			<SearchBar
-				onSubmit={handleSearchButton}
-				inputState={searchValue}
-				setInputState={setSearchValue}
-				placeholder="닉네임을 입력하세요"
-				results={searchResults}
-			/>
+			<div className="search-bar">
+				<SearchBar
+					onSubmit={handleSearchButton}
+					inputState={searchValue}
+					setInputState={setSearchValue}
+					placeholder="닉네임을 입력하세요"
+					results={searchResults}
+					disabled={isSearchButtonDisabled}
+				/>
+			</div>
 		</Layout>
 	);
 }
 
-const Layout = styled.div`
+const Layout = styled.div<{ view: string }>`
 	position: absolute;
 	left: 50%;
 	top: 30px;
 	z-index: 50;
 	transform: translateX(-50%);
 
-	display: flex;
+	display: ${({ view }) =>
+		view === 'MAIN' || view === 'DETAIL' ? 'flex' : 'none'};
 	justify-content: space-between;
 	width: 1180px;
 

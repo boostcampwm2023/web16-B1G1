@@ -10,6 +10,10 @@ export default function Board() {
 
 	const getBoardList = async () => {
 		const response = await fetch(baseUrl + '/admin/post');
+		if (response.status === 401) {
+			// 로그인 페이지로 리다이렉트
+			window.location.href = '/admin/login';
+		}
 		const data = await response.json();
 		setBoardList(data);
 	};
@@ -38,28 +42,27 @@ export default function Board() {
 					</tr>
 				</thead>
 				<tbody>
-					{boardList.map((board: any) => (
-						<tr key={board.id} id={board.id}>
-							<TD>{board.id}</TD>
-							<TD>{board.title}</TD>
-							<TD>{board.user.nickname}</TD>
-							<TD>{board.like_cnt}</TD>
-							<TD>{board.images.length}</TD>
-							<TD>{board.created_at}</TD>
-							<TD>{board.updated_at}</TD>
-							<TD>
-								<Button onClick={getBoardDetail}>상세 보기</Button>
-							</TD>
-						</tr>
-					))}
+					{boardList &&
+						boardList.map((board: any) => (
+							<tr key={board.id} id={board.id}>
+								<TD>{board.id}</TD>
+								<TD>{board.title}</TD>
+								<TD>{board.user.nickname}</TD>
+								<TD>{board.like_cnt}</TD>
+								<TD>{board.images.length}</TD>
+								<TD>{board.created_at}</TD>
+								<TD>{board.updated_at}</TD>
+								<TD>
+									<Button onClick={getBoardDetail}>상세 보기</Button>
+								</TD>
+							</tr>
+						))}
 				</tbody>
 			</Table>
 			<div>
 				{boardDetail &&
 					Object.keys(boardDetail)?.map((detail: any) => {
-						return (
-						  <div>{detail + ' | ' + boardDetail[detail]}</div>
-						);
+						return <div>{detail + ' | ' + boardDetail[detail]}</div>;
 					})}
 			</div>
 		</div>

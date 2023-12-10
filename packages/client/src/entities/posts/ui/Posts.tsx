@@ -1,33 +1,27 @@
 import Post from './Post';
 import { useState, useEffect } from 'react';
 import { StarData } from 'shared/lib/types/star';
-import { useOwnerStore } from 'shared/store/useOwnerStore';
 import { getPostListByNickName } from 'shared/apis/star';
-import { useViewStore } from 'shared/store';
 import { getMyPost } from '../apis/getMyPost';
+import useCheckNickName from 'shared/hooks/useCheckNickName';
+import { useViewStore } from 'shared/store';
 
 export default function Posts() {
 	const [postData, setPostData] = useState<StarData[]>();
-
-	const { isMyPage, pageOwnerNickName } = useOwnerStore();
 	const { view } = useViewStore();
 
+	const { page, nickName } = useCheckNickName();
+
 	useEffect(() => {
-		if (view !== 'MAIN') return;
+		if (!page) return;
+		if (!nickName) return;
 
-		if (isMyPage) {
-			(async () => {
-				const myPostData = await getMyPost();
-				setPostData(myPostData);
-			})();
-			return;
+		if (page === 'home') {
+			getMyPost().then((res) => setPostData(res));
+		} else {
+			getPostListByNickName(nickName).then((res) => setPostData(res));
 		}
-
-		(async () => {
-			const otherPostData = await getPostListByNickName(pageOwnerNickName);
-			setPostData(otherPostData);
-		})();
-	}, [view, pageOwnerNickName]);
+	}, [view, nickName]);
 
 	return (
 		<group>

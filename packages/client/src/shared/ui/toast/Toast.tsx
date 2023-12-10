@@ -3,12 +3,14 @@ import { Body04BD } from '../styles';
 import confirmIcon from '@icons/icon-confirm-22.svg';
 import { useState } from 'react';
 import { keyframes } from '@emotion/react';
+import { X } from 'lucide-react';
 
 interface PropsTypes {
+	type?: 'success' | 'error';
 	children: string;
 }
 
-export default function Toast({ children }: PropsTypes) {
+export default function Toast({ type = 'success', children }: PropsTypes) {
 	const [visible, setVisible] = useState(true);
 
 	const handleAnimationEnd = () => setVisible(false);
@@ -17,7 +19,12 @@ export default function Toast({ children }: PropsTypes) {
 
 	return (
 		<Layout onAnimationEnd={handleAnimationEnd}>
-			<img src={confirmIcon} alt="체크 아이콘" />
+			{type === 'success' ? (
+				<img src={confirmIcon} alt="체크 아이콘" />
+			) : (
+				<X color="#e65164" strokeWidth={4} />
+			)}
+
 			<Text>{children}</Text>
 		</Layout>
 	);
@@ -38,6 +45,7 @@ const Layout = styled.div`
 	padding: 16px 24px;
 	border-radius: 40px;
 	background-color: ${({ theme }) => theme.colors.primary.filled};
+	align-items: center;
 
 	animation: ${fadeOutAnimation} 1s ease forwards;
 	animation-delay: 2s;

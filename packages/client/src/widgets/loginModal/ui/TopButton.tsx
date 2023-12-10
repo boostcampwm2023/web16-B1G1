@@ -1,14 +1,17 @@
 import { TextButton } from 'shared/ui';
 import RightArrow from '@icons/icon-arrow-right-17-white.svg?react';
+import { useNavigate } from 'react-router-dom';
 
-interface PropsType {
-	onClick: () => void;
-}
+export default function TopButton() {
+	const navigate = useNavigate();
 
-export default function TopButton({ onClick }: PropsType) {
+	const handleWatchExample = () => {
+		navigate('/guest/96cebe82-c4bd-4ab7-b041-ba01e92afe4d');
+	};
+
 	return (
-		<TextButton size="l" onClick={onClick} type="button">
-			<p>둘러보기</p>
+		<TextButton size="l" onClick={handleWatchExample} type="button">
+			<p>예시 은하 구경하기</p>
 			<RightArrow />
 		</TextButton>
 	);

@@ -8,7 +8,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { jwtConfig } from '../config/jwt.config';
 import { RedisRepository } from './redis.repository';
 import { CookieAuthGuard } from './cookie-auth.guard';
-import { ShareLink } from './entities/share_link.entity';
+import { ShareLink } from './entities/share-link.entity';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Galaxy, GalaxySchema } from '../galaxy/schemas/galaxy.schema';
 import {

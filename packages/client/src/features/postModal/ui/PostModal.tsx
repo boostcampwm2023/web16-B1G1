@@ -5,26 +5,38 @@ import remarkGfm from 'remark-gfm';
 import styled from '@emotion/styled';
 import { useEffect, useState } from 'react';
 import AlertDialog from 'shared/ui/alertDialog/AlertDialog';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useFetch } from 'shared/hooks';
 import { PostData } from 'shared/lib/types/post';
 import { deletePost } from '../api/deletePost';
 import ImageSlider from './ImageSlider';
 import Like from 'entities/like/Like';
 import InputBar from 'shared/ui/inputBar/InputBar';
-import instance from 'shared/apis/AxiosInterceptor';
-import { useToastStore } from 'shared/store';
+import instance from 'shared/apis/core/AxiosInterceptor';
+import { useToastStore, useCameraStore } from 'shared/store';
+import useCheckNickName from 'shared/hooks/useCheckNickName';
+import { useRefresh } from 'shared/hooks/useRefresh';
 
 export default function PostModal() {
-	const { setView } = useViewStore();
 	const [deleteModal, setDeleteModal] = useState(false);
-	const { postId } = useParams();
-	const navigate = useNavigate();
-	const { data, refetch } = useFetch<PostData>(`post/${postId}`);
 	const [isEdit, setIsEdit] = useState(false);
 	const [content, setContent] = useState('');
 	const [title, setTitle] = useState('');
-	const { setText } = useToastStore();
+	const [isDeleteButtonDisabled, setIsDeleteButtonDisabled] = useState(false);
+	const [isSaveButtonDisabled, setIsSaveButtonDisabled] = useState(false);
+
+	const { setToast } = useToastStore();
+	const { setView } = useViewStore();
+	const { setTargetView } = useCameraStore();
+	const { postId } = useParams();
+	const { data, refetch } = useFetch<PostData>(`post/${postId}`);
+
+	const { page } = useCheckNickName();
+
+	const navigate = useNavigate();
+	const location = useLocation();
+
+	useRefresh('POST');
 
 	useEffect(() => {
 		setContent(data?.content ?? '');
@@ -32,20 +44,23 @@ export default function PostModal() {
 	}, [data]);
 
 	const handleEditSave = async () => {
+		if (isSaveButtonDisabled) return;
+		setIsSaveButtonDisabled(true);
 		const formData = new FormData();
 		formData.append('title', title);
 		formData.append('content', content);
-		const res = await instance({
-			url: `/post/${postId}`,
-			method: 'PATCH',
-			data: formData,
-		});
-		if (res.status === 200) {
+
+		try {
+			await instance({
+				url: `/post/${postId}`,
+				method: 'PATCH',
+				data: formData,
+			});
 			setIsEdit(false);
-			setText('글이 수정되었습니다.');
+			setToast({ text: '글이 수정되었습니다.', type: 'success' });
 			refetch();
-		} else {
-			setText('글 수정에 실패했습니다.');
+		} finally {
+			setIsSaveButtonDisabled(false);
 		}
 	};
 
@@ -57,6 +72,7 @@ export default function PostModal() {
 			onClick={() => {
 				setDeleteModal(true);
 			}}
+			disabled={page !== 'home'}
 		>
 			삭제
 		</Button>
@@ -70,6 +86,7 @@ export default function PostModal() {
 			onClick={() => {
 				setIsEdit(true);
 			}}
+			disabled={page !== 'home'}
 		>
 			수정
 		</Button>
@@ -97,22 +114,35 @@ export default function PostModal() {
 				setIsEdit(false);
 				handleEditSave();
 			}}
+			disabled={isSaveButtonDisabled}
 		>
 			저장
 		</Button>
 	);
 
 	const handleDelete = async () => {
-		const res = await deletePost(postId!);
-		setDeleteModal(false);
-		if (res.status === 200) {
-			setText('글을 삭제했습니다.');
+		try {
+			await deletePost(postId!);
+			setDeleteModal(false);
+			setToast({ text: '글이 삭제되었습니다.', type: 'success' });
 			setView('MAIN');
 			navigate('/home');
-			// window.location.reload();
-		} else {
-			setText('글 삭제에 실패했습니다.');
+		} finally {
+			setIsDeleteButtonDisabled(false);
 		}
+	};
+
+	const handleGoBackButton = () => {
+		const splitedPath = location.pathname.split('/');
+		const page = splitedPath[1];
+		const nickName = splitedPath[2];
+		let path = '/';
+		if (page === 'home') path += page + '/';
+		else path += page + '/' + nickName + '/';
+
+		setView('MAIN');
+		navigate(path);
+		setTargetView(null);
 	};
 
 	return (
@@ -125,10 +155,7 @@ export default function PostModal() {
 					leftButton={
 						isEdit ? null : <Like postId={postId!} count={data.like_cnt ?? 0} />
 					}
-					onClickGoBack={() => {
-						setView('MAIN');
-						navigate(`/home/${postId}`);
-					}}
+					onClickGoBack={handleGoBackButton}
 				>
 					<Container>
 						{data.images.length > 0 && !isEdit && (
@@ -173,6 +200,7 @@ export default function PostModal() {
 							setDeleteModal(false);
 						}}
 						onClickActionButton={handleDelete}
+						disabled={isDeleteButtonDisabled}
 					/>
 				)}
 			</ModalPortal>
@@ -209,6 +237,24 @@ const TextContainer = styled.div`
 	${({ theme: { colors } }) => ({
 		color: colors.text.secondary,
 	})}
+
+	& ol {
+		padding-left: 40px;
+		margin: 18px 0;
+	}
+
+	& ul {
+		padding-left: 40px;
+		margin: 18px 0;
+	}
+
+	& ol li {
+		list-style: decimal;
+	}
+
+	& ul li {
+		list-style: disc;
+	}
 `;
 
 const ImageContainer = styled.div`

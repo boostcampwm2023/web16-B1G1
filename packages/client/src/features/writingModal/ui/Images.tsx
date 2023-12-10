@@ -1,6 +1,5 @@
 import ImageIcon from '@icons/icon-photo-32-gray.svg?react';
 import { useState, ChangeEvent, useRef } from 'react';
-import { IconButton } from 'shared/ui';
 import styled from '@emotion/styled';
 
 interface PropsType {
@@ -15,6 +14,7 @@ export default function Images({ onModify }: PropsType) {
 	const handleAddImages = (event: ChangeEvent<HTMLInputElement>) => {
 		const files = event.target.files;
 		if (!files) return;
+		if (files.length > 5) return;
 		const images = Array.from(files).map((file) => URL.createObjectURL(file));
 		setShowImages(images);
 		setFiles(files);
@@ -43,9 +43,9 @@ export default function Images({ onModify }: PropsType) {
 				hidden
 				ref={inputRef}
 			/>
-			<IconButton onClick={() => inputRef.current?.click()}>
+			<IconWrapper onClick={() => inputRef.current?.click()}>
 				<ImageIcon />
-			</IconButton>
+			</IconWrapper>
 
 			{showImages.map((image, id) => (
 				<div key={id}>
@@ -61,10 +61,13 @@ export default function Images({ onModify }: PropsType) {
 }
 
 const ImagePreview = styled.img`
-	width: 40px;
-	height: 40px;
-	border-radius: 8px;
+	width: 80px;
+	height: 80px;
+	border-radius: 4px;
 	cursor: pointer;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 `;
 
 const Container = styled.div`
@@ -72,4 +75,21 @@ const Container = styled.div`
 	justify-content: center;
 	align-items: center;
 	gap: 12px;
+`;
+
+const IconWrapper = styled.div`
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 80px;
+	height: 80px;
+	border: 1px solid ${({ theme }) => theme.colors.stroke.default};
+	border-radius: 4px;
+	background-color: ${({ theme }) => theme.colors.background.bdp01_80};
+	cursor: pointer;
+
+	&:hover {
+		background-color: ${({ theme }) => theme.colors.primary.hover};
+		border: 1px solid ${({ theme }) => theme.colors.action.hover};
+	}
 `;

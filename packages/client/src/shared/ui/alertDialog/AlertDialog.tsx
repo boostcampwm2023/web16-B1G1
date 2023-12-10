@@ -10,6 +10,7 @@ interface PropsTypes extends React.HTMLAttributes<HTMLDivElement> {
 	onClickCancelButton: () => void;
 	onClickActionButton: () => void;
 	description?: string;
+	disabled: boolean;
 }
 
 export default function AlertDialog({
@@ -19,6 +20,7 @@ export default function AlertDialog({
 	actionButtonText,
 	onClickCancelButton,
 	onClickActionButton,
+	disabled,
 	...args
 }: PropsTypes) {
 	return (
@@ -41,6 +43,7 @@ export default function AlertDialog({
 						size="m"
 						type="button"
 						onClick={onClickActionButton}
+						disabled={disabled}
 					>
 						{actionButtonText}
 					</Button>
@@ -56,7 +59,7 @@ const Overlay = styled.div`
 	left: 0;
 	width: 100%;
 	height: 100%;
-	z-index: 998;
+	z-index: 1001;
 	background-color: rgba(0, 0, 0, 0.5);
 `;
 
@@ -65,7 +68,7 @@ const Layout = styled.div`
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%);
-	z-index: 999;
+	z-index: 1002;
 
 	display: flex;
 	flex-direction: column;

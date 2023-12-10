@@ -150,6 +150,24 @@ const Wrapper = styled.div<{ css: SerializedStyles }>`
 	margin-top: 9px;
 	margin-right: 9px;
 	color: ${theme.colors.text.secondary};
+
+	& ol {
+		padding-left: 40px;
+		margin: 18px 0;
+	}
+
+	& ul {
+		padding-left: 40px;
+		margin: 18px 0;
+	}
+
+	& ol li {
+		list-style: decimal;
+	}
+
+	& ul li {
+		list-style: disc;
+	}
 `;
 
 const scrollStyle = css`

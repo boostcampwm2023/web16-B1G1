@@ -19,7 +19,7 @@ export default function LandingScreen({
 
 	return (
 		<div style={{ height: '100vh', width: '100vw' }}>
-			<Canvas camera={camera}>
+			<Canvas camera={camera} frameloop="demand">
 				<EffectComposer>
 					<Bloom
 						intensity={0.4}

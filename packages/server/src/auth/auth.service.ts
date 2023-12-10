@@ -24,7 +24,7 @@ import {
 } from '../util/auth.util';
 import { v4 as uuid } from 'uuid';
 import { UserDataDto } from './dto/user-data.dto';
-import { ShareLink } from './entities/share_link.entity';
+import { ShareLink } from './entities/share-link.entity';
 import { InjectModel } from '@nestjs/mongoose';
 import { Galaxy } from '../galaxy/schemas/galaxy.schema';
 import { Model } from 'mongoose';
@@ -253,33 +253,33 @@ export class AuthService {
 			throw new BadRequestException('nickname is required');
 		}
 
-		const user = await this.userRepository.findOneBy({ nickname });
+		const user: User = await this.userRepository.findOneBy({ nickname });
 
 		if (!user) {
 			throw new NotFoundException('user not found');
 		}
 
-		const foundLink = await this.shareLinkRepository.findOneBy({
-			user: user.id,
+		const shareLink = await this.shareLinkRepository.findOneBy({
+			user: { id: user.id },
 		});
 
-		if (foundLink) {
-			return foundLink;
+		if (shareLink) {
+			return shareLink.link;
 		}
 
-		const newLink = this.shareLinkRepository.create({
-			user: user.id,
+		const newShareLink = this.shareLinkRepository.create({
 			link: uuid(),
+			user: user,
 		});
 
-		const savedLink = await this.shareLinkRepository.save(newLink);
-		savedLink.user = undefined;
-		return savedLink;
+		const savedShareLink = await this.shareLinkRepository.save(newShareLink);
+		return savedShareLink.link;
 	}
 
 	async getUsernameByShareLink(shareLink: string) {
-		const foundLink = await this.shareLinkRepository.findOneBy({
-			link: shareLink,
+		const foundLink = await this.shareLinkRepository.findOne({
+			where: { link: shareLink },
+			relations: ['user'],
 		});
 
 		if (!foundLink) {
@@ -287,13 +287,27 @@ export class AuthService {
 		}
 
 		const linkUser = await this.userRepository.findOneBy({
-			id: foundLink.user,
+			id: foundLink.user.id,
 		});
 
 		if (!linkUser) {
 			throw new InternalServerErrorException('link user not found');
 		}
 
-		return linkUser.username;
+		return linkUser.nickname;
+	}
+
+	async checkNickname(nickname: string) {
+		if (!nickname) {
+			throw new BadRequestException('nickname is required');
+		}
+
+		const user = await this.userRepository.findOneBy({ nickname });
+
+		if (!user) {
+			throw new NotFoundException('user not found');
+		}
+
+		return true;
 	}
 }

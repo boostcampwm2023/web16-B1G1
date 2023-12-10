@@ -7,7 +7,7 @@ import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
 import { useViewStore } from 'shared/store/useViewStore';
 import { useEffect } from 'react';
 import { CAMERA_POST_VIEW } from '@constants';
-import { useOwnerStore } from 'shared/store/useOwnerStore';
+import useCheckNickName from 'shared/hooks/useCheckNickName';
 
 const setCameraPosition = (
 	camera: Camera,
@@ -52,7 +52,7 @@ export default function Controls() {
 	} = useCameraStore();
 	const { view } = useViewStore();
 	const state = useThree();
-	const { pageOwnerNickName } = useOwnerStore();
+	const { nickName } = useCheckNickName();
 
 	useEffect(() => {
 		setCameraToCurrentView(currentView.distanceTo(state.camera.position));
@@ -60,7 +60,7 @@ export default function Controls() {
 
 	useEffect(() => {
 		setTargetView(null);
-	}, [pageOwnerNickName]);
+	}, [nickName]);
 
 	useFrame((state, delta) => {
 		const targetPosition = new THREE.Vector3(0, 0, 0);

@@ -1,4 +1,4 @@
-import instance from './AxiosInterceptor';
+import instance from './core/AxiosInterceptor';
 
 export const getShareLink = async (nickName: string) => {
 	const { data } = await instance({
@@ -16,6 +16,15 @@ export const patchShareStatus = async (status: 'private' | 'public') => {
 		data: {
 			status,
 		},
+	});
+
+	return data;
+};
+
+export const getShareLinkHostNickName = async (shareLink: string) => {
+	const { data } = await instance({
+		method: 'GET',
+		url: `/auth/shareLink/${shareLink}`,
 	});
 
 	return data;

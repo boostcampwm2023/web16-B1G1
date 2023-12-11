@@ -18,3 +18,13 @@ export const BLOOM_LUMINANCE_THRESHOLD = 0.55;
 export const BLOOM_LUMINANCE_SMOOTHING = 0;
 
 export const AMBIENT_LIGHT_INTENSITY = 15;
+
+export const SPACE_WARP_LINE_COLORS = [
+	'#627BFF',
+	'#3A5AFF',
+	'#6D3AFF',
+	'#9734FF',
+	'#EFE0FF',
+	'#DDDDDD',
+	'#FDFFE2',
+];

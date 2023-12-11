@@ -5,10 +5,22 @@
 		<link rel="icon" href="./src/assets/favicon.png" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>별 하나에 글 하나 🌟</title>
+		<script
+			async
+			src="https://www.googletagmanager.com/gtag/js?id=G-NVWSQCSKWF"
+		></script>
+		<script>
+			window.dataLayer = window.dataLayer || [];
+			function gtag() {
+				dataLayer.push(arguments);
+			}
+			gtag('js', new Date());
+
+			gtag('config', 'G-NVWSQCSKWF');
+		</script>
 	</head>
 	<body>
 		<div id="root"></div>
-		<div id="modal-root"></div>
 		<script type="module" src="./src/app/App.tsx"></script>
 	</body>
 </html>

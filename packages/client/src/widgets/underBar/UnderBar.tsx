@@ -34,9 +34,10 @@ export default function UnderBar() {
 		try {
 			await instance.get(`/auth/signout`);
 
-			Cookies.remove('accessToken');
-			Cookies.remove('refreshToken');
-			reset();
+		Cookies.remove('accessToken');
+		Cookies.remove('refreshToken');
+		Cookies.remove('userName');
+		reset();
 
 			navigate('/');
 		} finally {
@@ -63,7 +64,7 @@ export default function UnderBar() {
 		<Layout view={view}>
 			<NameContainer>
 				<Name>{nickName}님의 은하</Name>
-				<CoachButton />
+				{page === 'home' && <CoachButton />}
 			</NameContainer>
 
 			<ButtonsContainer>
@@ -79,41 +80,42 @@ export default function UnderBar() {
 						</Button>
 					)}
 
-					<Button
-						size="m"
-						buttonType="Button"
-						onClick={handleShareButton}
-						style={{ display: isMyPage ? 'flex' : 'none' }}
-						className="share-button"
-					>
-						공유하기
-					</Button>
+					{isMyPage && (
+						<Button
+							size="m"
+							buttonType="Button"
+							onClick={handleShareButton}
+							className="share-button"
+						>
+							공유하기
+						</Button>
+					)}
 				</SmallButtonsContainer>
 
 				<Line style={{ display: isMyPage ? 'flex' : 'none' }} />
 
-				<BigButtonsContainer>
-					<BigButton
-						size="l"
-						buttonType="Button"
-						onClick={handleGalaxyCustomButton}
-						style={{ display: isMyPage ? 'flex' : 'none' }}
-						className="galaxy-custom-button"
-					>
-						<img src={PlanetEditIcon} alt="은하 수정하기" />
-						은하 수정하기
-					</BigButton>
-					<BigButton
-						size="l"
-						buttonType="CTA-icon"
-						onClick={handleWritingButton}
-						style={{ display: isMyPage ? 'flex' : 'none' }}
-						className="writing-button"
-					>
-						<img src={WriteIcon} alt="글쓰기" />
-						글쓰기
-					</BigButton>
-				</BigButtonsContainer>
+				{isMyPage && (
+					<BigButtonsContainer>
+						<BigButton
+							size="l"
+							buttonType="Button"
+							onClick={handleGalaxyCustomButton}
+							className="galaxy-custom-button"
+						>
+							<img src={PlanetEditIcon} alt="은하 수정하기" />
+							은하 수정하기
+						</BigButton>
+						<BigButton
+							size="l"
+							buttonType="CTA-icon"
+							onClick={handleWritingButton}
+							className="writing-button"
+						>
+							<img src={WriteIcon} alt="글쓰기" />
+							글쓰기
+						</BigButton>
+					</BigButtonsContainer>
+				)}
 			</ButtonsContainer>
 		</Layout>
 	);

@@ -56,7 +56,7 @@ export default function Controls() {
 
 	useEffect(() => {
 		setCameraToCurrentView(currentView.distanceTo(state.camera.position));
-	}, []);
+	}, [view]);
 
 	useEffect(() => {
 		setTargetView(null);
@@ -77,7 +77,6 @@ export default function Controls() {
 			distance.z = 0;
 			if (distance.length() > LENGTH_LIMIT) distance.setLength(LENGTH_LIMIT);
 			state.camera.position.add(distance);
-			setCameraToCurrentView(currentView.distanceTo(state.camera.position));
 		}
 
 		if (targetPosition !== currentView) {

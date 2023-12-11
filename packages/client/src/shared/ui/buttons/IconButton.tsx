@@ -18,6 +18,7 @@ const CustomButton = styled.button<PropsType>`
 	padding: 8px;
 	gap: 10px;
 	border-radius: 8px;
+	white-space: nowrap;
 
 	${({ theme: { colors } }) => css`
 		border: 1px solid ${colors.stroke.default};

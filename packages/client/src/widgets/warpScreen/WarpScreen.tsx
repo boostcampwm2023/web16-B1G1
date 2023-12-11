@@ -12,12 +12,16 @@ import {
 import { EffectComposer, Bloom } from '@react-three/postprocessing';
 import SpaceWarp from './ui/SpaceWarp';
 import BrightSphere from './ui/BrightSphere';
+import styled from '@emotion/styled';
+import { keyframes } from '@emotion/react';
+import { isWeakSet } from 'util/types';
 
 interface PropsType {
-	setIsSwitching: React.Dispatch<React.SetStateAction<boolean>>;
+	isSwitching: 'warp' | 'fade' | 'end';
+	setIsSwitching: React.Dispatch<React.SetStateAction<'warp' | 'fade' | 'end'>>;
 }
 
-export default function WarpScreen({ setIsSwitching }: PropsType) {
+export default function WarpScreen({ isSwitching, setIsSwitching }: PropsType) {
 	const camera = {
 		position: SPACE_WARP_CAMERA_POSITION,
 		up: SPACE_WARP_CAMERA_UP,
@@ -31,6 +35,7 @@ export default function WarpScreen({ setIsSwitching }: PropsType) {
 		zIndex: 999,
 		backgroundColor: '#000000',
 	};
+	if (isSwitching === 'fade') return <FadeoutScreen />;
 
 	return (
 		<Canvas camera={camera} style={canvasStyle}>
@@ -50,3 +55,24 @@ export default function WarpScreen({ setIsSwitching }: PropsType) {
 		</Canvas>
 	);
 }
+
+const fadeout = keyframes`
+	0% {
+		opacity: 1;
+	}
+	100% {
+		opacity: 0;
+		display: none;
+	}
+`;
+
+const FadeoutScreen = styled.div`
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 101;
+	background-color: white;
+	animation: ${fadeout} 0.5s linear forwards;
+`;

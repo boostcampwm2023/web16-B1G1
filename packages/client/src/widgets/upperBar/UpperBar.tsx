@@ -7,6 +7,7 @@ import { checkExistNickname, getNickNames } from 'shared/apis/search';
 import { useToastStore, useViewStore } from 'shared/store';
 import { useNavigate } from 'react-router-dom';
 import useCheckNickName from 'shared/hooks/useCheckNickName';
+import Cookies from 'js-cookie';
 
 export default function UpperBar() {
 	// TODO: ui 분리하기
@@ -16,8 +17,9 @@ export default function UpperBar() {
 	const [isSearchButtonDisabled, setIsSearchButtonDisabled] = useState(false);
 
 	const { setToast } = useToastStore();
-	const { page, nickName, owner } = useCheckNickName();
+	const { page, nickName } = useCheckNickName();
 	const { view } = useViewStore();
+	const user = Cookies.get('userName');
 
 	const navigate = useNavigate();
 
@@ -43,7 +45,7 @@ export default function UpperBar() {
 			const nickNameDatas = await getNickNames(debouncedSearchValue);
 			const nickNames = nickNameDatas
 				.map((data: { nickname: string; id: number }) => data.nickname)
-				.filter((nickName: string) => nickName !== owner)
+				.filter((nickName: string) => nickName !== user)
 				.slice(0, 5);
 
 			setSearchResults(nickNames);
@@ -60,7 +62,7 @@ export default function UpperBar() {
 			setDebouncedSearchValue('');
 			setSearchResults([]);
 		} catch (error) {
-			if (searchValue === owner)
+			if (searchValue === user)
 				return setToast({
 					text: '내 은하로는 이동할 수 없습니다.',
 					type: 'error',
@@ -94,16 +96,18 @@ export default function UpperBar() {
 				<img src={goBackIcon} alt="뒤로가기" />
 			</IconButton>
 
-			<div className="search-bar">
-				<SearchBar
-					onSubmit={handleSearchButton}
-					inputState={searchValue}
-					setInputState={setSearchValue}
-					placeholder="닉네임을 입력하세요"
-					results={searchResults}
-					disabled={isSearchButtonDisabled}
-				/>
-			</div>
+			{page !== 'guest' && (
+				<div className="search-bar">
+					<SearchBar
+						onSubmit={handleSearchButton}
+						inputState={searchValue}
+						setInputState={setSearchValue}
+						placeholder="닉네임을 입력하세요"
+						results={searchResults}
+						disabled={isSearchButtonDisabled}
+					/>
+				</div>
+			)}
 		</Layout>
 	);
 }

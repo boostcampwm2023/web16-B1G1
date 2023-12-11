@@ -8,6 +8,7 @@ import { getIsAvailableNickName } from 'shared/apis';
 import { useToastStore, useViewStore } from 'shared/store';
 import { useNavigate } from 'react-router-dom';
 import useCheckNickName from 'shared/hooks/useCheckNickName';
+import Cookies from 'js-cookie';
 
 export default function UpperBar() {
 	// TODO: ui 분리하기
@@ -19,7 +20,7 @@ export default function UpperBar() {
 	const { setToast } = useToastStore();
 	const { page, nickName } = useCheckNickName();
 	const { view } = useViewStore();
-	const user = sessionStorage.getItem('user');
+	const user = Cookies.get('userName');
 
 	const navigate = useNavigate();
 

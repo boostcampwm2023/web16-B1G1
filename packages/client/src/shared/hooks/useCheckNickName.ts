@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { getSignInInfo } from 'shared/apis';
 import { getShareLinkHostNickName } from 'shared/apis/share';
+import Cookies from 'js-cookie';
 
 export default function useCheckNickName() {
 	const location = useLocation();
@@ -20,7 +21,7 @@ export default function useCheckNickName() {
 					const res = await getSignInInfo();
 					setNickName(res.nickname);
 					setStatus(res.status);
-					sessionStorage.setItem('user', res.nickname);
+					Cookies.set('userName', res.nickname);
 				})();
 				break;
 

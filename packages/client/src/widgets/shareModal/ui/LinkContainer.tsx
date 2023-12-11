@@ -3,13 +3,14 @@ import { useToastStore } from 'shared/store';
 import { Button, Input } from 'shared/ui';
 import { useState, useEffect } from 'react';
 import { getShareLink } from 'shared/apis/share';
+import Cookies from 'js-cookie';
 
 export default function LinkContainer() {
 	const [shareLink, setShareLink] = useState('');
 
 	const { setToast } = useToastStore();
 
-	const user = sessionStorage.getItem('user');
+	const user = Cookies.get('userName');
 
 	useEffect(() => {
 		if (!user) return;

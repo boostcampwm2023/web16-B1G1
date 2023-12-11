@@ -35,7 +35,7 @@ export default function UnderBar() {
 
 		Cookies.remove('accessToken');
 		Cookies.remove('refreshToken');
-		sessionStorage.removeItem('user');
+		Cookies.remove('userName');
 		reset();
 
 		setIsLogoutButtonDisabled(false);

@@ -62,11 +62,6 @@ const Star = forwardRef<THREE.Mesh, PropsType>((props, ref) => {
 				emissive={color}
 				emissiveIntensity={brightness}
 			/>
-			{/* <meshToonMaterial
-				color={color}
-				emissive={color}
-				emissiveIntensity={brightness}
-			/> */}
 			{children}
 		</mesh>
 	);

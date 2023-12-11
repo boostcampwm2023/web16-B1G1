@@ -40,11 +40,10 @@ export default function Screen() {
 				onWheel={(e) =>
 					setCameraToCurrentView(cameraToCurrentView + e.deltaY * wheelSpeed)
 				}
-				frameloop="demand"
 			>
 				<PerformanceMonitor
 					onChange={({ factor }) => {
-						setDpr(0.5 + factor);
+						setDpr(0.5 + factor / 2);
 					}}
 				/>
 				<EffectComposer>

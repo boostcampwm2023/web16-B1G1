@@ -64,32 +64,31 @@ export default function PostModal() {
 		}
 	};
 
-	const rightButton = (
-		<Button
-			size="m"
-			buttonType="warning-border"
-			type="button"
-			onClick={() => {
-				setDeleteModal(true);
-			}}
-			disabled={page !== 'home'}
-		>
-			삭제
-		</Button>
-	);
-
-	const EditButton = (
-		<Button
-			size="m"
-			buttonType="CTA-icon"
-			type="button"
-			onClick={() => {
-				setIsEdit(true);
-			}}
-			disabled={page !== 'home'}
-		>
-			수정
-		</Button>
+	const RightButton = (
+		<ButtonContainer>
+			<Button
+				size="m"
+				buttonType="CTA-icon"
+				type="button"
+				onClick={() => {
+					setIsEdit(true);
+				}}
+				disabled={page !== 'home'}
+			>
+				수정
+			</Button>
+			<Button
+				size="m"
+				buttonType="warning-border"
+				type="button"
+				onClick={() => {
+					setDeleteModal(true);
+				}}
+				disabled={page !== 'home'}
+			>
+				삭제
+			</Button>
+		</ButtonContainer>
 	);
 
 	const EditCancelButton = (
@@ -150,8 +149,8 @@ export default function PostModal() {
 			<ModalPortal>
 				<PostModalLayout
 					title={isEdit ? '글 수정하기' : data.title}
-					rightButton={isEdit ? EditSaveButton : page === 'home' && rightButton}
-					topButton={isEdit ? EditCancelButton : page === 'home' && EditButton}
+					rightButton={isEdit ? EditSaveButton : page === 'home' && RightButton}
+					topButton={isEdit && EditCancelButton}
 					leftButton={
 						isEdit ? null : <Like postId={postId!} count={data.like_cnt ?? 0} />
 					}
@@ -262,4 +261,9 @@ const ImageContainer = styled.div`
 	align-items: center;
 	justify-content: center;
 	margin-bottom: 26px;
+`;
+
+const ButtonContainer = styled.div`
+	display: flex;
+	gap: 8px;
 `;

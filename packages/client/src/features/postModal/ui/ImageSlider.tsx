@@ -11,18 +11,14 @@ interface PropsType {
 export default function ImageSlider({ imageUrls }: PropsType) {
 	const [imageIndex, setImageIndex] = useState(0);
 
-	const handlePrev = (e: React.MouseEvent) => {
-		e.preventDefault();
-
+	const handlePrev = () => {
 		setImageIndex((index) => {
 			if (index === 0) return imageUrls.length - 1;
 			return index - 1;
 		});
 	};
 
-	const handleNext = (e: React.MouseEvent) => {
-		e.preventDefault();
-
+	const handleNext = () => {
 		setImageIndex((index) => {
 			if (index === imageUrls.length - 1) return 0;
 			return index + 1;
@@ -51,10 +47,10 @@ export default function ImageSlider({ imageUrls }: PropsType) {
 
 			{imageUrls.length > 1 && (
 				<>
-					<Button onClick={handlePrev} style={{ left: 0 }}>
+					<Button onClick={handlePrev} style={{ left: 0 }} type="button">
 						<ArrowBigLeft />
 					</Button>
-					<Button onClick={handleNext} style={{ right: 0 }}>
+					<Button onClick={handleNext} style={{ right: 0 }} type="button">
 						<ArrowBigRight />
 					</Button>
 					<Pagination>

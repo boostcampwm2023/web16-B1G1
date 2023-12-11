@@ -35,17 +35,17 @@ export default function Screen() {
 	return (
 		<div style={{ height: '100vh', width: '100vw' }}>
 			<Canvas
-				// dpr={dpr}
+				dpr={dpr}
 				camera={camera}
 				onWheel={(e) =>
 					setCameraToCurrentView(cameraToCurrentView + e.deltaY * 휠속도)
 				}
 			>
-				{/* <PerformanceMonitor
+				<PerformanceMonitor
 					onChange={({ factor }) => {
 						setDpr(0.5 + factor / 2);
 					}}
-				/> */}
+				/>
 				<EffectComposer>
 					<Bloom
 						intensity={밝기}

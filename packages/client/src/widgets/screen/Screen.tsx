@@ -71,6 +71,7 @@ export default function Screen() {
 					hideCopyButton
 					hidden={view !== 'MAIN' && view !== 'DETAIL'}
 					theme={LevaTheme}
+					titleBar={{ filter: false }}
 				/>
 			</LevaWrapper>
 		</div>

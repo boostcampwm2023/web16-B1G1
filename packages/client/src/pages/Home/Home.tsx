@@ -13,8 +13,6 @@ import {
 } from 'widgets/galaxy/lib/constants';
 import useCheckNickName from 'shared/hooks/useCheckNickName';
 import { FullScreen, useFullScreenHandle } from 'react-full-screen';
-import styled from '@emotion/styled';
-import { keyframes } from '@emotion/react';
 import UnderBar from 'widgets/underBar/UnderBar';
 import UpperBar from 'widgets/upperBar/UpperBar';
 import CoachMarker from 'features/coachMarker/CoachMarker';
@@ -92,11 +90,10 @@ export default function Home() {
 	return (
 		<FullScreen handle={handleFullScreen}>
 			<Outlet />
-			{status === 'new' && <CoachMarker isFirst={true} />}
 
-			{isSwitching === 'warp' && <WarpScreen setIsSwitching={setIsSwitching} />}
-			{isSwitching === 'fade' && (
-				<FadeoutScreen onAnimationEnd={() => setIsSwitching('end')} />
+			{status === 'new' && <CoachMarker isFirst={true} />}
+			{isSwitching !== 'end' && (
+				<WarpScreen isSwitching={isSwitching} setIsSwitching={setIsSwitching} />
 			)}
 			{text && <Toast type={type}>{text}</Toast>}
 
@@ -107,24 +104,3 @@ export default function Home() {
 		</FullScreen>
 	);
 }
-
-const fadeout = keyframes`
-	0% {
-		opacity: 1;
-	}
-	100% {
-		opacity: 0;
-		display: none;
-	}
-`;
-
-const FadeoutScreen = styled.div`
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	z-index: 101;
-	background-color: white;
-	animation: ${fadeout} 0.5s linear forwards;
-`;

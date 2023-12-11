@@ -34,7 +34,7 @@ const geSpaceWarpLinesInfo = () => {
 };
 
 interface PropsType {
-	setIsSwitching: React.Dispatch<React.SetStateAction<'end' | 'warp' | 'fade'>>;
+	setIsSwitching: React.Dispatch<React.SetStateAction<'warp' | 'fade' | 'end'>>;
 }
 
 export default function SpaceWarp({ setIsSwitching }: PropsType) {
@@ -44,7 +44,9 @@ export default function SpaceWarp({ setIsSwitching }: PropsType) {
 		if (state.camera.position.y <= 0) {
 			state.scene.background = new THREE.Color(0xffffff);
 			setIsSwitching('fade');
-		} else state.camera.position.y -= 75000 * delta;
+			return;
+		}
+		state.camera.position.y -= 75000 * delta;
 	});
 
 	return (

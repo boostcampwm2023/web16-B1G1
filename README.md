@@ -92,10 +92,9 @@ https://github.com/boostcampwm2023/web16-B1G1/wiki
 
 [🔗 wiki 기술 스택 소개 바로가기](https://github.com/boostcampwm2023/web16-B1G1/wiki/%EA%B8%B0%EC%88%A0%EC%8A%A4%ED%83%9D-%EC%86%8C%EA%B0%9C)
 
-<img src="https://github.com/boostcampwm2023/web16-B1G1/assets/80266418/3a0507ca-1f7f-4fa1-add7-43d3e73515d4
-">
-<img src="https://github.com/boostcampwm2023/web16-B1G1/assets/80266418/f2590ade-7a4d-4151-8024-c58b75c2c9ff
-">
+<img src="https://github.com/boostcampwm2023/web16-B1G1/assets/80266418/3a0507ca-1f7f-4fa1-add7-43d3e73515d4" height="500" />
+
+<img src="https://github.com/boostcampwm2023/web16-B1G1/assets/80266418/f2590ade-7a4d-4151-8024-c58b75c2c9ff" height="500" />
 
 ### 기술 스택 선정 이유에 관한 팀원들의 글
 

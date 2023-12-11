@@ -63,11 +63,11 @@ export default function Like({ postId, count }: PropsType) {
 
 		try {
 			setButtonDisabled(true);
-			const res = await instance({
+			await instance({
 				method: 'patch',
 				url: `/post/${postId}/like`,
 			});
-			if (res.status === 200) dispatch({ type: LIKE });
+			dispatch({ type: LIKE });
 		} finally {
 			setButtonDisabled(false);
 		}
@@ -78,11 +78,11 @@ export default function Like({ postId, count }: PropsType) {
 
 		try {
 			setButtonDisabled(true);
-			const res = await instance({
+			await instance({
 				method: 'patch',
 				url: `/post/${postId}/unlike`,
 			});
-			if (res.status === 200) dispatch({ type: UNLIKE });
+			dispatch({ type: UNLIKE });
 		} finally {
 			setButtonDisabled(false);
 		}

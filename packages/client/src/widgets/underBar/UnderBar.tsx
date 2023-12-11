@@ -31,14 +31,17 @@ export default function UnderBar() {
 	const handleLogoutButton = async () => {
 		if (isLogoutButtonDisabled) return;
 		setIsLogoutButtonDisabled(true);
-		await instance.get(`${BASE_URL}auth/signout`);
+		try {
+			await instance.get(`${BASE_URL}auth/signout`);
 
-		Cookies.remove('accessToken');
-		Cookies.remove('refreshToken');
-		reset();
+			Cookies.remove('accessToken');
+			Cookies.remove('refreshToken');
+			reset();
 
-		setIsLogoutButtonDisabled(false);
-		navigate('/');
+			navigate('/');
+		} finally {
+			setIsLogoutButtonDisabled(false);
+		}
 	};
 
 	const handleShareButton = () => {

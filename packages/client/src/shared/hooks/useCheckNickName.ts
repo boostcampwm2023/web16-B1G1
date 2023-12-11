@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { getSignInInfo } from 'shared/apis';
 import { getShareLinkHostNickName } from 'shared/apis/share';
 import Cookies from 'js-cookie';
@@ -9,10 +9,10 @@ export default function useCheckNickName() {
 	const [page, setPage] = useState('');
 	const [nickName, setNickName] = useState('');
 	const [status, setStatus] = useState('');
+	const { hostNickname } = useParams();
 
 	useEffect(() => {
 		const path = location.pathname.split('/')[1];
-		const hostNickName = location.pathname.split('/')[2];
 
 		switch (path) {
 			case 'home':
@@ -27,13 +27,13 @@ export default function useCheckNickName() {
 
 			case 'search':
 				setPage('search');
-				setNickName(hostNickName);
+				setNickName(hostNickname!);
 				break;
 
 			case 'guest':
 				setPage('guest');
 				(async () => {
-					const res = await getShareLinkHostNickName(hostNickName);
+					const res = await getShareLinkHostNickName(hostNickname!);
 					setNickName(res);
 				})();
 				break;

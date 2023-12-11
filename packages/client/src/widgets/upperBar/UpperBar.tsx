@@ -95,16 +95,18 @@ export default function UpperBar() {
 				<img src={goBackIcon} alt="뒤로가기" />
 			</IconButton>
 
-			<div className="search-bar">
-				<SearchBar
-					onSubmit={handleSearchButton}
-					inputState={searchValue}
-					setInputState={setSearchValue}
-					placeholder="닉네임을 입력하세요"
-					results={searchResults}
-					disabled={isSearchButtonDisabled}
-				/>
-			</div>
+			{page !== 'guest' && (
+				<div className="search-bar">
+					<SearchBar
+						onSubmit={handleSearchButton}
+						inputState={searchValue}
+						setInputState={setSearchValue}
+						placeholder="닉네임을 입력하세요"
+						results={searchResults}
+						disabled={isSearchButtonDisabled}
+					/>
+				</div>
+			)}
 		</Layout>
 	);
 }

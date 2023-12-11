@@ -126,6 +126,7 @@ export default function PostModal() {
 			setToast({ text: '글이 삭제되었습니다.', type: 'success' });
 			setView('MAIN');
 			navigate('/home');
+			setTargetView(null);
 		} finally {
 			setIsDeleteButtonDisabled(false);
 		}

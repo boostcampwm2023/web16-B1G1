@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Button, Modal } from 'shared/ui';
 import TextArea from 'shared/ui/textArea/TextArea';
-import { ModalPortal } from 'shared/ui';
 import Images from './Images';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useViewStore, usePostStore } from 'shared/store';
@@ -45,7 +44,7 @@ export default function WritingModal() {
 	};
 
 	return (
-		<ModalPortal>
+		<>
 			{isClose && (
 				<AlertDialog
 					title="메인화면으로 돌아가시겠습니까?"
@@ -105,7 +104,7 @@ export default function WritingModal() {
 					<Images onModify={setFiles} />
 				</ImagesWrapper>
 			</Modal>
-		</ModalPortal>
+		</>
 	);
 }
 

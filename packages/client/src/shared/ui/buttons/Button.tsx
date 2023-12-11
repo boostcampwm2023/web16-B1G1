@@ -24,6 +24,7 @@ const CustomButton = styled.button<PropsType>`
 	gap: 2px;
 	border-radius: 4px;
 	box-shadow: 0px 2px 10px 5px rgba(13, 111, 252, 0.1);
+	white-space: nowrap;
 
 	&:disabled {
 		cursor: default;

@@ -22,6 +22,7 @@ const CustomButton = styled.button<PropsType>`
 	gap: 4px;
 	background: none;
 	border: none;
+	white-space: nowrap;
 
 	${({ size, theme: { colors } }) => css`
 		${size === 'm' ? Body02ME : Body03ME}

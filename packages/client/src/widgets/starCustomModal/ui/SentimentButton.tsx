@@ -17,9 +17,12 @@ export default function SentimentButton({ content, setColor }: PropsType) {
 	const handleRecommendColor = async () => {
 		if (isButtonDisabled) return;
 		setIsButtonDisabled(true);
-		const res = await getSentimentColor(content);
-		if (res?.status === 200) setColor(res.data.color);
-		setIsButtonDisabled(false);
+		try {
+			const res = await getSentimentColor(content);
+			setColor(res.data.color);
+		} finally {
+			setIsButtonDisabled(false);
+		}
 	};
 
 	return (

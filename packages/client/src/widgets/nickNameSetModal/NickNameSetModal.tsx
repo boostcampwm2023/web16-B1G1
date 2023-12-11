@@ -15,28 +15,31 @@ export default function NickNameSetModal() {
 	const [isSaveButtonDisabled, setIsSaveButtonDisabled] = useState(false);
 
 	const handleSaveButton = async () => {
-    if (isSaveButtonDisabled) return;
+		if (isSaveButtonDisabled) return;
 		setIsSaveButtonDisabled(true);
-		let response;
 
-		if (!platform) {
-			response = await postSignUp({
-				username: id,
-				password: pw,
-				nickname: validNickName,
-			});
-		} else {
-			response = await postSignUp({
-				nickname: validNickName,
-				platform: platform,
-			});
-		}
+		try {
+			let response;
+			if (!platform) {
+				response = await postSignUp({
+					username: id,
+					password: pw,
+					nickname: validNickName,
+				});
+			} else {
+				response = await postSignUp({
+					nickname: validNickName,
+					platform: platform,
+				});
+			}
 
-		if (response) {
-			navigate('/login');
-			setToast({ text: '회원가입이 완료되었습니다.', type: 'success' });
+			if (response) {
+				navigate('/login');
+				setToast({ text: '회원가입이 완료되었습니다.', type: 'success' });
+			}
+		} finally {
+			setIsSaveButtonDisabled(false);
 		}
-    setIsSaveButtonDisabled(false);
 	};
 
 	const handleGoBackButton = () => {

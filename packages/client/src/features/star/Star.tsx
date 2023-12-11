@@ -33,9 +33,9 @@ const Star = forwardRef<THREE.Mesh, PropsType>((props, ref) => {
 	} = props;
 
 	useFrame((state, delta) => {
-		const cameraDistance = innerRef.current.position.distanceTo(
-			state.camera.position,
-		);
+		const cameraDistance = innerRef.current
+			.getWorldPosition(new THREE.Vector3())
+			.distanceTo(state.camera.position);
 		const scale = Math.log((cameraDistance / DISTANCE_LIMIT) * Math.E);
 
 		if (cameraDistance > DISTANCE_LIMIT) {
@@ -62,11 +62,6 @@ const Star = forwardRef<THREE.Mesh, PropsType>((props, ref) => {
 				emissive={color}
 				emissiveIntensity={brightness}
 			/>
-			{/* <meshToonMaterial
-				color={color}
-				emissive={color}
-				emissiveIntensity={brightness}
-			/> */}
 			{children}
 		</mesh>
 	);

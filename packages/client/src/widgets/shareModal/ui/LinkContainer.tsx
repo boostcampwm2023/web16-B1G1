@@ -3,22 +3,22 @@ import { useToastStore } from 'shared/store';
 import { Button, Input } from 'shared/ui';
 import { useState, useEffect } from 'react';
 import { getShareLink } from 'shared/apis/share';
-import useCheckNickName from 'shared/hooks/useCheckNickName';
+import Cookies from 'js-cookie';
 
 export default function LinkContainer() {
 	const [shareLink, setShareLink] = useState('');
 
 	const { setToast } = useToastStore();
 
-	const { owner } = useCheckNickName();
+	const user = Cookies.get('userName');
 
 	useEffect(() => {
-		if (!owner) return;
+		if (!user) return;
 		(async () => {
-			const shareLinkData = await getShareLink(owner);
+			const shareLinkData = await getShareLink(user);
 			setShareLink('https://www.xn--bj0b03z.site/' + 'guest/' + shareLinkData);
 		})();
-	}, [owner]);
+	}, [user]);
 
 	const copyToClipboard = () => {
 		navigator.clipboard.writeText(shareLink);

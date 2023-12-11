@@ -11,14 +11,18 @@ interface PropsType {
 export default function ImageSlider({ imageUrls }: PropsType) {
 	const [imageIndex, setImageIndex] = useState(0);
 
-	const handlePrev = () => {
+	const handlePrev = (e: React.MouseEvent) => {
+		e.preventDefault();
+
 		setImageIndex((index) => {
 			if (index === 0) return imageUrls.length - 1;
 			return index - 1;
 		});
 	};
 
-	const handleNext = () => {
+	const handleNext = (e: React.MouseEvent) => {
+		e.preventDefault();
+
 		setImageIndex((index) => {
 			if (index === imageUrls.length - 1) return 0;
 			return index + 1;
@@ -29,7 +33,7 @@ export default function ImageSlider({ imageUrls }: PropsType) {
 		return (
 			<>
 				{imageUrls.map((_, index) => (
-					<Dot onClick={() => setImageIndex(index)}>
+					<Dot key={index} onClick={() => setImageIndex(index)}>
 						{index === imageIndex ? <CircleDot /> : <Circle />}
 					</Dot>
 				))}
@@ -44,6 +48,7 @@ export default function ImageSlider({ imageUrls }: PropsType) {
 					return <Image key={url} src={url} index={imageIndex} />;
 				})}
 			</CurrentImage>
+
 			{imageUrls.length > 1 && (
 				<>
 					<Button onClick={handlePrev} style={{ left: 0 }}>

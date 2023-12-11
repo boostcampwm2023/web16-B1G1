@@ -98,33 +98,32 @@ export default function StarCustomModal() {
 	);
 
 	return (
-		<form onSubmit={(e) => e.preventDefault()}>
-			<Modal
-				title="별 꾸미기"
-				onClickGoBack={handleGoBack}
-				rightButton={rightButton}
-			>
-				<ModalContents>
-					<SampleScreen
-						shape={shape}
-						setShape={setShape}
-						color={color}
-						size={size}
-						brightness={brightness}
-					/>
+		<Modal
+			title="별 꾸미기"
+			onClickGoBack={handleGoBack}
+			rightButton={rightButton}
+			onSubmit={(e) => e.preventDefault()}
+		>
+			<ModalContents>
+				<SampleScreen
+					shape={shape}
+					setShape={setShape}
+					color={color}
+					size={size}
+					brightness={brightness}
+				/>
 
-					<CustomLayout>
-						<ColorPickerContainer color={color} setColor={setColor} />
-						<SentimentButton content={content} setColor={setColor} />
-						<SizeSlider size={size} setSize={setSize} />
-						<BrightnessSlider
-							brightness={brightness}
-							setBrightness={setBrightness}
-						/>
-					</CustomLayout>
-				</ModalContents>
-			</Modal>
-		</form>
+				<CustomLayout>
+					<ColorPickerContainer color={color} setColor={setColor} />
+					<SentimentButton content={content} setColor={setColor} />
+					<SizeSlider size={size} setSize={setSize} />
+					<BrightnessSlider
+						brightness={brightness}
+						setBrightness={setBrightness}
+					/>
+				</CustomLayout>
+			</ModalContents>
+		</Modal>
 	);
 }
 

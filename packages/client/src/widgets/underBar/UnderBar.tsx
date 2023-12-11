@@ -3,7 +3,7 @@ import { Button } from 'shared/ui';
 import { Title01 } from '../../shared/ui/styles';
 import PlanetEditIcon from '@icons/icon-planetedit-24-white.svg';
 import WriteIcon from '@icons/icon-writte-24-white.svg';
-import { BASE_URL, MAX_WIDTH1, MAX_WIDTH2 } from 'shared/lib/constants';
+import { MAX_WIDTH1, MAX_WIDTH2 } from 'shared/lib/constants';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import instance from 'shared/apis/core/AxiosInterceptor';
@@ -34,10 +34,10 @@ export default function UnderBar() {
 		try {
 			await instance.get(`/auth/signout`);
 
-		Cookies.remove('accessToken');
-		Cookies.remove('refreshToken');
-		Cookies.remove('userName');
-		reset();
+			Cookies.remove('accessToken');
+			Cookies.remove('refreshToken');
+			Cookies.remove('userName');
+			reset();
 
 			navigate('/');
 		} finally {

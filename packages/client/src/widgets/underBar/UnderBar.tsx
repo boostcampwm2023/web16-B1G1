@@ -68,14 +68,16 @@ export default function UnderBar() {
 
 			<ButtonsContainer>
 				<SmallButtonsContainer>
-					<Button
-						size="m"
-						buttonType="Button"
-						onClick={handleLogoutButton}
-						disabled={isLogoutButtonDisabled}
-					>
-						로그아웃
-					</Button>
+					{page !== 'guest' && (
+						<Button
+							size="m"
+							buttonType="Button"
+							onClick={handleLogoutButton}
+							disabled={isLogoutButtonDisabled}
+						>
+							로그아웃
+						</Button>
+					)}
 
 					<Button
 						size="m"

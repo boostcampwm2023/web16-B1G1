@@ -1,5 +1,5 @@
 import { useViewStore } from 'shared/store/useViewStore';
-import { Button, Modal, ModalPortal, TextArea } from 'shared/ui';
+import { Button, Modal, TextArea } from 'shared/ui';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import styled from '@emotion/styled';
@@ -64,32 +64,31 @@ export default function PostModal() {
 		}
 	};
 
-	const rightButton = (
-		<Button
-			size="m"
-			buttonType="warning-border"
-			type="button"
-			onClick={() => {
-				setDeleteModal(true);
-			}}
-			disabled={page !== 'home'}
-		>
-			삭제
-		</Button>
-	);
-
-	const EditButton = (
-		<Button
-			size="m"
-			buttonType="CTA-icon"
-			type="button"
-			onClick={() => {
-				setIsEdit(true);
-			}}
-			disabled={page !== 'home'}
-		>
-			수정
-		</Button>
+	const RightButton = (
+		<ButtonContainer>
+			<Button
+				size="m"
+				buttonType="CTA-icon"
+				type="button"
+				onClick={() => {
+					setIsEdit(true);
+				}}
+				disabled={page !== 'home'}
+			>
+				수정
+			</Button>
+			<Button
+				size="m"
+				buttonType="warning-border"
+				type="button"
+				onClick={() => {
+					setDeleteModal(true);
+				}}
+				disabled={page !== 'home'}
+			>
+				삭제
+			</Button>
+		</ButtonContainer>
 	);
 
 	const EditCancelButton = (
@@ -127,6 +126,7 @@ export default function PostModal() {
 			setToast({ text: '글이 삭제되었습니다.', type: 'success' });
 			setView('MAIN');
 			navigate('/home');
+			setTargetView(null);
 		} finally {
 			setIsDeleteButtonDisabled(false);
 		}
@@ -147,11 +147,11 @@ export default function PostModal() {
 
 	return (
 		data && (
-			<ModalPortal>
+			<>
 				<PostModalLayout
 					title={isEdit ? '글 수정하기' : data.title}
-					rightButton={isEdit ? EditSaveButton : rightButton}
-					topButton={isEdit ? EditCancelButton : EditButton}
+					rightButton={isEdit ? EditSaveButton : page === 'home' && RightButton}
+					topButton={isEdit && EditCancelButton}
 					leftButton={
 						isEdit ? null : <Like postId={postId!} count={data.like_cnt ?? 0} />
 					}
@@ -164,7 +164,7 @@ export default function PostModal() {
 							</ImageContainer>
 						)}
 						{isEdit ? (
-							<TextContainer>
+							<TextContainer style={{ height: '100%' }}>
 								<InputBar
 									id={'postTitle'}
 									placeholder="제목"
@@ -203,7 +203,7 @@ export default function PostModal() {
 						disabled={isDeleteButtonDisabled}
 					/>
 				)}
-			</ModalPortal>
+			</>
 		)
 	);
 }
@@ -233,10 +233,10 @@ const Container = styled.div`
 
 const TextContainer = styled.div`
 	width: 40vw;
-	height: 100%;
 	${({ theme: { colors } }) => ({
 		color: colors.text.secondary,
 	})}
+	word-break: break-all;
 
 	& ol {
 		padding-left: 40px;
@@ -262,4 +262,9 @@ const ImageContainer = styled.div`
 	align-items: center;
 	justify-content: center;
 	margin-bottom: 26px;
+`;
+
+const ButtonContainer = styled.div`
+	display: flex;
+	gap: 8px;
 `;

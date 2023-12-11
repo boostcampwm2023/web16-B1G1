@@ -13,14 +13,14 @@ import {
 } from 'widgets/galaxy/lib/constants';
 import useCheckNickName from 'shared/hooks/useCheckNickName';
 import { FullScreen, useFullScreenHandle } from 'react-full-screen';
-import styled from '@emotion/styled';
-import { keyframes } from '@emotion/react';
 import UnderBar from 'widgets/underBar/UnderBar';
 import UpperBar from 'widgets/upperBar/UpperBar';
 import CoachMarker from 'features/coachMarker/CoachMarker';
 
 export default function Home() {
-	const [isSwitching, setIsSwitching] = useState(false);
+	const [isSwitching, setIsSwitching] = useState<'warp' | 'fade' | 'end'>(
+		'end',
+	);
 	const { text, type } = useToastStore();
 	const { nickName, status } = useCheckNickName();
 
@@ -30,9 +30,11 @@ export default function Home() {
 	const custom = useCustomStore();
 
 	useEffect(() => {
-		setIsSwitching(true);
-
+		if (!JSON.parse(sessionStorage.getItem('isReload') ?? 'false'))
+			setIsSwitching('warp');
 		if (nickName === '') return;
+		sessionStorage.setItem('isReload', 'false');
+
 		getGalaxy(nickName).then((res) => {
 			if (!res.spiral) setSpiral(SPIRAL);
 			else {
@@ -60,6 +62,14 @@ export default function Home() {
 		});
 	}, [nickName]);
 
+	useEffect(() => {
+		const setReload = () => sessionStorage.setItem('isReload', 'true');
+
+		window.addEventListener('beforeunload', setReload);
+
+		return () => window.removeEventListener('beforeunload', setReload);
+	}, []);
+
 	const keyDown = (e: KeyboardEvent) => {
 		if (e.key === 'Escape') {
 			e.preventDefault();
@@ -80,10 +90,11 @@ export default function Home() {
 	return (
 		<FullScreen handle={handleFullScreen}>
 			<Outlet />
-			{status === 'new' && <CoachMarker isFirst={true} />}
 
-			{isSwitching && <WarpScreen setIsSwitching={setIsSwitching} />}
-			{!isSwitching && <FadeoutScreen />}
+			{status === 'new' && <CoachMarker isFirst={true} />}
+			{isSwitching !== 'end' && (
+				<WarpScreen isSwitching={isSwitching} setIsSwitching={setIsSwitching} />
+			)}
 			{text && <Toast type={type}>{text}</Toast>}
 
 			<UpperBar />
@@ -93,24 +104,3 @@ export default function Home() {
 		</FullScreen>
 	);
 }
-
-const fadeout = keyframes`
-	0% {
-		opacity: 1;
-	}
-	100% {
-		opacity: 0;
-		display: none;
-	}
-`;
-
-const FadeoutScreen = styled.div`
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	z-index: 101;
-	background-color: white;
-	animation: ${fadeout} 0.5s linear forwards;
-`;

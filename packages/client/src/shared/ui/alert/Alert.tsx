@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import { Body02ME, Title01 } from '../styles';
 import { css } from '@emotion/react';
-import { Button } from '..';
+import { Button, ModalPortal } from '..';
 import { useState, useEffect } from 'react';
 
 interface PropsTypes extends React.HTMLAttributes<HTMLDivElement> {
@@ -29,23 +29,25 @@ export default function Alert({ title, description, ...args }: PropsTypes) {
 	}, []);
 
 	return (
-		<Overlay>
-			<Layout {...args}>
-				<Title>{title}</Title>
-				{description && <Description>{description}</Description>}
+		<ModalPortal>
+			<Overlay>
+				<Layout {...args}>
+					<Title>{title}</Title>
+					{description && <Description>{description}</Description>}
 
-				<ButtonWrapper>
-					<Button
-						buttonType="warning"
-						size="m"
-						type="button"
-						onClick={handleConfirmButton}
-					>
-						확인
-					</Button>
-				</ButtonWrapper>
-			</Layout>
-		</Overlay>
+					<ButtonWrapper>
+						<Button
+							buttonType="warning"
+							size="m"
+							type="button"
+							onClick={handleConfirmButton}
+						>
+							확인
+						</Button>
+					</ButtonWrapper>
+				</Layout>
+			</Overlay>
+		</ModalPortal>
 	);
 }
 

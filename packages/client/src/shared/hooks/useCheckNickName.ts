@@ -1,18 +1,18 @@
 import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { getSignInInfo } from 'shared/apis';
 import { getShareLinkHostNickName } from 'shared/apis/share';
+import Cookies from 'js-cookie';
 
 export default function useCheckNickName() {
 	const location = useLocation();
 	const [page, setPage] = useState('');
 	const [nickName, setNickName] = useState('');
 	const [status, setStatus] = useState('');
-	const [owner, setOwner] = useState('');
+	const { hostNickname } = useParams();
 
 	useEffect(() => {
 		const path = location.pathname.split('/')[1];
-		const hostNickName = location.pathname.split('/')[2];
 
 		switch (path) {
 			case 'home':
@@ -21,19 +21,19 @@ export default function useCheckNickName() {
 					const res = await getSignInInfo();
 					setNickName(res.nickname);
 					setStatus(res.status);
-					setOwner(res.nickname);
+					Cookies.set('userName', res.nickname);
 				})();
 				break;
 
 			case 'search':
 				setPage('search');
-				setNickName(hostNickName);
+				setNickName(hostNickname!);
 				break;
 
 			case 'guest':
 				setPage('guest');
 				(async () => {
-					const res = await getShareLinkHostNickName(hostNickName);
+					const res = await getShareLinkHostNickName(hostNickname!);
 					setNickName(res);
 				})();
 				break;
@@ -42,5 +42,5 @@ export default function useCheckNickName() {
 		}
 	}, [location]);
 
-	return { page, nickName, status, owner };
+	return { page, nickName, status };
 }

@@ -98,9 +98,8 @@ const Tabs = styled.ul`
 	}
 `;
 
-const Tab = styled.li`
+const Tab = styled.div`
 	cursor: pointer;
-	list-style: none;
 `;
 
 const TextInput = styled.textarea<{ css: SerializedStyles }>`
@@ -150,6 +149,7 @@ const Wrapper = styled.div<{ css: SerializedStyles }>`
 	margin-top: 9px;
 	margin-right: 9px;
 	color: ${theme.colors.text.secondary};
+	word-break: break-all;
 
 	& ol {
 		padding-left: 40px;

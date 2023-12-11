@@ -9,7 +9,7 @@ import { useCameraStore } from 'shared/store/useCameraStore.ts';
 import { Posts } from 'entities/posts';
 import styled from '@emotion/styled';
 import { useViewStore } from 'shared/store';
-import { CameraLight } from './ui';
+import { CameraLight, LevaTheme } from './ui';
 import { useState } from 'react';
 import { PerformanceMonitor } from '@react-three/drei';
 
@@ -22,12 +22,12 @@ export default function Screen() {
 
 	const { cameraToCurrentView, setCameraToCurrentView } = useCameraStore();
 
-	const { intensity, mipmapBlur } = useControls('Bloom', {
-		intensity: { value: 0.4, min: 0, max: 1.5, step: 0.01 },
-		mipmapBlur: { value: false },
+	const { 밝기, 블러효과 } = useControls('별 속성', {
+		밝기: { value: 0.4, min: 0, max: 1.5, step: 0.01 },
+		블러효과: { value: false },
 	});
-	const { wheelSpeed } = useControls('Controls', {
-		wheelSpeed: { value: 3, min: 0.1, max: 30, step: 0.1 },
+	const { 휠속도 } = useControls('컨트롤', {
+		휠속도: { value: 3, min: 0.1, max: 30, step: 0.1 },
 	});
 
 	const [dpr, setDpr] = useState(1);
@@ -38,19 +38,18 @@ export default function Screen() {
 				dpr={dpr}
 				camera={camera}
 				onWheel={(e) =>
-					setCameraToCurrentView(cameraToCurrentView + e.deltaY * wheelSpeed)
+					setCameraToCurrentView(cameraToCurrentView + e.deltaY * 휠속도)
 				}
-				frameloop="demand"
 			>
 				<PerformanceMonitor
 					onChange={({ factor }) => {
-						setDpr(0.5 + factor);
+						setDpr(0.5 + factor / 2);
 					}}
 				/>
 				<EffectComposer>
 					<Bloom
-						intensity={intensity}
-						mipmapBlur={mipmapBlur}
+						intensity={밝기}
+						mipmapBlur={블러효과}
 						luminanceThreshold={0.9}
 						luminanceSmoothing={0.025}
 					/>
@@ -66,7 +65,14 @@ export default function Screen() {
 				<CameraLight />
 			</Canvas>
 			<LevaWrapper className="leva">
-				<Leva fill collapsed hidden={view !== 'MAIN' && view !== 'DETAIL'} />
+				<Leva
+					fill
+					collapsed
+					hideCopyButton
+					hidden={view !== 'MAIN' && view !== 'DETAIL'}
+					theme={LevaTheme}
+					titleBar={{ filter: false }}
+				/>
 			</LevaWrapper>
 		</div>
 	);
@@ -74,7 +80,7 @@ export default function Screen() {
 
 const LevaWrapper = styled.div`
 	position: absolute;
-	top: 5%;
+	top: 37px;
 	right: 50%;
 	transform: translateX(50%);
 	z-index: 100;

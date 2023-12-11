@@ -6,8 +6,8 @@ import styled from '@emotion/styled';
 import { useViewStore } from 'shared/store/useViewStore';
 import * as THREE from 'three';
 import { StarType } from 'shared/lib/types/star';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import theme from 'shared/ui/styles/theme';
 import Star from 'features/star/Star';
 
@@ -26,6 +26,12 @@ export default function Post({ data, postId, title }: PropsType) {
 
 	const navigate = useNavigate();
 	const location = useLocation();
+
+	const { postId: id } = useParams();
+
+	useEffect(() => {
+		if (id && Number(id) === postId) setTargetView(meshRef.current);
+	}, [id]);
 
 	const handleMeshClick = (e: ThreeEvent<MouseEvent>) => {
 		e.stopPropagation();

@@ -17,8 +17,9 @@ export default function UpperBar() {
 	const [isSearchButtonDisabled, setIsSearchButtonDisabled] = useState(false);
 
 	const { setToast } = useToastStore();
-	const { page, nickName, owner } = useCheckNickName();
+	const { page, nickName } = useCheckNickName();
 	const { view } = useViewStore();
+	const user = sessionStorage.getItem('user');
 
 	const navigate = useNavigate();
 
@@ -44,7 +45,7 @@ export default function UpperBar() {
 			const nickNameDatas = await getNickNames(debouncedSearchValue);
 			const nickNames = nickNameDatas
 				.map((data: { nickname: string; id: number }) => data.nickname)
-				.filter((nickName: string) => nickName !== owner)
+				.filter((nickName: string) => nickName !== user)
 				.slice(0, 5);
 
 			setSearchResults(nickNames);
@@ -58,7 +59,7 @@ export default function UpperBar() {
 			await getIsAvailableNickName(searchValue);
 			setToast({ text: '존재하지 않는 닉네임입니다.', type: 'error' });
 		} catch (error) {
-			if (searchValue === owner)
+			if (searchValue === user)
 				return setToast({
 					text: '내 은하로는 이동할 수 없습니다.',
 					type: 'error',

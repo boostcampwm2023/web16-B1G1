@@ -20,7 +20,9 @@ import UpperBar from 'widgets/upperBar/UpperBar';
 import CoachMarker from 'features/coachMarker/CoachMarker';
 
 export default function Home() {
-	const [isSwitching, setIsSwitching] = useState(false);
+	const [isSwitching, setIsSwitching] = useState<'warp' | 'fade' | 'end'>(
+		'end',
+	);
 	const { text, type } = useToastStore();
 	const { nickName, status } = useCheckNickName();
 
@@ -30,9 +32,11 @@ export default function Home() {
 	const custom = useCustomStore();
 
 	useEffect(() => {
-		setIsSwitching(true);
-
+		if (!JSON.parse(sessionStorage.getItem('isReload') ?? 'false'))
+			setIsSwitching('warp');
 		if (nickName === '') return;
+		sessionStorage.setItem('isReload', 'false');
+
 		getGalaxy(nickName).then((res) => {
 			if (!res.spiral) setSpiral(SPIRAL);
 			else {
@@ -60,6 +64,14 @@ export default function Home() {
 		});
 	}, [nickName]);
 
+	useEffect(() => {
+		const setReload = () => sessionStorage.setItem('isReload', 'true');
+
+		window.addEventListener('beforeunload', setReload);
+
+		return () => window.removeEventListener('beforeunload', setReload);
+	}, []);
+
 	const keyDown = (e: KeyboardEvent) => {
 		if (e.key === 'Escape') {
 			e.preventDefault();
@@ -82,8 +94,10 @@ export default function Home() {
 			<Outlet />
 			{status === 'new' && <CoachMarker isFirst={true} />}
 
-			{isSwitching && <WarpScreen setIsSwitching={setIsSwitching} />}
-			{!isSwitching && <FadeoutScreen />}
+			{isSwitching === 'warp' && <WarpScreen setIsSwitching={setIsSwitching} />}
+			{isSwitching === 'fade' && (
+				<FadeoutScreen onAnimationEnd={() => setIsSwitching('end')} />
+			)}
 			{text && <Toast type={type}>{text}</Toast>}
 
 			<UpperBar />

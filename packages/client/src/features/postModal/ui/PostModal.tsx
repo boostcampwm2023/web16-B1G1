@@ -150,8 +150,8 @@ export default function PostModal() {
 			<ModalPortal>
 				<PostModalLayout
 					title={isEdit ? '글 수정하기' : data.title}
-					rightButton={isEdit ? EditSaveButton : rightButton}
-					topButton={isEdit ? EditCancelButton : EditButton}
+					rightButton={isEdit ? EditSaveButton : page === 'home' && rightButton}
+					topButton={isEdit ? EditCancelButton : page === 'home' && EditButton}
 					leftButton={
 						isEdit ? null : <Like postId={postId!} count={data.like_cnt ?? 0} />
 					}

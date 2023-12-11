@@ -14,7 +14,7 @@ import SpaceWarp from './ui/SpaceWarp';
 import BrightSphere from './ui/BrightSphere';
 
 interface PropsType {
-	setIsSwitching: React.Dispatch<React.SetStateAction<boolean>>;
+	setIsSwitching: React.Dispatch<React.SetStateAction<'end' | 'warp' | 'fade'>>;
 }
 
 export default function WarpScreen({ setIsSwitching }: PropsType) {

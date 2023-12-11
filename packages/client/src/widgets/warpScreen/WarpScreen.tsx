@@ -14,10 +14,11 @@ import SpaceWarp from './ui/SpaceWarp';
 import BrightSphere from './ui/BrightSphere';
 import styled from '@emotion/styled';
 import { keyframes } from '@emotion/react';
+import { isWeakSet } from 'util/types';
 
 interface PropsType {
-	isSwitching: boolean;
-	setIsSwitching: React.Dispatch<React.SetStateAction<boolean>>;
+	isSwitching: 'warp' | 'fade' | 'end';
+	setIsSwitching: React.Dispatch<React.SetStateAction<'warp' | 'fade' | 'end'>>;
 }
 
 export default function WarpScreen({ isSwitching, setIsSwitching }: PropsType) {
@@ -34,8 +35,7 @@ export default function WarpScreen({ isSwitching, setIsSwitching }: PropsType) {
 		zIndex: 999,
 		backgroundColor: '#000000',
 	};
-
-	if (!isSwitching) return <FadeoutScreen />;
+	if (isSwitching === 'fade') return <FadeoutScreen />;
 
 	return (
 		<Canvas camera={camera} style={canvasStyle}>

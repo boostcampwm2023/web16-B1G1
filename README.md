@@ -28,6 +28,9 @@
 
 ### 기능 설명
 
+
+<img src="https://github.com/boostcampwm2023/web16-B1G1/assets/80266418/990cea56-267c-46b5-bdf3-35cb49e9bee7" width="700px"/>
+
 1. 로고 화면 -> 로그인 화면 -> 로그인하고 은하 들어가는 것까지
 2. 회원가입하고 은하 들어가는 것까지
 3. 코치마크 보여주기

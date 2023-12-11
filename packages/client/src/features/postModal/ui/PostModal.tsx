@@ -164,7 +164,7 @@ export default function PostModal() {
 							</ImageContainer>
 						)}
 						{isEdit ? (
-							<TextContainer>
+							<TextContainer style={{ height: '100%' }}>
 								<InputBar
 									id={'postTitle'}
 									placeholder="제목"
@@ -233,10 +233,10 @@ const Container = styled.div`
 
 const TextContainer = styled.div`
 	width: 40vw;
-	height: 100%;
 	${({ theme: { colors } }) => ({
 		color: colors.text.secondary,
 	})}
+	word-break: break-all;
 
 	& ol {
 		padding-left: 40px;

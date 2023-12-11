@@ -2639,6 +2639,37 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["@nestjs/throttler", [\
+      ["npm:5.1.0", {\
+        "packageLocation": "./.yarn/cache/@nestjs-throttler-npm-5.1.0-12d7d9629c-8dc900ca1d.zip/node_modules/@nestjs/throttler/",\
+        "packageDependencies": [\
+          ["@nestjs/throttler", "npm:5.1.0"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:2499dbb93d824027565d71b0716c4fb8b548ad61955d0a0286bfb3c5b4058e227894b6691d96808c00f576db14870018375210362c26ee321ea99fd6ed041c74#npm:5.1.0", {\
+        "packageLocation": "./.yarn/__virtual__/@nestjs-throttler-virtual-676666150b/0/cache/@nestjs-throttler-npm-5.1.0-12d7d9629c-8dc900ca1d.zip/node_modules/@nestjs/throttler/",\
+        "packageDependencies": [\
+          ["@nestjs/throttler", "virtual:2499dbb93d824027565d71b0716c4fb8b548ad61955d0a0286bfb3c5b4058e227894b6691d96808c00f576db14870018375210362c26ee321ea99fd6ed041c74#npm:5.1.0"],\
+          ["@nestjs/common", "virtual:2499dbb93d824027565d71b0716c4fb8b548ad61955d0a0286bfb3c5b4058e227894b6691d96808c00f576db14870018375210362c26ee321ea99fd6ed041c74#npm:10.2.8"],\
+          ["@nestjs/core", "virtual:2499dbb93d824027565d71b0716c4fb8b548ad61955d0a0286bfb3c5b4058e227894b6691d96808c00f576db14870018375210362c26ee321ea99fd6ed041c74#npm:10.2.8"],\
+          ["@types/nestjs__common", null],\
+          ["@types/nestjs__core", null],\
+          ["@types/reflect-metadata", null],\
+          ["md5", "npm:2.3.0"],\
+          ["reflect-metadata", "npm:0.1.13"]\
+        ],\
+        "packagePeers": [\
+          "@nestjs/common",\
+          "@nestjs/core",\
+          "@types/nestjs__common",\
+          "@types/nestjs__core",\
+          "@types/reflect-metadata",\
+          "reflect-metadata"\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["@nestjs/typeorm", [\
       ["npm:10.0.0", {\
         "packageLocation": "./.yarn/cache/@nestjs-typeorm-npm-10.0.0-74e9c291bc-716f7e9596.zip/node_modules/@nestjs/typeorm/",\
@@ -5416,6 +5447,15 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["charenc", [\
+      ["npm:0.0.2", {\
+        "packageLocation": "./.yarn/cache/charenc-npm-0.0.2-aca0c2f207-a45ec39363.zip/node_modules/charenc/",\
+        "packageDependencies": [\
+          ["charenc", "npm:0.0.2"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["chart.js", [\
       ["npm:4.4.1", {\
         "packageLocation": "./.yarn/cache/chart.js-npm-4.4.1-bea8f3ff67-ef0cd10118.zip/node_modules/chart.js/",\
@@ -5969,6 +6009,15 @@ const RAW_RUNTIME_STATE =
           ["path-key", "npm:3.1.1"],\
           ["shebang-command", "npm:2.0.0"],\
           ["which", "npm:2.0.2"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["crypt", [\
+      ["npm:0.0.2", {\
+        "packageLocation": "./.yarn/cache/crypt-npm-0.0.2-033627d94f-adbf263441.zip/node_modules/crypt/",\
+        "packageDependencies": [\
+          ["crypt", "npm:0.0.2"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -8036,6 +8085,15 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["is-buffer", [\
+      ["npm:1.1.6", {\
+        "packageLocation": "./.yarn/cache/is-buffer-npm-1.1.6-08199d9ccc-ae18aa0b6e.zip/node_modules/is-buffer/",\
+        "packageDependencies": [\
+          ["is-buffer", "npm:1.1.6"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["is-callable", [\
       ["npm:1.2.7", {\
         "packageLocation": "./.yarn/cache/is-callable-npm-1.2.7-808a303e61-ceebaeb9d9.zip/node_modules/is-callable/",\
@@ -9439,6 +9497,18 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["makeerror", "npm:1.0.12"],\
           ["tmpl", "npm:1.0.5"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["md5", [\
+      ["npm:2.3.0", {\
+        "packageLocation": "./.yarn/cache/md5-npm-2.3.0-86c49d3915-14a21d597d.zip/node_modules/md5/",\
+        "packageDependencies": [\
+          ["md5", "npm:2.3.0"],\
+          ["charenc", "npm:0.0.2"],\
+          ["crypt", "npm:0.0.2"],\
+          ["is-buffer", "npm:1.1.6"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -11501,6 +11571,7 @@ const RAW_RUNTIME_STATE =
           ["@nestjs/schematics", "virtual:2499dbb93d824027565d71b0716c4fb8b548ad61955d0a0286bfb3c5b4058e227894b6691d96808c00f576db14870018375210362c26ee321ea99fd6ed041c74#npm:10.0.3"],\
           ["@nestjs/swagger", "virtual:2499dbb93d824027565d71b0716c4fb8b548ad61955d0a0286bfb3c5b4058e227894b6691d96808c00f576db14870018375210362c26ee321ea99fd6ed041c74#npm:7.1.16"],\
           ["@nestjs/testing", "virtual:2499dbb93d824027565d71b0716c4fb8b548ad61955d0a0286bfb3c5b4058e227894b6691d96808c00f576db14870018375210362c26ee321ea99fd6ed041c74#npm:10.2.8"],\
+          ["@nestjs/throttler", "virtual:2499dbb93d824027565d71b0716c4fb8b548ad61955d0a0286bfb3c5b4058e227894b6691d96808c00f576db14870018375210362c26ee321ea99fd6ed041c74#npm:5.1.0"],\
           ["@nestjs/typeorm", "virtual:2499dbb93d824027565d71b0716c4fb8b548ad61955d0a0286bfb3c5b4058e227894b6691d96808c00f576db14870018375210362c26ee321ea99fd6ed041c74#npm:10.0.0"],\
           ["@types/cookie-parser", "npm:1.4.6"],\
           ["@types/express", "npm:4.17.21"],\

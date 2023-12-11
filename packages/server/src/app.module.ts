@@ -9,6 +9,7 @@ import { StarModule } from './star/star.module';
 import { GalaxyModule } from './galaxy/galaxy.module';
 import { AdminModule } from './admin/admin.module';
 import { SentimentModule } from './sentiment/sentiment.module';
+import { ThrottlerModule } from '@nestjs/throttler';
 
 @Module({
 	imports: [
@@ -20,6 +21,12 @@ import { SentimentModule } from './sentiment/sentiment.module';
 		GalaxyModule,
 		AdminModule,
 		SentimentModule,
+		ThrottlerModule.forRoot([
+			{
+				ttl: 10000, // 10초에
+				limit: 5, // 5번까지 요청 가능
+			},
+		]),
 	],
 })
 export class AppModule {}

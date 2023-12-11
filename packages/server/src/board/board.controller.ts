@@ -36,6 +36,7 @@ import { DeleteResult } from 'typeorm';
 import { GetIsLikedSwaggerDecorator } from './decorators/swagger/get-is-liked-swagged.decorator';
 import { HttpExceptionFilter } from '../exception-filter/http.exception-filter';
 import { BoardService } from './board.service';
+import { ThrottlerGuard } from '@nestjs/throttler';
 
 @Controller('post')
 @UseInterceptors(LogInterceptor)
@@ -46,6 +47,7 @@ export class BoardController {
 
 	@Post()
 	@UseGuards(CookieAuthGuard)
+	@UseGuards(ThrottlerGuard)
 	@UseInterceptors(FilesInterceptor('file', 5))
 	@UsePipes(ValidationPipe)
 	@CreateBoardSwaggerDecorator()
@@ -113,6 +115,7 @@ export class BoardController {
 
 	@Patch(':id/like')
 	@UseGuards(CookieAuthGuard)
+	@UseGuards(ThrottlerGuard)
 	@UsePipes(ValidationPipe)
 	@PatchLikeSwaggerDecorator()
 	async patchLike(

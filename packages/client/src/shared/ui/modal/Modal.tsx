@@ -5,7 +5,7 @@ import { css } from '@emotion/react';
 import goBackIcon from '@icons/icon-back-32-white.svg';
 import { IconButton, ModalPortal } from '..';
 
-interface PropsTypes extends React.HTMLAttributes<HTMLDivElement> {
+interface PropsTypes extends React.HTMLAttributes<HTMLFormElement> {
 	title: string;
 	children: ReactNode;
 
@@ -72,7 +72,7 @@ const Overlay = styled.div`
 	z-index: 998;
 `;
 
-const Layout = styled.div`
+const Layout = styled.form`
 	position: absolute;
 	top: 50%;
 	left: 50%;

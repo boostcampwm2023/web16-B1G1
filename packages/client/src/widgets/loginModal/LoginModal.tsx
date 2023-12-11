@@ -40,29 +40,26 @@ export default function LoginModal() {
 	};
 
 	return (
-		<form
+		<Modal
+			title="로그인"
+			topButton={<TopButton />}
+			rightButton={
+				<RightButton disabled={!isValid() || isSubmitButtonDisabled} />
+			}
+			leftButton={<LeftButton onClick={() => navigate('/signup')} />}
+			onClickGoBack={() => navigate('/')}
+			style={{ width: '516px' }}
 			onSubmit={(e) => {
 				e.preventDefault();
 				handleLoginSubmit();
 			}}
 		>
-			<Modal
-				title="로그인"
-				topButton={<TopButton />}
-				rightButton={
-					<RightButton disabled={!isValid() || isSubmitButtonDisabled} />
-				}
-				leftButton={<LeftButton onClick={() => navigate('/signup')} />}
-				onClickGoBack={() => navigate('/')}
-				style={{ width: '516px' }}
-			>
-				<LoginContent
-					useId={[id, setId]}
-					useIdState={[idState, setIdState]}
-					usePassword={[password, setPassword]}
-					usePasswordState={[passwordState, setPasswordState]}
-				/>
-			</Modal>
-		</form>
+			<LoginContent
+				useId={[id, setId]}
+				useIdState={[idState, setIdState]}
+				usePassword={[password, setPassword]}
+				usePasswordState={[passwordState, setPasswordState]}
+			/>
+		</Modal>
 	);
 }

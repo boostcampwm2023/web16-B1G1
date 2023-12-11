@@ -14,7 +14,6 @@ import SpaceWarp from './ui/SpaceWarp';
 import BrightSphere from './ui/BrightSphere';
 import styled from '@emotion/styled';
 import { keyframes } from '@emotion/react';
-import { isWeakSet } from 'util/types';
 
 interface PropsType {
 	isSwitching: 'warp' | 'fade' | 'end';

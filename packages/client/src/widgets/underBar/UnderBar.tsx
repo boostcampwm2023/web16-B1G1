@@ -149,7 +149,7 @@ const Layout = styled.div<{ view: string }>`
 const NameContainer = styled.div`
 	display: flex;
 	align-items: center;
-	gap: 24px;
+	gap: 16px;
 `;
 
 const ButtonsContainer = styled.div`

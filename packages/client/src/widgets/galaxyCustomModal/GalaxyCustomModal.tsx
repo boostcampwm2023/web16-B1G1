@@ -30,22 +30,23 @@ export default function GalaxyCustomModal() {
 		e.preventDefault();
 		if (isSubmitButtonDisabled) return;
 		setIsSubmitButtonDisabled(true);
-		try {
-			const galaxyStyle = {
-				spiral: galaxy.spiral !== spiral ? spiral : undefined,
-				start: galaxy.start !== start ? start : undefined,
-				thickness: galaxy.thickness !== thickness ? thickness : undefined,
-				zDist: galaxy.zDist !== zDist ? zDist : undefined,
-			};
 
-			galaxy.setSpiral(spiral);
-			galaxy.setStart(start);
-			galaxy.setThickness(thickness);
-			galaxy.setZDist(zDist);
+		const galaxyStyle = {
+			spiral: galaxy.spiral !== spiral ? spiral : undefined,
+			start: galaxy.start !== start ? start : undefined,
+			thickness: galaxy.thickness !== thickness ? thickness : undefined,
+			zDist: galaxy.zDist !== zDist ? zDist : undefined,
+		};
+
+		galaxy.setSpiral(spiral);
+		galaxy.setStart(start);
+		galaxy.setThickness(thickness);
+		galaxy.setZDist(zDist);
+
+		try {
 			await postGalaxy(galaxyStyle);
 
 			setToast({ text: '은하가 수정되었습니다.', type: 'success' });
-
 			navigate('/home');
 			setView('MAIN');
 		} finally {

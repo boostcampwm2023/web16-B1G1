@@ -57,17 +57,17 @@ export default function UpperBar() {
 		setIsSearchButtonDisabled(true);
 		try {
 			await checkExistNickname(searchValue);
-			navigate(`/search/${searchValue}`);
-			setSearchValue('');
-			setDebouncedSearchValue('');
-			setSearchResults([]);
-		} catch (error) {
 			if (searchValue === user)
 				return setToast({
 					text: '내 은하로는 이동할 수 없습니다.',
 					type: 'error',
 				});
-			return setToast({
+			navigate(`/search/${searchValue}`);
+			setSearchValue('');
+			setDebouncedSearchValue('');
+			setSearchResults([]);
+		} catch (error) {
+			setToast({
 				text: '존재하지 않는 유저입니다.',
 				type: 'error',
 			});

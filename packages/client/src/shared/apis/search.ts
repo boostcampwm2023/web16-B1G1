@@ -8,3 +8,12 @@ export const getNickNames = async (nickName: string) => {
 
 	return data;
 };
+
+export const checkExistNickname = async (nickName: string) => {
+	const { data } = await instance({
+		method: 'GET',
+		url: `/auth/check-nickname?nickname=${nickName}`,
+	});
+	if (data === false) return Promise.reject();
+	return data;
+};

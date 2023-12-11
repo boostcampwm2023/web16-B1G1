@@ -3,7 +3,7 @@ import { Body02ME, Title02 } from '../styles';
 import { ReactNode } from 'react';
 import { css } from '@emotion/react';
 import goBackIcon from '@icons/icon-back-32-white.svg';
-import { IconButton } from '..';
+import { IconButton, ModalPortal } from '..';
 
 interface PropsTypes extends React.HTMLAttributes<HTMLDivElement> {
 	title: string;
@@ -29,35 +29,37 @@ export default function Modal({
 	const isButtonExist = leftButton || rightButton;
 
 	return (
-		<Overlay>
-			<Layout {...args}>
-				{onClickGoBack && (
-					<IconButton onClick={onClickGoBack} type="button">
-						<img src={goBackIcon} alt="뒤로가기 버튼" />
-					</IconButton>
-				)}
-
-				<MainLayout>
-					<UpperLayout>
-						<TitleLayout>
-							<Title>{title}</Title>
-							{topButton}
-						</TitleLayout>
-
-						{description && <Description>{description}</Description>}
-					</UpperLayout>
-
-					{children}
-
-					{isButtonExist && (
-						<ButtonLayout>
-							<div>{leftButton}</div>
-							<div>{rightButton}</div>
-						</ButtonLayout>
+		<ModalPortal>
+			<Overlay>
+				<Layout {...args}>
+					{onClickGoBack && (
+						<IconButton onClick={onClickGoBack} type="button">
+							<img src={goBackIcon} alt="뒤로가기 버튼" />
+						</IconButton>
 					)}
-				</MainLayout>
-			</Layout>
-		</Overlay>
+
+					<MainLayout>
+						<UpperLayout>
+							<TitleLayout>
+								<Title>{title}</Title>
+								{topButton}
+							</TitleLayout>
+
+							{description && <Description>{description}</Description>}
+						</UpperLayout>
+
+						{children}
+
+						{isButtonExist && (
+							<ButtonLayout>
+								<div>{leftButton}</div>
+								<div>{rightButton}</div>
+							</ButtonLayout>
+						)}
+					</MainLayout>
+				</Layout>
+			</Overlay>
+		</ModalPortal>
 	);
 }
 

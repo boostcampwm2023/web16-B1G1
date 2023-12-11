@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import { Body02ME, Title01 } from '../styles';
 import { css } from '@emotion/react';
-import { Button } from '..';
+import { Button, ModalPortal } from '..';
 
 interface PropsTypes extends React.HTMLAttributes<HTMLDivElement> {
 	title: string;
@@ -24,32 +24,34 @@ export default function AlertDialog({
 	...args
 }: PropsTypes) {
 	return (
-		<Overlay>
-			<Layout {...args}>
-				<Title>{title}</Title>
-				{description && <Description>{description}</Description>}
+		<ModalPortal>
+			<Overlay>
+				<Layout {...args}>
+					<Title>{title}</Title>
+					{description && <Description>{description}</Description>}
 
-				<ButtonsContainer>
-					<Button
-						buttonType="Button"
-						size="m"
-						type="button"
-						onClick={onClickCancelButton}
-					>
-						{cancelButtonText}
-					</Button>
-					<Button
-						buttonType="warning"
-						size="m"
-						type="button"
-						onClick={onClickActionButton}
-						disabled={disabled}
-					>
-						{actionButtonText}
-					</Button>
-				</ButtonsContainer>
-			</Layout>
-		</Overlay>
+					<ButtonsContainer>
+						<Button
+							buttonType="Button"
+							size="m"
+							type="button"
+							onClick={onClickCancelButton}
+						>
+							{cancelButtonText}
+						</Button>
+						<Button
+							buttonType="warning"
+							size="m"
+							type="button"
+							onClick={onClickActionButton}
+							disabled={disabled}
+						>
+							{actionButtonText}
+						</Button>
+					</ButtonsContainer>
+				</Layout>
+			</Overlay>
+		</ModalPortal>
 	);
 }
 

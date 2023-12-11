@@ -31,15 +31,18 @@ export default function UnderBar() {
 	const handleLogoutButton = async () => {
 		if (isLogoutButtonDisabled) return;
 		setIsLogoutButtonDisabled(true);
-		await instance.get(`${BASE_URL}auth/signout`);
+		try {
+			await instance.get(`/auth/signout`);
 
 		Cookies.remove('accessToken');
 		Cookies.remove('refreshToken');
 		Cookies.remove('userName');
 		reset();
 
-		setIsLogoutButtonDisabled(false);
-		navigate('/');
+			navigate('/');
+		} finally {
+			setIsLogoutButtonDisabled(false);
+		}
 	};
 
 	const handleShareButton = () => {
@@ -66,14 +69,16 @@ export default function UnderBar() {
 
 			<ButtonsContainer>
 				<SmallButtonsContainer>
-					<Button
-						size="m"
-						buttonType="Button"
-						onClick={handleLogoutButton}
-						disabled={isLogoutButtonDisabled}
-					>
-						로그아웃
-					</Button>
+					{page !== 'guest' && (
+						<Button
+							size="m"
+							buttonType="Button"
+							onClick={handleLogoutButton}
+							disabled={isLogoutButtonDisabled}
+						>
+							로그아웃
+						</Button>
+					)}
 
 					{isMyPage && (
 						<Button
@@ -146,7 +151,7 @@ const Layout = styled.div<{ view: string }>`
 const NameContainer = styled.div`
 	display: flex;
 	align-items: center;
-	gap: 24px;
+	gap: 16px;
 `;
 
 const ButtonsContainer = styled.div`

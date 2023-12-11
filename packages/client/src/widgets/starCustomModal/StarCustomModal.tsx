@@ -57,25 +57,26 @@ export default function StarCustomModal() {
 	const handleSubmit = async () => {
 		if (isSubmitButtonDisabled) return;
 		setIsSubmitButtonDisabled(true);
-		const existingStars = await getMyPost();
-		const starData = {
-			shape: shapeTypes[shape],
-			color,
-			size,
-			brightness,
-			position: await generateStarPosition(existingStars, size),
-		};
-		const formData = new FormData();
-
-		formData.append('star', JSON.stringify(starData));
-		formData.append('title', title);
-		formData.append('content', content);
-
-		if (files) {
-			for (let i = 0; i < files.length; i++) formData.append('file', files[i]);
-		}
-
 		try {
+			const existingStars = await getMyPost();
+			const starData = {
+				shape: shapeTypes[shape],
+				color,
+				size,
+				brightness,
+				position: await generateStarPosition(existingStars, size),
+			};
+			const formData = new FormData();
+
+			formData.append('star', JSON.stringify(starData));
+			formData.append('title', title);
+			formData.append('content', content);
+
+			if (files) {
+				for (let i = 0; i < files.length; i++)
+					formData.append('file', files[i]);
+			}
+
 			await sendPost(formData);
 			setToast({ text: '별을 생성했습니다.', type: 'success' });
 			setView('MAIN');

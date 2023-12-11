@@ -3,8 +3,7 @@ import { IconButton, Search } from 'shared/ui';
 import goBackIcon from '@icons/icon-back-32-white.svg';
 import { MAX_WIDTH1, MAX_WIDTH2 } from '@constants';
 import { useState, useEffect } from 'react';
-import { getNickNames } from 'shared/apis/search';
-import { getIsAvailableNickName } from 'shared/apis';
+import { checkExistNickname, getNickNames } from 'shared/apis/search';
 import { useToastStore, useViewStore } from 'shared/store';
 import { useNavigate } from 'react-router-dom';
 import useCheckNickName from 'shared/hooks/useCheckNickName';
@@ -57,19 +56,21 @@ export default function UpperBar() {
 		if (isSearchButtonDisabled) return;
 		setIsSearchButtonDisabled(true);
 		try {
-			await getIsAvailableNickName(searchValue);
-			setToast({ text: '존재하지 않는 닉네임입니다.', type: 'error' });
+			await checkExistNickname(searchValue);
+			navigate(`/search/${searchValue}`);
+			setSearchValue('');
+			setDebouncedSearchValue('');
+			setSearchResults([]);
 		} catch (error) {
 			if (searchValue === user)
 				return setToast({
 					text: '내 은하로는 이동할 수 없습니다.',
 					type: 'error',
 				});
-
-			navigate(`/search/${searchValue}`);
-			setSearchValue('');
-			setDebouncedSearchValue('');
-			setSearchResults([]);
+			return setToast({
+				text: '존재하지 않는 유저입니다.',
+				type: 'error',
+			});
 		} finally {
 			setIsSearchButtonDisabled(false);
 		}

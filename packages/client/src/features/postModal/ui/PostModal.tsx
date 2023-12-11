@@ -1,5 +1,5 @@
 import { useViewStore } from 'shared/store/useViewStore';
-import { Button, Modal, ModalPortal, TextArea } from 'shared/ui';
+import { Button, Modal, TextArea } from 'shared/ui';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import styled from '@emotion/styled';
@@ -147,7 +147,7 @@ export default function PostModal() {
 
 	return (
 		data && (
-			<ModalPortal>
+			<>
 				<PostModalLayout
 					title={isEdit ? '글 수정하기' : data.title}
 					rightButton={isEdit ? EditSaveButton : page === 'home' && RightButton}
@@ -164,7 +164,7 @@ export default function PostModal() {
 							</ImageContainer>
 						)}
 						{isEdit ? (
-							<TextContainer>
+							<TextContainer style={{ height: '100%' }}>
 								<InputBar
 									id={'postTitle'}
 									placeholder="제목"
@@ -203,7 +203,7 @@ export default function PostModal() {
 						disabled={isDeleteButtonDisabled}
 					/>
 				)}
-			</ModalPortal>
+			</>
 		)
 	);
 }
@@ -233,10 +233,10 @@ const Container = styled.div`
 
 const TextContainer = styled.div`
 	width: 40vw;
-	height: 100%;
 	${({ theme: { colors } }) => ({
 		color: colors.text.secondary,
 	})}
+	word-break: break-all;
 
 	& ol {
 		padding-left: 40px;

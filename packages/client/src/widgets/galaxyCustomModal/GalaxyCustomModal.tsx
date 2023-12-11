@@ -27,8 +27,6 @@ export default function GalaxyCustomModal() {
 	useRefresh('CUSTOM');
 
 	const handleSubmit = async () => {
-		if (isSubmitButtonDisabled) return;
-		setIsSubmitButtonDisabled(true);
 		const galaxyStyle = {
 			spiral: galaxy.spiral !== spiral ? spiral : undefined,
 			start: galaxy.start !== start ? start : undefined,
@@ -47,12 +45,17 @@ export default function GalaxyCustomModal() {
 		<form
 			onSubmit={async (e) => {
 				e.preventDefault();
-				await handleSubmit();
-				setToast({ text: '은하가 수정되었습니다.', type: 'success' });
+				if (isSubmitButtonDisabled) return;
+				setIsSubmitButtonDisabled(true);
+				try {
+					await handleSubmit();
+					setToast({ text: '은하가 수정되었습니다.', type: 'success' });
 
-				setIsSubmitButtonDisabled(false);
-				navigate('/home');
-				setView('MAIN');
+					navigate('/home');
+					setView('MAIN');
+				} finally {
+					setIsSubmitButtonDisabled(false);
+				}
 			}}
 		>
 			<Modal

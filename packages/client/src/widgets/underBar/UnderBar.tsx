@@ -32,7 +32,7 @@ export default function UnderBar() {
 		if (isLogoutButtonDisabled) return;
 		setIsLogoutButtonDisabled(true);
 		try {
-			await instance.get(`${BASE_URL}auth/signout`);
+			await instance.get(`/auth/signout`);
 
 			Cookies.remove('accessToken');
 			Cookies.remove('refreshToken');

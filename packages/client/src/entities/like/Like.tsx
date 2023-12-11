@@ -1,8 +1,9 @@
 import { useEffect, useReducer, useState } from 'react';
 import { Heart } from 'lucide-react';
-import { Button } from 'shared/ui';
+import { AlertDialog, Button } from 'shared/ui';
 import theme from 'shared/ui/styles/theme';
 import instance from 'shared/apis/core/AxiosInterceptor';
+import { useNavigate } from 'react-router-dom';
 
 interface PropsType {
 	postId: string;
@@ -46,6 +47,8 @@ export default function Like({ postId, count }: PropsType) {
 		likeCount: count,
 	});
 	const [isButtonDisabled, setButtonDisabled] = useState(false);
+	const [alert, setAlert] = useState(false);
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		const fetchLike = async () => {
@@ -60,9 +63,16 @@ export default function Like({ postId, count }: PropsType) {
 
 	const clickLike = async () => {
 		if (isButtonDisabled) return;
+		setButtonDisabled(true);
+
+		const path = location.pathname.split('/')[1];
+		if (path === 'guest') {
+			setAlert(true);
+			setButtonDisabled(false);
+			return;
+		}
 
 		try {
-			setButtonDisabled(true);
 			await instance({
 				method: 'patch',
 				url: `/post/${postId}/like`,
@@ -89,22 +99,37 @@ export default function Like({ postId, count }: PropsType) {
 	};
 
 	return (
-		<Button
-			size="m"
-			buttonType={state.isLiked ? 'warning-border' : 'Button'}
-			onClick={state.isLiked ? cancelLike : clickLike}
-			disabled={isButtonDisabled}
-		>
-			<Heart
-				style={{ marginRight: '10px' }}
-				color={
-					state.isLiked
-						? theme.colors.warning.pressed
-						: theme.colors.stroke.default
-				}
-				fill={state.isLiked ? theme.colors.warning.pressed : 'none'}
-			/>
-			{state.likeCount}
-		</Button>
+		<>
+			<Button
+				size="m"
+				buttonType={state.isLiked ? 'warning-border' : 'Button'}
+				onClick={state.isLiked ? cancelLike : clickLike}
+				disabled={isButtonDisabled}
+			>
+				<Heart
+					style={{ marginRight: '10px' }}
+					color={
+						state.isLiked
+							? theme.colors.warning.pressed
+							: theme.colors.stroke.default
+					}
+					fill={state.isLiked ? theme.colors.warning.pressed : 'none'}
+				/>
+				{state.likeCount}
+			</Button>
+			{alert && (
+				<AlertDialog
+					title="로그인이 필요한 기능입니다."
+					cancelButtonText="취소"
+					actionButtonText="로그인"
+					onClickCancelButton={() => setAlert(false)}
+					onClickActionButton={() => {
+						setAlert(false);
+						navigate('/login');
+					}}
+					disabled={false}
+				/>
+			)}
+		</>
 	);
 }

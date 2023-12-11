@@ -1,5 +1,5 @@
 import { useViewStore } from 'shared/store/useViewStore';
-import { Button, Modal, ModalPortal, TextArea } from 'shared/ui';
+import { Button, Modal, TextArea } from 'shared/ui';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import styled from '@emotion/styled';
@@ -147,7 +147,7 @@ export default function PostModal() {
 
 	return (
 		data && (
-			<ModalPortal>
+			<>
 				<PostModalLayout
 					title={isEdit ? '글 수정하기' : data.title}
 					rightButton={isEdit ? EditSaveButton : rightButton}
@@ -203,7 +203,7 @@ export default function PostModal() {
 						disabled={isDeleteButtonDisabled}
 					/>
 				)}
-			</ModalPortal>
+			</>
 		)
 	);
 }

@@ -29,7 +29,7 @@ export default function ImageSlider({ imageUrls }: PropsType) {
 		return (
 			<>
 				{imageUrls.map((_, index) => (
-					<Dot onClick={() => setImageIndex(index)}>
+					<Dot onClick={() => setImageIndex(index)} type="button">
 						{index === imageIndex ? <CircleDot /> : <Circle />}
 					</Dot>
 				))}
@@ -46,10 +46,10 @@ export default function ImageSlider({ imageUrls }: PropsType) {
 			</CurrentImage>
 			{imageUrls.length > 1 && (
 				<>
-					<Button onClick={handlePrev} style={{ left: 0 }}>
+					<Button onClick={handlePrev} style={{ left: 0 }} type="button">
 						<ArrowBigLeft />
 					</Button>
-					<Button onClick={handleNext} style={{ right: 0 }}>
+					<Button onClick={handleNext} style={{ right: 0 }} type="button">
 						<ArrowBigRight />
 					</Button>
 					<Pagination>

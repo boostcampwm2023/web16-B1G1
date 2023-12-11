@@ -4,13 +4,13 @@ import { useMemo } from 'react';
 import * as THREE from 'three';
 import {
 	SPACE_WARP_LINES_NUM,
+	SPACE_WARP_LINE_COLORS,
 	SPACE_WARP_LINE_LENGTH,
 	SPACE_WARP_XZ_MAX,
 	SPACE_WARP_XZ_MIN,
 	SPACE_WARP_Y_MAX,
 	SPACE_WARP_Y_MIN,
 } from '../lib/constants';
-import { BACKGROUND_STAR_COLORS } from 'features/backgroundStars/lib/constants';
 import React from 'react';
 
 const geSpaceWarpLinesInfo = () => {
@@ -24,7 +24,7 @@ const geSpaceWarpLinesInfo = () => {
 
 	const colors = Array.from({ length: SPACE_WARP_LINES_NUM }, () => {
 		const color = new THREE.Color(
-			BACKGROUND_STAR_COLORS[getRandomInt(0, BACKGROUND_STAR_COLORS.length)],
+			SPACE_WARP_LINE_COLORS[getRandomInt(0, SPACE_WARP_LINE_COLORS.length)],
 		);
 
 		return [color.r, color.g, color.b];

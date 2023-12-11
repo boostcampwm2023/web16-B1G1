@@ -16,7 +16,6 @@ export default function LandingScreen() {
 
 	useEffect(() => {
 		const mouseHandler = (e: MouseEvent) => {
-			console.log(e);
 			const mouseX = e.clientX / window.innerWidth;
 			const mouseY = e.clientY / window.innerHeight;
 			galaxyRef.current.rotation.x = (mouseY - 0.5) / 5;

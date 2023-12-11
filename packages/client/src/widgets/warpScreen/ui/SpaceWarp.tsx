@@ -44,7 +44,10 @@ export default function SpaceWarp({ setIsSwitching }: PropsType) {
 		if (state.camera.position.y <= 0) {
 			state.scene.background = new THREE.Color(0xffffff);
 			setIsSwitching(false);
-		} else state.camera.position.y -= 75000 * delta;
+			return;
+		}
+
+		state.camera.position.y -= 75000 * delta;
 	});
 
 	return (

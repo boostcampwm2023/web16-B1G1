@@ -23,7 +23,7 @@ import { ThrottlerModule } from '@nestjs/throttler';
 		SentimentModule,
 		ThrottlerModule.forRoot([
 			{
-				ttl: 10000, // 10초에
+				ttl: 5000, // 5초에
 				limit: 5, // 5번까지 요청 가능
 			},
 		]),

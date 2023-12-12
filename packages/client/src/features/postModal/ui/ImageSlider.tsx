@@ -29,7 +29,7 @@ export default function ImageSlider({ imageUrls }: PropsType) {
 		return (
 			<>
 				{imageUrls.map((_, index) => (
-					<Dot key={index} onClick={() => setImageIndex(index)}>
+					<Dot key={index} onClick={() => setImageIndex(index)} type="button">
 						{index === imageIndex ? <CircleDot /> : <Circle />}
 					</Dot>
 				))}

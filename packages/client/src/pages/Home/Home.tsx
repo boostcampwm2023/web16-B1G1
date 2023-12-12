@@ -35,7 +35,6 @@ export default function Home() {
 
 	useEffect(() => {
 		const path = location.pathname.split('/');
-		console.log(path);
 		if (path[1] === 'home' && path.length <= 3) setView('MAIN');
 		else if (path[1] === 'guest' && path.length <= 4) setView('MAIN');
 		else if (path[1] === 'search' && path.length <= 4) setView('MAIN');

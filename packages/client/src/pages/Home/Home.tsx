@@ -1,5 +1,5 @@
 import Screen from 'widgets/screen/Screen';
-import { Outlet, useLocation } from 'react-router-dom';
+import { Outlet, useLocation, useParams } from 'react-router-dom';
 import WarpScreen from 'widgets/warpScreen/WarpScreen';
 import { useEffect, useState } from 'react';
 import { getGalaxy } from 'shared/apis';
@@ -12,11 +12,9 @@ import {
 	ARMS_Z_DIST,
 } from 'widgets/galaxy/lib/constants';
 import useCheckNickName from 'shared/hooks/useCheckNickName';
-import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 import UnderBar from 'widgets/underBar/UnderBar';
 import UpperBar from 'widgets/upperBar/UpperBar';
 import CoachMarker from 'features/coachMarker/CoachMarker';
-import ModalRoot from '../../shared/routes/ModalRoot';
 import { useViewStore } from 'shared/store';
 
 export default function Home() {
@@ -26,16 +24,16 @@ export default function Home() {
 	const { text, type } = useToastStore();
 	const { nickName, status } = useCheckNickName();
 
-	const handleFullScreen = useFullScreenHandle();
-
 	const { setSpiral, setStart, setThickness, setZDist } = useGalaxyStore();
 	const custom = useCustomStore();
 	const location = useLocation();
 	const { setView } = useViewStore();
+	const { postId } = useParams();
 
 	useEffect(() => {
 		const path = location.pathname.split('/');
-		if (path[1] === 'home' && path.length <= 3) setView('MAIN');
+		if (path[1] === 'home' && path.length <= 2) setView('MAIN');
+		else if (path[1] === 'home' && path.length === 3) setView('MAIN');
 		else if (path[1] === 'guest' && path.length <= 4) setView('MAIN');
 		else if (path[1] === 'search' && path.length <= 4) setView('MAIN');
 	}, [location]);
@@ -82,13 +80,8 @@ export default function Home() {
 	}, []);
 
 	const keyDown = (e: KeyboardEvent) => {
-		if (e.key === 'Escape') {
-			e.preventDefault();
-			handleFullScreen.exit();
-		} else if (e.key === 'F9') {
-			e.preventDefault();
-			handleFullScreen.enter();
-		}
+		if (e.key === 'F9') document.documentElement.requestFullscreen();
+		if (e.key === 'Escape') document.exitFullscreen();
 	};
 
 	useEffect(() => {
@@ -99,9 +92,8 @@ export default function Home() {
 	}, []);
 
 	return (
-		<FullScreen handle={handleFullScreen}>
+		<>
 			<Outlet />
-			<ModalRoot />
 			{status === 'new' && <CoachMarker isFirst={true} />}
 			{isSwitching !== 'end' && (
 				<WarpScreen isSwitching={isSwitching} setIsSwitching={setIsSwitching} />
@@ -112,6 +104,6 @@ export default function Home() {
 			<UnderBar />
 
 			<Screen />
-		</FullScreen>
+		</>
 	);
 }

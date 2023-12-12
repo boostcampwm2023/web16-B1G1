@@ -26,6 +26,7 @@ export const errorMessage: ErrorMessageTypes = {
 		'/auth/signin': '아이디 또는 비밀번호가 일치하지 않습니다.',
 		'/auth/[a-zA-Z]+/signup': '회원가입에 실패했습니다.',
 		'/post': '글 작성에 실패했습니다.',
+		'/sentiment': '감정 분석에 실패했습니다.',
 	},
 
 	patch: {

@@ -7,8 +7,16 @@ interface PropsType extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 	children: React.ReactNode;
 }
 
-export default function IconButton({ children, ...args }: PropsType) {
-	return <CustomButton {...args}>{children}</CustomButton>;
+export default function IconButton({
+	children,
+	type = 'button',
+	...args
+}: PropsType) {
+	return (
+		<CustomButton {...args} type={type}>
+			{children}
+		</CustomButton>
+	);
 }
 
 const CustomButton = styled.button<PropsType>`

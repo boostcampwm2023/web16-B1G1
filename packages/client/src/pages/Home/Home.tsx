@@ -16,6 +16,7 @@ import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 import UnderBar from 'widgets/underBar/UnderBar';
 import UpperBar from 'widgets/upperBar/UpperBar';
 import CoachMarker from 'features/coachMarker/CoachMarker';
+import ModalRoot from '../../shared/routes/ModalRoot';
 
 export default function Home() {
 	const [isSwitching, setIsSwitching] = useState<'warp' | 'fade' | 'end'>(
@@ -90,7 +91,7 @@ export default function Home() {
 	return (
 		<FullScreen handle={handleFullScreen}>
 			<Outlet />
-
+			<ModalRoot />
 			{status === 'new' && <CoachMarker isFirst={true} />}
 			{isSwitching !== 'end' && (
 				<WarpScreen isSwitching={isSwitching} setIsSwitching={setIsSwitching} />

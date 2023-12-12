@@ -1,5 +1,5 @@
 import Screen from 'widgets/screen/Screen';
-import { Outlet, useLocation } from 'react-router-dom';
+import { Outlet, useLocation, useParams } from 'react-router-dom';
 import WarpScreen from 'widgets/warpScreen/WarpScreen';
 import { useEffect, useState } from 'react';
 import { getGalaxy } from 'shared/apis';
@@ -28,10 +28,12 @@ export default function Home() {
 	const custom = useCustomStore();
 	const location = useLocation();
 	const { setView } = useViewStore();
+	const { postId } = useParams();
 
 	useEffect(() => {
 		const path = location.pathname.split('/');
-		if (path[1] === 'home' && path.length <= 3) setView('MAIN');
+		if (path[1] === 'home' && path.length <= 2) setView('MAIN');
+		else if (path[1] === 'home' && path.length === 3) setView('MAIN');
 		else if (path[1] === 'guest' && path.length <= 4) setView('MAIN');
 		else if (path[1] === 'search' && path.length <= 4) setView('MAIN');
 	}, [location]);

@@ -12,9 +12,9 @@ export const generateStarPosition = async (
 	existingStars: StarData[],
 	size: number,
 ): Promise<StarPosition> => {
-	const x = getRandomFloat(-ARMS_X_DIST, ARMS_X_DIST);
+	const x = getRandomFloat(-ARMS_X_DIST * 2, ARMS_X_DIST * 2);
 	const y = getRandomFloat(-GALAXY_THICKNESS, GALAXY_THICKNESS);
-	const z = getRandomFloat(-ARMS_X_DIST, ARMS_X_DIST);
+	const z = getRandomFloat(-ARMS_X_DIST * 2, ARMS_X_DIST * 2);
 
 	const isOverlap = existingStars.some(({ star }) => {
 		const dist = Math.sqrt(

@@ -1,9 +1,8 @@
-import styled from '@emotion/styled';
-import { Input } from 'shared/ui';
-import { useState } from 'react';
-import { Caption } from 'shared/ui/styles';
 import { css } from '@emotion/react';
-import { useEffect } from 'react';
+import styled from '@emotion/styled';
+import { useEffect, useState } from 'react';
+import { Caption } from 'shared/styles';
+import { Input } from 'shared/ui';
 
 interface PropsTypes {
 	validPw: string;

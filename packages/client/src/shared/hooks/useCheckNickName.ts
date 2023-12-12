@@ -1,10 +1,9 @@
+import Cookies from 'js-cookie';
 import { useEffect, useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
-import { getSignInInfo } from 'shared/apis';
-import { getShareLinkHostNickName } from 'shared/apis/share';
-import Cookies from 'js-cookie';
+import { getShareLinkHostNickName, getSignInInfo } from 'shared/apis';
 
-export default function useCheckNickName() {
+export function useCheckNickName() {
 	const location = useLocation();
 	const [page, setPage] = useState('');
 	const [nickName, setNickName] = useState('');

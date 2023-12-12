@@ -1,15 +1,13 @@
-import { useRef } from 'react';
-import { useCameraStore } from 'shared/store/useCameraStore';
-import { ThreeEvent } from '@react-three/fiber';
-import { Html } from '@react-three/drei';
 import styled from '@emotion/styled';
-import { useViewStore } from 'shared/store/useViewStore';
-import * as THREE from 'three';
-import { StarType } from 'shared/lib/types/star';
+import { Html } from '@react-three/drei';
+import { ThreeEvent } from '@react-three/fiber';
+import { Star } from 'features';
+import { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { useState, useEffect } from 'react';
-import theme from 'shared/ui/styles/theme';
-import Star from 'features/star/Star';
+import { StarType } from 'shared/lib';
+import { useCameraStore, useViewStore } from 'shared/store';
+import { theme } from 'shared/styles';
+import * as THREE from 'three';
 
 interface PropsType {
 	data: StarType;

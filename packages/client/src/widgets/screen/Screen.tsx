@@ -1,17 +1,15 @@
-import { Canvas } from '@react-three/fiber';
-import BackgroundStars from 'features/backgroundStars/BackgroundStars';
-import { Galaxy } from '../galaxy';
-import { EffectComposer, Bloom } from '@react-three/postprocessing';
-import { Leva, useControls } from 'leva';
-import { CAMERA_POSITION, CAMERA_FAR } from '@constants';
-import Controls from 'features/controls/Controls.tsx';
-import { useCameraStore } from 'shared/store/useCameraStore.ts';
-import { Posts } from 'entities/posts';
+import { CAMERA_FAR, CAMERA_POSITION } from '@constants';
 import styled from '@emotion/styled';
-import { useViewStore } from 'shared/store';
-import { CameraLight, LevaTheme } from './ui';
-import { useState } from 'react';
 import { PerformanceMonitor } from '@react-three/drei';
+import { Canvas } from '@react-three/fiber';
+import { Bloom, EffectComposer } from '@react-three/postprocessing';
+import { Posts } from 'entities';
+import { BackgroundStars, Controls } from 'features';
+import { Leva, useControls } from 'leva';
+import { useState } from 'react';
+import { useViewStore, useCameraStore } from 'shared/store';
+import { Galaxy } from 'widgets/galaxy';
+import { CameraLight, LevaTheme } from './ui';
 
 export default function Screen() {
 	const { view } = useViewStore();

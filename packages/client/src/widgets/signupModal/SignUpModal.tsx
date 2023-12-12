@@ -1,11 +1,11 @@
 import styled from '@emotion/styled';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useSignUpStore } from 'shared/store';
 import { Button, Modal } from 'shared/ui';
-import { useState, useEffect } from 'react';
+import CheckPwInputContainer from './ui/CheckPwInputContainer';
 import IdInputContainer from './ui/IdInputContainer';
 import PwInputContainer from './ui/PwInputContainer';
-import CheckPwInputContainer from './ui/CheckPwInputContainer';
-import { useSignUpStore } from 'shared/store/useSignUpStore';
-import { useNavigate } from 'react-router-dom';
 
 export default function SignUpModal() {
 	const navigate = useNavigate();

@@ -1,4 +1,4 @@
-import instance from 'shared/apis/core/AxiosInterceptor';
+import { instance } from 'shared/apis';
 
 export const deletePost = async (postId: string) => {
 	const res = await instance({

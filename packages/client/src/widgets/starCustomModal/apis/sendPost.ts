@@ -1,4 +1,4 @@
-import instance from 'shared/apis/core/AxiosInterceptor';
+import { instance } from 'shared/apis';
 
 export const sendPost = async (formData: FormData) => {
 	const response = await instance({

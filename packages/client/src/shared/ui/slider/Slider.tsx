@@ -1,7 +1,7 @@
-import styled from '@emotion/styled';
 import { css } from '@emotion/react';
+import styled from '@emotion/styled';
+import { Body03ME } from 'shared/styles';
 import { Input } from 'shared/ui';
-import { Body03ME } from '../styles';
 
 interface PropsType extends React.InputHTMLAttributes<HTMLInputElement> {
 	id: string;

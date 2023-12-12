@@ -1,4 +1,4 @@
-import instance from './core/AxiosInterceptor';
+import { instance } from 'shared/apis';
 
 export const getIsAvailableUsername = async (username: string) => {
 	const { data } = await instance({

@@ -1,14 +1,14 @@
-import * as THREE from 'three';
-import { useRef, useEffect, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { DISTANCE_LIMIT, STARS_DENSITY } from '../constants';
+import { useEffect, useMemo, useRef } from 'react';
+import { useCustomStore, useGalaxyStore } from 'shared/store';
+import * as THREE from 'three';
 import {
-	getSpiralPositions,
 	getSpherePositions,
-	setSpiralPositions,
+	getSpiralPositions,
 	setSpherePositions,
+	setSpiralPositions,
 } from '.';
-import { useGalaxyStore, useCustomStore } from 'shared/store';
+import { DISTANCE_LIMIT, STARS_DENSITY } from '../constants';
 
 interface PropsType {
 	count: number;

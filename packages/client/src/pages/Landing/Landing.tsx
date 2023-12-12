@@ -1,8 +1,8 @@
-import LandingScreen from 'widgets/landingScreen/LandingScreen';
-import { useToastStore } from 'shared/store/useToastStore';
-import { Toast } from 'shared/ui';
-import { Outlet } from 'react-router-dom';
 import { useEffect } from 'react';
+import { Outlet } from 'react-router-dom';
+import { useToastStore } from 'shared/store';
+import { Toast } from 'shared/ui';
+import { LandingScreen } from 'widgets';
 
 export default function Landing() {
 	const { text, type } = useToastStore();

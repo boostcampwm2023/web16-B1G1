@@ -1,6 +1,6 @@
-import { create } from 'zustand';
+import { CAMERA_MAX_DISTANCE, CAMERA_MIN_DISTANCE } from '@constants';
 import * as THREE from 'three';
-import { CAMERA_MIN_DISTANCE, CAMERA_MAX_DISTANCE } from '@constants';
+import { create } from 'zustand';
 
 interface CameraState {
 	currentView: THREE.Vector3;

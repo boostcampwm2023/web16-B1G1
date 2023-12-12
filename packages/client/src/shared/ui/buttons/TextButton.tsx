@@ -9,8 +9,16 @@ interface PropsType extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 	size: 'm' | 'l';
 }
 
-export default function TextButton({ children, ...args }: PropsType) {
-	return <CustomButton {...args}>{children}</CustomButton>;
+export default function TextButton({
+	children,
+	type = 'button',
+	...args
+}: PropsType) {
+	return (
+		<CustomButton {...args} type={type}>
+			{children}
+		</CustomButton>
+	);
 }
 
 const CustomButton = styled.button<PropsType>`

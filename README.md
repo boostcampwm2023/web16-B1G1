@@ -1,5 +1,7 @@
 # 별 하나에 글 하나 🌟
 
+# 리드미 정비 중입니다 !!
+
 자신만의 우주에 기억을 담은 별을 띄우는 웹 추억 저장소
 
 <img src="https://github.com/boostcampwm2023/web16-B1G1/assets/80266418/b6f77114-9fdc-44bf-91fc-990edc9a918c" height='100'>

@@ -56,7 +56,12 @@ export default function UpperBar() {
 		if (isSearchButtonDisabled) return;
 		setIsSearchButtonDisabled(true);
 		try {
-			await checkExistNickname(searchValue);
+			const data = await checkExistNickname(searchValue);
+			if (data.status === 'private')
+				return setToast({
+					text: '비공개 은하입니다.',
+					type: 'error',
+				});
 			if (searchValue === user)
 				return setToast({
 					text: '내 은하로는 이동할 수 없습니다.',
@@ -66,11 +71,6 @@ export default function UpperBar() {
 			setSearchValue('');
 			setDebouncedSearchValue('');
 			setSearchResults([]);
-		} catch (error) {
-			setToast({
-				text: '존재하지 않는 유저입니다.',
-				type: 'error',
-			});
 		} finally {
 			setIsSearchButtonDisabled(false);
 		}

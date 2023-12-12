@@ -19,6 +19,7 @@ export const errorMessage: ErrorMessageTypes = {
 		'/star/by-author': '글 목록 조회에 실패했습니다.',
 		'/galaxy': '은하 형태 불러오기에 실패했습니다.',
 		'/galaxy/by-nickname': '은하 형태 불러오기에 실패했습니다.',
+		'/auth/check-nickname': '존재하지 않는 유저입니다.',
 	},
 
 	post: {

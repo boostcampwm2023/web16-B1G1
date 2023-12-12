@@ -1,5 +1,5 @@
 import Screen from 'widgets/screen/Screen';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import WarpScreen from 'widgets/warpScreen/WarpScreen';
 import { useEffect, useState } from 'react';
 import { getGalaxy } from 'shared/apis';
@@ -17,6 +17,7 @@ import UnderBar from 'widgets/underBar/UnderBar';
 import UpperBar from 'widgets/upperBar/UpperBar';
 import CoachMarker from 'features/coachMarker/CoachMarker';
 import ModalRoot from '../../shared/routes/ModalRoot';
+import { useViewStore } from 'shared/store';
 
 export default function Home() {
 	const [isSwitching, setIsSwitching] = useState<'warp' | 'fade' | 'end'>(
@@ -29,6 +30,15 @@ export default function Home() {
 
 	const { setSpiral, setStart, setThickness, setZDist } = useGalaxyStore();
 	const custom = useCustomStore();
+	const location = useLocation();
+	const { setView } = useViewStore();
+
+	useEffect(() => {
+		const path = location.pathname.split('/');
+		if (path[1] === 'home' && path.length <= 3) setView('MAIN');
+		else if (path[1] === 'guest' && path.length <= 4) setView('MAIN');
+		else if (path[1] === 'search' && path.length <= 4) setView('MAIN');
+	}, [location]);
 
 	useEffect(() => {
 		if (!JSON.parse(sessionStorage.getItem('isReload') ?? 'false'))

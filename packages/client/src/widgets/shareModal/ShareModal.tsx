@@ -53,7 +53,7 @@ export default function ShareModal() {
 		<Button
 			buttonType="CTA-icon"
 			size="m"
-			type="submit"
+			type="button"
 			onClick={handleSaveButton}
 		>
 			저장

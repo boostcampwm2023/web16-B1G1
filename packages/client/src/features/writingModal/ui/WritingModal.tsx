@@ -66,7 +66,7 @@ export default function WritingModal() {
 						onClick={handleSendPost}
 						size="m"
 						buttonType="CTA-icon"
-						type="submit"
+						type="button"
 					>
 						다음
 					</Button>

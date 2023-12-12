@@ -14,6 +14,5 @@ export const checkExistNickname = async (nickName: string) => {
 		method: 'GET',
 		url: `/auth/check-nickname?nickname=${nickName}`,
 	});
-	if (data === false) return Promise.reject();
 	return data;
 };

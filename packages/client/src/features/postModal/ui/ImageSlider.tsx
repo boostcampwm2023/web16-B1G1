@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { CircleDot, Circle } from 'lucide-react';
 import ArrowBigLeft from '@icons/icon-arrow-left-32-white.svg?react';
 import ArrowBigRight from '@icons/icon-arrow-right-32-white.svg?react';
@@ -25,7 +25,7 @@ export default function ImageSlider({ imageUrls }: PropsType) {
 		});
 	};
 
-	const Dots = () => {
+	const Dots = useMemo(() => {
 		return (
 			<>
 				{imageUrls.map((_, index) => (
@@ -35,7 +35,7 @@ export default function ImageSlider({ imageUrls }: PropsType) {
 				))}
 			</>
 		);
-	};
+	}, [...imageUrls, imageIndex]);
 
 	return (
 		<Layout>
@@ -53,9 +53,7 @@ export default function ImageSlider({ imageUrls }: PropsType) {
 					<Button onClick={handleNext} style={{ right: 0 }} type="button">
 						<ArrowBigRight />
 					</Button>
-					<Pagination>
-						<Dots />
-					</Pagination>
+					<Pagination>{Dots}</Pagination>
 				</>
 			)}
 		</Layout>

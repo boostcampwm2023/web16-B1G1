@@ -308,6 +308,8 @@ export class AuthService {
 			throw new NotFoundException('user not found');
 		}
 
-		return true;
+		return {
+			status: user.status,
+		};
 	}
 }

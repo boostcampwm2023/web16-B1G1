@@ -59,7 +59,7 @@ export default function UpperBar() {
 			const data = await checkExistNickname(searchValue);
 			if (data.status === 'private')
 				return setToast({
-					text: '비공개 은하입니다.',
+					text: '비공개 처리된 유저입니다.',
 					type: 'error',
 				});
 			if (searchValue === user)

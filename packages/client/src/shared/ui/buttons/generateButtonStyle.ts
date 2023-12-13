@@ -1,9 +1,10 @@
 import { css } from '@emotion/react';
+import { ButtonType } from 'shared/lib';
 import { Body02BD, Body02ME, Body03BD, Body03ME } from 'shared/styles';
 
 export const generateButtonStyle = (
 	size: 'm' | 'l',
-	buttonType: 'Button' | 'CTA-icon' | 'warning' | 'warning-border',
+	buttonType: ButtonType,
 	colors: any,
 ) => {
 	switch (buttonType) {

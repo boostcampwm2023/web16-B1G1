@@ -24,8 +24,8 @@ export default function FallBackComponent() {
 const Layout = styled.div`
 	height: 100vh;
 	width: 100vw;
-	background-color: #070614;
-	color: ${({ theme }) => theme.colors.text.primary};
+	background-color: ${({ theme: { colors } }) => colors.background.bdp04};
+	color: ${({ theme: { colors } }) => colors.text.primary};
 	display: flex;
 	flex-direction: column;
 	justify-content: center;

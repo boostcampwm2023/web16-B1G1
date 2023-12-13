@@ -45,11 +45,11 @@
   - [배포 및 자동화](#배포-및-자동화)
 
 ### [4. 팀원 소개](#%EF%B8%8F-팀원-소개)
-- [J010 김가은](#j010-김가은-fe)
-- [J016 김동민](#j016-김동민-fe)
-- [J053 박재하](#j053-박재하-be)
-- [J073 송준섭](#j073-송준섭-be)
-- [J098 이백범](#j098-이백범-fe)
+- [J010 김가은](#-j010-김가은-fe)
+- [J016 김동민](#-j016-김동민-fe)
+- [J053 박재하](#-j053-박재하-be)
+- [J073 송준섭](#-j073-송준섭-be)
+- [J098 이백범](#-j098-이백범-fe)
 
 ### [5. 팀원 회고](#-팀원-회고)
 
@@ -452,7 +452,7 @@ Interceptor, Exception Filter 등 학습을 하고 백엔드 코드에 적용을
 <table >
   <tr height="130px">
     <td align="center" width="130px">
-      <a href="https://github.com/KimGaeun0806"><img src="https://avatars.g)ithubusercontent.com/u/80266418?v=4" style="border-radius:50%"/></a>
+      <a href="https://github.com/KimGaeun0806"><img src="https://avatars.githubusercontent.com/u/80266418?v=4" style="border-radius:50%"/></a>
     </td>
     <td align="center" width="130px">
       <a href="https://github.com/MinboyKim"><img src="https://avatars.githubusercontent.com/u/35567292?v=4" style="border-radius:50%" /></a>

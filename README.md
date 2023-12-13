@@ -185,17 +185,24 @@ yarn workspace server start:dev
 
 **테스트와 쿼리 로그 분석을 통한 이유 있는 코드 작성**
 
-### TDD
+### TDD, e2e 및 유닛 테스트
 
 하나의 API를 구현하기 전에 여러 케이스에 대하여 먼저 테스트코드를 작성하는 TDD(Test Driven Development)를 해보았습니다.
 그 과정에서 어색함도 많이 느꼈고, 완벽하게 했다고도 하지 못하지만 TDD의 방법과 장점 등에 대해 알 수 있었습니다.
 
+기능 구현 이후에도, 코드 커버리지를 높이기 위해 e2e 테스트 코드 개선과, mocking을 활용한 유닛 테스트 등을 학습하고 적용해 보았습니다.
+
 #### 학습 및 개발 기록
+
 - [테스트 코드를 작성해야 하는 이유](https://www.notion.so/b091dfc8229e4943af4acef50a7a5b75)
 - [NetsJS + Jest 환경 설정](https://github.com/boostcampwm2023/web16-B1G1/wiki/%5B%EC%A4%80%EC%84%AD%5D-1114(%ED%99%94)-%EA%B0%9C%EB%B0%9C%EA%B8%B0%EB%A1%9D)
+- [NestJS, TDD로 개발하기](https://velog.io/@qkrwogk/NestJS-TDD%EB%A1%9C-%EA%B0%9C%EB%B0%9C%ED%95%98%EA%B8%B0-cx211d14)
+- [2주차 멘토링 일지(BE) - TDD 관련](https://github.com/boostcampwm2023/web16-B1G1/wiki/2%EC%A3%BC%EC%B0%A8-%EB%A9%98%ED%86%A0%EB%A7%81-%EC%9D%BC%EC%A7%80#be)
 - [TDD 기록 1](https://github.com/boostcampwm2023/web16-B1G1/wiki/%5B%EC%9E%AC%ED%95%98%5D-1115(%EC%88%98)-%EA%B0%9C%EB%B0%9C%EA%B8%B0%EB%A1%9D)
 - [TDD 기록 2](https://github.com/boostcampwm2023/web16-B1G1/wiki/%5B%EC%9E%AC%ED%95%98%5D-1116(%EB%AA%A9)-%EA%B0%9C%EB%B0%9C%EA%B8%B0%EB%A1%9D)
 - [TDD 기록 3](https://github.com/boostcampwm2023/web16-B1G1/wiki/%5B%EC%A4%80%EC%84%AD%5D-1116(%EB%AA%A9)-%EA%B0%9C%EB%B0%9C%EA%B8%B0%EB%A1%9D)
+- [NestJS e2e 테스트 (jest, supertest)](https://velog.io/@qkrwogk/NestJS-e2e-%ED%85%8C%EC%8A%A4%ED%8A%B8-jest-supertest)
+- [NestJS, 유닛 테스트 각종 mocking, e2e 테스트 폼데이터 및 파일첨부](https://velog.io/@qkrwogk/NestJS-%EC%9C%A0%EB%8B%9B-%ED%85%8C%EC%8A%A4%ED%8A%B8-%EA%B0%81%EC%A2%85-mocking-e2e-%ED%85%8C%EC%8A%A4%ED%8A%B8-%ED%8F%BC%EB%8D%B0%EC%9D%B4%ED%84%B0-%EB%B0%8F-%ED%8C%8C%EC%9D%BC%EC%B2%A8%EB%B6%80)
 
 ### 트랜잭션 제어, 쿼리 최적화
 

@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import ImageIcon from '@icons/icon-photo-32-gray.svg?react';
-import { ChangeEvent, useEffect, useRef, useState } from 'react';
+import { ChangeEvent, useRef, useState } from 'react';
 
 interface PropsType {
 	files: FileList | null;

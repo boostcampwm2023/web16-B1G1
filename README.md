@@ -18,6 +18,8 @@
 
 <img src="https://github.com/boostcampwm2023/web16-B1G1/assets/80266418/b6f77114-9fdc-44bf-91fc-990edc9a918c" height='100'>
 
+[wiki 바로가기](https://github.com/boostcampwm2023/web16-B1G1/wiki)
+
 </div>
 
 <br />
@@ -438,10 +440,6 @@ Interceptor, Exception Filter 등 학습을 하고 백엔드 코드에 적용을
 - [NAT Gateway, MongoDB](<https://github.com/boostcampwm2023/web16-B1G1/wiki/%5B%EC%9E%AC%ED%95%98%5D-1126(%EC%9D%BC)-%EA%B0%9C%EB%B0%9C%EA%B8%B0%EB%A1%9D#%EB%B0%B0%ED%8F%AC%EC%9A%A9-db-%EC%9D%B8%EC%8A%A4%ED%84%B4%EC%8A%A4%EC%97%90-mongodb-%EC%84%A4%EC%B9%98-%EB%B0%8F-%EC%99%B8%EB%B6%80%EC%97%B0%EB%8F%99>)
 - [플랫폼 종속성 문제 해결(Sharp), 쿼리 최적화](<https://github.com/boostcampwm2023/web16-B1G1/wiki/%5B%EC%9E%AC%ED%95%98%5D-1128(%ED%99%94)-%EA%B0%9C%EB%B0%9C%EA%B8%B0%EB%A1%9D>)
 - [docker 이미지 최적화](<https://github.com/boostcampwm2023/web16-B1G1/wiki/%5B%EC%9E%AC%ED%95%98%5D-1203(%EC%9D%BC)-%EA%B0%9C%EB%B0%9C%EA%B8%B0%EB%A1%9D>)
-
-<br />
-
-### **💪🏻 자세한 프로젝트 진행과정은 [wiki](https://github.com/boostcampwm2023/web16-B1G1/wiki)를 참고해주세요!**
 
 <br />
 

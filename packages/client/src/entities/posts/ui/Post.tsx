@@ -120,12 +120,12 @@ const Label = styled.div`
 	padding: 10px 15px;
 	border-radius: 5px;
 	width: fit-content;
-	max-width: 200px; // TODO: 수정 예정
+	max-width: 200px;
 	text-align: center;
 	background-color: ${({ theme: { colors } }) => colors.background.bdp01_80};
 	border: ${({ theme: { colors } }) => colors.stroke.sc};
 	color: ${({ theme: { colors } }) => colors.text.secondary};
-	transform: translate3d(calc(-50%), calc(-250%), 0); // TODO: 수정 예정
+	transform: translate3d(calc(-50%), calc(-250%), 0);
 
 	overflow: hidden;
 	text-overflow: ellipsis;

@@ -1,6 +1,6 @@
+import { useEffect, useState } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 import { getSignInInfo } from 'shared/apis';
-import { useEffect, useState } from 'react';
 
 export default function PublicRoute() {
 	const [isAuthenticated, setIsAuthenticated] = useState(false);

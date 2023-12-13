@@ -1,4 +1,4 @@
-import { getRandomFloat, getGaussianRandomFloat } from '@utils/random';
+import { getGaussianRandomFloat, getRandomFloat } from '@utils/random';
 import * as THREE from 'three';
 import { ARMS_X_DIST } from '../constants';
 

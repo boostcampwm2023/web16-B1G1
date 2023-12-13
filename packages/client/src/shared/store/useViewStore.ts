@@ -1,5 +1,5 @@
+import { view } from 'shared/lib';
 import { create } from 'zustand';
-import { view } from 'shared/lib/types/view';
 
 interface ViewState {
 	view: view;

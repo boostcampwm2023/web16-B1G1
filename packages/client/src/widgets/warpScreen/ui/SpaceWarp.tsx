@@ -1,6 +1,6 @@
 import { useFrame } from '@react-three/fiber';
 import { getRandomFloat, getRandomInt } from '@utils/random';
-import { useMemo } from 'react';
+import React, { useMemo } from 'react';
 import * as THREE from 'three';
 import {
 	SPACE_WARP_LINES_NUM,
@@ -11,7 +11,6 @@ import {
 	SPACE_WARP_Y_MAX,
 	SPACE_WARP_Y_MIN,
 } from '../lib/constants';
-import React from 'react';
 
 const geSpaceWarpLinesInfo = () => {
 	const positions = Array.from({ length: SPACE_WARP_LINES_NUM }, () => {

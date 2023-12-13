@@ -1,9 +1,9 @@
-import { useEffect, useReducer, useState } from 'react';
 import { Heart } from 'lucide-react';
-import { AlertDialog, Button } from 'shared/ui';
-import theme from 'shared/ui/styles/theme';
-import instance from 'shared/apis/core/AxiosInterceptor';
+import { useEffect, useReducer, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { instance } from 'shared/apis';
+import { theme } from 'shared/styles';
+import { AlertDialog, Button } from 'shared/ui';
 
 interface PropsType {
 	postId: string;

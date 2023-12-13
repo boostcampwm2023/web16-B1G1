@@ -1,8 +1,8 @@
 import styled from '@emotion/styled';
-import NaverLogo from '@icons/logo/Naver.png';
-import GithubLogo from '@icons/logo/Github.png';
-import GoogleLogo from '@icons/logo/Google.png';
-import { NAVER_AUTH_URL, GITHUB_AUTH_URL, GOOGLE_AUTH_URL } from '../lib';
+import GithubLogo from '@icons/logos/Github.png';
+import GoogleLogo from '@icons/logos/Google.png';
+import NaverLogo from '@icons/logos/Naver.png';
+import { GITHUB_AUTH_URL, GOOGLE_AUTH_URL, NAVER_AUTH_URL } from '../lib';
 
 export default function OauthLogin() {
 	return (

@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
-import { Body02ME, Body03ME } from 'shared/ui/styles';
 import checkIcon from '@icons/icon-check-purple.svg';
+import { Body02ME, Body03ME } from 'shared/styles';
 import { SearchStatusType } from '../lib/types';
 
 interface PropsTypes {

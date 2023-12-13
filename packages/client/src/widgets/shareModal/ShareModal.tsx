@@ -1,13 +1,12 @@
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { getSignInInfo, patchShareStatus } from 'shared/apis';
+import { useRefresh } from 'shared/hooks';
+import { useToastStore, useViewStore } from 'shared/store';
 import { Button, Modal } from 'shared/ui';
+import { SearchStatusType } from './lib/types';
 import LinkContainer from './ui/LinkContainer';
 import SearchSetContainer from './ui/SearchSetContainer';
-import { useState, useEffect } from 'react';
-import { getSignInInfo } from 'shared/apis';
-import { SearchStatusType } from './lib/types';
-import { useToastStore, useViewStore } from 'shared/store';
-import { useNavigate } from 'react-router-dom';
-import { patchShareStatus } from 'shared/apis/share';
-import { useRefresh } from 'shared/hooks/useRefresh';
 
 export default function ShareModal() {
 	const [originalSearchStatus, setOriginalSearchStatus] =

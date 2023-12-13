@@ -1,10 +1,9 @@
-import { Button, Modal } from 'shared/ui';
 import { useState } from 'react';
-import NickNameInputContainer from './ui/NickNameInputContainer';
-import { postSignUp } from 'shared/apis';
-import { useSignUpStore } from 'shared/store/useSignUpStore';
-import { useToastStore } from 'shared/store/useToastStore';
 import { useNavigate, useParams } from 'react-router-dom';
+import { postSignUp } from 'shared/apis';
+import { useSignUpStore, useToastStore } from 'shared/store';
+import { Button, Modal } from 'shared/ui';
+import NickNameInputContainer from './ui/NickNameInputContainer';
 
 export default function NickNameSetModal() {
 	const [validNickName, setValidNickName] = useState('');

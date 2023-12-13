@@ -1,6 +1,6 @@
-import bgm from 'assets/bgm.mp3';
+import bgm from 'assets/musics/bgm.mp3';
 import ReactHowler from 'react-howler';
-import { usePlayingStore } from 'shared/store/useAudioStore';
+import { usePlayingStore } from 'shared/store';
 
 export default function Audio() {
 	const { playing } = usePlayingStore();

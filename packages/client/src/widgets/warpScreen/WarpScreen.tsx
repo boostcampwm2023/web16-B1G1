@@ -1,4 +1,7 @@
+import { keyframes } from '@emotion/react';
+import styled from '@emotion/styled';
 import { Canvas } from '@react-three/fiber';
+import { Bloom, EffectComposer } from '@react-three/postprocessing';
 import {
 	AMBIENT_LIGHT_INTENSITY,
 	BLOOM_INTENSITY,
@@ -9,11 +12,8 @@ import {
 	SPACE_WARP_CAMERA_POSITION,
 	SPACE_WARP_CAMERA_UP,
 } from './lib/constants';
-import { EffectComposer, Bloom } from '@react-three/postprocessing';
-import SpaceWarp from './ui/SpaceWarp';
 import BrightSphere from './ui/BrightSphere';
-import styled from '@emotion/styled';
-import { keyframes } from '@emotion/react';
+import SpaceWarp from './ui/SpaceWarp';
 
 interface PropsType {
 	isSwitching: 'warp' | 'fade' | 'end';

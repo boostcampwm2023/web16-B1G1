@@ -1,9 +1,9 @@
-import styled from '@emotion/styled';
-import { Body04BD } from '../styles';
-import confirmIcon from '@icons/icon-confirm-22.svg';
-import { useState } from 'react';
 import { keyframes } from '@emotion/react';
+import styled from '@emotion/styled';
+import confirmIcon from '@icons/icon-confirm-22.svg';
 import { X } from 'lucide-react';
+import { useState } from 'react';
+import { Body04BD } from 'shared/styles';
 
 interface PropsTypes {
 	type?: 'success' | 'error';

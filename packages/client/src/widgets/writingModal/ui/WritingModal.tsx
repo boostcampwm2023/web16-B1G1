@@ -1,15 +1,12 @@
-import { useState } from 'react';
-import { Button, Modal } from 'shared/ui';
-import TextArea from 'shared/ui/textArea/TextArea';
-import Images from './Images';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { useViewStore, usePostStore } from 'shared/store';
-import InputBar from 'shared/ui/inputBar/InputBar';
-import styled from '@emotion/styled';
 import { css } from '@emotion/react';
-import { Caption } from 'shared/ui/styles';
-import { useRefresh } from 'shared/hooks/useRefresh';
-import { AlertDialog } from 'shared/ui';
+import styled from '@emotion/styled';
+import { useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useRefresh } from 'shared/hooks';
+import { usePostStore, useViewStore } from 'shared/store';
+import { Caption } from 'shared/styles';
+import { AlertDialog, Button, Input, Modal, TextArea } from 'shared/ui';
+import Images from './Images';
 
 type TextStateTypes = 'DEFAULT' | 'INVALID';
 
@@ -132,7 +129,7 @@ const ContentContainer = styled.div<{ state: TextStateTypes }>`
 	}};
 `;
 
-const TitleInput = styled(InputBar)<{ state: TextStateTypes }>`
+const TitleInput = styled(Input)<{ state: TextStateTypes }>`
 	${({ state, theme: { colors } }) => {
 		if (state === 'DEFAULT') return;
 

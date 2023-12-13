@@ -1,10 +1,10 @@
-import { forwardRef } from 'react';
-import * as THREE from 'three';
-import { useFrame, ThreeEvent } from '@react-three/fiber';
-import { DISTANCE_LIMIT } from './lib/constants';
-import { useForwardRef } from 'shared/hooks';
-import { Geometry } from './model';
 import { ShapeType } from '@constants';
+import { ThreeEvent, useFrame } from '@react-three/fiber';
+import { forwardRef } from 'react';
+import { useForwardRef } from 'shared/hooks';
+import * as THREE from 'three';
+import { DISTANCE_LIMIT } from './lib/constants';
+import { Geometry } from './model';
 
 interface PropsType {
 	children?: React.ReactNode;

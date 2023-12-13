@@ -1,28 +1,35 @@
-import { useRef } from 'react';
-import { useCameraStore } from 'shared/store/useCameraStore';
-import { ThreeEvent } from '@react-three/fiber';
-import { Html } from '@react-three/drei';
 import styled from '@emotion/styled';
-import { useViewStore } from 'shared/store/useViewStore';
-import * as THREE from 'three';
-import { StarType } from 'shared/lib/types/star';
+import { Html } from '@react-three/drei';
+import { ThreeEvent, useFrame } from '@react-three/fiber';
+import { Star } from 'features';
+import { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { useState, useEffect } from 'react';
-import theme from 'shared/ui/styles/theme';
-import Star from 'features/star/Star';
+import { StarType } from 'shared/lib';
+import { useCameraStore, useViewStore } from 'shared/store';
+import * as THREE from 'three';
 
 interface PropsType {
 	data: StarType;
 	postId: number;
 	title: string;
+	state?: 'created' | 'normal' | 'deleted';
 }
 
-export default function Post({ data, postId, title }: PropsType) {
+export default function Post({
+	data,
+	postId,
+	title,
+	state = 'normal',
+}: PropsType) {
 	const { targetView, setTargetView } = useCameraStore();
 	const { setView } = useViewStore();
 
 	const meshRef = useRef<THREE.Mesh>(null!);
 	const [isHovered, setIsHovered] = useState(false);
+	const [starState, setStarState] = useState<'created' | 'normal' | 'deleted'>(
+		'normal',
+	);
+	const [size, setSize] = useState(0);
 
 	const navigate = useNavigate();
 	const location = useLocation();
@@ -32,6 +39,29 @@ export default function Post({ data, postId, title }: PropsType) {
 	useEffect(() => {
 		if (id && Number(id) === postId) setTargetView(meshRef.current);
 	}, [id]);
+
+	useEffect(() => {
+		if (state === 'created') {
+			setStarState('created');
+			setSize(0);
+		} else if (state === 'deleted') {
+			setStarState('deleted');
+			setSize(data.size);
+		}
+	}, [state]);
+
+	useFrame((_, delta) => {
+		if (starState === 'created') {
+			if (size + delta * 300 < data.size) setSize(size + delta * 300);
+			else {
+				setSize(data.size);
+				setStarState('normal');
+			}
+		} else if (starState === 'deleted') {
+			if (size - delta * 300 > 0) setSize(size - delta * 300);
+			else setSize(0);
+		}
+	});
 
 	const handleMeshClick = (e: ThreeEvent<MouseEvent>) => {
 		e.stopPropagation();
@@ -68,7 +98,7 @@ export default function Post({ data, postId, title }: PropsType) {
 			position={
 				new THREE.Vector3(data.position.x, data.position.y, data.position.z)
 			}
-			size={data.size}
+			size={size}
 			color={data.color}
 			onClick={handleMeshClick}
 			ref={meshRef}
@@ -92,9 +122,9 @@ const Label = styled.div`
 	width: fit-content;
 	max-width: 200px; // TODO: 수정 예정
 	text-align: center;
-	background-color: ${theme.colors.background.bdp01_80};
-	border: 1px solid ${theme.colors.stroke.sc};
-	color: ${theme.colors.text.secondary};
+	background-color: ${({ theme: { colors } }) => colors.background.bdp01_80};
+	border: ${({ theme: { colors } }) => colors.stroke.sc};
+	color: ${({ theme: { colors } }) => colors.text.secondary};
 	transform: translate3d(calc(-50%), calc(-250%), 0); // TODO: 수정 예정
 
 	overflow: hidden;

@@ -187,6 +187,16 @@ yarn workspace server start:dev
 
 ### TDD
 
+하나의 API를 구현하기 전에 여러 케이스에 대하여 먼저 테스트코드를 작성하는 TDD(Test Driven Development)를 해보았습니다.
+그 과정에서 어색함도 많이 느꼈고, 완벽하게 했다고도 하지 못하지만 TDD의 방법과 장점 등에 대해 알 수 있었습니다.
+
+#### 학습 및 개발 기록
+- [테스트 코드를 작성해야 하는 이유](https://www.notion.so/b091dfc8229e4943af4acef50a7a5b75)
+- [NetsJS + Jest 환경 설정](https://github.com/boostcampwm2023/web16-B1G1/wiki/%5B%EC%A4%80%EC%84%AD%5D-1114(%ED%99%94)-%EA%B0%9C%EB%B0%9C%EA%B8%B0%EB%A1%9D)
+- [TDD 기록 1](https://github.com/boostcampwm2023/web16-B1G1/wiki/%5B%EC%9E%AC%ED%95%98%5D-1115(%EC%88%98)-%EA%B0%9C%EB%B0%9C%EA%B8%B0%EB%A1%9D)
+- [TDD 기록 2](https://github.com/boostcampwm2023/web16-B1G1/wiki/%5B%EC%9E%AC%ED%95%98%5D-1116(%EB%AA%A9)-%EA%B0%9C%EB%B0%9C%EA%B8%B0%EB%A1%9D)
+- [TDD 기록 3](https://github.com/boostcampwm2023/web16-B1G1/wiki/%5B%EC%A4%80%EC%84%AD%5D-1116(%EB%AA%A9)-%EA%B0%9C%EB%B0%9C%EA%B8%B0%EB%A1%9D)
+
 ### 트랜잭션
 
 <br />

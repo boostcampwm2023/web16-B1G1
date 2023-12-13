@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import logo from 'assets/logo.png';
+import logo from 'assets/logos/logo.png';
 import { useNavigate } from 'react-router-dom';
 import { Title02 } from 'shared/styles';
 import { Button } from 'shared/ui';

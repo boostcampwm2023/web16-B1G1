@@ -4,15 +4,16 @@ import { ThreeEvent, useFrame } from '@react-three/fiber';
 import { Star } from 'features';
 import { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { StarType } from 'shared/lib';
+import { StarStateType, StarType } from 'shared/lib';
 import { useCameraStore, useViewStore } from 'shared/store';
+import { theme } from 'shared/styles';
 import * as THREE from 'three';
 
 interface PropsType {
 	data: StarType;
 	postId: number;
 	title: string;
-	state?: 'created' | 'normal' | 'deleted';
+	state?: StarStateType;
 }
 
 export default function Post({
@@ -26,9 +27,7 @@ export default function Post({
 
 	const meshRef = useRef<THREE.Mesh>(null!);
 	const [isHovered, setIsHovered] = useState(false);
-	const [starState, setStarState] = useState<'created' | 'normal' | 'deleted'>(
-		'normal',
-	);
+	const [starState, setStarState] = useState<StarStateType>('normal');
 	const [size, setSize] = useState(0);
 
 	const navigate = useNavigate();
@@ -122,10 +121,10 @@ const Label = styled.div`
 	width: fit-content;
 	max-width: 200px;
 	text-align: center;
-	background-color: ${({ theme: { colors } }) => colors.background.bdp01_80};
-	border: ${({ theme: { colors } }) => colors.stroke.sc};
-	color: ${({ theme: { colors } }) => colors.text.secondary};
-	transform: translate3d(calc(-50%), calc(-250%), 0);
+	background-color: ${theme.colors.background.bdp01_80};
+	border: ${theme.colors.stroke.sc};
+	color: ${theme.colors.text.secondary};
+	transform: translate3d(calc(-50%), calc(-250%), 0); 
 
 	overflow: hidden;
 	text-overflow: ellipsis;

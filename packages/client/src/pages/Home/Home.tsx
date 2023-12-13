@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { Outlet, useLocation, useParams } from 'react-router-dom';
 import { getGalaxy } from 'shared/apis';
 import { useCheckNickName } from 'shared/hooks';
+import { WarpStateType } from 'shared/lib';
 import {
 	useCustomStore,
 	useGalaxyStore,
@@ -19,9 +20,7 @@ import {
 } from 'widgets/galaxy/lib/constants';
 
 export default function Home() {
-	const [isSwitching, setIsSwitching] = useState<'warp' | 'fade' | 'end'>(
-		'end',
-	);
+	const [isSwitching, setIsSwitching] = useState<WarpStateType>('end');
 	const { text, type } = useToastStore();
 	const { nickName, status } = useCheckNickName();
 

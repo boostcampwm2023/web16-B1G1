@@ -265,7 +265,7 @@ Session vs JWT, Authorization Bearer vs Cookie, RefreshToken
 - [Redis 연결](https://velog.io/@songjseop/nestjs-redis)
 - [RefreshToken 발급 및 Redis 저장](https://github.com/boostcampwm2023/web16-B1G1/wiki/%5B%EC%A4%80%EC%84%AD%5D-1121(%ED%99%94)-%EA%B0%9C%EB%B0%9C%EA%B8%B0%EB%A1%9D-%E2%80%90-%08SignIn%EC%8B%9C-RefreshToken-%EB%B0%9C%EA%B8%89-%EB%B0%8F-Redis%EC%97%90-%EC%A0%80%EC%9E%A5)
 - [커스텀 AuthGuard 작성](https://github.com/boostcampwm2023/web16-B1G1/wiki/%5B%EC%A4%80%EC%84%AD%5D-1121(%ED%99%94)-%EA%B0%9C%EB%B0%9C%EA%B8%B0%EB%A1%9D-%E2%80%90-%EC%BB%A4%EC%8A%A4%ED%85%80-AuthGuard-%EC%9E%91%EC%84%B1)
-- [OAuth(깃헙 로그인)]([https://github.com/boostcampwm2023/web16-B1G1/wiki/%5B%EC%A4%80%EC%84%AD%5D-1125(%ED%86%A0)-%EA%B0%9C%EB%B0%9C-%EA%B8%B0%EB%A1%9D-%E2%80%90-OAuth-%EC%BD%94%EB%93%9C-%ED%86%B5%ED%95%A9-%EB%B0%8F-%EC%9E%AC%EC%82%AC%EC%9A%A9](https://github.com/boostcampwm2023/web16-B1G1/wiki/%5B%EC%A4%80%EC%84%AD%5D-1122(%EC%88%98)-%EA%B0%9C%EB%B0%9C%EA%B8%B0%EB%A1%9D-%E2%80%90-%EA%B9%83%ED%97%99-%EB%A1%9C%EA%B7%B8%EC%9D%B8-%EA%B5%AC%ED%98%84))
+- [OAuth(깃헙 로그인)](https://github.com/boostcampwm2023/web16-B1G1/wiki/%5B%EC%A4%80%EC%84%AD%5D-1122(%EC%88%98)-%EA%B0%9C%EB%B0%9C%EA%B8%B0%EB%A1%9D-%E2%80%90-%EA%B9%83%ED%97%99-%EB%A1%9C%EA%B7%B8%EC%9D%B8-%EA%B5%AC%ED%98%84)
 
 
 ### 트랜잭션 제어, 쿼리 최적화

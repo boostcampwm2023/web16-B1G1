@@ -1,6 +1,6 @@
-import { IconButton } from 'shared/ui';
-import { useCustomStore, useGalaxyStore } from 'shared/store';
 import { RotateCcw } from 'lucide-react';
+import { useCustomStore, useGalaxyStore } from 'shared/store';
+import { IconButton } from 'shared/ui';
 
 export default function TopButton() {
 	const { setSpiral, setStart, setZDist, setThickness } = useCustomStore();

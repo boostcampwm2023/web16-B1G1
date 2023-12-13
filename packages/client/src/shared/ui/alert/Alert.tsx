@@ -1,8 +1,8 @@
-import styled from '@emotion/styled';
-import { Body02ME, Title01 } from '../styles';
 import { css } from '@emotion/react';
-import { Button, ModalPortal } from '..';
-import { useState, useEffect } from 'react';
+import styled from '@emotion/styled';
+import { useEffect, useState } from 'react';
+import { Body02ME, Title01 } from 'shared/styles';
+import { Button, ModalPortal } from 'shared/ui';
 
 interface PropsTypes extends React.HTMLAttributes<HTMLDivElement> {
 	title: string;

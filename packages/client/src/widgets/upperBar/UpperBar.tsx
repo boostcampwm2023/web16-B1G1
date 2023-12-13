@@ -1,13 +1,13 @@
-import styled from '@emotion/styled';
-import { IconButton, Search } from 'shared/ui';
-import goBackIcon from '@icons/icon-back-32-white.svg';
 import { MAX_WIDTH1, MAX_WIDTH2 } from '@constants';
-import { useState, useEffect } from 'react';
-import { checkExistNickname, getNickNames } from 'shared/apis/search';
-import { useToastStore, useViewStore } from 'shared/store';
-import { useNavigate } from 'react-router-dom';
-import useCheckNickName from 'shared/hooks/useCheckNickName';
+import styled from '@emotion/styled';
+import goBackIcon from '@icons/icon-back-32-white.svg';
 import Cookies from 'js-cookie';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { checkExistNickname, getNickNames } from 'shared/apis';
+import { useCheckNickName } from 'shared/hooks';
+import { useToastStore, useViewStore } from 'shared/store';
+import { IconButton, Search } from 'shared/ui';
 
 export default function UpperBar() {
 	// TODO: ui 분리하기

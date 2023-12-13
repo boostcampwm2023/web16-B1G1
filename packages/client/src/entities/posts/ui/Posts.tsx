@@ -1,10 +1,10 @@
-import Post from './Post';
-import { useState, useEffect } from 'react';
-import { StarData } from 'shared/lib/types/star';
-import { getPostListByNickName } from 'shared/apis/star';
-import { getMyPost } from '../apis/getMyPost';
-import useCheckNickName from 'shared/hooks/useCheckNickName';
+import { useEffect, useState } from 'react';
+import { getPostListByNickName } from 'shared/apis';
+import { useCheckNickName } from 'shared/hooks';
+import { StarData } from 'shared/lib';
 import { useViewStore } from 'shared/store';
+import { getMyPost } from '../apis/getMyPost';
+import Post from './Post';
 
 export default function Posts() {
 	const [postData, setPostData] = useState<StarData[]>();

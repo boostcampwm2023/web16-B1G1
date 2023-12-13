@@ -1,13 +1,13 @@
-import { useMemo, useRef } from 'react';
+import { DIMENSION, SPACE_MAX_SIZE, SPACE_MIN_SIZE } from '@constants';
 import { useFrame } from '@react-three/fiber';
-import { getRandomInt, getRandomFloat } from '@utils/random';
+import { getRandomFloat, getRandomInt } from '@utils/random';
+import { useMemo, useRef } from 'react';
 import * as THREE from 'three';
 import {
 	BACKGROUND_STARS_NUM,
 	BACKGROUND_STAR_COLORS,
 	BACKGROUND_STAR_SIZE,
 } from './lib/constants';
-import { DIMENSION, SPACE_MAX_SIZE, SPACE_MIN_SIZE } from '@constants';
 
 const getBackgroundStarsInfo = () => {
 	const positions = Array.from(

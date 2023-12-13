@@ -1,5 +1,5 @@
 import Joyride, { Step } from 'react-joyride';
-import { patchShareStatus } from 'shared/apis/share';
+import { patchShareStatus } from 'shared/apis';
 
 interface PropsType {
 	isFirst: boolean;

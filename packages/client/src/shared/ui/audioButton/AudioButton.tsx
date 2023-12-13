@@ -1,6 +1,6 @@
-import { Volume2, VolumeX } from 'lucide-react';
-import { usePlayingStore } from 'shared/store/useAudioStore';
 import styled from '@emotion/styled';
+import { Volume2, VolumeX } from 'lucide-react';
+import { usePlayingStore } from 'shared/store';
 
 export default function AudioButton() {
 	const { playing, setPlaying } = usePlayingStore();

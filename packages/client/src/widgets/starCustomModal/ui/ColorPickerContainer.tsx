@@ -1,6 +1,6 @@
-import { ColorChangeHandler, SliderPicker } from 'react-color';
 import styled from '@emotion/styled';
-import { Body03ME } from 'shared/ui/styles';
+import { ColorChangeHandler, SliderPicker } from 'react-color';
+import { Body03ME } from 'shared/styles';
 
 interface PropsType {
 	color: string;

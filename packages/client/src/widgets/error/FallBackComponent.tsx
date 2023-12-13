@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import Logo from 'assets/logos/404.png';
 import { useNavigate } from 'react-router-dom';
-import { Body05Me, PageTitle03 } from 'shared/ui/styles';
+import { Body05Me, PageTitle03 } from 'shared/styles';
 
 export default function FallBackComponent() {
 	const navigate = useNavigate();

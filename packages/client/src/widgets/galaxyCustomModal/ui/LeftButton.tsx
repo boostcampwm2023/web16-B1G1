@@ -1,10 +1,10 @@
-import { Button } from 'shared/ui';
 import { useCustomStore } from 'shared/store';
+import { Button } from 'shared/ui';
 import {
-	SPIRAL,
-	SPIRAL_START,
 	ARMS_Z_DIST,
 	GALAXY_THICKNESS,
+	SPIRAL,
+	SPIRAL_START,
 } from 'widgets/galaxy/lib/constants';
 
 export default function LeftButton() {

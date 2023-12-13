@@ -1,5 +1,5 @@
-import { useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
+import { useRef } from 'react';
 import { Group, Object3DEventMap } from 'three';
 
 export default function CameraLight() {

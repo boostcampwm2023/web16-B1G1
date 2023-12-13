@@ -1,5 +1,5 @@
 import { getRandomFloat } from '@utils/random';
-import { StarData } from 'shared/lib/types/star';
+import { StarData } from 'shared/lib';
 import { ARMS_X_DIST, GALAXY_THICKNESS } from 'widgets/galaxy/lib/constants';
 
 interface StarPosition {

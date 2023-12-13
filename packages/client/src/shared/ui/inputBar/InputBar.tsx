@@ -1,6 +1,5 @@
 import styled from '@emotion/styled';
-import theme from '../styles/theme';
-import { Body02ME, Body03ME } from '../styles';
+import { Body02ME, Body03ME, theme } from 'shared/styles';
 
 interface PropsType extends React.InputHTMLAttributes<HTMLInputElement> {
 	label?: string;

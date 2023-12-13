@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
-import { Slider } from 'shared/ui';
 import { useCustomStore } from 'shared/store';
+import { Slider } from 'shared/ui';
 
 export default function Sliders() {
 	const {

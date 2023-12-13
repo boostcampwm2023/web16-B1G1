@@ -1,19 +1,22 @@
-import { Modal } from 'shared/ui';
+import styled from '@emotion/styled';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { postGalaxy } from 'shared/apis';
+import { useRefresh } from 'shared/hooks';
 import {
+	useCustomStore,
+	useGalaxyStore,
+	useToastStore,
+	useViewStore,
+} from 'shared/store';
+import { AlertDialog, Modal } from 'shared/ui';
+import {
+	LeftButton,
 	RightButton,
 	SampleScreen,
 	Sliders,
-	LeftButton,
 	TopButton,
 } from './ui';
-import { useToastStore, useViewStore } from 'shared/store';
-import styled from '@emotion/styled';
-import { useGalaxyStore, useCustomStore } from 'shared/store';
-import { postGalaxy } from 'shared/apis';
-import { useRefresh } from 'shared/hooks/useRefresh';
-import { useState } from 'react';
-import AlertDialog from 'shared/ui/alertDialog/AlertDialog';
 
 export default function GalaxyCustomModal() {
 	const navigate = useNavigate();

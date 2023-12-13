@@ -1,9 +1,8 @@
-import * as THREE from 'three';
-import { useRef, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { Instances } from './lib/modules';
+import React, { useMemo, useRef } from 'react';
+import * as THREE from 'three';
 import { STARS_NUM, starTypes } from './lib/constants';
-import React from 'react';
+import { Instances } from './lib/modules';
 
 interface PropsType {
 	number?: number;

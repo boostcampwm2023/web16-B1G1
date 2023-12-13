@@ -1,9 +1,9 @@
-import styled from '@emotion/styled';
-import { Body02ME, Title02 } from '../styles';
-import { ReactNode } from 'react';
 import { css } from '@emotion/react';
+import styled from '@emotion/styled';
 import goBackIcon from '@icons/icon-back-32-white.svg';
-import { IconButton, ModalPortal } from '..';
+import { ReactNode } from 'react';
+import { Body02ME, Title02 } from 'shared/styles';
+import { IconButton, ModalPortal } from 'shared/ui';
 
 interface PropsTypes extends React.HTMLAttributes<HTMLFormElement> {
 	title: string;

@@ -1,10 +1,9 @@
-import { useState } from 'react';
-import styled from '@emotion/styled';
 import { css, SerializedStyles } from '@emotion/react';
+import styled from '@emotion/styled';
+import { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import theme from '../styles/theme';
-import { Body04Me } from '../styles';
+import { Body04Me, theme } from 'shared/styles';
 
 interface PropsType {
 	onChange: (text: string) => void;

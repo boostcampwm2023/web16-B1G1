@@ -263,8 +263,8 @@ yarn workspace server start:dev
 
    아래 사진 중 왼쪽은 최고 해상도인 경우이고, 오른쪽은 최저 해상도인 경우입니다.
 
-    <img  height="250" src="https://github.com/boostcampwm2023/web16-B1G1/assets/80266418/3f8b0974-4492-4567-a395-76a3ccb7007a">
-    <img  height="250" src="https://github.com/boostcampwm2023/web16-B1G1/assets/80266418/5f0c25f8-d977-437c-ba1d-3bc3b6f05c2a">
+    <img  height="220" src="https://github.com/boostcampwm2023/web16-B1G1/assets/80266418/3f8b0974-4492-4567-a395-76a3ccb7007a">
+    <img  height="220" src="https://github.com/boostcampwm2023/web16-B1G1/assets/80266418/5f0c25f8-d977-437c-ba1d-3bc3b6f05c2a">
 
    아래 사진은 메모리 사용량을 비교한 것으로, Performance Monitoring 최적화 전 13.46GB였던 메모리 사용량이 최적화 후 12.50GB까지 감소했습니다.
 

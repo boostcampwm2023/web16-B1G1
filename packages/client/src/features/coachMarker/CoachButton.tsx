@@ -14,6 +14,6 @@ export default function CoachButton() {
 }
 
 const HelpCircleButton = styled(HelpCircleIcon)`
-	color: ${({ theme }) => theme.colors.text.secondary};
+	color: ${({ theme: { colors } }) => colors.text.secondary};
 	cursor: pointer;
 `;

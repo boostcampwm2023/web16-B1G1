@@ -76,8 +76,8 @@ const Section = styled.section<{ width: string; height: string }>`
 	${Body04Me}
 	width: ${({ width }) => width};
 	height: ${({ height }) => height};
-	background-color: ${theme.colors.background.bdp03};
-	color: ${theme.colors.text.third};
+	background-color: ${({ theme: { colors } }) => colors.background.bdp03};
+	color: ${({ theme: { colors } }) => colors.text.third};
 	border-radius: 4px;
 	display: flex;
 	padding: 16px;
@@ -92,7 +92,7 @@ const Tabs = styled.ul`
 	align-items: center;
 
 	.selected {
-		color: ${theme.colors.text.primary};
+		color: ${({ theme: { colors } }) => colors.text.primary};
 		font-size: large;
 	}
 `;
@@ -104,14 +104,14 @@ const Tab = styled.div`
 const TextInput = styled.textarea<{ css: SerializedStyles }>`
 	${({ css }) => css}
 	resize: none;
-	background-color: ${theme.colors.background.bdp03};
-	color: ${theme.colors.text.third};
+	background-color: ${({ theme: { colors } }) => colors.background.bdp03};
+	color: ${({ theme: { colors } }) => colors.text.third};
 	border: none;
 	height: 100%;
 
 	&:focus {
 		outline: none;
-		color: ${theme.colors.text.secondary};
+		color: ${({ theme: { colors } }) => colors.text.secondary};
 	}
 `;
 
@@ -124,18 +124,18 @@ const LimitSpan = styled.span`
 const Container = styled.div`
 	display: flex;
 	flex-direction: column;
-	border: 1px solid ${theme.colors.stroke.default};
+	border: 1px solid ${({ theme: { colors } }) => colors.stroke.default};
 	border-radius: 4px;
 	padding: 8px;
 	height: 100%;
 	overflow: auto;
 
 	&:focus-within {
-		border: 1px solid ${theme.colors.stroke.focus};
+		border: 1px solid ${({ theme: { colors } }) => colors.stroke.focus};
 	}
 
 	&:hover {
-		border: 1px solid ${theme.colors.stroke.focus};
+		border: 1px solid ${({ theme: { colors } }) => colors.stroke.focus};
 	}
 `;
 
@@ -147,7 +147,7 @@ const Wrapper = styled.div<{ css: SerializedStyles }>`
 	padding: 8px;
 	margin-top: 9px;
 	margin-right: 9px;
-	color: ${theme.colors.text.secondary};
+	color: ${({ theme: { colors } }) => colors.text.secondary};
 	word-break: break-all;
 
 	& ol {

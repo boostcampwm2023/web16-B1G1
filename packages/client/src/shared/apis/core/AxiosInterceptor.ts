@@ -28,8 +28,6 @@ function AxiosInterceptor({ children }: Props) {
 
 				if (url === '/auth/check-signin') return Promise.reject(error);
 
-				// TODO: '/auth/is-available-nickname'  부분 처리하기
-
 				setToast({ text: errorMessage[method][url], type: 'error' });
 
 				console.error(error.response.data);

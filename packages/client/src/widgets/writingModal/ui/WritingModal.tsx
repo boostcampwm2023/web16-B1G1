@@ -98,7 +98,7 @@ export default function WritingModal() {
 					)}
 				</ContentContainer>
 				<ImagesWrapper>
-					<Images onModify={setFiles} />
+					<Images files={files} setFiles={setFiles} />
 				</ImagesWrapper>
 			</Modal>
 		</>

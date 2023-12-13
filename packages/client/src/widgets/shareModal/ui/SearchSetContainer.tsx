@@ -21,8 +21,8 @@ export default function SearchSetContainer({
 		if (searchStatus === 'public') return true;
 		return false;
 	};
-	//www.xn--bj0b03z.site/guest/5026c728-d5c6-4d2c-b918-bdcd1149ac97
-	https: return (
+
+	return (
 		<Layout>
 			<SearchSetLabel>검색 허용</SearchSetLabel>
 			<SearchSetCheckBox

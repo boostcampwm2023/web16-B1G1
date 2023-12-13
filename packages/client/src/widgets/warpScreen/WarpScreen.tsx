@@ -2,6 +2,8 @@ import { keyframes } from '@emotion/react';
 import styled from '@emotion/styled';
 import { Canvas } from '@react-three/fiber';
 import { Bloom, EffectComposer } from '@react-three/postprocessing';
+import { theme } from 'shared/styles';
+import { WarpStateType } from 'shared/lib';
 import {
 	AMBIENT_LIGHT_INTENSITY,
 	BLOOM_INTENSITY,
@@ -16,8 +18,8 @@ import BrightSphere from './ui/BrightSphere';
 import SpaceWarp from './ui/SpaceWarp';
 
 interface PropsType {
-	isSwitching: 'warp' | 'fade' | 'end';
-	setIsSwitching: React.Dispatch<React.SetStateAction<'warp' | 'fade' | 'end'>>;
+	isSwitching: WarpStateType;
+	setIsSwitching: React.Dispatch<React.SetStateAction<WarpStateType>>;
 }
 
 export default function WarpScreen({ isSwitching, setIsSwitching }: PropsType) {
@@ -32,7 +34,7 @@ export default function WarpScreen({ isSwitching, setIsSwitching }: PropsType) {
 		height: '100vh',
 		width: '100vw',
 		zIndex: 999,
-		backgroundColor: '#000000',
+		backgroundColor: theme.colors.background.bdp04,
 	};
 	if (isSwitching === 'fade') return <FadeoutScreen />;
 

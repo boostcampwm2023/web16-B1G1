@@ -1,5 +1,6 @@
 import { Canvas } from '@react-three/fiber';
 import { Bloom, EffectComposer } from '@react-three/postprocessing';
+import { theme } from 'shared/styles';
 import { Galaxy } from 'widgets';
 
 export default function SampleScreen() {
@@ -19,7 +20,7 @@ export default function SampleScreen() {
 						luminanceSmoothing={0.025}
 					/>
 				</EffectComposer>
-				<color attach="background" args={['#070614']} />
+				<color attach="background" args={[theme.colors.background.bdp04]} />
 				<ambientLight color="#fff" intensity={5} />
 				<Galaxy number={1500} isCustom={true} />
 			</Canvas>

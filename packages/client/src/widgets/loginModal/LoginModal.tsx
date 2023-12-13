@@ -1,10 +1,10 @@
-import { Modal } from 'shared/ui';
-import { TopButton, LeftButton, RightButton, LoginContent } from './ui';
-import { useNavigate } from 'react-router-dom';
+import { AxiosError } from 'axios';
 import Cookies from 'js-cookie';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { postLogin } from 'shared/apis';
-import { AxiosError } from 'axios';
+import { Modal } from 'shared/ui';
+import { LeftButton, LoginContent, RightButton, TopButton } from './ui';
 
 export default function LoginModal() {
 	const [id, setId] = useState(Cookies.get('userId') ?? '');

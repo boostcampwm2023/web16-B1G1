@@ -1,17 +1,16 @@
 import styled from '@emotion/styled';
-import { Button } from 'shared/ui';
-import { Title01 } from '../../shared/ui/styles';
 import PlanetEditIcon from '@icons/icon-planetedit-24-white.svg';
 import WriteIcon from '@icons/icon-writte-24-white.svg';
-import { MAX_WIDTH1, MAX_WIDTH2 } from 'shared/lib/constants';
-import { useNavigate } from 'react-router-dom';
+import { CoachButton } from 'features';
 import Cookies from 'js-cookie';
-import instance from 'shared/apis/core/AxiosInterceptor';
-import { useViewStore } from 'shared/store';
 import { useEffect, useState } from 'react';
-import useCheckNickName from 'shared/hooks/useCheckNickName';
-import { useGalaxyStore } from 'shared/store';
-import CoachButton from 'features/coachMarker/CoachButton';
+import { useNavigate } from 'react-router-dom';
+import { instance } from 'shared/apis';
+import { useCheckNickName } from 'shared/hooks';
+import { MAX_WIDTH1, MAX_WIDTH2 } from 'shared/lib';
+import { useGalaxyStore, useViewStore } from 'shared/store';
+import { Title01 } from 'shared/styles';
+import { Button } from 'shared/ui';
 
 export default function UnderBar() {
 	const navigate = useNavigate();

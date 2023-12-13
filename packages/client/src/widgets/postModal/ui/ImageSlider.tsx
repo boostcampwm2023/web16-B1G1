@@ -1,8 +1,8 @@
-import { useState, useMemo } from 'react';
-import { CircleDot, Circle } from 'lucide-react';
+import styled from '@emotion/styled';
 import ArrowBigLeft from '@icons/icon-arrow-left-32-white.svg?react';
 import ArrowBigRight from '@icons/icon-arrow-right-32-white.svg?react';
-import styled from '@emotion/styled';
+import { Circle, CircleDot } from 'lucide-react';
+import { useMemo, useState } from 'react';
 
 interface PropsType {
 	imageUrls: string[];

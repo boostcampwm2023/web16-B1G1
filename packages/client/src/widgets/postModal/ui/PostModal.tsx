@@ -1,21 +1,16 @@
-import { useViewStore } from 'shared/store/useViewStore';
-import { Button, Modal, TextArea } from 'shared/ui';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
 import styled from '@emotion/styled';
+import { Like } from 'entities';
 import { useEffect, useState } from 'react';
-import AlertDialog from 'shared/ui/alertDialog/AlertDialog';
+import ReactMarkdown from 'react-markdown';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { useFetch } from 'shared/hooks';
-import { PostData } from 'shared/lib/types/post';
+import remarkGfm from 'remark-gfm';
+import { instance } from 'shared/apis';
+import { useCheckNickName, useFetch, useRefresh } from 'shared/hooks';
+import { PostData } from 'shared/lib';
+import { useCameraStore, useToastStore, useViewStore } from 'shared/store';
+import { AlertDialog, Button, Input, Modal, TextArea } from 'shared/ui';
 import { deletePost } from '../api/deletePost';
 import ImageSlider from './ImageSlider';
-import Like from 'entities/like/Like';
-import InputBar from 'shared/ui/inputBar/InputBar';
-import instance from 'shared/apis/core/AxiosInterceptor';
-import { useToastStore, useCameraStore } from 'shared/store';
-import useCheckNickName from 'shared/hooks/useCheckNickName';
-import { useRefresh } from 'shared/hooks/useRefresh';
 
 export default function PostModal() {
 	const [deleteModal, setDeleteModal] = useState(false);
@@ -165,7 +160,7 @@ export default function PostModal() {
 						)}
 						{isEdit ? (
 							<TextContainer style={{ height: '100%' }}>
-								<InputBar
+								<Input
 									id={'postTitle'}
 									placeholder="제목"
 									style={{ marginBottom: '30px', height: '25%' }}

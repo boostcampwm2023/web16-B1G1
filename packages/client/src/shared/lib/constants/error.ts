@@ -13,6 +13,7 @@ export const errorMessage: ErrorMessageTypes = {
 		'/auth/is-available-nickname': '이미 존재하는 닉네임입니다.',
 		'/auth/search': '유저 목록 조회에 실패했습니다.',
 		'/auth/sharelink': '공유 링크 생성에 실패했습니다.',
+		'/auth/check-nickname': '존재하지 않는 유저입니다.',
 		'/post/[0-9]+': '글 조회에 실패했습니다.',
 		'/post/[0-9]+/is-liked': '좋아요 여부 조회에 실패했습니다.',
 		'/star': '글 목록 조회에 실패했습니다.',

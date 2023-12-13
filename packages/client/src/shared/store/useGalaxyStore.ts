@@ -1,10 +1,10 @@
-import { create } from 'zustand';
 import {
 	ARMS_Z_DIST,
 	GALAXY_THICKNESS,
 	SPIRAL,
 	SPIRAL_START,
 } from 'widgets/galaxy/lib/constants';
+import { create } from 'zustand';
 
 interface GalaxyState {
 	spiral: number;

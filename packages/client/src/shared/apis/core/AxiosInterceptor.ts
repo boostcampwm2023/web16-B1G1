@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useEffect } from 'react';
-import { errorMessage } from 'shared/lib/constants/error';
+import { errorMessage } from 'shared/lib';
 import { useToastStore } from 'shared/store';
 
 const instance = axios.create({

@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
-import axios, { AxiosError } from 'axios';
 import { BASE_URL } from '@constants';
+import axios, { AxiosError } from 'axios';
+import { useEffect, useState } from 'react';
 
 export const useFetch = <T>(api: string) => {
 	const [data, setData] = useState<T>();

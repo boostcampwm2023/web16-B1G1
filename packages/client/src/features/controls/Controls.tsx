@@ -1,13 +1,11 @@
-import { useRef } from 'react';
-import { OrbitControls } from '@react-three/drei';
-import * as THREE from 'three';
-import { useCameraStore } from 'shared/store/useCameraStore';
-import { Camera, useFrame, useThree } from '@react-three/fiber';
-import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
-import { useViewStore } from 'shared/store/useViewStore';
-import { useEffect } from 'react';
 import { CAMERA_POST_VIEW } from '@constants';
-import useCheckNickName from 'shared/hooks/useCheckNickName';
+import { OrbitControls } from '@react-three/drei';
+import { Camera, useFrame, useThree } from '@react-three/fiber';
+import { useEffect, useRef } from 'react';
+import { useCheckNickName } from 'shared/hooks';
+import { useCameraStore, useViewStore } from 'shared/store';
+import * as THREE from 'three';
+import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
 
 const setCameraPosition = (
 	camera: Camera,

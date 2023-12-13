@@ -1,9 +1,9 @@
 import styled from '@emotion/styled';
+import Cookies from 'js-cookie';
+import { useEffect, useState } from 'react';
+import { getShareLink } from 'shared/apis';
 import { useToastStore } from 'shared/store';
 import { Button, Input } from 'shared/ui';
-import { useState, useEffect } from 'react';
-import { getShareLink } from 'shared/apis/share';
-import Cookies from 'js-cookie';
 
 export default function LinkContainer() {
 	const [shareLink, setShareLink] = useState('');

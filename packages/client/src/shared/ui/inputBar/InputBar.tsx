@@ -1,6 +1,5 @@
 import styled from '@emotion/styled';
-import theme from '../styles/theme';
-import { Body02ME, Body03ME } from '../styles';
+import { Body02ME, Body03ME } from 'shared/styles';
 
 interface PropsType extends React.InputHTMLAttributes<HTMLInputElement> {
 	label?: string;
@@ -42,19 +41,19 @@ const Input = styled.input`
 	height: 100%;
 	padding: 12px;
 	border-radius: 4px;
-	background-color: ${theme.colors.background.bdp03};
-	border: 1px solid ${theme.colors.stroke.default};
-	color: ${theme.colors.text.third};
+	background-color: ${({ theme: { colors } }) => colors.background.bdp03};
+	border: 1px solid ${({ theme: { colors } }) => colors.stroke.default};
+	color: ${({ theme: { colors } }) => colors.text.third};
 	${Body03ME}
 
 	&:hover {
-		border: 1px solid ${theme.colors.stroke.sc};
+		border: 1px solid ${({ theme: { colors } }) => colors.stroke.sc};
 	}
 
 	&:focus {
 		outline: none;
-		border: 1px solid ${theme.colors.stroke.focus};
-		color: ${theme.colors.text.secondary};
+		border: 1px solid ${({ theme: { colors } }) => colors.stroke.focus};
+		color: ${({ theme: { colors } }) => colors.text.secondary};
 	}
 `;
 
@@ -63,7 +62,7 @@ const LabelContainer = styled.div`
 `;
 
 const LabelText = styled.label`
-	color: ${theme.colors.text.secondary};
+	color: ${({ theme: { colors } }) => colors.text.secondary};
 	${Body02ME}
 `;
 

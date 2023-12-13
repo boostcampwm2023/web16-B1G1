@@ -1,7 +1,7 @@
-import { Input } from 'shared/ui';
-import styled from '@emotion/styled';
 import { css } from '@emotion/react';
-import { Caption } from 'shared/ui/styles';
+import styled from '@emotion/styled';
+import { Caption } from 'shared/styles';
+import { Input } from 'shared/ui';
 import OauthLogin from './OauthLogin';
 
 interface PropsType {

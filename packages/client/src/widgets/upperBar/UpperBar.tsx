@@ -1,13 +1,13 @@
-import styled from '@emotion/styled';
-import { IconButton, Search } from 'shared/ui';
-import goBackIcon from '@icons/icon-back-32-white.svg';
 import { MAX_WIDTH1, MAX_WIDTH2 } from '@constants';
-import { useState, useEffect } from 'react';
-import { checkExistNickname, getNickNames } from 'shared/apis/search';
-import { useToastStore, useViewStore } from 'shared/store';
-import { useNavigate } from 'react-router-dom';
-import useCheckNickName from 'shared/hooks/useCheckNickName';
+import styled from '@emotion/styled';
+import goBackIcon from '@icons/icon-back-32-white.svg';
 import Cookies from 'js-cookie';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { checkExistNickname, getNickNames } from 'shared/apis';
+import { useCheckNickName } from 'shared/hooks';
+import { useToastStore, useViewStore } from 'shared/store';
+import { IconButton, Search } from 'shared/ui';
 
 export default function UpperBar() {
 	// TODO: ui 분리하기
@@ -56,7 +56,12 @@ export default function UpperBar() {
 		if (isSearchButtonDisabled) return;
 		setIsSearchButtonDisabled(true);
 		try {
-			await checkExistNickname(searchValue);
+			const data = await checkExistNickname(searchValue);
+			if (data.status === 'private')
+				return setToast({
+					text: '비공개 처리된 유저입니다.',
+					type: 'error',
+				});
 			if (searchValue === user)
 				return setToast({
 					text: '내 은하로는 이동할 수 없습니다.',
@@ -66,11 +71,6 @@ export default function UpperBar() {
 			setSearchValue('');
 			setDebouncedSearchValue('');
 			setSearchResults([]);
-		} catch (error) {
-			setToast({
-				text: '존재하지 않는 유저입니다.',
-				type: 'error',
-			});
 		} finally {
 			setIsSearchButtonDisabled(false);
 		}

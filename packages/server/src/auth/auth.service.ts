@@ -225,7 +225,7 @@ export class AuthService {
 			.where(`MATCH (user.nickname) AGAINST (:nickname IN BOOLEAN MODE)`, {
 				nickname: nickname + '*',
 			})
-			.andWhere('user.status = :status', { status: UserShareStatus.PUBLIC })
+			.andWhere('user.status != :status', { status: UserShareStatus.PRIVATE })
 			.getMany();
 		return users;
 	}
@@ -308,6 +308,8 @@ export class AuthService {
 			throw new NotFoundException('user not found');
 		}
 
-		return true;
+		return {
+			status: user.status,
+		};
 	}
 }

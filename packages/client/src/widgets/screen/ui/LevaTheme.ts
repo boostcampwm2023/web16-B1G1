@@ -1,5 +1,5 @@
 import { LevaCustomTheme } from 'leva/dist/declarations/src/styles';
-import theme from 'shared/ui/styles/theme';
+import { theme } from 'shared/styles';
 
 const color = theme.colors;
 

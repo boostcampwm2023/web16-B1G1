@@ -1,22 +1,22 @@
+import { Home, Landing } from 'pages';
 import {
 	Route,
 	createBrowserRouter,
 	createRoutesFromElements,
 } from 'react-router-dom';
-import Home from '../pages/Home/Home';
-import Landing from '../pages/Landing/Landing';
-import { WritingModal } from 'features/writingModal';
-import LoginModal from 'widgets/loginModal/LoginModal';
-import SignUpModal from 'widgets/signupModal/SignUpModal';
-import NickNameSetModal from 'widgets/nickNameSetModal/NickNameSetModal';
-import LogoAndStart from 'widgets/logoAndStart/LogoAndStart';
-import { PostModal } from 'features/postModal';
-import GalaxyCustomModal from 'widgets/galaxyCustomModal/GalaxyCustomModal';
-import StarCustomModal from 'widgets/starCustomModal/StarCustomModal';
-import ShareModal from 'widgets/shareModal/ShareModal';
-import PrivateRoute from '../shared/routes/PrivateRoute';
-import PublicRoute from 'shared/routes/PublicRoute';
-import FallBackComponent from 'widgets/error/FallBackComponent';
+import { PrivateRoute, PublicRoute } from 'shared/routes';
+import {
+	FallBackComponent,
+	GalaxyCustomModal,
+	LoginModal,
+	LogoAndStart,
+	NickNameSetModal,
+	PostModal,
+	ShareModal,
+	SignUpModal,
+	StarCustomModal,
+	WritingModal,
+} from 'widgets';
 
 export const router = createBrowserRouter(
 	createRoutesFromElements(

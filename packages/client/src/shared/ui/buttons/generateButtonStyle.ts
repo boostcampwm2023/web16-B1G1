@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { Body02ME, Body03ME, Body02BD, Body03BD } from '../styles';
+import { Body02BD, Body02ME, Body03BD, Body03ME } from 'shared/styles';
 
 export const generateButtonStyle = (
 	size: 'm' | 'l',

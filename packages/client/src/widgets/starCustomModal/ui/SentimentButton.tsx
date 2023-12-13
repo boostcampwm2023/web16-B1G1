@@ -1,9 +1,9 @@
 import styled from '@emotion/styled';
-import { useState } from 'react';
-import { Button } from 'shared/ui';
-import { Body01ME } from 'shared/ui/styles';
-import { getSentimentColor } from '../apis/getSentimentColor';
 import { HelpCircle } from 'lucide-react';
+import { useState } from 'react';
+import { Body01ME } from 'shared/styles';
+import { Button } from 'shared/ui';
+import { getSentimentColor } from '../apis/getSentimentColor';
 
 interface PropsType {
 	content: string;

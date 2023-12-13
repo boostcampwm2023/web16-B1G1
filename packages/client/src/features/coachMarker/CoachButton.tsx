@@ -1,7 +1,7 @@
+import styled from '@emotion/styled';
 import { HelpCircleIcon } from 'lucide-react';
 import { useState } from 'react';
 import CoachMarker from './CoachMarker';
-import styled from '@emotion/styled';
 
 export default function CoachButton() {
 	const [showCoach, setShowCoach] = useState(false);
@@ -14,6 +14,6 @@ export default function CoachButton() {
 }
 
 const HelpCircleButton = styled(HelpCircleIcon)`
-	color: ${({ theme }) => theme.colors.text.secondary};
+	color: ${({ theme: { colors } }) => colors.text.secondary};
 	cursor: pointer;
 `;

@@ -1,4 +1,4 @@
-import instance from './core/AxiosInterceptor';
+import { instance } from 'shared/apis';
 
 interface PostLoginTypes {
 	username: string;

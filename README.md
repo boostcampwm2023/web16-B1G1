@@ -16,7 +16,7 @@
 
 # 목차
 
-### [1. 프로젝트 소개](#⭐️-프로젝트-소개)
+### [프로젝트 소개](#%EF%B8%8F-프로젝트-소개)
 
 - [<별 하나에 글 하나>를 만들게 된 계기](#별-하나에-글-하나를-만들게-된-계기)
 - [기능 설명](#기능-설명)
@@ -243,6 +243,86 @@ FSD 방식 아키텍쳐는 프로젝트 폴더를 6개의 `layer`로 구분하�
 
 - 작성 중
 
+**테스트와 쿼리 로그 분석을 통한 이유 있는 코드 작성**
+
+### TDD, e2e 및 유닛 테스트
+
+하나의 API를 구현하기 전에 여러 케이스에 대하여 먼저 테스트코드를 작성하는 TDD(Test Driven Development)를 해보았습니다.  
+그 과정에서 어색함도 많이 느꼈고, 완벽하게 했다고도 하지 못하지만 TDD의 방법과 장점 등에 대해 알 수 있었습니다.
+
+기능 구현 이후에도, 코드 커버리지를 높이기 위해 e2e 테스트 코드 개선과, mocking을 활용한 유닛 테스트 등을 학습하고 적용해 보았습니다.
+
+#### 학습 및 개발 기록
+
+- [테스트 코드를 작성해야 하는 이유](https://www.notion.so/b091dfc8229e4943af4acef50a7a5b75)
+- [NetsJS + Jest 환경 설정](https://github.com/boostcampwm2023/web16-B1G1/wiki/%5B%EC%A4%80%EC%84%AD%5D-1114(%ED%99%94)-%EA%B0%9C%EB%B0%9C%EA%B8%B0%EB%A1%9D)
+- [NestJS, TDD로 개발하기](https://velog.io/@qkrwogk/NestJS-TDD%EB%A1%9C-%EA%B0%9C%EB%B0%9C%ED%95%98%EA%B8%B0-cx211d14)
+- [2주차 멘토링 일지(BE) - TDD 관련](https://github.com/boostcampwm2023/web16-B1G1/wiki/2%EC%A3%BC%EC%B0%A8-%EB%A9%98%ED%86%A0%EB%A7%81-%EC%9D%BC%EC%A7%80#be)
+- [TDD 기록 1](https://github.com/boostcampwm2023/web16-B1G1/wiki/%5B%EC%9E%AC%ED%95%98%5D-1115(%EC%88%98)-%EA%B0%9C%EB%B0%9C%EA%B8%B0%EB%A1%9D)
+- [TDD 기록 2](https://github.com/boostcampwm2023/web16-B1G1/wiki/%5B%EC%9E%AC%ED%95%98%5D-1116(%EB%AA%A9)-%EA%B0%9C%EB%B0%9C%EA%B8%B0%EB%A1%9D)
+- [TDD 기록 3](https://github.com/boostcampwm2023/web16-B1G1/wiki/%5B%EC%A4%80%EC%84%AD%5D-1116(%EB%AA%A9)-%EA%B0%9C%EB%B0%9C%EA%B8%B0%EB%A1%9D)
+- [NestJS e2e 테스트 (jest, supertest)](https://velog.io/@qkrwogk/NestJS-e2e-%ED%85%8C%EC%8A%A4%ED%8A%B8-jest-supertest)
+- [NestJS, 유닛 테스트 각종 mocking, e2e 테스트 폼데이터 및 파일첨부](https://velog.io/@qkrwogk/NestJS-%EC%9C%A0%EB%8B%9B-%ED%85%8C%EC%8A%A4%ED%8A%B8-%EA%B0%81%EC%A2%85-mocking-e2e-%ED%85%8C%EC%8A%A4%ED%8A%B8-%ED%8F%BC%EB%8D%B0%EC%9D%B4%ED%84%B0-%EB%B0%8F-%ED%8C%8C%EC%9D%BC%EC%B2%A8%EB%B6%80)
+
+### 인증/인가
+
+인증/인가에 대해 고민도 많이 하였습니다.  
+Session vs JWT, Authorization Bearer vs Cookie, RefreshToken  
+특히 보안과 성능 및 편의성 사이의 트레이드오프에 대해 고민하고 학습을 하였습니다.
+
+#### 학습 및 개발 기록
+
+- [Redis 연결](https://velog.io/@songjseop/nestjs-redis)
+- [RefreshToken 발급 및 Redis 저장](https://github.com/boostcampwm2023/web16-B1G1/wiki/%5B%EC%A4%80%EC%84%AD%5D-1121(%ED%99%94)-%EA%B0%9C%EB%B0%9C%EA%B8%B0%EB%A1%9D-%E2%80%90-%08SignIn%EC%8B%9C-RefreshToken-%EB%B0%9C%EA%B8%89-%EB%B0%8F-Redis%EC%97%90-%EC%A0%80%EC%9E%A5)
+- [커스텀 AuthGuard 작성](https://github.com/boostcampwm2023/web16-B1G1/wiki/%5B%EC%A4%80%EC%84%AD%5D-1121(%ED%99%94)-%EA%B0%9C%EB%B0%9C%EA%B8%B0%EB%A1%9D-%E2%80%90-%EC%BB%A4%EC%8A%A4%ED%85%80-AuthGuard-%EC%9E%91%EC%84%B1)
+- [OAuth(깃헙 로그인)](https://github.com/boostcampwm2023/web16-B1G1/wiki/%5B%EC%A4%80%EC%84%AD%5D-1122(%EC%88%98)-%EA%B0%9C%EB%B0%9C%EA%B8%B0%EB%A1%9D-%E2%80%90-%EA%B9%83%ED%97%99-%EB%A1%9C%EA%B7%B8%EC%9D%B8-%EA%B5%AC%ED%98%84)
+
+
+### 트랜잭션 제어, 쿼리 최적화
+
+TypeORM 쿼리 로그를 통해 하나의 비즈니스 로직에서 복수개의 테이블을 수정하는 경우, 트랜잭션을 직접 제어할 필요가 있었습니다. 저희는 TypeORM의 queryRunner와 transaction 메소드, NestJS의 Interceptor 등을 활용하여 여러 차례 트랜잭션 제어 로직을 개선하였고, 각 구현방식의 장단점에 대해서도 학습할 수 있었습니다.
+
+또한 쿼리 로그와 MySQL 쿼리 플랜 기능을 활용해 기존 TypeORM 메소드의 쿼리를 분석하고, 자주 사용되는 일부 메소드에 대해 이를 개선하여 queryBuilder로 개선된 쿼리를 요청하는 쿼리 최적화 과정도 수행해 보았습니다.
+
+#### 학습 및 개발 기록
+
+- [Transaction(트랜잭션)](https://velog.io/@qkrwogk/Transaction-%ED%8A%B8%EB%9E%9C%EC%9E%AD%EC%85%98)
+- [TypeORM 트랜잭션(Transaction) 제어 with Query Runner 1](https://velog.io/@qkrwogk/TypeORM-%ED%8A%B8%EB%9E%9C%EC%9E%AD%EC%85%98Transaction-%EC%A0%9C%EC%96%B4-with-Query-Runner-1%EC%9D%BC%EC%B0%A8)
+- [TypeORM 트랜잭션(Transaction) 제어 with Query Runner 2](https://velog.io/@qkrwogk/TypeORM-%ED%8A%B8%EB%9E%9C%EC%9E%AD%EC%85%98Transaction-%EC%A0%9C%EC%96%B4-with-Query-Runner-2%EC%9D%BC%EC%B0%A8)
+- [NestJS Interceptor와 로거 - Transaction Interceptor](https://github.com/boostcampwm2023/web16-B1G1/wiki/%5B%EC%A4%80%EC%84%AD%5D-1130(%EB%AA%A9)-%EA%B0%9C%EB%B0%9C-%EA%B8%B0%EB%A1%9D-%E2%80%90-NestJS-Interceptor%EC%99%80-%EB%A1%9C%EA%B1%B0#transaction-interceptor)
+- [transaction 제어 인터셉터 방식 -> 메소드 내부에서 수행하는 방식으로 변경](https://github.com/boostcampwm2023/web16-B1G1/wiki/%5B%EC%9E%AC%ED%95%98%5D-1207(%EB%AA%A9)-%EA%B0%9C%EB%B0%9C%EA%B8%B0%EB%A1%9D#transaction-%EC%A0%9C%EC%96%B4-%EC%9D%B8%ED%84%B0%EC%85%89%ED%84%B0-%EB%B0%A9%EC%8B%9D---%EB%A9%94%EC%86%8C%EB%93%9C-%EB%82%B4%EB%B6%80%EC%97%90%EC%84%9C-%EC%88%98%ED%96%89%ED%95%98%EB%8A%94-%EB%B0%A9%EC%8B%9D%EC%9C%BC%EB%A1%9C-%EB%B3%80%EA%B2%BD)
+- [TypeORM 쿼리 로그, MySQL 쿼리 플랜, Query Builder을 이용한 쿼리 최적화 with NestJS](https://velog.io/@qkrwogk/TypeORM-%EC%BF%BC%EB%A6%AC-%EB%A1%9C%EA%B7%B8-MySQL-%EC%BF%BC%EB%A6%AC-%ED%94%8C%EB%9E%9C-Query-Builder%EC%9D%84-%EC%9D%B4%EC%9A%A9%ED%95%9C-%EC%BF%BC%EB%A6%AC-%EC%B5%9C%EC%A0%81%ED%99%94-with-NestJS)
+
+### NestJS Enhancers
+
+NetsJS 자체에 대한 학습을 위해 NestJS의 Lifecycle과 각 Enhancer들에 대해서도 학습을 해보았습니다.  
+Interceptor, Exception Filter 등 학습을 하고 백엔드 코드에 적용을 해보았습니다.
+
+#### 학습 및 개발 기록
+
+ - [NestJS Interceptor와 로거 -> Log Interceptor](https://github.com/boostcampwm2023/web16-B1G1/wiki/%5B%EC%A4%80%EC%84%AD%5D-1130(%EB%AA%A9)-%EA%B0%9C%EB%B0%9C-%EA%B8%B0%EB%A1%9D-%E2%80%90-NestJS-Interceptor%EC%99%80-%EB%A1%9C%EA%B1%B0)
+ - [Exception Filter](https://www.notion.so/NestJS-Exception-Filter-13906c848dfb45ffb2829e81e470c619?pvs=4)
+ 
+
+### 배포 및 자동화
+
+클라우드 배포 경험이 많지 않아 이번 프로젝트를 통해 많은 성장을 할 수 있었습니다. AWS 및 NCP에서 제공하는 서버, VPC, NAT Gateway 등 주요 서비스에 대해 학습하여 배포 환경을 구성하고, Nginx, Docker 및 Docker Compose, GitHub Actions 등을 학습하여 main 브랜치에 push되면 자동으로 배포되도록 설정했습니다.
+
+#### 학습 및 개발 기록
+
+- [GitHub Actions을 이용한 자동 배포](https://velog.io/@qkrwogk/GitHub-Actions%EC%9D%84-%EC%9D%B4%EC%9A%A9%ED%95%9C-%EC%9E%90%EB%8F%99-%EB%B0%B0%ED%8F%AC)
+- [AWS와 NCP의 주요 서비스](https://velog.io/@qkrwogk/AWS%EC%99%80-NCP-%EC%84%9C%EB%B9%84%EC%8A%A4-%EB%B9%84%EA%B5%90)
+- [NGINX 설정](https://www.notion.so/NGINX-b03d0811b0884ca3b7f61ca35f2d7779?pvs=4)
+- [SSH 보안: Key Forwarding, Tunneling, 포트 변경](https://velog.io/@qkrwogk/SSH-%EB%B3%B4%EC%95%88-SSH-Key-Forwarding-SSH-Tunneling%EC%9D%84-%ED%86%B5%ED%95%B4-%ED%81%B4%EB%9D%BC%EC%9A%B0%EB%93%9C%EC%9D%98-private-instance%EC%97%90-%EC%A0%91%EA%B7%BC%ED%95%98%EB%8A%94-%EB%B2%95-SSH-%ED%8F%AC%ED%8A%B8-%EB%B3%80%EA%B2%BD)
+- [Kubernetes 기초(minikube), docker image 최적화(멀티스테이징)](https://velog.io/@qkrwogk/Kubernetes-%EA%B8%B0%EC%B4%88minikube-docker-image-%EC%B5%9C%EC%A0%81%ED%99%94%EB%A9%80%ED%8B%B0%EC%8A%A4%ED%85%8C%EC%9D%B4%EC%A7%95-AWS-IAM-EC2)
+- [NCP VPC&인스턴스 구성, MySQL, nginx, docker, docker-compose](https://github.com/boostcampwm2023/web16-B1G1/wiki/%5B%EC%9E%AC%ED%95%98%5D-1119(%EC%9D%BC)-%EA%B0%9C%EB%B0%9C%EA%B8%B0%EB%A1%9D)
+- [Redis 연결 후 RedisRepository 작성](https://velog.io/@songjseop/nestjs-redis)
+- [NCP Object Storage, HTTPS, GitHub Actions](https://github.com/boostcampwm2023/web16-B1G1/wiki/%5B%EC%9E%AC%ED%95%98%5D-1123(%EB%AA%A9)-%EA%B0%9C%EB%B0%9C%EA%B8%B0%EB%A1%9D)
+- [NAT Gateway, MongoDB](https://github.com/boostcampwm2023/web16-B1G1/wiki/%5B%EC%9E%AC%ED%95%98%5D-1126(%EC%9D%BC)-%EA%B0%9C%EB%B0%9C%EA%B8%B0%EB%A1%9D#%EB%B0%B0%ED%8F%AC%EC%9A%A9-db-%EC%9D%B8%EC%8A%A4%ED%84%B4%EC%8A%A4%EC%97%90-mongodb-%EC%84%A4%EC%B9%98-%EB%B0%8F-%EC%99%B8%EB%B6%80%EC%97%B0%EB%8F%99)
+- [플랫폼 종속성 문제 해결(Sharp), 쿼리 최적화](https://github.com/boostcampwm2023/web16-B1G1/wiki/%5B%EC%9E%AC%ED%95%98%5D-1128(%ED%99%94)-%EA%B0%9C%EB%B0%9C%EA%B8%B0%EB%A1%9D)
+- [docker 이미지 최적화](https://github.com/boostcampwm2023/web16-B1G1/wiki/%5B%EC%9E%AC%ED%95%98%5D-1203(%EC%9D%BC)-%EA%B0%9C%EB%B0%9C%EA%B8%B0%EB%A1%9D)
+
+
 <br />
 
 ### **💪🏻 자세한 프로젝트 진행과정은 [wiki](https://github.com/boostcampwm2023/web16-B1G1/wiki)를 참고해주세요!**
@@ -256,7 +336,7 @@ FSD 방식 아키텍쳐는 프로젝트 폴더를 6개의 `layer`로 구분하�
 <table >
   <tr height="130px">
     <td align="center" width="130px">
-      <a href="https://github.com/KimGaeun0806"><img src="https://avatars.githubusercontent.com/u/80266418?v=4" style="border-radius:50%"/></a>
+      <a href="https://github.com/KimGaeun0806"><img src="https://avatars.g)ithubusercontent.com/u/80266418?v=4" style="border-radius:50%"/></a>
     </td>
     <td align="center" width="130px">
       <a href="https://github.com/MinboyKim"><img src="https://avatars.githubusercontent.com/u/35567292?v=4" style="border-radius:50%" /></a>

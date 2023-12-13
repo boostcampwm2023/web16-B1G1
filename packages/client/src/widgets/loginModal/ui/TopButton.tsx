@@ -1,6 +1,6 @@
-import { TextButton } from 'shared/ui';
 import RightArrow from '@icons/icon-arrow-right-17-white.svg?react';
 import { useNavigate } from 'react-router-dom';
+import { TextButton } from 'shared/ui';
 
 export default function TopButton() {
 	const navigate = useNavigate();

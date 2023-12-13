@@ -1,10 +1,9 @@
-import styled from '@emotion/styled';
-import { Button, Input } from 'shared/ui';
-import { useState } from 'react';
-import { Caption } from 'shared/ui/styles';
 import { css } from '@emotion/react';
-import { useEffect } from 'react';
+import styled from '@emotion/styled';
+import { useEffect, useState } from 'react';
 import { getIsAvailableNickName } from 'shared/apis';
+import { Caption } from 'shared/styles';
+import { Button, Input } from 'shared/ui';
 import { NICKNAME_REGEX } from '../lib/constants';
 
 interface PropsTypes {

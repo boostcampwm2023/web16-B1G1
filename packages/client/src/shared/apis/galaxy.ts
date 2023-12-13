@@ -1,4 +1,4 @@
-import instance from './core/AxiosInterceptor';
+import { instance } from 'shared/apis';
 
 export const getGalaxy = async (nickname: string) => {
 	if (nickname !== '') {

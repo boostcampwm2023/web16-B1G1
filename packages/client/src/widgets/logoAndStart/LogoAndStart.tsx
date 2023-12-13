@@ -1,8 +1,8 @@
-import { Button } from 'shared/ui';
 import styled from '@emotion/styled';
-import { Title02 } from 'shared/ui/styles';
-import { useNavigate } from 'react-router-dom';
 import logo from 'assets/logo.png';
+import { useNavigate } from 'react-router-dom';
+import { Title02 } from 'shared/styles';
+import { Button } from 'shared/ui';
 
 export default function LogoAndStart() {
 	const navigate = useNavigate();

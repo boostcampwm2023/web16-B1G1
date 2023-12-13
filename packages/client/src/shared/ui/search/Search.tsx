@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import searchIcon from '@icons/icon-search-24-white.svg';
-import { Body03ME } from '../styles';
+import { Body03ME } from 'shared/styles';
 import { Button } from 'shared/ui';
 
 interface PropsTypes {

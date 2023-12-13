@@ -1,10 +1,10 @@
 import { Canvas } from '@react-three/fiber';
-import BackgroundStars from 'features/backgroundStars/BackgroundStars.tsx';
-import { Galaxy } from '../galaxy/index.ts';
-import { EffectComposer, Bloom } from '@react-three/postprocessing';
-import { CAMERA_POSITION, CAMERA_UP, CAMERA_FAR } from './lib/camera.ts';
+import { Bloom, EffectComposer } from '@react-three/postprocessing';
+import { BackgroundStars } from 'features';
+import { useEffect, useRef } from 'react';
 import { Group, Object3DEventMap } from 'three';
-import { useRef, useEffect } from 'react';
+import { Galaxy } from 'widgets/galaxy/index.ts';
+import { CAMERA_FAR, CAMERA_POSITION, CAMERA_UP } from './lib/camera.ts';
 
 export default function LandingScreen() {
 	const galaxyRef = useRef<Group<Object3DEventMap>>(null!);

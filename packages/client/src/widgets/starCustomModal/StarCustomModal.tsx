@@ -1,26 +1,26 @@
-import { Modal } from 'shared/ui';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { useToastStore, useViewStore } from 'shared/store';
+import { shapeTypes } from '@constants';
 import styled from '@emotion/styled';
-import { SampleScreen } from './ui';
+import { getMyPost } from 'entities/posts/apis/getMyPost';
 import { useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useRefresh } from 'shared/hooks';
+import { usePostStore, useToastStore, useViewStore } from 'shared/store';
+import { Button, Modal } from 'shared/ui';
+import { sendPost } from './apis/sendPost';
 import {
 	STAR_DEFAULT_BRIGHTNESS,
 	STAR_DEFAULT_COLOR,
 	STAR_DEFAULT_SHAPE_INDEX,
 	STAR_DEFAULT_SIZE,
 } from './lib';
-import ColorPickerContainer from './ui/ColorPickerContainer';
-import { Button } from 'shared/ui';
-import { usePostStore } from 'shared/store';
-import { sendPost } from './apis/sendPost';
-import SizeSlider from './ui/SizeSlider';
-import BrightnessSlider from './ui/BrightnessSlider';
-import { shapeTypes } from '@constants';
-import SentimentButton from './ui/SentimentButton';
 import { generateStarPosition } from './lib/generateStarPosition';
-import { getMyPost } from 'entities/posts/apis/getMyPost';
-import { useRefresh } from 'shared/hooks/useRefresh';
+import {
+	BrightnessSlider,
+	ColorPickerContainer,
+	SampleScreen,
+	SentimentButton,
+	SizeSlider,
+} from './ui';
 
 export default function StarCustomModal() {
 	const { setView } = useViewStore();

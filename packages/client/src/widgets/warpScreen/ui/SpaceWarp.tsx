@@ -11,6 +11,7 @@ import {
 	SPACE_WARP_Y_MAX,
 	SPACE_WARP_Y_MIN,
 } from '../lib/constants';
+import { WarpStateType } from 'shared/lib';
 
 const geSpaceWarpLinesInfo = () => {
 	const positions = Array.from({ length: SPACE_WARP_LINES_NUM }, () => {
@@ -33,7 +34,7 @@ const geSpaceWarpLinesInfo = () => {
 };
 
 interface PropsType {
-	setIsSwitching: React.Dispatch<React.SetStateAction<'warp' | 'fade' | 'end'>>;
+	setIsSwitching: React.Dispatch<React.SetStateAction<WarpStateType>>;
 }
 
 export default function SpaceWarp({ setIsSwitching }: PropsType) {

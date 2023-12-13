@@ -24,7 +24,7 @@
 			"@utils/*": ["shared/utils/*"],
 			"@hooks/*": ["shared/lib/hooks/*"],
 			"@constants": ["shared/lib/constants"],
-			"@icons/*": ["assets/*"]
+			"@icons/*": ["assets/icons/*"]
 		}
 	},
 	"include": ["src"],

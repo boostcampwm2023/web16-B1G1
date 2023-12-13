@@ -1,24 +1,28 @@
 import styled from '@emotion/styled';
 import ImageIcon from '@icons/icon-photo-32-gray.svg?react';
-import { ChangeEvent, useRef, useState } from 'react';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 
 interface PropsType {
-	onModify: (files: FileList | null) => void;
+	files: FileList | null;
+	setFiles: React.Dispatch<React.SetStateAction<FileList | null>>;
 }
 
-export default function Images({ onModify }: PropsType) {
+export default function Images({ files, setFiles }: PropsType) {
 	const [showImages, setShowImages] = useState<string[]>([]);
-	const [files, setFiles] = useState<FileList | null>(null);
 	const inputRef = useRef<HTMLInputElement>(null);
+	const [inputKey, setInputKey] = useState(0);
 
 	const handleAddImages = (event: ChangeEvent<HTMLInputElement>) => {
-		const files = event.target.files;
-		if (!files) return;
-		if (files.length > 5) return;
-		const images = Array.from(files).map((file) => URL.createObjectURL(file));
+		const currentFiles = event.target.files;
+		if (!currentFiles) return;
+		if (currentFiles.length > 5) return;
+		const images = Array.from(currentFiles).map((file) =>
+			URL.createObjectURL(file),
+		);
 		setShowImages(images);
-		setFiles(files);
-		onModify(files);
+		setFiles(currentFiles);
+
+		setInputKey((prevKey) => (prevKey + 1) % 2);
 	};
 
 	const handleDeleteImage = (id: number) => {
@@ -30,7 +34,6 @@ export default function Images({ onModify }: PropsType) {
 			.filter((_, index) => index !== id)
 			.forEach((file) => dataTransfer.items.add(file));
 		setFiles(dataTransfer.files);
-		onModify(dataTransfer.files);
 	};
 
 	return (
@@ -38,10 +41,12 @@ export default function Images({ onModify }: PropsType) {
 			<input
 				type="file"
 				id="input-file"
+				accept="image/png, image/jpeg, image/jpg"
 				multiple
 				onChange={handleAddImages}
 				hidden
 				ref={inputRef}
+				key={inputKey}
 			/>
 			<IconWrapper onClick={() => inputRef.current?.click()}>
 				<ImageIcon />

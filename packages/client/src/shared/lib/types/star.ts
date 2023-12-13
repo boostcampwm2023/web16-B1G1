@@ -11,3 +11,5 @@ export interface StarData {
 	title: string;
 	star: StarType;
 }
+
+export type StarStateType = 'created' | 'normal' | 'deleted';

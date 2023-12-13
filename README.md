@@ -215,17 +215,17 @@ TypeORM 쿼리 로그를 통해 하나의 비즈니스 로직에서 복수개의
 
 #### 학습 및 개발 기록
 
+- [GitHub Actions을 이용한 자동 배포](https://velog.io/@qkrwogk/GitHub-Actions%EC%9D%84-%EC%9D%B4%EC%9A%A9%ED%95%9C-%EC%9E%90%EB%8F%99-%EB%B0%B0%ED%8F%AC)
+- [AWS와 NCP의 주요 서비스](https://velog.io/@qkrwogk/AWS%EC%99%80-NCP-%EC%84%9C%EB%B9%84%EC%8A%A4-%EB%B9%84%EA%B5%90)
+- [NGINX 설정](https://www.notion.so/NGINX-b03d0811b0884ca3b7f61ca35f2d7779?pvs=4)
+- [SSH 보안: Key Forwarding, Tunneling, 포트 변경](https://velog.io/@qkrwogk/SSH-%EB%B3%B4%EC%95%88-SSH-Key-Forwarding-SSH-Tunneling%EC%9D%84-%ED%86%B5%ED%95%B4-%ED%81%B4%EB%9D%BC%EC%9A%B0%EB%93%9C%EC%9D%98-private-instance%EC%97%90-%EC%A0%91%EA%B7%BC%ED%95%98%EB%8A%94-%EB%B2%95-SSH-%ED%8F%AC%ED%8A%B8-%EB%B3%80%EA%B2%BD)
+- [Kubernetes 기초(minikube), docker image 최적화(멀티스테이징)](https://velog.io/@qkrwogk/Kubernetes-%EA%B8%B0%EC%B4%88minikube-docker-image-%EC%B5%9C%EC%A0%81%ED%99%94%EB%A9%80%ED%8B%B0%EC%8A%A4%ED%85%8C%EC%9D%B4%EC%A7%95-AWS-IAM-EC2)
 - [NCP VPC&인스턴스 구성, MySQL, nginx, docker, docker-compose](https://github.com/boostcampwm2023/web16-B1G1/wiki/%5B%EC%9E%AC%ED%95%98%5D-1119(%EC%9D%BC)-%EA%B0%9C%EB%B0%9C%EA%B8%B0%EB%A1%9D)
 - [Redis 연결 후 RedisRepository 작성](https://velog.io/@songjseop/nestjs-redis)
 - [NCP Object Storage, HTTPS, GitHub Actions](https://github.com/boostcampwm2023/web16-B1G1/wiki/%5B%EC%9E%AC%ED%95%98%5D-1123(%EB%AA%A9)-%EA%B0%9C%EB%B0%9C%EA%B8%B0%EB%A1%9D)
 - [NAT Gateway, MongoDB](https://github.com/boostcampwm2023/web16-B1G1/wiki/%5B%EC%9E%AC%ED%95%98%5D-1126(%EC%9D%BC)-%EA%B0%9C%EB%B0%9C%EA%B8%B0%EB%A1%9D#%EB%B0%B0%ED%8F%AC%EC%9A%A9-db-%EC%9D%B8%EC%8A%A4%ED%84%B4%EC%8A%A4%EC%97%90-mongodb-%EC%84%A4%EC%B9%98-%EB%B0%8F-%EC%99%B8%EB%B6%80%EC%97%B0%EB%8F%99)
 - [플랫폼 종속성 문제 해결(Sharp), 쿼리 최적화](https://github.com/boostcampwm2023/web16-B1G1/wiki/%5B%EC%9E%AC%ED%95%98%5D-1128(%ED%99%94)-%EA%B0%9C%EB%B0%9C%EA%B8%B0%EB%A1%9D)
 - [docker 이미지 최적화](https://github.com/boostcampwm2023/web16-B1G1/wiki/%5B%EC%9E%AC%ED%95%98%5D-1203(%EC%9D%BC)-%EA%B0%9C%EB%B0%9C%EA%B8%B0%EB%A1%9D)
-- [GitHub Actions을 이용한 자동 배포](https://velog.io/@qkrwogk/GitHub-Actions%EC%9D%84-%EC%9D%B4%EC%9A%A9%ED%95%9C-%EC%9E%90%EB%8F%99-%EB%B0%B0%ED%8F%AC)
-- [AWS와 NCP의 주요 서비스](https://velog.io/@qkrwogk/AWS%EC%99%80-NCP-%EC%84%9C%EB%B9%84%EC%8A%A4-%EB%B9%84%EA%B5%90)
-- [NGINX 설정](https://www.notion.so/NGINX-b03d0811b0884ca3b7f61ca35f2d7779?pvs=4)
-- [SSH 보안: Key Forwarding, Tunneling, 포트 변경](https://velog.io/@qkrwogk/SSH-%EB%B3%B4%EC%95%88-SSH-Key-Forwarding-SSH-Tunneling%EC%9D%84-%ED%86%B5%ED%95%B4-%ED%81%B4%EB%9D%BC%EC%9A%B0%EB%93%9C%EC%9D%98-private-instance%EC%97%90-%EC%A0%91%EA%B7%BC%ED%95%98%EB%8A%94-%EB%B2%95-SSH-%ED%8F%AC%ED%8A%B8-%EB%B3%80%EA%B2%BD)
-- [Kubernetes 기초(minikube), docker image 최적화(멀티스테이징)](https://velog.io/@qkrwogk/Kubernetes-%EA%B8%B0%EC%B4%88minikube-docker-image-%EC%B5%9C%EC%A0%81%ED%99%94%EB%A9%80%ED%8B%B0%EC%8A%A4%ED%85%8C%EC%9D%B4%EC%A7%95-AWS-IAM-EC2)
 
 <br />
 

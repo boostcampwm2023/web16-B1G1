@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { getPostListByNickName } from 'shared/apis';
 import { useCheckNickName } from 'shared/hooks';
 import { StarData } from 'shared/lib';
@@ -7,7 +7,8 @@ import { getMyPost } from '../apis/getMyPost';
 import Post from './Post';
 
 export default function Posts() {
-	const [postData, setPostData] = useState<StarData[]>();
+	const [postData, setPostData] = useState<StarData[]>([]);
+	const [prevData, setPrevData] = useState<StarData[]>([]);
 	const { view } = useViewStore();
 
 	const { page, nickName } = useCheckNickName();
@@ -23,17 +24,39 @@ export default function Posts() {
 		}
 	}, [view, nickName]);
 
-	return (
-		<group>
-			{postData &&
-				postData.map((data, index) => (
+	const PostList = useMemo(() => {
+		const prevId = prevData.map((data) => data.id);
+		const currentId = postData.map((data) => data.id);
+
+		const list = postData.map((data) => {
+			return (
+				<Post
+					key={data.id}
+					data={data.star}
+					postId={data.id}
+					title={data.title}
+					state={prevId.includes(data.id) ? 'normal' : 'created'}
+				/>
+			);
+		});
+		prevData
+			.filter((data) => !currentId.includes(data.id))
+			.forEach((data) =>
+				list.push(
 					<Post
-						key={index}
+						key={data.id}
 						data={data.star}
 						postId={data.id}
 						title={data.title}
-					/>
-				))}
-		</group>
-	);
+						state="deleted"
+					/>,
+				),
+			);
+
+		setPrevData([...postData]);
+
+		return list;
+	}, [postData]);
+
+	return <group>{PostList}</group>;
 }

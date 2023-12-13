@@ -31,6 +31,20 @@ export default function CoachMarker({ isFirst }: PropsType) {
 			},
 		},
 		{
+			target: 'body',
+			content: (
+				<div>
+					<h3>전체화면 전환 🔎</h3>
+					<br />
+					<p>F9를 눌러 전체화면으로 전환할 수 있습니다.</p>
+					<p>esc를 눌러 기본 화면으로 돌아올 수 있습니다.</p>
+					<p>더 큰 화면으로 우주를 감상해보세요.</p>
+				</div>
+			),
+			disableBeacon: true,
+			placement: 'center',
+		},
+		{
 			target: '.leva',
 			content: (
 				<div>
@@ -85,7 +99,7 @@ export default function CoachMarker({ isFirst }: PropsType) {
 					<h3>우주 공유 🔗</h3>
 					<br />
 					<p>우주를 비공개로 설정하거나, 다른 사람에게 공유할 수 있습니다.</p>
-					<p>혼자만의 비밀 이야기를 담아도 좋아요.</p>
+					<p>혼자만의 비밀 이야기를 담아도 좋고,</p>
 					<p>사랑하는 사람과 함께하는 것도 좋아요. 🫶🏻</p>
 				</div>
 			),

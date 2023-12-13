@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { Html } from '@react-three/drei';
-import { ThreeEvent } from '@react-three/fiber';
+import { ThreeEvent, useFrame } from '@react-three/fiber';
 import { Star } from 'features';
 import { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
@@ -12,14 +12,24 @@ interface PropsType {
 	data: StarType;
 	postId: number;
 	title: string;
+	state?: 'created' | 'normal' | 'deleted';
 }
 
-export default function Post({ data, postId, title }: PropsType) {
+export default function Post({
+	data,
+	postId,
+	title,
+	state = 'normal',
+}: PropsType) {
 	const { targetView, setTargetView } = useCameraStore();
 	const { setView } = useViewStore();
 
 	const meshRef = useRef<THREE.Mesh>(null!);
 	const [isHovered, setIsHovered] = useState(false);
+	const [starState, setStarState] = useState<'created' | 'normal' | 'deleted'>(
+		'normal',
+	);
+	const [size, setSize] = useState(0);
 
 	const navigate = useNavigate();
 	const location = useLocation();
@@ -29,6 +39,29 @@ export default function Post({ data, postId, title }: PropsType) {
 	useEffect(() => {
 		if (id && Number(id) === postId) setTargetView(meshRef.current);
 	}, [id]);
+
+	useEffect(() => {
+		if (state === 'created') {
+			setStarState('created');
+			setSize(0);
+		} else if (state === 'deleted') {
+			setStarState('deleted');
+			setSize(data.size);
+		}
+	}, [state]);
+
+	useFrame((_, delta) => {
+		if (starState === 'created') {
+			if (size + delta * 300 < data.size) setSize(size + delta * 300);
+			else {
+				setSize(data.size);
+				setStarState('normal');
+			}
+		} else if (starState === 'deleted') {
+			if (size - delta * 300 > 0) setSize(size - delta * 300);
+			else setSize(0);
+		}
+	});
 
 	const handleMeshClick = (e: ThreeEvent<MouseEvent>) => {
 		e.stopPropagation();
@@ -65,7 +98,7 @@ export default function Post({ data, postId, title }: PropsType) {
 			position={
 				new THREE.Vector3(data.position.x, data.position.y, data.position.z)
 			}
-			size={data.size}
+			size={size}
 			color={data.color}
 			onClick={handleMeshClick}
 			ref={meshRef}

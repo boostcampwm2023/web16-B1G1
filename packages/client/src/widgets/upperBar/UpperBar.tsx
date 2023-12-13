@@ -1,111 +1,21 @@
 import { MAX_WIDTH1, MAX_WIDTH2 } from '@constants';
 import styled from '@emotion/styled';
-import goBackIcon from '@icons/icon-back-32-white.svg';
-import Cookies from 'js-cookie';
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { checkExistNickname, getNickNames } from 'shared/apis';
 import { useCheckNickName } from 'shared/hooks';
-import { useToastStore, useViewStore } from 'shared/store';
-import { IconButton, Search } from 'shared/ui';
+import { useViewStore } from 'shared/store';
+import GoBackButton from './ui/GoBackButton';
+import SearchBar from './ui/SearchBar';
 
 export default function UpperBar() {
-	// TODO: ui 분리하기
-	const [searchValue, setSearchValue] = useState('');
-	const [debouncedSearchValue, setDebouncedSearchValue] = useState('');
-	const [searchResults, setSearchResults] = useState([]);
-	const [isSearchButtonDisabled, setIsSearchButtonDisabled] = useState(false);
-
-	const { setToast } = useToastStore();
-	const { page, nickName } = useCheckNickName();
+	const { page } = useCheckNickName();
 	const { view } = useViewStore();
-	const user = Cookies.get('userName');
-
-	const navigate = useNavigate();
-
-	const DEBOUNCE_TIME = 200;
-
-	useEffect(() => {}, [page, nickName]);
-
-	useEffect(() => {
-		const debounce = setTimeout(() => {
-			setDebouncedSearchValue(searchValue);
-		}, DEBOUNCE_TIME);
-
-		return () => clearTimeout(debounce);
-	}, [searchValue]);
-
-	useEffect(() => {
-		if (!debouncedSearchValue) {
-			setSearchResults([]);
-			return;
-		}
-
-		(async () => {
-			const nickNameDatas = await getNickNames(debouncedSearchValue);
-			const nickNames = nickNameDatas
-				.map((data: { nickname: string; id: number }) => data.nickname)
-				.filter((nickName: string) => nickName !== user)
-				.slice(0, 5);
-
-			setSearchResults(nickNames);
-		})();
-	}, [debouncedSearchValue]);
-
-	const handleSearchButton = async () => {
-		if (isSearchButtonDisabled) return;
-		setIsSearchButtonDisabled(true);
-		try {
-			const data = await checkExistNickname(searchValue);
-			if (data.status === 'private')
-				return setToast({
-					text: '비공개 처리된 유저입니다.',
-					type: 'error',
-				});
-			if (searchValue === user)
-				return setToast({
-					text: '내 은하로는 이동할 수 없습니다.',
-					type: 'error',
-				});
-			navigate(`/search/${searchValue}`);
-			setSearchValue('');
-			setDebouncedSearchValue('');
-			setSearchResults([]);
-		} finally {
-			setIsSearchButtonDisabled(false);
-		}
-	};
-
-	const iconButtonVisibility = page === 'home' ? 'hidden' : 'visible';
-
-	const handleGoBackButton = () => {
-		if (page === 'guest') {
-			navigate('/');
-			return;
-		}
-
-		navigate('/home');
-	};
 
 	return (
 		<Layout view={view}>
-			<IconButton
-				onClick={handleGoBackButton}
-				style={{ visibility: iconButtonVisibility }}
-			>
-				<img src={goBackIcon} alt="뒤로가기" />
-			</IconButton>
+			<GoBackButton page={page} />
 
 			{page !== 'guest' && (
 				<div className="search-bar">
-					<SearchBar
-						onSubmit={handleSearchButton}
-						inputState={searchValue}
-						setInputState={setSearchValue}
-						placeholder="닉네임을 입력하세요"
-						results={searchResults}
-						disabled={isSearchButtonDisabled}
-					/>
+					<SearchBar />
 				</div>
 			)}
 		</Layout>
@@ -131,8 +41,4 @@ const Layout = styled.div<{ view: string }>`
 	@media (max-width: ${MAX_WIDTH2}px) {
 		width: 1000px;
 	}
-`;
-
-const SearchBar = styled(Search)`
-	width: 320px;
 `;

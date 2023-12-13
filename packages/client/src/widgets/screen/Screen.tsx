@@ -10,6 +10,7 @@ import { useState } from 'react';
 import { useViewStore, useCameraStore } from 'shared/store';
 import { Galaxy } from 'widgets/galaxy';
 import { CameraLight, LevaTheme } from './ui';
+import { theme } from 'shared/styles';
 
 export default function Screen() {
 	const { view } = useViewStore();
@@ -53,7 +54,7 @@ export default function Screen() {
 					/>
 				</EffectComposer>
 
-				<color attach="background" args={['#070614']} />
+				<color attach="background" args={[theme.colors.background.bdp04]} />
 				<ambientLight color="#fff" intensity={1} />
 				<Controls />
 				<BackgroundStars />

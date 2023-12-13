@@ -6,6 +6,7 @@ import { OrbitControls } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
 import { Bloom, EffectComposer } from '@react-three/postprocessing';
 import { Star } from 'features';
+import { theme } from 'shared/styles';
 import * as THREE from 'three';
 
 interface PropsType {
@@ -66,7 +67,7 @@ export default function SampleScreen({
 					/>
 				</EffectComposer>
 
-				<color attach="background" args={['#070614']} />
+				<color attach="background" args={[theme.colors.background.bdp04]} />
 
 				<directionalLight color={'#fff'} intensity={4} />
 				<ambientLight color="#fff" intensity={1} />

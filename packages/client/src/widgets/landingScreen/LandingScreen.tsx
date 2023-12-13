@@ -5,6 +5,7 @@ import { useEffect, useRef } from 'react';
 import { Group, Object3DEventMap } from 'three';
 import { Galaxy } from 'widgets/galaxy/index.ts';
 import { CAMERA_FAR, CAMERA_POSITION, CAMERA_UP } from './lib/camera.ts';
+import theme from 'shared/styles/theme.ts';
 
 export default function LandingScreen() {
 	const galaxyRef = useRef<Group<Object3DEventMap>>(null!);
@@ -39,7 +40,7 @@ export default function LandingScreen() {
 					/>
 				</EffectComposer>
 
-				<color attach="background" args={['#070614']} />
+				<color attach="background" args={[theme.colors.background.bdp04]} />
 				<ambientLight color="#fff" intensity={5} />
 				<BackgroundStars />
 				<group ref={galaxyRef}>

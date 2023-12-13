@@ -197,9 +197,11 @@ yarn workspace server start:dev
 - [TDD 기록 2](https://github.com/boostcampwm2023/web16-B1G1/wiki/%5B%EC%9E%AC%ED%95%98%5D-1116(%EB%AA%A9)-%EA%B0%9C%EB%B0%9C%EA%B8%B0%EB%A1%9D)
 - [TDD 기록 3](https://github.com/boostcampwm2023/web16-B1G1/wiki/%5B%EC%A4%80%EC%84%AD%5D-1116(%EB%AA%A9)-%EA%B0%9C%EB%B0%9C%EA%B8%B0%EB%A1%9D)
 
-### 트랜잭션
+### 트랜잭션 제어, 쿼리 최적화
 
 TypeORM 쿼리 로그를 통해 하나의 비즈니스 로직에서 복수개의 테이블을 수정하는 경우, 트랜잭션을 직접 제어할 필요가 있었습니다. 저희는 TypeORM의 queryRunner와 transaction 메소드, NestJS의 Interceptor 등을 활용하여 여러 차례 트랜잭션 제어 로직을 개선하였고, 각 구현방식의 장단점에 대해서도 학습할 수 있었습니다.
+
+또한 쿼리 로그와 MySQL 쿼리 플랜 기능을 활용해 기존 TypeORM 메소드의 쿼리를 분석하고, 자주 사용되는 일부 메소드에 대해 이를 개선하여 queryBuilder로 개선된 쿼리를 요청하는 쿼리 최적화 과정도 수행해 보았습니다.
 
 #### 학습 및 개발 기록
 
@@ -208,6 +210,7 @@ TypeORM 쿼리 로그를 통해 하나의 비즈니스 로직에서 복수개의
 - [TypeORM 트랜잭션(Transaction) 제어 with Query Runner 2](https://velog.io/@qkrwogk/TypeORM-%ED%8A%B8%EB%9E%9C%EC%9E%AD%EC%85%98Transaction-%EC%A0%9C%EC%96%B4-with-Query-Runner-2%EC%9D%BC%EC%B0%A8)
 - [NestJS Interceptor와 로거 - Transaction Interceptor](https://github.com/boostcampwm2023/web16-B1G1/wiki/%5B%EC%A4%80%EC%84%AD%5D-1130(%EB%AA%A9)-%EA%B0%9C%EB%B0%9C-%EA%B8%B0%EB%A1%9D-%E2%80%90-NestJS-Interceptor%EC%99%80-%EB%A1%9C%EA%B1%B0#transaction-interceptor)
 - [transaction 제어 인터셉터 방식 -> 메소드 내부에서 수행하는 방식으로 변경](https://github.com/boostcampwm2023/web16-B1G1/wiki/%5B%EC%9E%AC%ED%95%98%5D-1207(%EB%AA%A9)-%EA%B0%9C%EB%B0%9C%EA%B8%B0%EB%A1%9D#transaction-%EC%A0%9C%EC%96%B4-%EC%9D%B8%ED%84%B0%EC%85%89%ED%84%B0-%EB%B0%A9%EC%8B%9D---%EB%A9%94%EC%86%8C%EB%93%9C-%EB%82%B4%EB%B6%80%EC%97%90%EC%84%9C-%EC%88%98%ED%96%89%ED%95%98%EB%8A%94-%EB%B0%A9%EC%8B%9D%EC%9C%BC%EB%A1%9C-%EB%B3%80%EA%B2%BD)
+- [TypeORM 쿼리 로그, MySQL 쿼리 플랜, Query Builder을 이용한 쿼리 최적화 with NestJS](https://velog.io/@qkrwogk/TypeORM-%EC%BF%BC%EB%A6%AC-%EB%A1%9C%EA%B7%B8-MySQL-%EC%BF%BC%EB%A6%AC-%ED%94%8C%EB%9E%9C-Query-Builder%EC%9D%84-%EC%9D%B4%EC%9A%A9%ED%95%9C-%EC%BF%BC%EB%A6%AC-%EC%B5%9C%EC%A0%81%ED%99%94-with-NestJS)
 
 ### 배포 및 자동화
 

@@ -8,7 +8,7 @@ import { Caption } from 'shared/styles';
 import { AlertDialog, Button, Input, Modal, TextArea } from 'shared/ui';
 import Images from './Images';
 
-type TextStateTypes = 'DEFAULT' | 'INVALID';
+type TextStateTypes = 'DEFAULT' | 'INVALID' | 'OVER';
 
 export default function WritingModal() {
 	const [titleState, setTitleState] = useState<TextStateTypes>('DEFAULT');
@@ -76,6 +76,10 @@ export default function WritingModal() {
 						placeholder="제목"
 						value={title}
 						onChange={(e) => {
+							if (e.target.value.length > 20) {
+								setTitleState('OVER');
+								return;
+							}
 							setTitleState('DEFAULT');
 							setTitle(e.target.value);
 						}}
@@ -83,6 +87,9 @@ export default function WritingModal() {
 						autoComplete="off"
 					/>
 					{titleState === 'INVALID' && <Message>제목을 입력해주세요.</Message>}
+					{titleState === 'OVER' && (
+						<Message>제목은 20자 까지 입력 가능합니다.</Message>
+					)}
 				</TitleContainer>
 				<ContentContainer state={contentState}>
 					<TextArea
@@ -106,7 +113,7 @@ export default function WritingModal() {
 }
 
 const TitleContainer = styled.div`
-	margin-bottom: 16px;
+	margin-bottom: 20px;
 `;
 
 const ContentContainer = styled.div<{ state: TextStateTypes }>`

@@ -32,7 +32,7 @@ export default function Instances({ count, size, color, isCustom }: PropsType) {
 	const arms = count * STARS_DENSITY;
 	const center = count - arms;
 
-	let [spiralPositions, spherePositions] = useMemo(() => {
+	const [spiralPositions, spherePositions] = useMemo(() => {
 		const spirals = [];
 		const spheres = [];
 		for (let i = 0; i < arms; i++) {

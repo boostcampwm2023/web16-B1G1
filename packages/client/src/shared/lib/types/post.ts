@@ -5,3 +5,5 @@ export interface PostData {
 	images: string[];
 	like_cnt?: number;
 }
+
+export type TextStateTypes = 'DEFAULT' | 'INVALID' | 'OVER';

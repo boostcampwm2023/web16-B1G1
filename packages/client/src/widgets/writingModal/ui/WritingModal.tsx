@@ -7,8 +7,7 @@ import { usePostStore, useViewStore } from 'shared/store';
 import { Caption } from 'shared/styles';
 import { AlertDialog, Button, Input, Modal, TextArea } from 'shared/ui';
 import Images from './Images';
-
-type TextStateTypes = 'DEFAULT' | 'INVALID' | 'OVER';
+import { TextStateTypes } from 'shared/lib';
 
 export default function WritingModal() {
 	const [titleState, setTitleState] = useState<TextStateTypes>('DEFAULT');

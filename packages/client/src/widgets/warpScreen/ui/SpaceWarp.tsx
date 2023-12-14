@@ -13,7 +13,7 @@ import {
 } from '../lib/constants';
 import { WarpStateType } from 'shared/lib';
 
-const geSpaceWarpLinesInfo = () => {
+const getSpaceWarpLinesInfo = () => {
 	const positions = Array.from({ length: SPACE_WARP_LINES_NUM }, () => {
 		const x = getRandomFloat(SPACE_WARP_XZ_MIN, SPACE_WARP_XZ_MAX);
 		const y = getRandomFloat(SPACE_WARP_Y_MIN, SPACE_WARP_Y_MAX);
@@ -38,10 +38,10 @@ interface PropsType {
 }
 
 export default function SpaceWarp({ setIsSwitching }: PropsType) {
-	const [positions, colors] = useMemo(() => geSpaceWarpLinesInfo(), []);
+	const [positions, colors] = useMemo(() => getSpaceWarpLinesInfo(), []);
 
 	useFrame((state, delta) => {
-		if (state.camera.position.y <= 0) {
+		if (state.camera.position.y <= SPACE_WARP_Y_MIN) {
 			state.scene.background = new THREE.Color(0xffffff);
 			setIsSwitching('fade');
 			return;

@@ -95,10 +95,9 @@ export default function Home() {
 		<>
 			<Outlet />
 			{status === 'new' && <CoachMarker isFirst={true} />}
-			{isSwitching !== 'end' && (
-				<WarpScreen isSwitching={isSwitching} setIsSwitching={setIsSwitching} />
-			)}
 			{text && <Toast type={type}>{text}</Toast>}
+
+			<WarpScreen isSwitching={isSwitching} setIsSwitching={setIsSwitching} />
 
 			<UpperBar />
 			<UnderBar />

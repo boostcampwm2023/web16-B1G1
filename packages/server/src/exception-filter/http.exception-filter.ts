@@ -16,13 +16,14 @@ export class HttpExceptionFilter {
 		const response = context.getResponse();
 		const method = request.method;
 		const status = exception.getStatus();
+		const errorResponse = exception.getResponse() as any;
 
 		const now = new Date();
 		const korTime = new Date(now.getTime() + 9 * 3600 * 1000);
 		const exceptionData = {
 			path: `${method} ${request.url}`,
 			error: `${status} ${exception.name}`,
-			message: exception.message,
+			message: errorResponse.message,
 			timestamp: korTime,
 		};
 		const saveException = new this.exceptionModel(exceptionData);

@@ -12,16 +12,26 @@ import * as sharp from 'sharp';
 @Injectable()
 export class FileService {
 	async uploadFile(file: Express.Multer.File): Promise<any> {
-		if (!file.mimetype.includes('image')) {
-			throw new BadRequestException('not an image file');
+		if (
+			!file.mimetype.includes('image') ||
+			!file.originalname.match(/\.(jpg|jpeg|png)$/)
+		) {
+			throw new BadRequestException('not supported image files');
 		}
 
 		const { buffer } = file;
 
-		const resized_buffer = await sharp(buffer)
-			.resize(500, 500, { fit: 'cover' })
-			.toFormat('png', { quality: 100 })
-			.toBuffer();
+		let resized_buffer;
+		try {
+			resized_buffer = await sharp(buffer)
+				.resize(500, 500, { fit: 'cover' })
+				.toFormat('png', { quality: 100 })
+				.toBuffer();
+		} catch (e) {
+			// sharp에서 지원하지 않는 파일 형식 등의 이유로 리사이징에 실패한 경우 에러 리턴
+			Logger.error(e);
+			throw new InternalServerErrorException('image resize failed');
+		}
 
 		const filename = uuid();
 

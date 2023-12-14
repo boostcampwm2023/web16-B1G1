@@ -12,7 +12,6 @@ import { LogInterceptor } from '../interceptor/log.interceptor';
 import { HttpExceptionFilter } from '../exception-filter/http.exception-filter';
 import * as osUtils from 'os-utils';
 import { exec } from 'child_process';
-import { decryptAes } from '../util/aes.util';
 import { InjectModel } from '@nestjs/mongoose';
 import { Exception } from '../exception-filter/exception.schema';
 import { awsConfig, bucketName } from '../config/aws.config';

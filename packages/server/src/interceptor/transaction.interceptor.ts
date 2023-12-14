@@ -2,7 +2,6 @@ import {
 	CallHandler,
 	ExecutionContext,
 	Injectable,
-	InternalServerErrorException,
 	Logger,
 	NestInterceptor,
 } from '@nestjs/common';

@@ -36,7 +36,11 @@ export default function WarpScreen({ isSwitching, setIsSwitching }: PropsType) {
 		zIndex: 999,
 		backgroundColor: theme.colors.background.bdp04,
 	};
-	if (isSwitching === 'fade') return <FadeoutScreen />;
+
+	if (isSwitching === 'end') return null;
+
+	if (isSwitching === 'fade')
+		return <FadeoutScreen onAnimationEnd={() => setIsSwitching('end')} />;
 
 	return (
 		<Canvas camera={camera} style={canvasStyle}>
@@ -50,7 +54,6 @@ export default function WarpScreen({ isSwitching, setIsSwitching }: PropsType) {
 			</EffectComposer>
 
 			<ambientLight intensity={AMBIENT_LIGHT_INTENSITY} />
-
 			<BrightSphere />
 			<SpaceWarp setIsSwitching={setIsSwitching} />
 		</Canvas>

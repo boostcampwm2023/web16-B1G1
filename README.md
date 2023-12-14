@@ -2,11 +2,11 @@
 
 <h1>별 하나에 글 하나 🌟</h1>
 
+<img src="https://github.com/boostcampwm2023/web16-B1G1/assets/80266418/cb3a01fc-243c-4cdd-bcd8-67aa698a81c3">
+
 <h3> "내 삶의 반짝이는 기억들을 우주에 담아보세요" </h3>
 
 3D 기반 웹 추억 저장 서비스
-
-[<별 하나에 글 하나> 사용해보기](https://www.xn--bj0b03z.site/)
 
 <br />
 
@@ -18,7 +18,7 @@
 
 </br>
 
-<img src="https://github.com/boostcampwm2023/web16-B1G1/assets/80266418/b6f77114-9fdc-44bf-91fc-990edc9a918c" height='100'>
+[<별 하나에 글 하나> 사용해보기](https://www.xn--bj0b03z.site/)
 
 [wiki 바로가기](https://github.com/boostcampwm2023/web16-B1G1/wiki)
 

@@ -386,6 +386,8 @@ FSD 아키텍처는 app, pages, widgets, features, entities, shared라는 6개�
 - [NestJS e2e 테스트 (jest, supertest)](https://velog.io/@qkrwogk/NestJS-e2e-%ED%85%8C%EC%8A%A4%ED%8A%B8-jest-supertest)
 - [NestJS, 유닛 테스트 각종 mocking, e2e 테스트 폼데이터 및 파일첨부](https://velog.io/@qkrwogk/NestJS-%EC%9C%A0%EB%8B%9B-%ED%85%8C%EC%8A%A4%ED%8A%B8-%EA%B0%81%EC%A2%85-mocking-e2e-%ED%85%8C%EC%8A%A4%ED%8A%B8-%ED%8F%BC%EB%8D%B0%EC%9D%B4%ED%84%B0-%EB%B0%8F-%ED%8C%8C%EC%9D%BC%EC%B2%A8%EB%B6%80)
 
+<br />
+
 ### 인증/인가
 
 인증/인가에 대해 고민도 많이 하였습니다.  
@@ -398,6 +400,8 @@ Session vs JWT, Authorization Bearer vs Cookie, RefreshToken
 - [RefreshToken 발급 및 Redis 저장](<https://github.com/boostcampwm2023/web16-B1G1/wiki/%5B%EC%A4%80%EC%84%AD%5D-1121(%ED%99%94)-%EA%B0%9C%EB%B0%9C%EA%B8%B0%EB%A1%9D-%E2%80%90-%08SignIn%EC%8B%9C-RefreshToken-%EB%B0%9C%EA%B8%89-%EB%B0%8F-Redis%EC%97%90-%EC%A0%80%EC%9E%A5>)
 - [커스텀 AuthGuard 작성](<https://github.com/boostcampwm2023/web16-B1G1/wiki/%5B%EC%A4%80%EC%84%AD%5D-1121(%ED%99%94)-%EA%B0%9C%EB%B0%9C%EA%B8%B0%EB%A1%9D-%E2%80%90-%EC%BB%A4%EC%8A%A4%ED%85%80-AuthGuard-%EC%9E%91%EC%84%B1>)
 - [OAuth(깃헙 로그인)](<https://github.com/boostcampwm2023/web16-B1G1/wiki/%5B%EC%A4%80%EC%84%AD%5D-1122(%EC%88%98)-%EA%B0%9C%EB%B0%9C%EA%B8%B0%EB%A1%9D-%E2%80%90-%EA%B9%83%ED%97%99-%EB%A1%9C%EA%B7%B8%EC%9D%B8-%EA%B5%AC%ED%98%84>)
+
+<br />
 
 ### 트랜잭션 제어, 쿼리 최적화
 
@@ -414,6 +418,8 @@ TypeORM 쿼리 로그를 통해 하나의 비즈니스 로직에서 복수개의
 - [transaction 제어 인터셉터 방식 -> 메소드 내부에서 수행하는 방식으로 변경](<https://github.com/boostcampwm2023/web16-B1G1/wiki/%5B%EC%9E%AC%ED%95%98%5D-1207(%EB%AA%A9)-%EA%B0%9C%EB%B0%9C%EA%B8%B0%EB%A1%9D#transaction-%EC%A0%9C%EC%96%B4-%EC%9D%B8%ED%84%B0%EC%85%89%ED%84%B0-%EB%B0%A9%EC%8B%9D---%EB%A9%94%EC%86%8C%EB%93%9C-%EB%82%B4%EB%B6%80%EC%97%90%EC%84%9C-%EC%88%98%ED%96%89%ED%95%98%EB%8A%94-%EB%B0%A9%EC%8B%9D%EC%9C%BC%EB%A1%9C-%EB%B3%80%EA%B2%BD>)
 - [TypeORM 쿼리 로그, MySQL 쿼리 플랜, Query Builder을 이용한 쿼리 최적화 with NestJS](https://velog.io/@qkrwogk/TypeORM-%EC%BF%BC%EB%A6%AC-%EB%A1%9C%EA%B7%B8-MySQL-%EC%BF%BC%EB%A6%AC-%ED%94%8C%EB%9E%9C-Query-Builder%EC%9D%84-%EC%9D%B4%EC%9A%A9%ED%95%9C-%EC%BF%BC%EB%A6%AC-%EC%B5%9C%EC%A0%81%ED%99%94-with-NestJS)
 
+<br />
+
 ### NestJS Enhancers
 
 NetsJS 자체에 대한 학습을 위해 NestJS의 Lifecycle과 각 Enhancer들에 대해서도 학습을 해보았습니다.  
@@ -423,6 +429,8 @@ Interceptor, Exception Filter 등 학습을 하고 백엔드 코드에 적용을
 
 - [NestJS Interceptor와 로거 -> Log Interceptor](<https://github.com/boostcampwm2023/web16-B1G1/wiki/%5B%EC%A4%80%EC%84%AD%5D-1130(%EB%AA%A9)-%EA%B0%9C%EB%B0%9C-%EA%B8%B0%EB%A1%9D-%E2%80%90-NestJS-Interceptor%EC%99%80-%EB%A1%9C%EA%B1%B0>)
 - [Exception Filter](https://www.notion.so/NestJS-Exception-Filter-13906c848dfb45ffb2829e81e470c619?pvs=4)
+
+<br />
 
 ### 배포 및 자동화
 
@@ -441,6 +449,8 @@ Interceptor, Exception Filter 등 학습을 하고 백엔드 코드에 적용을
 - [NAT Gateway, MongoDB](<https://github.com/boostcampwm2023/web16-B1G1/wiki/%5B%EC%9E%AC%ED%95%98%5D-1126(%EC%9D%BC)-%EA%B0%9C%EB%B0%9C%EA%B8%B0%EB%A1%9D#%EB%B0%B0%ED%8F%AC%EC%9A%A9-db-%EC%9D%B8%EC%8A%A4%ED%84%B4%EC%8A%A4%EC%97%90-mongodb-%EC%84%A4%EC%B9%98-%EB%B0%8F-%EC%99%B8%EB%B6%80%EC%97%B0%EB%8F%99>)
 - [플랫폼 종속성 문제 해결(Sharp), 쿼리 최적화](<https://github.com/boostcampwm2023/web16-B1G1/wiki/%5B%EC%9E%AC%ED%95%98%5D-1128(%ED%99%94)-%EA%B0%9C%EB%B0%9C%EA%B8%B0%EB%A1%9D>)
 - [docker 이미지 최적화](<https://github.com/boostcampwm2023/web16-B1G1/wiki/%5B%EC%9E%AC%ED%95%98%5D-1203(%EC%9D%BC)-%EA%B0%9C%EB%B0%9C%EA%B8%B0%EB%A1%9D>)
+
+<br />
 
 ### admin 페이지 구현
 

@@ -196,6 +196,7 @@ yarn workspace server start:dev
 - [Yarn berry로 모노레포 구성하기](https://velog.io/@minboykim/Yarn-berry%EB%A1%9C-%EB%AA%A8%EB%85%B8%EB%A0%88%ED%8F%AC-%EA%B5%AC%EC%84%B1%ED%95%98%EA%B8%B0)
 - [Vite, 왜 쓰는거지?](https://velog.io/@minboykim/Vite-%EC%99%9C-%EC%93%B0%EB%8A%94%EA%B1%B0%EC%A7%80)
 - [기술스택 선정이유 (NestJS, TypeORM, Docker, GitHub Actions)](https://velog.io/@qkrwogk/%EA%B8%B0%EC%88%A0%EC%8A%A4%ED%83%9D-%EC%84%A0%EC%A0%95%EC%9D%B4%EC%9C%A0-NestJS-TypeORM-Docker-GitHub-Actions)
+- [MySQL 선택 이유](https://velog.io/@songjseop/why-mysql)
 
 <br />
 

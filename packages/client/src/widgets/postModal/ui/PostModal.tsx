@@ -6,11 +6,13 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import remarkGfm from 'remark-gfm';
 import { instance } from 'shared/apis';
 import { useCheckNickName, useFetch, useRefresh } from 'shared/hooks';
-import { PostData } from 'shared/lib';
+import { PostData, TextStateTypes } from 'shared/lib';
 import { useCameraStore, useToastStore, useViewStore } from 'shared/store';
 import { AlertDialog, Button, Input, Modal, TextArea } from 'shared/ui';
 import { deletePost } from '../api/deletePost';
 import ImageSlider from './ImageSlider';
+import { Caption } from 'shared/styles';
+import { css } from '@emotion/react';
 
 export default function PostModal() {
 	const [deleteModal, setDeleteModal] = useState(false);
@@ -19,6 +21,8 @@ export default function PostModal() {
 	const [title, setTitle] = useState('');
 	const [isDeleteButtonDisabled, setIsDeleteButtonDisabled] = useState(false);
 	const [isSaveButtonDisabled, setIsSaveButtonDisabled] = useState(false);
+	const [titleState, setTitleState] = useState<TextStateTypes>('DEFAULT');
+	const [contentState, setContentState] = useState<TextStateTypes>('DEFAULT');
 
 	const { setToast } = useToastStore();
 	const { setView } = useViewStore();
@@ -44,7 +48,6 @@ export default function PostModal() {
 		const formData = new FormData();
 		formData.append('title', title);
 		formData.append('content', content);
-
 		try {
 			await instance({
 				url: `/post/${postId}`,
@@ -105,6 +108,8 @@ export default function PostModal() {
 			buttonType="CTA-icon"
 			type="button"
 			onClick={() => {
+				if (title === '') return setTitleState('INVALID');
+				if (content === '') return setContentState('INVALID');
 				setIsEdit(false);
 				handleEditSave();
 			}}
@@ -160,21 +165,44 @@ export default function PostModal() {
 						)}
 						{isEdit ? (
 							<TextContainer style={{ height: '100%' }}>
-								<Input
-									id={'postTitle'}
-									placeholder="제목"
-									style={{ marginBottom: '30px', height: '25%' }}
-									value={title}
-									onChange={(e) => setTitle(e.target.value)}
-								/>
-								<TextArea
-									value={content}
-									onChange={(content) => {
-										setContent(content);
-									}}
-									width="100%"
-									height="75%"
-								/>
+								<TitleContainer>
+									<TitleInput
+										id={'postTitle'}
+										state={titleState}
+										placeholder="제목"
+										style={{ height: '25%' }}
+										value={title}
+										onChange={(e) => {
+											if (e.target.value.length > 20) {
+												setTitleState('OVER');
+												return;
+											}
+											setTitleState('DEFAULT');
+											setTitle(e.target.value);
+										}}
+										autoComplete="off"
+									/>
+									{titleState === 'INVALID' && (
+										<Message>제목을 입력해주세요.</Message>
+									)}
+									{titleState === 'OVER' && (
+										<Message>제목은 20자 까지 입력 가능합니다.</Message>
+									)}
+								</TitleContainer>
+								<ContentContainer state={contentState}>
+									<TextArea
+										value={content}
+										onChange={(content) => {
+											setContentState('DEFAULT');
+											setContent(content);
+										}}
+										width="100%"
+										height="100%"
+									/>
+									{contentState === 'INVALID' && (
+										<Message>내용을 입력해주세요.</Message>
+									)}
+								</ContentContainer>
 							</TextContainer>
 						) : (
 							<TextContainer>
@@ -202,6 +230,45 @@ export default function PostModal() {
 		)
 	);
 }
+
+const ContentContainer = styled.div<{ state: TextStateTypes }>`
+	border: 1px solid;
+	border-radius: 4px;
+	height: 75%;
+	${({ state, theme: { colors } }) => {
+		if (state === 'DEFAULT') return;
+
+		return css`
+			border-color: ${colors.text.warning};
+
+			&:focus {
+				border-color: ${colors.text.warning};
+			}
+
+			&:hover {
+				border-color: ${colors.text.warning};
+			}
+		`;
+	}};
+`;
+
+const TitleInput = styled(Input)<{ state: TextStateTypes }>`
+	${({ state, theme: { colors } }) => {
+		if (state === 'DEFAULT') return;
+
+		return css`
+			border-color: ${colors.text.warning};
+
+			&:focus {
+				border-color: ${colors.text.warning};
+			}
+
+			&:hover {
+				border-color: ${colors.text.warning};
+			}
+		`;
+	}};
+`;
 
 const PostModalLayout = styled(Modal)`
 	transform: translate(-10%, -50%);
@@ -262,4 +329,16 @@ const ImageContainer = styled.div`
 const ButtonContainer = styled.div`
 	display: flex;
 	gap: 8px;
+`;
+
+const Message = styled.p`
+	position: absolute;
+	margin: 4px 0 0 0;
+	color: ${({ theme: { colors } }) => colors.text.warning};
+
+	${Caption}
+`;
+
+const TitleContainer = styled.div`
+	margin-bottom: 30px;
 `;

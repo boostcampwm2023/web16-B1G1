@@ -50,7 +50,11 @@ export class LogInterceptor implements NestInterceptor {
 					errLog += ` ${userString}`;
 				}
 				Logger.error(errLog);
-				Logger.error(error);
+				Logger.error(
+					`${error.getResponse()['statusCode']} ${
+						error.getResponse()['error']
+					} - ${error.getResponse()['message']}`,
+				);
 				throw error;
 			}),
 			tap(() => {

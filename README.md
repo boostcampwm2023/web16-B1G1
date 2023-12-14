@@ -18,9 +18,9 @@
 
 </br>
 
-[<별 하나에 글 하나> 사용해보기](https://www.xn--bj0b03z.site/)
+[✨ <별 하나에 글 하나> 사용해보기](https://www.xn--bj0b03z.site/)
 
-[wiki 바로가기](https://github.com/boostcampwm2023/web16-B1G1/wiki)
+[🔗 wiki 바로가기](https://github.com/boostcampwm2023/web16-B1G1/wiki)
 
 </div>
 

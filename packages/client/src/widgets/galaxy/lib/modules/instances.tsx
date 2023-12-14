@@ -82,7 +82,7 @@ export default function Instances({ count, size, color, isCustom }: PropsType) {
 
 			instancedMeshRef.current.getMatrixAt(index, tempMatrix);
 			tempObject.position.setFromMatrixPosition(tempMatrix);
-			tempObject.scale.set(scale, scale, scale);
+			if (scale > 0.5) tempObject.scale.set(scale, scale, scale);
 			tempObject.updateMatrix();
 			instancedMeshRef.current.setMatrixAt(index++, tempObject.matrix);
 		}

@@ -45,6 +45,7 @@
   - [트랜잭션 제어, 쿼리 최적화](#트랜잭션-제어-쿼리-최적화)
   - [NestJS Enhancers](#NestJS-Enhancers)
   - [배포 및 자동화](#배포-및-자동화)
+  - [admin 페이지 구현](#admin-페이지-구현)
 
 ### [4. 팀원 소개](#%EF%B8%8F-팀원-소개)
 - [J010 김가은](#-j010-김가은-fe)
@@ -440,6 +441,17 @@ Interceptor, Exception Filter 등 학습을 하고 백엔드 코드에 적용을
 - [NAT Gateway, MongoDB](<https://github.com/boostcampwm2023/web16-B1G1/wiki/%5B%EC%9E%AC%ED%95%98%5D-1126(%EC%9D%BC)-%EA%B0%9C%EB%B0%9C%EA%B8%B0%EB%A1%9D#%EB%B0%B0%ED%8F%AC%EC%9A%A9-db-%EC%9D%B8%EC%8A%A4%ED%84%B4%EC%8A%A4%EC%97%90-mongodb-%EC%84%A4%EC%B9%98-%EB%B0%8F-%EC%99%B8%EB%B6%80%EC%97%B0%EB%8F%99>)
 - [플랫폼 종속성 문제 해결(Sharp), 쿼리 최적화](<https://github.com/boostcampwm2023/web16-B1G1/wiki/%5B%EC%9E%AC%ED%95%98%5D-1128(%ED%99%94)-%EA%B0%9C%EB%B0%9C%EA%B8%B0%EB%A1%9D>)
 - [docker 이미지 최적화](<https://github.com/boostcampwm2023/web16-B1G1/wiki/%5B%EC%9E%AC%ED%95%98%5D-1203(%EC%9D%BC)-%EA%B0%9C%EB%B0%9C%EA%B8%B0%EB%A1%9D>)
+
+### admin 페이지 구현
+
+리액트를 경험해보고 싶어서 Vite + React + TS를 활용해 간단한 admin 페이지를 만들어보았습니다.  
+admin용 계정 정보를 설정하고, 게시글 관리 및 컴퓨터 자원 사용량, 에러 로그의 차트를 볼 수 있습니다.  
+
+![image](https://github.com/boostcampwm2023/web16-B1G1/assets/101378867/780802e8-94f2-427d-b5c5-96e4f03dea17)
+
+![image](https://github.com/boostcampwm2023/web16-B1G1/assets/101378867/94877604-5f54-4807-8570-d7d7aa699c65)
+
+
 
 <br />
 

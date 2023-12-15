@@ -84,6 +84,8 @@ wiki에서 더 많은 기능을 살펴볼 수 있습니다.
 
 [🔗 wiki 프로젝트 소개 바로가기](https://github.com/boostcampwm2023/web16-B1G1/wiki)
 
+( gif 로딩이 느릴 수 있습니다🥹 조금만 기다려주세요 )
+
 ### [ 글 조회 ]
 
 <img src="https://github.com/boostcampwm2023/web16-B1G1/assets/80266418/405750c7-e891-4d1f-aa86-88a00d7064cd">

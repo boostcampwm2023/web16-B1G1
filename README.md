@@ -2,7 +2,7 @@
 
 <h1>별 하나에 글 하나 🌟</h1>
 
-<img src="https://github.com/boostcampwm2023/web16-B1G1/assets/80266418/cb3a01fc-243c-4cdd-bcd8-67aa698a81c3">
+<img src="https://github.com/boostcampwm2023/web16-B1G1/assets/80266418/cb3a01fc-243c-4cdd-bcd8-67aa698a81c3" alt="별 하나에 글 하나 로고">
 
 <h3> "내 삶의 반짝이는 기억들을 우주에 담아보세요" </h3>
 
@@ -88,7 +88,7 @@ wiki에서 더 많은 기능을 살펴볼 수 있습니다.
 
 ### [ 글 조회 ]
 
-<img src="https://github.com/boostcampwm2023/web16-B1G1/assets/80266418/405750c7-e891-4d1f-aa86-88a00d7064cd">
+<img src="https://github.com/boostcampwm2023/web16-B1G1/assets/80266418/405750c7-e891-4d1f-aa86-88a00d7064cd" alt="글 조회 이미지">
 
 - 1.5배속된 영상입니다.
 - 별에 마우스를 호버하면 제목을 볼 수 있습니다.
@@ -99,12 +99,12 @@ wiki에서 더 많은 기능을 살펴볼 수 있습니다.
 
 ### [ 글 작성 ]
 
-<img src="https://github.com/boostcampwm2023/web16-B1G1/assets/80266418/61fbd19b-17b3-4901-bce0-73d56c87b6fb">
+<img src="https://github.com/boostcampwm2023/web16-B1G1/assets/80266418/61fbd19b-17b3-4901-bce0-73d56c87b6fb" alt="글 작성 이미지">
 
 - 글은 마크다운 형식으로 작성할 수 있으며, Preview 버튼을 누르면 마크다운이 적용된 글을 미리 볼 수 있습니다.
 - 사진은 5장까지 첨부할 수 있습니다.
 
-<img src="https://github.com/boostcampwm2023/web16-B1G1/assets/80266418/fcbeba63-2189-4bdf-b8f6-79bfc076c8bd">
+<img src="https://github.com/boostcampwm2023/web16-B1G1/assets/80266418/fcbeba63-2189-4bdf-b8f6-79bfc076c8bd" alt="글 커스텀 이미지">
 
 - 글 작성하고 다음 버튼을 누르면 별을 커스텀할 수 있습니다.
 - 별의 양 옆에 있는 화살표 버튼을 통해 별의 모양을 변경할 수 있습니다.
@@ -114,7 +114,7 @@ wiki에서 더 많은 기능을 살펴볼 수 있습니다.
 
 ### [ 은하 수정 ]
 
-<img src="https://github.com/boostcampwm2023/web16-B1G1/assets/80266418/31b6ebb4-ad0e-424d-90bd-4d10a5735f78">
+<img src="https://github.com/boostcampwm2023/web16-B1G1/assets/80266418/31b6ebb4-ad0e-424d-90bd-4d10a5735f78" alt="은하 수정 이미지">
 
 - 내 은하 나선팔 꼬인 정도, 나선팔 두께, 막대 길이, 은하 높이를 조절할 수 있습니다.
 - 오른쪽 위의 되돌리기 버튼을 누르면 수정 이전의 내 은하 스타일로 돌아갑니다.
@@ -122,14 +122,14 @@ wiki에서 더 많은 기능을 살펴볼 수 있습니다.
 
 ### [ 은하 공유 ]
 
-<img src="https://github.com/boostcampwm2023/web16-B1G1/assets/80266418/89ceeab5-9a08-4799-9e02-b10e8b77ff22" />
+<img src="https://github.com/boostcampwm2023/web16-B1G1/assets/80266418/89ceeab5-9a08-4799-9e02-b10e8b77ff22" alt="은하 공유 이미지"/>
 
 - 체크박스를 통해 검색 허용 여부를 설정할 수 있습니다.
 - 로그인하지 않은 사용자도 공유 링크를 통해 은하에 접근할 수 있습니다.
 
 ### [ 은하 검색 ]
 
-<img src="https://github.com/boostcampwm2023/web16-B1G1/assets/80266418/40f8d4c6-d220-44f8-9abe-34f1f309286b">
+<img src="https://github.com/boostcampwm2023/web16-B1G1/assets/80266418/40f8d4c6-d220-44f8-9abe-34f1f309286b" alt="은하 검색 이미지">
 
 - 검색 허용된 사용자들의 우주를 닉네임 검색을 통해 구경할 수 있습니다.
 - 검색해서 들어간 우주에서 왼쪽 위 뒤로가기 버튼을 누르면 다시 내 우주로 돌아옵니다.
@@ -156,9 +156,9 @@ yarn workspace server start:dev
 
 [🔗 wiki 기술 스택 소개 바로가기](https://github.com/boostcampwm2023/web16-B1G1/wiki/%EA%B8%B0%EC%88%A0%EC%8A%A4%ED%83%9D-%EC%86%8C%EA%B0%9C)
 
-<img src="https://github.com/boostcampwm2023/web16-B1G1/assets/80266418/3a0507ca-1f7f-4fa1-add7-43d3e73515d4" height="500" />
+<img src="https://github.com/boostcampwm2023/web16-B1G1/assets/80266418/3a0507ca-1f7f-4fa1-add7-43d3e73515d4" height="500" alt="기술스택 이미지"/>
 
-<img src="https://github.com/boostcampwm2023/web16-B1G1/assets/80266418/f2590ade-7a4d-4151-8024-c58b75c2c9ff" height="500" />
+<img src="https://github.com/boostcampwm2023/web16-B1G1/assets/80266418/f2590ade-7a4d-4151-8024-c58b75c2c9ff" height="500" alt="아키텍처 이미지"/>
 
 ## 기술 스택 선정 이유에 관한 팀원들의 글
 
@@ -207,11 +207,11 @@ yarn workspace server start:dev
 
 - 직선 운동하는 카메라
 
-  <img src="https://github.com/boostcampwm2023/web16-B1G1/assets/80266418/f03af4c1-41c5-4af8-ae56-5271e065a9bc" height="200">
+  <img src="https://github.com/boostcampwm2023/web16-B1G1/assets/80266418/f03af4c1-41c5-4af8-ae56-5271e065a9bc" height="200" alt="직선 운동하는 카메라 이미지">
 
 - 포물선 운동하는 카메라
 
-  <img src="https://github.com/boostcampwm2023/web16-B1G1/assets/80266418/bab2271b-9bdc-42b6-bc8c-76ec2109d478" height="200">
+  <img src="https://github.com/boostcampwm2023/web16-B1G1/assets/80266418/bab2271b-9bdc-42b6-bc8c-76ec2109d478" height="200" alt="포물선 운동하는 카메라 이미지">
 
 하지만 아직 멀리 있는 별이 너무 작게 보이는 문제가 남아있었습니다.
 어찌보면 당연한 이야기일 수 있지만, 서비스 특성상 사용자 입장에서 불편한 요소였고 시각적으로 좋지 않았습니다.
@@ -251,8 +251,8 @@ yarn workspace server start:dev
 
     아래 사진 중 왼쪽은 최고 해상도인 경우이고, 오른쪽은 최저 해상도인 경우입니다.
 
-       <img  height="220" src="https://github.com/boostcampwm2023/web16-B1G1/assets/80266418/3f8b0974-4492-4567-a395-76a3ccb7007a">
-       <img  height="220" src="https://github.com/boostcampwm2023/web16-B1G1/assets/80266418/5f0c25f8-d977-437c-ba1d-3bc3b6f05c2a">
+       <img  height="220" src="https://github.com/boostcampwm2023/web16-B1G1/assets/80266418/3f8b0974-4492-4567-a395-76a3ccb7007a" alt="은하 최고 해상도">
+       <img  height="220" src="https://github.com/boostcampwm2023/web16-B1G1/assets/80266418/5f0c25f8-d977-437c-ba1d-3bc3b6f05c2a" alt="은하 최저 회상도">
 
     아래 사진은 메모리 사용량을 비교한 것으로, Performance Monitoring 최적화 전 13.46GB였던 메모리 사용량이 최적화 후 12.50GB까지 감소했습니다.
 

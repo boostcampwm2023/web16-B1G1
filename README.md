@@ -529,4 +529,5 @@ admin용 계정 정보를 설정하고, 게시글 관리 및 컴퓨터 자원 �
 
 # 🍡 팀원 회고
 
-- 수료 후 작성 예정
+- J010 김가은
+  - [부스트캠프 8기를 끝마치며 (Feat. 네트워킹데이 후기)](https://velog.io/@greencloud/%EB%B6%80%EC%8A%A4%ED%8A%B8%EC%BA%A0%ED%94%84-8%EA%B8%B0%EB%A5%BC-%EB%81%9D%EB%A7%88%EC%B9%98%EB%A9%B0-Feat.-%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%82%B9%EB%8D%B0%EC%9D%B4-%ED%9B%84%EA%B8%B0)
